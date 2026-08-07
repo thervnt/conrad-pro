@@ -2426,11 +2426,20 @@ button { font: inherit; cursor: pointer; }
 .cart-card-seller strong { font-weight: 600; }
 .cart-card-actions { display: flex; gap: 8px; align-self: flex-start; flex-shrink: 0; }
 /* Pack pills, stepper and item actions on one horizontal line. */
+/* Bottom row: interactions left, price right, top-aligned. */
+.cart-card-bottom {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+.cart-card-bottom .cart-card-price { flex-shrink: 0; margin-top: 0; }
 .cart-card-interact {
   display: flex;
   align-items: center;
   gap: 16px;
   flex-wrap: wrap;
+  flex: 1;
 }
 .cart-card-interact .pack-row { flex: 0 0 380px; margin-bottom: 0; }
 .cart-card-interact .qty-row { margin-bottom: 0; }
@@ -2847,6 +2856,7 @@ button { font: inherit; cursor: pointer; }
           '</div>' +
         '</div>' +
         '<hr class="cart-card-divider">' +
+        '<div class="cart-card-bottom">' +
         '<div class="cart-card-interact">' +
           '<div class="pack-row">' + item.packSizes.map(function (sz) { return pillHtml(item, sz); }).join('') + '</div>' +
           '<div class="qty-row">' +
@@ -2865,6 +2875,7 @@ button { font: inherit; cursor: pointer; }
           '<span class="cart-card-total">' + fmt(price * item.qty) + '</span>' +
           '<span class="cart-card-unit">' + unitLine + '</span>' +
           '<span class="cart-card-unit">zzgl. MwSt.</span>' +
+        '</div>' +
         '</div>' +
       '</div>';
   }
