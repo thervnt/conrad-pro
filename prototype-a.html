@@ -1435,23 +1435,26 @@ button { font: inherit; cursor: pointer; }
   color: var(--c-text-secondary);
 }
 
-.shipping-threshold {
-  margin: 2px 0 10px;
-  font-size: 12px;
-  color: var(--c-text-secondary);
-  text-align: center;
-}
 .pro-usp {
   background: #F4F5FE;
-  height: 32px;
-  padding: 0 12px;
+  padding: 8px 12px;
   border-radius: var(--radius-sm);
   font-size: 13px;
   color: var(--c-text);
   display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  margin-bottom: 10px;
+}
+.pro-usp-main {
+  display: flex;
   align-items: center;
   gap: 6px;
-  margin-bottom: 10px;
+}
+.pro-usp-sub {
+  font-size: 11px;
+  color: var(--c-text-secondary);
 }
 .pro-logo {
   display: inline-block;
@@ -1584,6 +1587,37 @@ button { font: inherit; cursor: pointer; }
   cursor: pointer;
 }
 .other-sellers svg { width: 16px; height: 16px; color: var(--c-text-tertiary); }
+
+/* Compact buy box on short viewports: tighten spacing so the whole
+   box stays visible without scrolling. */
+@media (max-height: 900px) {
+  .buy-box { padding: 14px 16px; top: 8px; }
+  .price-savings { margin-bottom: 2px; }
+  .price-main { margin-bottom: 2px; }
+  .price-main .amount { font-size: 24px; }
+  .tax-note { margin-bottom: 8px; }
+  .stock-text { margin-bottom: 6px; }
+  .delivery-pill { height: 28px; margin-bottom: 6px; }
+  .delivery-pill-icon { width: 28px; height: 28px; }
+  .delivery-pill-icon svg { width: 16px; height: 16px; }
+  .countdown { margin-bottom: 8px; }
+  .invoice-note { padding: 10px 12px; gap: 10px; margin-bottom: 5px; }
+  .shipper-line { margin-bottom: 8px; padding-bottom: 8px; }
+  .pack-label { margin-bottom: 4px; }
+  .qty-row { margin-bottom: 8px; }
+  .qty-min-note { margin-top: 4px; }
+  .buy-divider { margin: 8px 0; }
+  .pro-usp { margin-bottom: 8px; }
+  .cta-row { margin-top: 10px; }
+  .cta { padding: 11px 18px; }
+  .return-note { margin-top: 8px; }
+  .other-sellers { margin-top: 10px; padding-top: 10px; }
+  .pack-pill { padding: 6px 8px; }
+  .qty-btn-puck { width: 32px; height: 32px; }
+  .invoice-note-text { font-size: 12px; }
+  .pro-usp { padding: 6px 12px; }
+  .return-note { margin-top: 6px; }
+}
 
 /* ===== TABS (pill style) ===== */
 .tabs-wrap {
@@ -2502,14 +2536,15 @@ button { font: inherit; cursor: pointer; }
       </div>
       <div class="pack-total" data-pack-total>= 50 Stück</div>
     </div>
-    <p class="qty-min-note" data-qty-min-note>Dieser Versender verlangt eine Mindestbestellmenge von 3 Stück. Die Anzahl wurde entsprechend angepasst.</p>
+    <p class="qty-min-note" data-qty-min-note>Dieser Versender verlangt eine Mindestbestellmenge von 3 Stück.</p>
     <hr class="buy-divider">
 
     <div class="pro-usp">
-      Kostenfreier Versand mit
+      <div class="pro-usp-main">Kostenfreier Versand mit
       <svg class="pro-logo" width="38" height="9" viewBox="0 0 38 9" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M22.5387 8.85372L20.3429 6.05665C22.3755 5.61932 23.4462 4.47042 23.4462 2.69746C23.4462 0.774114 22.3266 0 19.5155 0H13.6735L11.6777 8.85372H15.1095L16.5947 2.2729H18.7727C19.7467 2.2729 20.2576 2.57252 20.2576 3.13458C20.2576 3.93394 19.7952 4.33317 18.8462 4.33317H16.4482L18.0915 7.16776C19.0528 8.80413 19.138 8.85372 21.0612 8.85372H22.5387Z" fill="#376EEF"/><path fill-rule="evenodd" clip-rule="evenodd" d="M7.09494 2.2729C8.06898 2.2729 8.57991 2.57252 8.57991 3.13458C8.57991 3.93394 8.11744 4.33316 7.1685 4.33316H4.77051L5.82403 6.15128H7.2955C8.31421 6.15128 8.66512 6.05665 8.66512 6.05665C10.6978 5.61933 11.7685 4.47042 11.7685 2.69745C11.7685 0.774122 10.6489 0 7.83776 0H1.99574L0 8.85372H3.43179L4.91696 2.2729H7.09494Z" fill="#376EEF"/><path fill-rule="evenodd" clip-rule="evenodd" d="M7.09494 2.2729C8.06898 2.2729 8.57991 2.57252 8.57991 3.13458C8.57991 3.93394 8.11744 4.33316 7.1685 4.33316H4.452L4.04168 6.15128H7.2955C8.31421 6.15128 8.66512 6.05665 8.66512 6.05665C10.6978 5.61933 11.7685 4.47042 11.7685 2.69745C11.7685 0.774122 10.6489 0 7.83776 0H1.99574L0 8.85372H3.43179L4.91696 2.2729H7.09494Z" fill="#376EEF"/><path d="M34.2872 0H29.1727C25.9115 0 24.1348 2.0724 24.1348 5.89341C24.1348 8.09139 25.0718 8.85305 27.7977 8.85305L32.8025 8.85259C36.1126 8.85259 37.9986 6.83001 37.9986 3.27142C37.9986 0.874272 37.0132 0 34.2872 0ZM31.7927 6.71809L29.574 6.71786C28.0535 6.71786 27.5744 6.39289 27.5744 5.30668C27.5744 3.3961 28.5886 2.34712 30.3531 2.34712L32.5961 2.34735C33.9954 2.34735 34.3604 2.62187 34.3604 3.67108C34.3604 5.65612 33.4596 6.71809 31.7927 6.71809Z" fill="#376EEF"/></svg>
+      </div>
+      <div class="pro-usp-sub">Oder kostenfreier Versand ab 100 € Bestellwert.</div>
     </div>
-    <p class="shipping-threshold">Oder kostenfreier Versand ab 100 € Bestellwert.</p>
 
     <button class="notify-link" data-notify-btn type="button" style="display:none">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
