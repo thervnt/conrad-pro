@@ -615,15 +615,6 @@ button { font: inherit; cursor: pointer; }
 }
 .title-row .product-title { flex: 1; min-width: 0; }
 .title-row .share-btn { flex-shrink: 0; margin-top: -2px; }
-.bestseller-pill {
-  display: inline-block;
-  background: var(--c-pink-bg);
-  color: var(--c-pink-text);
-  padding: 3px 10px;
-  border-radius: var(--radius-pill);
-  font-size: 12px;
-  font-weight: 600;
-}
 .share-btn {
   background: none;
   border: none;
@@ -1035,7 +1026,6 @@ button { font: inherit; cursor: pointer; }
     0 1px 2px 0 rgba(17, 18, 19, 0.08);
 }
 
-.buy-box .bestseller-pill { margin-bottom: 8px; }
 
 .price-savings {
   display: flex;
@@ -2465,7 +2455,6 @@ button { font: inherit; cursor: pointer; }
 
   <!-- RIGHT BUY BOX -->
   <aside class="buy-box">
-    <span class="bestseller-pill" data-bestseller-pill style="display:none">Bestseller</span>
     <div class="price-savings" data-price-savings>
       <span class="price-was" data-list-price></span>
       <span class="discount-badge-wrap" data-discount-badge-wrap>
@@ -3232,17 +3221,6 @@ function renderProductSide() {
     }
   }
 
-  // Bestseller pill: highlighted when the chosen pack matches the
-  // bestseller for the current polzahl (25 for most, 50 for P=2),
-  // and only after the user has interacted with the configurator.
-  // Hide when the variant is sold out.
-  const bestsellerPill = document.querySelector('[data-bestseller-pill]');
-  if (bestsellerPill) {
-    const bestsellerForP = bestsellerPackByPolzahl[p];
-    const isBestseller = bestsellerForP != null && state.packSize === bestsellerForP;
-    bestsellerPill.style.display = (isBestseller && state.interacted && !soldOut) ? 'inline-block' : 'none';
-  }
-
   // Pack-size pills
   const packRow = document.querySelector('[data-pack-row]');
   if (packRow) {
@@ -3267,8 +3245,8 @@ function renderProductSide() {
         state.qty = minQtyFor(state.packSize);
         state.qtyChosen = true;
         // Picking a pack is a configurator interaction - unlock the
-        // bestseller pill / discount-badge / 'Zuletzt gekauft' label
-        // story the same way polzahl/stil/hebel clicks do.
+        // discount-badge / 'Zuletzt gekauft' label story the same
+        // way polzahl/stil/hebel clicks do.
         state.interacted = true;
         // Full re-render so the polzahl tile prices stay in sync with
         // the per-piece price in the buy box.
