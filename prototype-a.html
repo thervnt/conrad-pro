@@ -3897,13 +3897,71 @@ if (countdownEl) {
   setInterval(tick, 1000);
 }
 
-// Buy-box "In den Einkaufswagen" -> shared addToCart helper.
+// Buy-box "In den Einkaufswagen": persist the active configuration
+// for the cart page (localStorage) and show the confirmation toast.
+// The cart page renders its product cards from this store.
 (function () {
+  const CART_KEY = 'conradCart';
+
+  function buildCartItem(p, s, h, packSize, qty) {
+    const skuExact = skuByCombo[p + '|' + s + '|' + h] || '221-413';
+    const bestellMap = {
+      '221-412': '1188439', '221-413': '1188440', '221-415': '1188441', '221-420': '1188450',
+      '221-2412': '2462941', '221-2413': '2462942', '221-2415': '2462943', '221-430': '2462950',
+      '221-612': '1188460', '221-613': '1188461', '221-615': '1188462'
+    };
+    return {
+      sku: skuExact,
+      bestellNr: bestellMap[skuExact] || '1188440',
+      polzahl: p,
+      range: s === '6'
+        ? 'flexibel: 0.5-6 mm² starr: 0.5-6 mm²'
+        : 'flexibel: 0.14-4 mm² starr: 0.2-4 mm²',
+      variantTag: h === 'green-range' ? ' Green Range' : '',
+      packSize: packSize,
+      qty: qty,
+      packSizes: (packSizesByPolzahl[p] || [1]).slice(),
+      packPrices: getPricing(p, s, h).packs,
+      img: imageBySku[resolveImageSku(p, s, h)] || '',
+      note: ''
+    };
+  }
+
+  function loadCart() {
+    try {
+      const v = JSON.parse(localStorage.getItem(CART_KEY));
+      if (Array.isArray(v)) return v;
+    } catch (e) { /* corrupted -> fall through to seed */ }
+    // First visit: seed with the demo item the cart page has always shown.
+    return [buildCartItem(3, '4', 'standard', 50, 4)];
+  }
+
+  function saveCart(items) {
+    try { localStorage.setItem(CART_KEY, JSON.stringify(items)); } catch (e) { /* quota */ }
+    const badge = document.querySelector('[data-cart-badge]');
+    if (badge) {
+      badge.textContent = String(items.length);
+      badge.classList.remove('bump');
+      void badge.offsetWidth;
+      badge.classList.add('bump');
+    }
+  }
+
+  // Header badge reflects the persisted cart (distinct products).
+  const badge = document.querySelector('[data-cart-badge]');
+  if (badge) badge.textContent = String(loadCart().length);
+
   const cta = document.querySelector('[data-cart-cta]');
   if (!cta) return;
   cta.addEventListener('click', () => {
     if (cta.classList.contains('is-disabled')) return;
     const q = state.qty, sz = state.packSize;
+    const item = buildCartItem(state.polzahl, state.stil, state.hebel, sz, q);
+    const items = loadCart();
+    const existing = items.find(function (it) { return it.sku === item.sku && it.packSize === item.packSize; });
+    if (existing) existing.qty += q;
+    else items.push(item);
+    saveCart(items);
     let label;
     if (sz === 1) {
       label = q + ' Stück';
@@ -3968,21 +4026,9 @@ document.addEventListener('click', e => {
   // Expose to other modules (e.g. the bundle add-to-cart button).
   window.showToast = showToast;
 
-  // Header cart badge: separate from the wishlist badge above.
-  const cartBadge = document.querySelector('[data-cart-badge]');
-  function bumpCart() {
-    if (!cartBadge) return;
-    const current = parseInt(cartBadge.textContent, 10) || 0;
-    cartBadge.textContent = String(current + 1);
-    cartBadge.classList.remove('bump');
-    void cartBadge.offsetWidth;
-    cartBadge.classList.add('bump');
-  }
-  // Shared add-to-cart entry point used by the buy box and the
-  // bundle add-on. Increments the badge by 1 (per product, not
-  // per quantity) and shows a confirmation toast.
+  // Shared add-to-cart toast. The header badge is driven by the
+  // persisted cart (see the buy-box CTA block), not bumped here.
   window.addToCart = function (qtyLabel) {
-    bumpCart();
     showToast(qtyLabel + ' zum Einkaufswagen hinzugefügt');
   };
 
