@@ -1055,7 +1055,6 @@ button { font: inherit; cursor: pointer; }
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.02em;
-  cursor: help;
   user-select: none;
   display: inline-flex;
   align-items: center;
@@ -1085,8 +1084,10 @@ button { font: inherit; cursor: pointer; }
   text-align: left;
   white-space: nowrap;
 }
-.discount-badge-wrap:hover .discount-popover,
-.discount-badge-wrap:focus-within .discount-popover { display: block; }
+.pack-hover-wrap { position: relative; }
+.pack-hover-wrap .discount-popover { left: 0; right: auto; }
+.pack-hover-wrap:hover .discount-popover,
+.pack-hover-wrap:focus-within .discount-popover { display: block; }
 .discount-popover-title {
   font-weight: 600;
   margin-bottom: 8px;
@@ -2436,9 +2437,8 @@ button { font: inherit; cursor: pointer; }
     <span class="bestseller-pill" data-bestseller-pill style="display:none">Bestseller</span>
     <div class="price-savings" data-price-savings>
       <span class="price-was" data-list-price></span>
-      <span class="discount-badge-wrap" data-discount-badge-wrap tabindex="0">
+      <span class="discount-badge-wrap" data-discount-badge-wrap>
         <span class="discount-badge" data-discount-badge></span>
-        <div class="discount-popover" data-discount-popover role="dialog" aria-label="Mengenrabatte"></div>
       </span>
     </div>
     <div class="price-main">
@@ -2462,7 +2462,10 @@ button { font: inherit; cursor: pointer; }
     </div>
 
     <p class="pack-label">Verpackungseinheit</p>
-    <div class="pack-row" data-pack-row></div>
+    <div class="pack-hover-wrap" data-pack-hover-wrap>
+      <div class="pack-row" data-pack-row></div>
+      <div class="discount-popover" data-discount-popover role="dialog" aria-label="Mengenrabatte"></div>
+    </div>
     <div class="qty-row">
       <div class="qty-input-wrap">
         <input type="text" value="1" data-qty>
