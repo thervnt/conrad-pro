@@ -2840,9 +2840,9 @@ button { font: inherit; cursor: pointer; }
     var price = PACKS[pack];
     var net = removed ? 0 : price * qty;
     var vat = net * VAT_RATE;
-    // Below 100 € Gesamtpreis shipping costs 5,95 €; from 100 € on
+    // Below 100 € Nettopreis shipping costs 5,95 €; from 100 € on
     // it is free.
-    var shipping = (!removed && net + vat < 100) ? 5.95 : 0;
+    var shipping = (!removed && net < 100) ? 5.95 : 0;
     document.querySelector('[data-cart-title]').textContent = variantTitle();
     document.querySelector('[data-cart-line-total]').textContent = fmt(price * qty);
     document.querySelector('[data-cart-unit-line]').textContent = pack === 1
