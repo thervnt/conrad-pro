@@ -3037,6 +3037,7 @@ const state = {
   hebel: 'standard',
   qty: 1,
   packSize: 50,  // current selected pack size in Stück
+  qtyChosen: false,  // user actively picked a pack/qty; carry it across config changes
   interacted: false,
   showAll: false
 };
@@ -3225,6 +3226,7 @@ function renderProductSide() {
         // Picking a new pack resets qty to its floor: 3 Stück for
         // the single-piece pack (seller minimum), 1 Set otherwise.
         state.qty = minQtyFor(state.packSize);
+        state.qtyChosen = true;
         // Picking a pack is a configurator interaction - unlock the
         // bestseller pill / discount-badge / 'Zuletzt gekauft' label
         // story the same way polzahl/stil/hebel clicks do.
@@ -3547,43 +3549,49 @@ function attachInteractions() {
   document.querySelectorAll('[data-polzahl]:not([aria-disabled="true"])').forEach(btn => {
     btn.addEventListener('click', () => {
       const newP = Number(btn.dataset.polzahl);
+      const targetPieces = state.qty * state.packSize;
       state.polzahl = newP;
       state.interacted = true;
-      autoSelectBestseller();
       if (APPROACH === 'C') state.showAll = false;
       if (APPROACH !== 'B') {
         const resolved = resolveCombo(newP, state.stil, state.hebel, 'p');
         state.stil = resolved.s;
         state.hebel = resolved.h;
       }
+      if (state.qtyChosen) applyQtyCarryOver(targetPieces);
+      else autoSelectBestseller();
       render();
     });
   });
   document.querySelectorAll('[data-stil]:not([aria-disabled="true"])').forEach(btn => {
     btn.addEventListener('click', () => {
       const newS = btn.dataset.stil;
+      const targetPieces = state.qty * state.packSize;
       state.stil = newS;
       state.interacted = true;
-      autoSelectBestseller();
       if (APPROACH !== 'B') {
         const resolved = resolveCombo(state.polzahl, newS, state.hebel, 's');
         state.polzahl = resolved.p;
         state.hebel = resolved.h;
       }
+      if (state.qtyChosen) applyQtyCarryOver(targetPieces);
+      else autoSelectBestseller();
       render();
     });
   });
   document.querySelectorAll('[data-hebel]:not([aria-disabled="true"])').forEach(btn => {
     btn.addEventListener('click', () => {
       const newH = btn.dataset.hebel;
+      const targetPieces = state.qty * state.packSize;
       state.hebel = newH;
       state.interacted = true;
-      autoSelectBestseller();
       if (APPROACH !== 'B') {
         const resolved = resolveCombo(state.polzahl, state.stil, newH, 'h');
         state.polzahl = resolved.p;
         state.stil = resolved.s;
       }
+      if (state.qtyChosen) applyQtyCarryOver(targetPieces);
+      else autoSelectBestseller();
       render();
     });
   });
@@ -3618,6 +3626,40 @@ function autoSelectBestseller() {
   state.packSize = defaultPackByPolzahl[state.polzahl] || sizes[0] || 1;
 }
 
+// Carry the user's chosen amount across configuration changes.
+// If the new combo still offers the identical pack, keep pack and qty
+// untouched. Otherwise rebuild the same total piece count from the
+// packs that are offered and pick the cheapest exact combination
+// (e.g. 1× 50er-Set → 50× Einzelstück or 2× 25er-Set, whichever
+// costs less in total). The 1-Stück pack is always offered, so an
+// exact rebuild always exists.
+function applyQtyCarryOver(targetPieces) {
+  const sizes = packSizesByPolzahl[state.polzahl] || [1];
+  if (sizes.indexOf(state.packSize) !== -1) return;
+  const pricing = getPricing(state.polzahl, state.stil, state.hebel);
+  let best = null;
+  sizes.forEach(sz => {
+    if (targetPieces % sz !== 0) return;
+    const q = targetPieces / sz;
+    if (q < minQtyFor(sz)) return;
+    const packPrice = (pricing.packs && pricing.packs[sz] != null)
+      ? pricing.packs[sz]
+      : pricing.baselineUnit * sz;
+    const total = packPrice * q;
+    if (!best || total < best.total) best = { sz: sz, q: q, total: total };
+  });
+  if (best) {
+    state.packSize = best.sz;
+    state.qty = best.q;
+  } else {
+    // Unreachable while the 1-Stück pack is always offered; round up
+    // on the smallest pack as a safety net.
+    const sz = sizes[0];
+    state.packSize = sz;
+    state.qty = Math.max(minQtyFor(sz), Math.ceil(targetPieces / sz));
+  }
+}
+
 function render() {
   document.querySelector('[data-prototype]').innerHTML = renderPrototype();
   attachInteractions();
@@ -3632,12 +3674,14 @@ function minQtyFor(packSize) {
 }
 document.querySelector('[data-qty-plus]').addEventListener('click', () => {
   state.qty += 1;
+  state.qtyChosen = true;
   document.querySelector('[data-qty]').value = state.qty;
   renderProductSide();
 });
 document.querySelector('[data-qty-minus]').addEventListener('click', () => {
   const floor = minQtyFor(state.packSize);
   if (state.qty > floor) state.qty -= 1;
+  state.qtyChosen = true;
   document.querySelector('[data-qty]').value = state.qty;
   renderProductSide();
 });
@@ -3646,6 +3690,7 @@ document.querySelector('[data-qty]').addEventListener('change', e => {
   const floor = minQtyFor(state.packSize);
   if (!isNaN(v) && v >= floor) state.qty = v;
   else state.qty = floor;
+  state.qtyChosen = true;
   e.target.value = state.qty;
   renderProductSide();
 });
