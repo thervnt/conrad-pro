@@ -131,7 +131,7 @@ button { font: inherit; cursor: pointer; }
 .promo-strip {
   background: var(--c-blue);
   color: var(--c-text-on-dark);
-  font-size: 12px;
+  font-size: 14px;
   padding: 10px 0;
   border-bottom: 1px solid rgba(255,255,255,0.06);
 }
@@ -1300,7 +1300,7 @@ button { font: inherit; cursor: pointer; }
   border-radius: 6px;
 }
 .invoice-note-text {
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 700;
   color: var(--c-navy);
   line-height: 1.4;
@@ -1313,7 +1313,7 @@ button { font: inherit; cursor: pointer; }
 }
 .pack-row {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 6px;
   margin-bottom: 10px;
 }
@@ -1614,7 +1614,7 @@ button { font: inherit; cursor: pointer; }
   .other-sellers { margin-top: 10px; padding-top: 10px; }
   .pack-pill { padding: 6px 8px; }
   .qty-btn-puck { width: 32px; height: 32px; }
-  .invoice-note-text { font-size: 12px; }
+  .invoice-note-text { font-size: 11px; }
   .pro-usp { padding: 6px 12px; }
   .return-note { margin-top: 6px; }
 }
@@ -3268,8 +3268,8 @@ function renderProductSide() {
     packRow.innerHTML = sizes.map(sz => {
       const sel = sz === state.packSize ? ' selected' : '';
       const label = sz === 1
-        ? '<span class="pack-pill-value">Stück</span><span class="pack-pill-sub">Einzelstück</span>'
-        : '<span class="pack-pill-value">' + sz + ' Stück</span><span class="pack-pill-sub">Set</span>';
+        ? '<span class="pack-pill-value">Stk.</span><span class="pack-pill-sub">Einzelstück</span>'
+        : '<span class="pack-pill-value">' + sz + ' Stk.</span><span class="pack-pill-sub">Set</span>';
       return '<button class="pack-pill' + sel + '" data-pack="' + sz + '">' + label + '</button>';
     }).join('');
     packRow.querySelectorAll('[data-pack]').forEach(btn => {
