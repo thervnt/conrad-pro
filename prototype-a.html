@@ -954,27 +954,41 @@ button { font: inherit; cursor: pointer; }
 }
 .id-chip-actions button:hover { border-color: var(--c-blue); }
 .id-chip-actions svg { width: 18px; height: 18px; }
-.datenblatt-group { display: inline-flex; align-items: center; gap: 6px; }
+/* One split-button component: [ DE v | (pdf) Datenblatt öffnen ] */
+.datenblatt-group {
+  display: inline-flex;
+  align-items: stretch;
+  align-self: center;
+  flex-shrink: 0;
+  white-space: nowrap;
+  background: var(--c-bg-white);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-pill);
+}
+.datenblatt-group:hover,
+.datenblatt-group:focus-within { border-color: var(--c-blue); }
 .datenblatt-open {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  background: var(--c-bg-white);
-  border: 1px solid var(--c-border);
-  padding: 6px 14px;
-  border-radius: var(--radius-pill);
+  padding: 6px 14px 6px 12px;
+  border-radius: 0 var(--radius-pill) var(--radius-pill) 0;
   font-size: 13px;
   font-weight: 600;
   color: var(--c-text);
 }
-.datenblatt-open:hover { border-color: var(--c-blue); text-decoration: none; }
+.datenblatt-open:hover { background: var(--c-bg-tint); text-decoration: none; }
 .datenblatt-pdf-icon { width: 16px; height: 16px; fill: #d9234c; flex-shrink: 0; }
-.datenblatt-dropdown { position: relative; }
+.datenblatt-dropdown {
+  position: relative;
+  display: flex;
+  border-right: 1px solid var(--c-border);
+}
 .datenblatt-trigger {
-  background: var(--c-bg-white);
-  border: 1px solid var(--c-border);
-  padding: 6px 14px;
-  border-radius: var(--radius-pill);
+  background: none;
+  border: none;
+  padding: 6px 10px 6px 12px;
+  border-radius: var(--radius-pill) 0 0 var(--radius-pill);
   font-size: 13px;
   color: var(--c-text);
   display: inline-flex;
@@ -985,14 +999,14 @@ button { font: inherit; cursor: pointer; }
   user-select: none;
 }
 .datenblatt-trigger::-webkit-details-marker { display: none; }
-.datenblatt-trigger:hover { border-color: var(--c-blue); }
-.datenblatt-dropdown[open] .datenblatt-trigger { border-color: var(--c-blue); }
+.datenblatt-trigger:hover,
+.datenblatt-dropdown[open] .datenblatt-trigger { background: var(--c-bg-tint); }
 .datenblatt-dropdown[open] .datenblatt-caret { transform: rotate(180deg); }
 .datenblatt-caret { transition: transform 0.15s; }
 .datenblatt-menu {
   position: absolute;
-  top: calc(100% + 6px);
-  right: 0;
+  top: calc(100% + 8px);
+  left: 0;
   min-width: 180px;
   background: var(--c-bg-white);
   border: 1px solid var(--c-border);
