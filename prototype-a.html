@@ -1284,6 +1284,30 @@ button { font: inherit; cursor: pointer; }
   gap: 8px;
   margin-bottom: 14px;
 }
+.invoice-note {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: #F4F5FE;
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin: 0 0 14px;
+}
+.invoice-note-badge {
+  flex-shrink: 0;
+  background: #E2E5FA;
+  color: var(--c-navy);
+  font-size: 14px;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 8px;
+}
+.invoice-note-text {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--c-navy);
+  line-height: 1.35;
+}
 .pack-label {
   font-size: 14px;
   color: var(--c-text);
@@ -2456,6 +2480,11 @@ button { font: inherit; cursor: pointer; }
       Sofort-Lieferung <span data-delivery-date>morgen</span>
     </div>
     <div class="countdown">Bestellung innerhalb <strong data-countdown>00:00:00</strong></div>
+
+    <div class="invoice-note">
+      <span class="invoice-note-badge">Neu</span>
+      <span class="invoice-note-text">Alle Rechnungen von Drittanbietern kommen nun direkt von Conrad.</span>
+    </div>
 
     <div class="shipper-line">
       <div>Verkauft und versendet von <a href="#">Conrad Electronic</a></div>
