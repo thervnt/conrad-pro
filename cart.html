@@ -2846,11 +2846,6 @@ button { font: inherit; cursor: pointer; }
             '<button type="button" class="icon-btn icon-btn-danger" data-act="remove" data-tooltip="Artikel entfernen" aria-label="Artikel entfernen">' + SVG_TRASH + '</button>' +
           '</div>' +
         '</div>' +
-        '<div class="cart-card-price">' +
-          '<span class="cart-card-total">' + fmt(price * item.qty) + '</span>' +
-          '<span class="cart-card-unit">' + unitLine + '</span>' +
-          '<span class="cart-card-unit">zzgl. MwSt.</span>' +
-        '</div>' +
         '<hr class="cart-card-divider">' +
         '<div class="cart-card-interact">' +
           '<div class="pack-row">' + item.packSizes.map(function (sz) { return pillHtml(item, sz); }).join('') + '</div>' +
@@ -2865,6 +2860,11 @@ button { font: inherit; cursor: pointer; }
             '</div>' +
             (item.packSize === 1 ? '' : '<div class="pack-total">= ' + (item.qty * item.packSize) + ' Stück</div>') +
           '</div>' +
+        '</div>' +
+        '<div class="cart-card-price">' +
+          '<span class="cart-card-total">' + fmt(price * item.qty) + '</span>' +
+          '<span class="cart-card-unit">' + unitLine + '</span>' +
+          '<span class="cart-card-unit">zzgl. MwSt.</span>' +
         '</div>' +
       '</div>';
   }
