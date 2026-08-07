@@ -2885,7 +2885,11 @@ button { font: inherit; cursor: pointer; }
 
     document.querySelector('[data-cart-count]').textContent = items.length + ' Artikel';
     var badge = document.querySelector('[data-cart-badge]');
-    if (badge) badge.textContent = String(items.length);
+    if (badge) {
+      badge.textContent = String(items.length);
+      // An empty cart shows no badge at all.
+      badge.style.display = items.length > 0 ? '' : 'none';
+    }
     document.querySelector('[data-cta-checkout]').disabled = empty;
     document.querySelector('[data-cta-express]').disabled = empty;
   }

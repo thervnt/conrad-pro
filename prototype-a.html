@@ -3936,20 +3936,26 @@ if (countdownEl) {
     return [buildCartItem(3, '4', 'standard', 50, 4)];
   }
 
-  function saveCart(items) {
-    try { localStorage.setItem(CART_KEY, JSON.stringify(items)); } catch (e) { /* quota */ }
+  function setBadge(count, bump) {
     const badge = document.querySelector('[data-cart-badge]');
-    if (badge) {
-      badge.textContent = String(items.length);
+    if (!badge) return;
+    badge.textContent = String(count);
+    // An empty cart shows no badge at all.
+    badge.style.display = count > 0 ? '' : 'none';
+    if (bump && count > 0) {
       badge.classList.remove('bump');
       void badge.offsetWidth;
       badge.classList.add('bump');
     }
   }
 
+  function saveCart(items) {
+    try { localStorage.setItem(CART_KEY, JSON.stringify(items)); } catch (e) { /* quota */ }
+    setBadge(items.length, true);
+  }
+
   // Header badge reflects the persisted cart (distinct products).
-  const badge = document.querySelector('[data-cart-badge]');
-  if (badge) badge.textContent = String(loadCart().length);
+  setBadge(loadCart().length, false);
 
   const cta = document.querySelector('[data-cart-cta]');
   if (!cta) return;
