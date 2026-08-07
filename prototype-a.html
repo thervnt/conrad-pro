@@ -965,7 +965,9 @@ button { font: inherit; cursor: pointer; }
   border: 1px solid var(--c-border);
   border-radius: var(--radius-pill);
 }
-.datenblatt-group:focus-within { border-color: var(--c-blue); }
+/* Blue border only for keyboard focus (:focus-visible), never for
+   mouse clicks. */
+.datenblatt-group:has(:focus-visible) { border-color: var(--c-blue); }
 .datenblatt-open {
   display: inline-flex;
   align-items: center;
