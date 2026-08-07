@@ -1406,40 +1406,11 @@ button { font: inherit; cursor: pointer; }
 .qty-btn:hover .qty-btn-puck { background: #eaf0fe; color: var(--c-blue); }
 .qty-btn:active .qty-btn-puck { background: #d6e2fc; }
 .qty-btn:hover { color: var(--c-blue); }
-.qty-info-btn {
-  background: none;
-  border: none;
-  padding: 4px;
-  margin-right: 2px;
-  color: var(--c-text-tertiary);
-  cursor: help;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-}
-.qty-info-btn:hover { color: var(--c-text-secondary); }
-.qty-info-btn svg { width: 16px; height: 16px; }
-.qty-info-btn[data-tooltip]:hover::after,
-.qty-info-btn[data-tooltip]:focus-visible::after {
-  content: attr(data-tooltip);
-  position: absolute;
-  bottom: calc(100% + 8px);
-  right: -4px;
-  background: var(--c-navy);
-  color: var(--c-text-on-dark);
+.qty-min-note {
+  margin: 6px 0 0;
   font-size: 12px;
-  font-weight: 400;
   line-height: 1.4;
-  padding: 8px 12px;
-  border-radius: 6px;
-  width: max-content;
-  max-width: 260px;
-  white-space: normal;
-  text-align: left;
-  z-index: 50;
-  pointer-events: none;
-  box-shadow: 0 6px 14px rgba(0,0,0,0.18);
+  color: var(--c-text-secondary);
 }
 
 .shipping-threshold {
@@ -2497,15 +2468,13 @@ button { font: inherit; cursor: pointer; }
         <input type="text" value="1" data-qty>
         <span class="qty-unit" data-qty-unit>Set</span>
         <div class="qty-btn-group">
-          <button class="qty-info-btn" type="button" aria-label="Hinweise zur Bestellmenge" data-qty-info data-tooltip="Dieser Versender verlangt eine Mindestbestellmenge von 3 Stück. Die Anzahl wurde entsprechend angepasst.">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-          </button>
           <button class="qty-btn" data-qty-minus aria-label="Menge verringern"><span class="qty-btn-puck">−</span></button>
           <button class="qty-btn" data-qty-plus aria-label="Menge erhöhen"><span class="qty-btn-puck">+</span></button>
         </div>
       </div>
       <div class="pack-total" data-pack-total>= 50 Stück</div>
     </div>
+    <p class="qty-min-note" data-qty-min-note>Dieser Versender verlangt eine Mindestbestellmenge von 3 Stück. Die Anzahl wurde entsprechend angepasst.</p>
     <hr class="buy-divider">
 
     <div class="pro-usp">
@@ -3246,7 +3215,7 @@ function renderProductSide() {
     packRow.innerHTML = sizes.map(sz => {
       const sel = sz === state.packSize ? ' selected' : '';
       const label = sz === 1
-        ? '<span class="pack-pill-value">1 Stück</span><span class="pack-pill-sub">Einzelstück</span>'
+        ? '<span class="pack-pill-value">Stück</span><span class="pack-pill-sub">Einzelstück</span>'
         : '<span class="pack-pill-value">' + sz + ' Stück</span><span class="pack-pill-sub">Set</span>';
       return '<button class="pack-pill' + sel + '" data-pack="' + sz + '">' + label + '</button>';
     }).join('');
@@ -3272,11 +3241,11 @@ function renderProductSide() {
   const qtyUnitEl = document.querySelector('[data-qty-unit]');
   if (qtyUnitEl) qtyUnitEl.textContent = state.packSize === 1 ? 'Stück' : 'Set';
 
-  // The min-order tooltip only matters when the user is buying
+  // The min-order note only matters when the user is buying
   // single pieces (where the 3-Stück seller minimum kicks in).
   // For any Set pack a single Set already clears the minimum.
-  const qtyInfoEl = document.querySelector('[data-qty-info]');
-  if (qtyInfoEl) qtyInfoEl.style.display = state.packSize === 1 ? '' : 'none';
+  const qtyMinNoteEl = document.querySelector('[data-qty-min-note]');
+  if (qtyMinNoteEl) qtyMinNoteEl.style.display = state.packSize === 1 ? '' : 'none';
 
   // Size the qty input to its content so the unit label tracks
   // 4 px from the value across "1" → "99+". field-sizing: content
