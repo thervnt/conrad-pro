@@ -2456,7 +2456,7 @@ button { font: inherit; cursor: pointer; }
 .cart-card-img img { max-width: 92%; max-height: 92%; object-fit: contain; }
 .cart-card-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
 .cart-card-name { font-size: 15px; font-weight: 600; margin: 0; }
-.cart-card-id { font-size: 12px; color: var(--c-text-secondary); }
+.cart-card-id { font-size: 12px; color: var(--c-text-secondary); margin-top: 6px; }
 .cart-toolbar { display: flex; gap: 8px; }
 .icon-btn {
   position: relative;
@@ -2840,14 +2840,20 @@ button { font: inherit; cursor: pointer; }
     var price = PACKS[pack];
     var net = removed ? 0 : price * qty;
     var vat = net * VAT_RATE;
+    // Below 100 € Gesamtpreis shipping costs 5,95 €; from 100 € on
+    // it is free.
+    var shipping = (!removed && net + vat < 100) ? 5.95 : 0;
     document.querySelector('[data-cart-title]').textContent = variantTitle();
     document.querySelector('[data-cart-line-total]').textContent = fmt(price * qty);
     document.querySelector('[data-cart-unit-line]').textContent = pack === 1
       ? fmt(price) + ' / Stück'
       : fmt(price) + ' / Set (' + (price / pack).toFixed(2).replace('.', ',') + ' €/Stück)';
     document.querySelector('[data-sum-net]').textContent = fmt(net);
+    document.querySelector('[data-sum-shipping]').textContent = removed
+      ? '—'
+      : (shipping > 0 ? fmt(shipping) : 'Kostenfrei');
     document.querySelector('[data-sum-vat]').textContent = fmt(vat);
-    document.querySelector('[data-sum-total]').textContent = fmt(net + vat);
+    document.querySelector('[data-sum-total]').textContent = fmt(net + vat + shipping);
     // Badge and headline count distinct products (positions), not the
     // ordered quantity.
     var products = removed ? 0 : 1;
