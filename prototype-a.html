@@ -3433,9 +3433,10 @@ function describeAttr(attr, value) {
 }
 
 // Tooltip text for dashed (Prototype A) and disabled (Prototype B) tiles.
-// Dashed: says exactly which other attributes the auto-resolve will adjust.
-// Disabled: names the current attribute(s) blocking the option and the
-// resolving action. Empty string for selectable/selected tiles.
+// Dashed: generic note that the remaining selection auto-adjusts — kept
+// deliberately unspecific so users don't read the option as tied to one
+// single combination. Disabled: names the current attribute(s) blocking
+// the option and the resolving action. Empty for selectable/selected tiles.
 function tileTooltip(p, s, h, attr, optValue, state) {
   if (state !== 'dashed' && state !== 'disabled') return '';
 
@@ -3444,14 +3445,7 @@ function tileTooltip(p, s, h, attr, optValue, state) {
   const tryH = attr === 'hebel'   ? optValue : h;
 
   if (state === 'dashed') {
-    const changedKey = attr === 'polzahl' ? 'p' : (attr === 'stil' ? 's' : 'h');
-    const r = resolveCombo(tryP, tryS, tryH, changedKey);
-    const changes = [];
-    if (attr !== 'polzahl' && r.p !== p) changes.push(describeAttr('polzahl', r.p));
-    if (attr !== 'stil'    && r.s !== s) changes.push(describeAttr('stil',    r.s));
-    if (attr !== 'hebel'   && r.h !== h) changes.push(describeAttr('hebel',   r.h));
-    if (!changes.length) return 'Klick passt Ihre weitere Auswahl automatisch an.';
-    return 'Auswahl wechselt automatisch zu ' + changes.join(' und ') + '.';
+    return 'Ihre Auswahl wird automatisch auf verfügbare Optionen angepasst.';
   }
 
   // disabled (Prototype B): figure out which currently-set attribute(s)
