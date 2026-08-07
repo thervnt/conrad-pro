@@ -1666,12 +1666,17 @@ button { font: inherit; cursor: pointer; }
   display: flex;
   gap: 28px;
   overflow-x: auto;
+  /* Keep swipe/scroll behavior but never show a scrollbar inside
+     the sticky tab bar. */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
   padding: 0 4px;
   background: transparent;
   box-shadow: none;
   border-radius: 0;
   border-bottom: 1px solid var(--c-border);
 }
+.tabs::-webkit-scrollbar { display: none; }
 .tab {
   padding: 14px 2px;
   font-size: 14px;
@@ -1980,8 +1985,8 @@ button { font: inherit; cursor: pointer; }
 .serie-block .compare-card-header { margin-bottom: 8px; gap: 8px; }
 .serie-block .compare-card-icon { width: 28px; height: 28px; }
 .serie-block .compare-card-icon svg { width: 16px; height: 16px; }
-.serie-block .compare-card-title { font-size: 13px; margin: 0; line-height: 1.3; }
-.serie-block .compare-card-desc { font-size: 11px; margin-top: 1px; line-height: 1.35; }
+.serie-block .compare-card-title { font-size: 18px; margin: 0; line-height: 1.3; }
+.serie-block .compare-card-desc { font-size: 13px; margin-top: 1px; line-height: 1.35; }
 .serie-block .compare-specs { padding: 8px 0; gap: 8px; }
 .serie-block .compare-spec-label { font-size: 11px; margin-bottom: 3px; }
 .serie-block .compare-spec-value { font-size: 14px; }
