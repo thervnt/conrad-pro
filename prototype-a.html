@@ -1341,7 +1341,7 @@ button { font: inherit; cursor: pointer; }
   background: #eaf0fe;
 }
 .pack-pill-value {
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
   color: var(--c-text);
 }
@@ -3268,7 +3268,7 @@ function renderProductSide() {
     packRow.innerHTML = sizes.map(sz => {
       const sel = sz === state.packSize ? ' selected' : '';
       const label = sz === 1
-        ? '<span class="pack-pill-value">Stk.</span><span class="pack-pill-sub">Einzelstück</span>'
+        ? '<span class="pack-pill-value">Stück</span><span class="pack-pill-sub">Einzelstück</span>'
         : '<span class="pack-pill-value">' + sz + ' Stk.</span><span class="pack-pill-sub">Set</span>';
       return '<button class="pack-pill' + sel + '" data-pack="' + sz + '">' + label + '</button>';
     }).join('');
