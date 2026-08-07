@@ -2425,22 +2425,21 @@ button { font: inherit; cursor: pointer; }
 .cart-card-seller { font-size: 14px; font-weight: 500; color: var(--c-text); }
 .cart-card-seller strong { font-weight: 600; }
 .cart-card-actions { display: flex; gap: 8px; align-self: flex-start; flex-shrink: 0; }
-.cart-card-footer { display: flex; justify-content: space-between; align-items: center; }
 /* Pack pills, stepper and item actions on one horizontal line. */
 .cart-card-interact {
   display: flex;
   align-items: center;
   gap: 16px;
   flex-wrap: wrap;
-  margin-top: 16px;
 }
 .cart-card-interact .pack-row { flex: 0 0 380px; margin-bottom: 0; }
 .cart-card-interact .qty-row { margin-bottom: 0; }
 .cart-card-divider {
   border: none;
   border-top: 1px solid var(--c-border);
-  margin: 14px 0 12px;
+  margin: 12px 0;
 }
+.cart-card > .cart-card-price { margin-top: 6px; }
 .icon-btn.icon-btn-danger:hover { color: #d9234c; background: #fdf0f3; }
 .icon-btn.icon-btn-danger:hover svg { stroke: #d9234c; }
 .cart-card-img {
@@ -2551,7 +2550,7 @@ button { font: inherit; cursor: pointer; }
   display: block;
   width: 100%;
   background: #E2E5FA;
-  color: var(--c-blue);
+  color: var(--c-navy);
   border: none;
   padding: 12px 18px;
   border-radius: var(--radius-sm);
@@ -2841,8 +2840,15 @@ button { font: inherit; cursor: pointer; }
           '<div class="cart-card-actions">' +
             '<button type="button" class="icon-btn" data-act="note" data-tooltip="Notiz hinzufügen" aria-label="Notiz hinzufügen">' + SVG_NOTE + '</button>' +
             '<button type="button" class="icon-btn" data-act="wishlist" data-tooltip="Für später merken" aria-label="Für später merken">' + SVG_HEART + '</button>' +
+            '<button type="button" class="icon-btn icon-btn-danger" data-act="remove" data-tooltip="Artikel entfernen" aria-label="Artikel entfernen">' + SVG_TRASH + '</button>' +
           '</div>' +
         '</div>' +
+        '<div class="cart-card-price">' +
+          '<span class="cart-card-total">' + fmt(price * item.qty) + '</span>' +
+          '<span class="cart-card-unit">' + unitLine + '</span>' +
+          '<span class="cart-card-unit">zzgl. MwSt.</span>' +
+        '</div>' +
+        '<hr class="cart-card-divider">' +
         '<div class="cart-card-interact">' +
           '<div class="pack-row">' + item.packSizes.map(function (sz) { return pillHtml(item, sz); }).join('') + '</div>' +
           '<div class="qty-row">' +
@@ -2855,15 +2861,6 @@ button { font: inherit; cursor: pointer; }
               '</div>' +
             '</div>' +
             (item.packSize === 1 ? '' : '<div class="pack-total">= ' + (item.qty * item.packSize) + ' Stück</div>') +
-          '</div>' +
-        '</div>' +
-        '<hr class="cart-card-divider">' +
-        '<div class="cart-card-footer">' +
-          '<button type="button" class="icon-btn icon-btn-danger" data-act="remove" data-tooltip="Artikel entfernen" aria-label="Artikel entfernen">' + SVG_TRASH + '</button>' +
-          '<div class="cart-card-price">' +
-            '<span class="cart-card-total">' + fmt(price * item.qty) + '</span>' +
-            '<span class="cart-card-unit">' + unitLine + '</span>' +
-            '<span class="cart-card-unit">zzgl. MwSt.</span>' +
           '</div>' +
         '</div>' +
       '</div>';
