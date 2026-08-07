@@ -1790,6 +1790,21 @@ button { font: inherit; cursor: pointer; }
 .compare-tab-name { font-size: 14px; font-weight: 600; }
 .compare-tab-sub { font-size: 11px; color: var(--c-text-tertiary); }
 .compare-tab[aria-selected="true"] .compare-tab-sub { color: var(--c-blue); }
+/* Current-product tab: marker persists independent of selection. */
+.compare-tab.is-current { background: #F4F5FE; }
+.compare-tab.is-current[aria-selected="true"] { background: #eaf0fe; }
+.compare-tab-current-pill {
+  display: inline-block;
+  align-self: flex-start;
+  background: var(--c-blue);
+  color: var(--c-text-on-dark);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  padding: 2px 7px;
+  border-radius: 999px;
+  margin-top: 2px;
+}
 .compare-card {
   background: var(--c-bg-white);
   border: 1px solid var(--c-border);
@@ -4041,7 +4056,7 @@ document.addEventListener('click', e => {
   };
 
   const COMPARE_TAB_ORDER = [
-    { id: '221',    name: 'Serie 221',     sub: 'aktuell' },
+    { id: '221',    name: 'Serie 221',     sub: 'Aktuelles Produkt', current: true },
     { id: '2273',   name: 'Serie 2273',    sub: 'zum Stecken' },
     { id: '224',    name: 'Serie 224',     sub: 'für Leuchten' },
     { id: '243',    name: 'Serie 243',     sub: 'Mikro' }
@@ -4091,7 +4106,12 @@ document.addEventListener('click', e => {
       const sel = opt.id === compareActive;
       const data = COMPARISON_DATA[opt.id] || {};
       const thumb = (data.thumb && SERIES_THUMBS[data.thumb]) ? SERIES_THUMBS[data.thumb] : '';
-      return '<button class="compare-tab" role="tab"' +
+      // The current product keeps its marker (pill + tint via
+      // .is-current) independent of which tab is selected.
+      const subHtml = opt.current
+        ? '<span class="compare-tab-current-pill">' + opt.sub + '</span>'
+        : '<span class="compare-tab-sub">' + opt.sub + '</span>';
+      return '<button class="compare-tab' + (opt.current ? ' is-current' : '') + '" role="tab"' +
         ' id="compare-tab-' + opt.id + '"' +
         ' data-compare-tab="' + opt.id + '"' +
         ' aria-selected="' + sel + '"' +
@@ -4100,7 +4120,7 @@ document.addEventListener('click', e => {
         '<span class="compare-tab-thumb" aria-hidden="true">' + thumb + '</span>' +
         '<span class="compare-tab-text">' +
           '<span class="compare-tab-name">' + opt.name + '</span>' +
-          '<span class="compare-tab-sub">' + opt.sub + '</span>' +
+          subHtml +
         '</span>' +
       '</button>';
     }).join('');
