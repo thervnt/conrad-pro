@@ -2516,6 +2516,91 @@ button { font: inherit; cursor: pointer; }
 .cart-card-total { font-size: 18px; font-weight: 700; }
 .cart-card-unit { font-size: 12px; color: var(--c-text-secondary); }
 
+
+/* ===== QUICK ADD (Bestell-Nr. / CSV) ===== */
+.quickadd {
+  background: var(--c-bg-white);
+  border-radius: var(--radius);
+  box-shadow:
+    0 8px 12px -1px rgba(17, 18, 19, 0.06),
+    0 1px 2px 0 rgba(17, 18, 19, 0.08);
+  padding: 16px 20px;
+  margin-top: 16px;
+}
+.quickadd-title { font-size: 14px; font-weight: 600; color: var(--c-text); margin: 0 0 10px; }
+.quickadd-form { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.quickadd-input {
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-sm);
+  padding: 0 12px;
+  height: 40px;
+  font: inherit;
+  font-size: 14px;
+  color: var(--c-text);
+  background: var(--c-bg-white);
+}
+.quickadd-input:focus { outline: none; border-color: var(--c-blue); }
+.quickadd-nr { flex: 1 1 220px; min-width: 0; }
+.quickadd-qty { flex: 0 0 88px; text-align: center; font-variant-numeric: tabular-nums; }
+.quickadd-add {
+  height: 40px;
+  padding: 0 20px;
+  background: var(--c-blue);
+  color: var(--c-text-on-dark);
+  border: none;
+  border-radius: var(--radius-sm);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.quickadd-add:hover { background: var(--c-blue-hover); }
+.quickadd-csv-link {
+  background: none;
+  border: none;
+  padding: 0 4px;
+  font: inherit;
+  font-size: 13px;
+  color: var(--c-blue);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.quickadd-csv-link:hover { text-decoration: underline; }
+.quickadd-hint { font-size: 12px; color: var(--c-text-tertiary); margin: 8px 0 0; }
+.quickadd-msg { font-size: 13px; margin: 8px 0 0; }
+.quickadd-msg.ok { color: #218972; font-weight: 500; }
+.quickadd-msg.err { color: #d9234c; font-weight: 500; }
+.quickadd-csv-row[hidden] { display: none; }
+.quickadd-csv-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--c-border);
+}
+.quickadd-file {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 40px;
+  padding: 0 16px;
+  background: var(--c-bg-white);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-sm);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--c-text);
+  cursor: pointer;
+}
+.quickadd-file:hover { border-color: var(--c-blue); }
+.quickadd-file svg { width: 16px; height: 16px; }
+.quickadd-csv-row a { font-size: 13px; color: var(--c-blue); }
+.quickadd-csv-note { font-size: 13px; color: var(--c-text-secondary); }
+
 /* ===== EMPTY CART STATE ===== */
 .cart-empty {
   background: transparent;
@@ -2890,6 +2975,26 @@ button { font: inherit; cursor: pointer; }
 
     <div class="cart-items">
       <div data-cart-list></div>
+      <div class="quickadd" data-quickadd>
+        <p class="quickadd-title">Artikel per Bestell-Nr. hinzufügen</p>
+        <div class="quickadd-form">
+          <input class="quickadd-input quickadd-nr" type="text" placeholder="Bestell-Nr., z. B. 1188440" aria-label="Bestell-Nr." data-qa-nr>
+          <input class="quickadd-input quickadd-qty" type="text" inputmode="numeric" value="1" aria-label="Menge" data-qa-qty>
+          <button type="button" class="quickadd-add" data-qa-add>Hinzufügen</button>
+          <button type="button" class="quickadd-csv-link" data-qa-csv-toggle>oder CSV importieren</button>
+        </div>
+        <p class="quickadd-hint">Mehrere Artikel: Bestell-Nr. und Menge mit Semikolon, weitere mit Komma trennen – z. B. 1188440;4, 1188441;2</p>
+        <p class="quickadd-msg" data-qa-msg hidden></p>
+        <div class="quickadd-csv-row" data-qa-csv hidden>
+          <input type="file" accept=".csv,text/csv" hidden data-qa-file>
+          <button type="button" class="quickadd-file" data-qa-file-btn>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            CSV auswählen
+          </button>
+          <span class="quickadd-csv-note">Spalten: Bestell-Nr.; Menge</span>
+          <a href="#" data-qa-template>CSV-Vorlage herunterladen</a>
+        </div>
+      </div>
       <div class="cart-empty" data-cart-empty>
         <div class="cart-empty-head">
           <h2 class="cart-empty-title">Ihr Einkaufswagen ist noch leer.</h2>
@@ -2899,6 +3004,7 @@ button { font: inherit; cursor: pointer; }
             <a class="cart-empty-btn secondary" href="#">Zur Startseite</a>
           </div>
         </div>
+        <div data-quickadd-slot></div>
         <hr class="cart-empty-divider">
         <h3 class="recent-title">Zuletzt gesehen</h3>
         <div class="recent-grid" data-recent-grid></div>
@@ -3185,6 +3291,125 @@ button { font: inherit; cursor: pointer; }
 
   var listEl = document.querySelector('[data-cart-list]');
 
+  // ---- Quick add: Bestell-Nr. / CSV -------------------------------
+  // Resolves against the same catalogue the PDP uses, so an added
+  // line is a real cart item.
+  var CATALOG = {};
+  RECENT.forEach(function (p) { CATALOG[p.bestellNr] = p; });
+
+  var qaNode = document.querySelector('[data-quickadd]');
+  var qaNr = qaNode.querySelector('[data-qa-nr]');
+  var qaQty = qaNode.querySelector('[data-qa-qty]');
+  var qaMsg = qaNode.querySelector('[data-qa-msg]');
+  var qaCsv = qaNode.querySelector('[data-qa-csv]');
+  var qaFile = qaNode.querySelector('[data-qa-file]');
+
+  function qaShow(text, kind) {
+    qaMsg.textContent = text;
+    qaMsg.className = 'quickadd-msg ' + kind;
+    qaMsg.hidden = false;
+  }
+
+  // Merge into an existing line of the same variant, like the PDP does.
+  function addByProduct(p, qty) {
+    var line = items.filter(function (it) {
+      return it.sku === p.sku && it.packSize === p.packSize;
+    })[0];
+    if (line) line.qty += qty;
+    else {
+      var it = recentItem(p);
+      it.qty = qty;
+      items.push(it);
+    }
+  }
+
+  // "1188440;4, 1188441;2" -> [{nr:'1188440',qty:4}, ...]
+  function qaParse(value) {
+    return value.split(',').map(function (chunk) {
+      var parts = chunk.trim().split(/[;\s\t]+/).filter(Boolean);
+      if (!parts.length) return null;
+      var qty = parseInt(parts[1], 10);
+      return { nr: parts[0], qty: (!isNaN(qty) && qty > 0) ? qty : null };
+    }).filter(Boolean);
+  }
+
+  function qaAddEntries(entries, fallbackQty) {
+    var added = 0, missing = [];
+    entries.forEach(function (e) {
+      var p = CATALOG[e.nr];
+      if (!p) { missing.push(e.nr); return; }
+      addByProduct(p, e.qty || fallbackQty || 1);
+      added++;
+    });
+    if (added) { save(); render(); }
+    return { added: added, missing: missing };
+  }
+
+  function qaSubmit() {
+    var raw = qaNr.value.trim();
+    if (!raw) { qaShow('Bitte eine Bestell-Nr. eingeben.', 'err'); qaNr.focus(); return; }
+    var fallback = parseInt(qaQty.value, 10);
+    if (isNaN(fallback) || fallback < 1) fallback = 1;
+    var res = qaAddEntries(qaParse(raw), fallback);
+    if (res.added && !res.missing.length) {
+      qaShow(res.added === 1 ? 'Artikel hinzugefügt.' : res.added + ' Artikel hinzugefügt.', 'ok');
+      qaNr.value = '';
+      qaQty.value = '1';
+    } else if (res.added) {
+      qaShow(res.added + ' Artikel hinzugefügt · nicht gefunden: ' + res.missing.join(', '), 'err');
+      qaNr.value = '';
+    } else {
+      qaShow('Bestell-Nr. nicht gefunden: ' + res.missing.join(', '), 'err');
+    }
+    qaNr.focus();   // keep typing the next number
+  }
+
+  qaNode.querySelector('[data-qa-add]').addEventListener('click', qaSubmit);
+  [qaNr, qaQty].forEach(function (el) {
+    el.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') { e.preventDefault(); qaSubmit(); }
+    });
+  });
+  qaNr.addEventListener('input', function () { qaMsg.hidden = true; });
+
+  qaNode.querySelector('[data-qa-csv-toggle]').addEventListener('click', function (e) {
+    qaCsv.hidden = !qaCsv.hidden;
+    e.target.textContent = qaCsv.hidden ? 'oder CSV importieren' : 'CSV-Import schließen';
+  });
+  qaNode.querySelector('[data-qa-file-btn]').addEventListener('click', function () { qaFile.click(); });
+
+  qaFile.addEventListener('change', function () {
+    var file = qaFile.files && qaFile.files[0];
+    if (!file) return;
+    var reader = new FileReader();
+    reader.onload = function () {
+      var lines = String(reader.result).split(/\r?\n/).filter(function (l) { return l.trim(); });
+      if (lines.length && /bestell/i.test(lines[0])) lines.shift();   // header
+      var entries = lines.map(function (l) {
+        var parts = l.split(/[;,\t]/).map(function (s) { return s.trim(); });
+        var qty = parseInt(parts[1], 10);
+        return { nr: parts[0], qty: (!isNaN(qty) && qty > 0) ? qty : 1 };
+      });
+      var res = qaAddEntries(entries, 1);
+      if (res.added && !res.missing.length) qaShow(res.added + ' Artikel aus CSV hinzugefügt.', 'ok');
+      else if (res.added) qaShow(res.added + ' Artikel hinzugefügt · nicht gefunden: ' + res.missing.join(', '), 'err');
+      else qaShow('Keine gültige Bestell-Nr. in der Datei gefunden.', 'err');
+    };
+    reader.readAsText(file);
+    qaFile.value = '';
+  });
+
+  qaNode.querySelector('[data-qa-template]').addEventListener('click', function (e) {
+    e.preventDefault();
+    var csv = 'Bestell-Nr.;Menge\n1188440;4\n1188441;2\n';
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8' }));
+    a.download = 'einkaufswagen-vorlage.csv';
+    a.click();
+    URL.revokeObjectURL(a.href);
+  });
+
+
   function render() {
     listEl.innerHTML = items.map(cardHtml).join('');
     var empty = items.length === 0;
@@ -3194,6 +3419,12 @@ button { font: inherit; cursor: pointer; }
     document.querySelector('[data-cart-aside]').style.display = empty ? 'none' : '';
     document.querySelector('.cart-title-row').style.display = empty ? 'none' : '';
     if (empty) renderRecent();
+    // Empty cart: the bulk-entry tool sits right under the CTAs.
+    // Filled cart: it follows the item list.
+    var qaSlot = document.querySelector('[data-quickadd-slot]');
+    var qa = document.querySelector('[data-quickadd]');
+    if (empty && qa.parentElement !== qaSlot) qaSlot.appendChild(qa);
+    else if (!empty && qa.parentElement === qaSlot) listEl.parentElement.insertBefore(qa, listEl.nextSibling);
 
     var net = items.reduce(function (sum, it) { return sum + priceOf(it) * it.qty; }, 0);
     var vat = net * VAT_RATE;
