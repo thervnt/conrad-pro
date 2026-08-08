@@ -2300,6 +2300,178 @@ button { font: inherit; cursor: pointer; }
   opacity: 0.85;
 }
 
+/* ===== MINI CART DRAWER (add-to-cart confirmation) ===== */
+.minicart-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 31, 66, 0.45);
+  z-index: 900;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+.minicart-backdrop.open { opacity: 1; }
+.minicart-backdrop[hidden] { display: none; }
+.minicart {
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100%;
+  width: 420px;
+  max-width: 92vw;
+  background: var(--c-bg-white);
+  z-index: 901;
+  display: flex;
+  flex-direction: column;
+  box-shadow: -12px 0 32px rgba(15, 23, 42, 0.18);
+  transform: translateX(100%);
+  transition: transform 0.26s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+.minicart.open { transform: none; }
+.minicart[hidden] { display: none; }
+.minicart-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--c-border);
+}
+.minicart-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+}
+.minicart-title svg { width: 20px; height: 20px; color: #218972; flex-shrink: 0; }
+.minicart-close {
+  background: none;
+  border: none;
+  padding: 6px;
+  border-radius: var(--radius-sm);
+  color: var(--c-text-secondary);
+  cursor: pointer;
+  display: inline-flex;
+}
+.minicart-close:hover { color: var(--c-text); background: var(--c-bg-tint); }
+.minicart-close svg { width: 18px; height: 18px; }
+.minicart-body { flex: 1; overflow-y: auto; padding: 16px 20px; }
+.minicart-item { display: flex; gap: 12px; }
+.minicart-img {
+  width: 72px;
+  height: 72px;
+  flex-shrink: 0;
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.minicart-img img { max-width: 90%; max-height: 90%; object-fit: contain; }
+.minicart-info { flex: 1; min-width: 0; }
+.minicart-name {
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.35;
+  margin: 0 0 4px;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.minicart-config { font-size: 12px; color: var(--c-text-secondary); margin-bottom: 10px; }
+.minicart-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.minicart-qty { display: flex; align-items: center; gap: 8px; }
+.minicart-qty button {
+  width: 28px;
+  height: 28px;
+  border: 1px solid var(--c-border);
+  background: var(--c-bg-white);
+  border-radius: var(--radius-sm);
+  color: var(--c-text-secondary);
+  font: inherit;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.minicart-qty button:hover { border-color: var(--c-blue); }
+.minicart-qty-val { font-size: 14px; font-weight: 600; min-width: 2ch; text-align: center; font-variant-numeric: tabular-nums; }
+.minicart-qty-unit { font-size: 12px; color: var(--c-text-secondary); }
+.minicart-price { font-size: 15px; font-weight: 700; white-space: nowrap; }
+.minicart-ship {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--c-border);
+  font-size: 13px;
+  color: var(--c-text);
+}
+.minicart-ship strong { font-weight: 600; }
+.minicart-ship.free { color: #218972; font-weight: 600; }
+.minicart-bar {
+  height: 6px;
+  border-radius: 999px;
+  background: var(--c-bg-tint);
+  margin-top: 8px;
+  overflow: hidden;
+}
+.minicart-bar span { display: block; height: 100%; background: #218972; border-radius: 999px; transition: width 0.3s ease; }
+.minicart-foot {
+  border-top: 1px solid var(--c-border);
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.minicart-sub { display: flex; justify-content: space-between; align-items: baseline; }
+.minicart-sub-label { font-size: 14px; font-weight: 600; }
+.minicart-sub-value { font-size: 18px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.minicart-sub-note { font-size: 12px; color: var(--c-text-secondary); margin: 0 0 6px; }
+.minicart-cta {
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  font: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+}
+.minicart-cta.primary { background: var(--c-blue); color: var(--c-text-on-dark); }
+.minicart-cta.primary:hover { background: var(--c-blue-hover); text-decoration: none; }
+.minicart-cta.secondary { background: #E2E5FA; color: var(--c-navy); }
+.minicart-cta.secondary:hover { background: #d6dcf8; text-decoration: none; }
+.minicart-cta.tertiary {
+  background: none;
+  color: var(--c-text-secondary);
+  height: auto;
+  padding: 4px;
+  font-size: 13px;
+  font-weight: 500;
+}
+.minicart-cta.tertiary:hover { color: var(--c-text); text-decoration: underline; }
+@media (prefers-reduced-motion: reduce) {
+  .minicart, .minicart-backdrop, .minicart-bar span { transition: none; }
+}
+@media (max-width: 640px) {
+  .minicart {
+    width: 100%;
+    max-width: 100%;
+    top: auto;
+    bottom: 0;
+    height: auto;
+    max-height: 88vh;
+    border-radius: 16px 16px 0 0;
+    transform: translateY(100%);
+  }
+  .minicart.open { transform: none; }
+}
+
 /* ===== IMAGE ZOOM OVERLAY ===== */
 .image-overlay {
   position: fixed;
@@ -2768,6 +2940,31 @@ button { font: inherit; cursor: pointer; }
   <br>
   <span class="footer-proto">Prototyp A · Silent</span>
 </footer>
+
+<!-- MINI CART DRAWER -->
+<div class="minicart-backdrop" data-minicart-backdrop hidden></div>
+<aside class="minicart" data-minicart role="dialog" aria-modal="true" aria-labelledby="minicart-title" hidden>
+  <div class="minicart-head">
+    <h2 class="minicart-title" id="minicart-title">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+      Zum Einkaufswagen hinzugefügt
+    </h2>
+    <button class="minicart-close" data-minicart-close type="button" aria-label="Schließen">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+  <div class="minicart-body" data-minicart-body></div>
+  <div class="minicart-foot">
+    <div class="minicart-sub">
+      <span class="minicart-sub-label" data-minicart-sub-label>Zwischensumme</span>
+      <span class="minicart-sub-value" data-minicart-sub>0,00 €</span>
+    </div>
+    <p class="minicart-sub-note">zzgl. MwSt. &amp; Versand</p>
+    <a class="minicart-cta primary" href="cart.html">Zur Kasse</a>
+    <a class="minicart-cta secondary" href="cart.html">Warenkorb ansehen</a>
+    <button class="minicart-cta tertiary" type="button" data-minicart-close>Weiter einkaufen</button>
+  </div>
+</aside>
 
 <!-- IMAGE ZOOM OVERLAY -->
 <div class="image-overlay" data-overlay>
@@ -3958,6 +4155,138 @@ if (countdownEl) {
   // Header badge reflects the persisted cart (distinct products).
   setBadge(loadCart().length, false);
 
+  // ---- Mini-cart drawer -------------------------------------------
+  // Confirmation after add-to-cart: shows the configured variant, the
+  // free-shipping progress and the ways forward. Replaces the toast
+  // for the buy-box CTA (the bundle button keeps using the toast).
+  const FREE_SHIPPING_NET = 100;
+  const mcEl = document.querySelector('[data-minicart]');
+  const mcBackdrop = document.querySelector('[data-minicart-backdrop]');
+  const mcBody = document.querySelector('[data-minicart-body]');
+  let mcKey = null;          // { sku, packSize } of the line just added
+  let mcReturnFocus = null;
+
+  function euro(n) { return n.toFixed(2).replace('.', ',') + ' €'; }
+
+  function lineTitle(it) {
+    return 'WAGO ' + it.sku + (it.packSize === 1 ? '' : '-' + it.packSize) +
+      ' 221' + it.variantTag + ' Verbindungsklemme ' + it.range +
+      ' Polzahl: ' + it.polzahl + ' ' + it.packSize + ' St. Transparent, Orange';
+  }
+
+  function lineConfig(it) {
+    const mm = it.range.indexOf('0.5-6') !== -1 ? '6 mm²' : '4 mm²';
+    const hebel = it.variantTag ? 'Green Range' : 'Standard';
+    const pack = it.packSize === 1 ? 'Einzelstück' : it.packSize + 'er-Set';
+    return 'Polzahl ' + it.polzahl + ' · ' + mm + ' · ' + hebel + ' · ' + pack;
+  }
+
+  function cartNet(list) {
+    return list.reduce(function (sum, it) {
+      return sum + ((it.packPrices && it.packPrices[it.packSize]) || 0) * it.qty;
+    }, 0);
+  }
+
+  function renderMiniCart() {
+    const list = loadCart();
+    const line = list.filter(function (it) {
+      return it.sku === mcKey.sku && it.packSize === mcKey.packSize;
+    })[0];
+    if (!line) { closeMiniCart(); return; }
+
+    const price = (line.packPrices && line.packPrices[line.packSize]) || 0;
+    const unit = line.packSize === 1 ? 'Stk.' : (line.qty === 1 ? 'Set' : 'Sets');
+    const net = cartNet(list);
+    const missing = FREE_SHIPPING_NET - net;
+    const pct = Math.max(0, Math.min(100, (net / FREE_SHIPPING_NET) * 100));
+
+    mcBody.innerHTML =
+      '<div class="minicart-item">' +
+        '<div class="minicart-img"><img src="' + line.img + '" alt=""></div>' +
+        '<div class="minicart-info">' +
+          '<p class="minicart-name">' + lineTitle(line) + '</p>' +
+          '<div class="minicart-config">' + lineConfig(line) + '</div>' +
+          '<div class="minicart-row">' +
+            '<div class="minicart-qty">' +
+              '<button type="button" data-mc-minus aria-label="Menge verringern">−</button>' +
+              '<span class="minicart-qty-val">' + line.qty + '</span>' +
+              '<button type="button" data-mc-plus aria-label="Menge erhöhen">+</button>' +
+              '<span class="minicart-qty-unit">' + unit + '</span>' +
+            '</div>' +
+            '<span class="minicart-price">' + euro(price * line.qty) + '</span>' +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="minicart-ship' + (missing <= 0 ? ' free' : '') + '">' +
+        (missing <= 0
+          ? 'Versandkostenfrei – Ihre Bestellung liegt über 100 €.'
+          : 'Noch <strong>' + euro(missing) + '</strong> bis zum kostenfreien Versand.') +
+        '<div class="minicart-bar"><span style="width:' + pct + '%"></span></div>' +
+      '</div>';
+
+    const count = list.length;
+    document.querySelector('[data-minicart-sub-label]').textContent =
+      'Zwischensumme (' + count + (count === 1 ? ' Artikel)' : ' Artikel)');
+    document.querySelector('[data-minicart-sub]').textContent = euro(net);
+  }
+
+  function setQty(delta) {
+    const list = loadCart();
+    const line = list.filter(function (it) {
+      return it.sku === mcKey.sku && it.packSize === mcKey.packSize;
+    })[0];
+    if (!line) return;
+    const floor = (typeof minQtyFor === 'function') ? minQtyFor(line.packSize) : 1;
+    line.qty = Math.max(floor, line.qty + delta);
+    saveCart(list);
+    renderMiniCart();
+  }
+
+  mcBody.addEventListener('click', function (e) {
+    if (e.target.closest('[data-mc-plus]')) setQty(1);
+    else if (e.target.closest('[data-mc-minus]')) setQty(-1);
+  });
+
+  function onMiniCartKey(e) {
+    if (e.key === 'Escape') { closeMiniCart(); return; }
+    if (e.key !== 'Tab') return;
+    const f = mcEl.querySelectorAll('a[href], button:not([disabled])');
+    if (!f.length) return;
+    const first = f[0], last = f[f.length - 1];
+    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+  }
+
+  function openMiniCart(key) {
+    mcKey = key;
+    mcReturnFocus = document.activeElement;
+    mcEl.hidden = false;
+    mcBackdrop.hidden = false;
+    renderMiniCart();
+    requestAnimationFrame(function () {
+      mcEl.classList.add('open');
+      mcBackdrop.classList.add('open');
+    });
+    document.body.style.overflow = 'hidden';
+    document.addEventListener('keydown', onMiniCartKey);
+    const closeBtn = mcEl.querySelector('[data-minicart-close]');
+    if (closeBtn) closeBtn.focus();
+  }
+
+  function closeMiniCart() {
+    mcEl.classList.remove('open');
+    mcBackdrop.classList.remove('open');
+    document.body.style.overflow = '';
+    document.removeEventListener('keydown', onMiniCartKey);
+    setTimeout(function () { mcEl.hidden = true; mcBackdrop.hidden = true; }, 260);
+    if (mcReturnFocus && typeof mcReturnFocus.focus === 'function') mcReturnFocus.focus();
+  }
+
+  mcEl.querySelectorAll('[data-minicart-close]').forEach(function (btn) {
+    btn.addEventListener('click', closeMiniCart);
+  });
+  mcBackdrop.addEventListener('click', closeMiniCart);
+
   const cta = document.querySelector('[data-cart-cta]');
   if (!cta) return;
   cta.addEventListener('click', () => {
@@ -3969,14 +4298,7 @@ if (countdownEl) {
     if (existing) existing.qty += q;
     else items.push(item);
     saveCart(items);
-    let label;
-    if (sz === 1) {
-      label = q + ' Stück';
-    } else {
-      const setWord = q === 1 ? 'Set' : 'Sets';
-      label = q + ' ' + setWord + ' (' + (q * sz) + ' Stück)';
-    }
-    if (typeof window.addToCart === 'function') window.addToCart(label);
+    openMiniCart({ sku: item.sku, packSize: item.packSize });
   });
 })();
 
