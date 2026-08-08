@@ -3870,10 +3870,16 @@ function renderProductSide() {
     }).join('');
     packRow.querySelectorAll('[data-pack]').forEach(btn => {
       btn.addEventListener('click', () => {
-        state.packSize = Number(btn.dataset.pack);
-        // Picking a new pack resets qty to its floor: 3 Stück for
-        // the single-piece pack (seller minimum), 1 Set otherwise.
-        state.qty = minQtyFor(state.packSize);
+        const next = Number(btn.dataset.pack);
+        // Erneuter Klick auf die aktive Verpackung aendert nichts -
+        // die eingestellte Menge bleibt stehen.
+        if (next === state.packSize) return;
+        // Beim Wechsel bleibt die gewuenschte Stueckzahl erhalten und
+        // wird auf die neue Verpackung umgerechnet, mindestens aber
+        // auf deren Untergrenze.
+        const pieces = state.qty * state.packSize;
+        state.packSize = next;
+        state.qty = Math.max(minQtyFor(next), Math.round(pieces / next));
         state.qtyChosen = true;
         // Picking a pack is a configurator interaction - unlock the
         // discount-badge / 'Zuletzt gekauft' label story the same
