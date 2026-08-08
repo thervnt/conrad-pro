@@ -1411,8 +1411,11 @@ button { font: inherit; cursor: pointer; }
   border-radius: var(--radius-sm);
   text-align: center;
   padding: 5px 6px;
-  min-width: 3.5ch;
-  width: 3.5ch;
+  /* content-box, damit die ch-Breite wirklich der Zahl gilt und nicht
+     von Padding und Rahmen aufgefressen wird. */
+  box-sizing: content-box;
+  min-width: 3ch;
+  width: 3ch;
   field-sizing: content;
   font: inherit;
   font-size: 14px;
@@ -2661,6 +2664,8 @@ button { font: inherit; cursor: pointer; }
 }
 .cart-card-img img { max-width: 92%; max-height: 92%; object-fit: contain; }
 .cart-card-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+.cart-card-name a { color: inherit; text-decoration: none; }
+.cart-card-name a:hover { text-decoration: underline; }
 .cart-card-name { font-size: 15px; font-weight: 600; margin: 0; }
 .cart-card-id { font-size: 12px; color: var(--c-text-secondary); margin-top: 6px; }
 .cart-toolbar { display: flex; gap: 8px; }
@@ -3054,7 +3059,7 @@ button { font: inherit; cursor: pointer; }
   gap: 6px;
   font-size: 13px;
   font-weight: 500;
-  color: var(--c-blue);
+  color: var(--c-text);
   cursor: pointer;
   list-style: none;
   user-select: none;
@@ -3064,25 +3069,30 @@ button { font: inherit; cursor: pointer; }
 .summary-acc-caret { width: 14px; height: 14px; color: var(--c-blue); transition: transform 0.15s; flex-shrink: 0; }
 .summary-acc[open] .summary-acc-caret { transform: rotate(180deg); }
 .summary-acc-body { margin-top: 12px; }
-.summary-acc-row { display: flex; gap: 8px; }
-.summary-acc-pin { flex: 0 0 80px; }
-.summary-acc-pin[hidden] { display: none; }
-.summary-acc-pin-switch {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-top: 10px;
+.summary-acc-group + .summary-acc-group { margin-top: 14px; }
+.summary-acc-label {
   font-size: 12px;
+  font-weight: 600;
   color: var(--c-text-secondary);
+  margin: 0 0 6px;
+}
+.summary-acc-row { display: flex; gap: 8px; }
+.summary-acc-row .cart-acc-input { height: 40px; padding: 0 12px; }
+.summary-acc-pin { flex: 0 0 72px; }
+.summary-acc-apply {
+  flex-shrink: 0;
+  height: 40px;
+  padding: 0 16px;
+  background: #E2E5FA;
+  color: var(--c-navy);
+  border: none;
+  border-radius: var(--radius-sm);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
   cursor: pointer;
 }
-.summary-acc-pin-switch input {
-  width: 16px;
-  height: 16px;
-  margin: 0;
-  accent-color: var(--c-blue);
-  cursor: pointer;
-}
+.summary-acc-apply:hover { background: #d6dcf8; }
 .cart-acc-input { width: 100%; }
 @media (max-width: 640px) {
   .recent-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
@@ -3315,15 +3325,21 @@ button { font: inherit; cursor: pointer; }
             <svg class="summary-acc-caret" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
           </summary>
           <div class="summary-acc-body">
-            <div class="summary-acc-row">
-              <input class="cart-acc-input" type="text" placeholder="Code oder Kartennummer" aria-label="Code oder Kartennummer">
-              <input class="cart-acc-input summary-acc-pin" type="text" inputmode="numeric" maxlength="6" placeholder="PIN" aria-label="PIN" hidden>
-              <button type="button" class="cart-acc-apply">Einlösen</button>
+            <div class="summary-acc-group">
+              <p class="summary-acc-label">Vorteilscode</p>
+              <div class="summary-acc-row">
+                <input class="cart-acc-input" type="text" placeholder="Code eingeben" aria-label="Vorteilscode">
+                <button type="button" class="summary-acc-apply">Einlösen</button>
+              </div>
             </div>
-            <label class="summary-acc-pin-switch">
-              <input type="checkbox" data-pin-toggle>
-              <span>Guthabenkarte mit PIN</span>
-            </label>
+            <div class="summary-acc-group">
+              <p class="summary-acc-label">Geschenk- oder Guthabenkarte</p>
+              <div class="summary-acc-row">
+                <input class="cart-acc-input" type="text" placeholder="Kartennummer" aria-label="Kartennummer">
+                <input class="cart-acc-input summary-acc-pin" type="text" inputmode="numeric" maxlength="6" placeholder="PIN" aria-label="PIN">
+                <button type="button" class="summary-acc-apply">Einlösen</button>
+              </div>
+            </div>
           </div>
         </details>
       </div>
@@ -3421,9 +3437,9 @@ button { font: inherit; cursor: pointer; }
     return '' +
       '<div class="cart-card" data-idx="' + idx + '">' +
         '<div class="cart-card-top">' +
-          '<div class="cart-card-img"><img src="' + item.img + '" alt="' + esc(titleFor(item)) + '"></div>' +
+          '<a class="cart-card-img" href="prototype-a.html" target="_blank" rel="noopener noreferrer"><img src="' + item.img + '" alt="' + esc(titleFor(item)) + '"></a>' +
           '<div class="cart-card-body">' +
-            '<p class="cart-card-name">' + esc(titleFor(item)) + '</p>' +
+            '<p class="cart-card-name"><a href="prototype-a.html" target="_blank" rel="noopener noreferrer">' + esc(titleFor(item)) + '</a></p>' +
             '<div class="cart-card-id">Bestell-Nr. ' + esc(item.bestellNr) + '</div>' +
             '<div class="stock-text">264.150 Stück auf Lager</div>' +
             '<div class="delivery-pill"><span class="delivery-pill-icon">' + SVG_BOLT + '</span>Sofort-Lieferung&nbsp; Mo., 10. Aug.</div>' +
@@ -3442,7 +3458,7 @@ button { font: inherit; cursor: pointer; }
           '<div class="pack-row">' + item.packSizes.map(function (sz) { return pillHtml(item, sz); }).join('') + '</div>' +
           '<div class="qty-row">' +
             '<div class="qty-input-wrap">' +
-              '<input type="text" value="' + item.qty + '" data-qty-input style="width:' + Math.max(1, String(item.qty).length) + 'ch">' +
+              '<input type="text" value="' + item.qty + '" data-qty-input style="width:' + (Math.max(3, String(item.qty).length) + 0.5) + 'ch">' +
               '<span class="qty-unit">' + (item.packSize === 1 ? 'Stk.' : 'Set') + '</span>' +
               '<div class="qty-btn-group">' +
                 '<button class="qty-btn" data-act="minus" aria-label="Menge verringern"><span class="qty-btn-puck">−</span></button>' +
@@ -3642,11 +3658,11 @@ button { font: inherit; cursor: pointer; }
 
   function qaSetQty(n) {
     qaQty.value = Math.max(1, n);
-    qaQty.style.width = Math.max(1, String(qaQty.value).length) + 'ch';
+    qaQty.style.width = (Math.max(3, String(qaQty.value).length) + 0.5) + 'ch';
     qaMsg.hidden = true;
   }
   qaQty.addEventListener('input', function () {
-    qaQty.style.width = Math.max(1, String(qaQty.value).length) + 'ch';
+    qaQty.style.width = (Math.max(3, String(qaQty.value).length) + 0.5) + 'ch';
   });
   qaSetQty(1);
   qaNode.querySelector('[data-qa-plus]').addEventListener('click', function () {
@@ -3795,6 +3811,12 @@ button { font: inherit; cursor: pointer; }
     }
   });
 
+  // Breite waechst schon beim Tippen mit, nicht erst beim Neurendern.
+  listEl.addEventListener('input', function (e) {
+    if (!e.target.hasAttribute('data-qty-input')) return;
+    e.target.style.width = (Math.max(3, String(e.target.value).length) + 0.5) + 'ch';
+  });
+
   listEl.addEventListener('change', function (e) {
     var card = e.target.closest('.cart-card');
     if (!card) return;
@@ -3824,17 +3846,6 @@ button { font: inherit; cursor: pointer; }
       row.classList.add('pulse');
     });
   });
-
-  // Guthabenkarte: PIN-Feld nur bei Bedarf einblenden.
-  (function () {
-    var toggle = document.querySelector('[data-pin-toggle]');
-    if (!toggle) return;
-    var pin = document.querySelector('.summary-acc-pin');
-    toggle.addEventListener('change', function () {
-      pin.hidden = !toggle.checked;
-      if (toggle.checked) pin.focus();
-    });
-  })();
 
   document.querySelector('[data-cart-clear]').addEventListener('click', function () {
     items = [];
