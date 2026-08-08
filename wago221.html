@@ -871,19 +871,25 @@ button { font: inherit; cursor: pointer; }
   border-radius: var(--radius);
   padding: 12px 18px 16px;
   margin-top: -2px;
+  /* Haelt die schwimmende Kennzeichnung im Kasten. */
+  display: flow-root;
 }
 /* Transparenzhinweis nach Art. 50 EU AI Act (gilt seit 02.08.2026):
    KI-erzeugte Inhalte muessen als solche gekennzeichnet sein. */
-/* Kennzeichnung oben rechts, Symbol direkt davor. */
+/* Kennzeichnung schwimmt oben rechts, damit die Aufzaehlung auf gleicher
+   Hoehe beginnt. Die Hoehe entspricht einer Listenzeile (13px * 1.65),
+   so sitzt die Schrift mittig zur ersten Aufzaehlungszeile. */
 .ai-callout-label {
+  float: right;
   display: flex;
   align-items: center;
   justify-content: flex-end;
   gap: 6px;
+  min-height: calc(13px * 1.65);
+  margin: 0 0 0 16px;
   font-size: 12px;
   font-weight: 600;
   color: var(--c-purple-icon);
-  margin-bottom: 2px;
 }
 .ai-callout-icon {
   width: 16px;
