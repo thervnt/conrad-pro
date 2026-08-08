@@ -2510,6 +2510,57 @@ button { font: inherit; cursor: pointer; }
 .cart-card-price { text-align: right; display: flex; flex-direction: column; gap: 2px; flex-shrink: 0; }
 .cart-card-total { font-size: 18px; font-weight: 700; }
 .cart-card-unit { font-size: 12px; color: var(--c-text-secondary); }
+/* PRO membership opt-in card below the item list. */
+.pro-upsell {
+  background: var(--c-bg-white);
+  border-radius: var(--radius);
+  box-shadow:
+    0 8px 12px -1px rgba(17, 18, 19, 0.06),
+    0 1px 2px 0 rgba(17, 18, 19, 0.08);
+  padding: 20px;
+  margin-top: 16px;
+}
+.pro-upsell-main { display: flex; gap: 32px; align-items: flex-start; flex-wrap: wrap; }
+.pro-upsell-brand { flex: 0 0 auto; }
+.pro-upsell-price { font-size: 22px; font-weight: 700; margin-top: 8px; }
+.pro-upsell-price span { font-size: 13px; font-weight: 500; color: var(--c-text-secondary); }
+.pro-upsell-billing { font-size: 12px; color: var(--c-text-secondary); margin-top: 2px; }
+.pro-upsell-benefits { flex: 1; min-width: 260px; }
+.pro-upsell-saving { font-size: 14px; font-weight: 600; color: #218972; margin-bottom: 6px; }
+.pro-upsell-list { list-style: none; margin: 0; padding: 0; font-size: 14px; }
+.pro-upsell-list li { display: flex; align-items: center; gap: 8px; padding: 2px 0; }
+.pro-upsell-list svg { width: 13px; height: 13px; fill: var(--c-navy); flex-shrink: 0; }
+.pro-upsell-all { display: inline-block; font-size: 13px; color: var(--c-blue); margin-top: 6px; }
+.pro-upsell-optin {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid var(--c-border);
+  font-size: 13px;
+  color: var(--c-text);
+  cursor: pointer;
+}
+.pro-upsell-optin input {
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  margin-top: 1px;
+  flex-shrink: 0;
+  accent-color: var(--c-blue);
+  cursor: pointer;
+}
+.pro-upsell-optin a { color: var(--c-blue); }
+.summary-label-sub { font-weight: 400; color: var(--c-text-secondary); font-size: 12px; }
+.summary-row[hidden] { display: none; }
+/* Brief highlight when the PRO tick changes shipping/total. */
+@keyframes sum-pulse {
+  0% { background: #eaf0fe; }
+  100% { background: transparent; }
+}
+.summary-row.pulse, .summary-total-row.pulse { animation: sum-pulse 0.9s ease; }
+
 .cart-empty {
   background: var(--c-bg-white);
   border-radius: var(--radius);
@@ -2723,12 +2774,36 @@ button { font: inherit; cursor: pointer; }
         <p>Ihr Einkaufswagen ist leer.</p>
         <a href="prototype-a.html">Zurück zum Produkt</a>
       </div>
+
+      <div class="pro-upsell" data-pro-upsell>
+        <div class="pro-upsell-main">
+          <div class="pro-upsell-brand">
+            <svg width="76" height="18" viewBox="0 0 38 9" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Conrad PRO"><path fill-rule="evenodd" clip-rule="evenodd" d="M22.5387 8.85372L20.3429 6.05665C22.3755 5.61932 23.4462 4.47042 23.4462 2.69746C23.4462 0.774114 22.3266 0 19.5155 0H13.6735L11.6777 8.85372H15.1095L16.5947 2.2729H18.7727C19.7467 2.2729 20.2576 2.57252 20.2576 3.13458C20.2576 3.93394 19.7952 4.33317 18.8462 4.33317H16.4482L18.0915 7.16776C19.0528 8.80413 19.138 8.85372 21.0612 8.85372H22.5387Z" fill="#376EEF"/><path fill-rule="evenodd" clip-rule="evenodd" d="M7.09494 2.2729C8.06898 2.2729 8.57991 2.57252 8.57991 3.13458C8.57991 3.93394 8.11744 4.33316 7.1685 4.33316H4.77051L5.82403 6.15128H7.2955C8.31421 6.15128 8.66512 6.05665 8.66512 6.05665C10.6978 5.61933 11.7685 4.47042 11.7685 2.69745C11.7685 0.774122 10.6489 0 7.83776 0H1.99574L0 8.85372H3.43179L4.91696 2.2729H7.09494Z" fill="#376EEF"/><path fill-rule="evenodd" clip-rule="evenodd" d="M7.09494 2.2729C8.06898 2.2729 8.57991 2.57252 8.57991 3.13458C8.57991 3.93394 8.11744 4.33316 7.1685 4.33316H4.452L4.04168 6.15128H7.2955C8.31421 6.15128 8.66512 6.05665 8.66512 6.05665C10.6978 5.61933 11.7685 4.47042 11.7685 2.69745C11.7685 0.774122 10.6489 0 7.83776 0H1.99574L0 8.85372H3.43179L4.91696 2.2729H7.09494Z" fill="#376EEF"/><path d="M34.2872 0H29.1727C25.9115 0 24.1348 2.0724 24.1348 5.89341C24.1348 8.09139 25.0718 8.85305 27.7977 8.85305L32.8025 8.85259C36.1126 8.85259 37.9986 6.83001 37.9986 3.27142C37.9986 0.874272 37.0132 0 34.2872 0ZM31.7927 6.71809L29.574 6.71786C28.0535 6.71786 27.5744 6.39289 27.5744 5.30668C27.5744 3.3961 28.5886 2.34712 30.3531 2.34712L32.5961 2.34735C33.9954 2.34735 34.3604 2.62187 34.3604 3.67108C34.3604 5.65612 33.4596 6.71809 31.7927 6.71809Z" fill="#376EEF"/></svg>
+            <div class="pro-upsell-price">59 € <span>/ Jahr</span></div>
+            <div class="pro-upsell-billing">inkl. MwSt. Jährliche Abrechnung per Rechnung.</div>
+          </div>
+          <div class="pro-upsell-benefits">
+            <div class="pro-upsell-saving" data-pro-saving>Mit PRO sparen Sie heute 5,95 € Versand.</div>
+            <ul class="pro-upsell-list">
+              <li><svg viewBox="0 0 640 640" aria-hidden="true"><path d="M530.8 134.1C545.1 144.5 548.3 164.5 537.9 178.8L281.9 530.8C276.4 538.4 267.9 543.1 258.5 543.9C249.1 544.7 240 541.2 233.4 534.6L105.4 406.6C92.9 394.1 92.9 373.8 105.4 361.3C117.9 348.8 138.2 348.8 150.7 361.3L252.2 462.8L486.2 141.1C496.6 126.8 516.6 123.6 530.9 134z"/></svg>Versandkostenfreie Lieferung</li>
+              <li><svg viewBox="0 0 640 640" aria-hidden="true"><path d="M530.8 134.1C545.1 144.5 548.3 164.5 537.9 178.8L281.9 530.8C276.4 538.4 267.9 543.1 258.5 543.9C249.1 544.7 240 541.2 233.4 534.6L105.4 406.6C92.9 394.1 92.9 373.8 105.4 361.3C117.9 348.8 138.2 348.8 150.7 361.3L252.2 462.8L486.2 141.1C496.6 126.8 516.6 123.6 530.9 134z"/></svg>PRO Vorteilspreise</li>
+              <li><svg viewBox="0 0 640 640" aria-hidden="true"><path d="M530.8 134.1C545.1 144.5 548.3 164.5 537.9 178.8L281.9 530.8C276.4 538.4 267.9 543.1 258.5 543.9C249.1 544.7 240 541.2 233.4 534.6L105.4 406.6C92.9 394.1 92.9 373.8 105.4 361.3C117.9 348.8 138.2 348.8 150.7 361.3L252.2 462.8L486.2 141.1C496.6 126.8 516.6 123.6 530.9 134z"/></svg>Erweiterter Zahlungsrahmen</li>
+            </ul>
+            <a class="pro-upsell-all" href="https://www.conrad.de/de/service/conrad-pro.html" target="_blank" rel="noopener noreferrer">Alle Vorteile ansehen</a>
+          </div>
+        </div>
+        <label class="pro-upsell-optin">
+          <input type="checkbox" data-pro-checkbox>
+          <span><strong>30 Tage kostenlos testen</strong> – danach 59 €/Jahr, jederzeit kündbar. Ich akzeptiere die <a href="#">AGB</a> und <a href="#">Kündigungsbedingungen</a>.</span>
+        </label>
+      </div>
     </div>
 
     <aside>
       <div class="summary-card">
         <div class="summary-row"><span class="summary-label">Nettopreis</span><span class="summary-value" data-sum-net>59,96 €</span></div>
         <div class="summary-row"><span class="summary-label">Versand</span><span class="summary-value" data-sum-shipping>Kostenfrei</span></div>
+        <div class="summary-row" data-sum-pro-row hidden><span class="summary-label">Conrad PRO <span class="summary-label-sub">(30 Tage kostenlos)</span></span><span class="summary-value">0,00 €</span></div>
         <div class="summary-row"><span class="summary-label">MwSt. (19 %)</span><span class="summary-value" data-sum-vat>11,39 €</span></div>
         <hr class="summary-divider">
         <div class="summary-total-row">
@@ -2801,6 +2876,9 @@ button { font: inherit; cursor: pointer; }
   }
 
   var items = loadCart();
+
+  var PRO_KEY = 'conradProTrial';
+  var pro = localStorage.getItem(PRO_KEY) === '1';
 
   function save() {
     try { localStorage.setItem(CART_KEY, JSON.stringify(items)); } catch (e) { /* quota */ }
@@ -2890,14 +2968,30 @@ button { font: inherit; cursor: pointer; }
 
     var net = items.reduce(function (sum, it) { return sum + priceOf(it) * it.qty; }, 0);
     var vat = net * VAT_RATE;
-    // Below 100 EUR Nettopreis shipping costs 5,95 EUR; free from 100 EUR on.
-    var shipping = (!empty && net < 100) ? SHIPPING : 0;
+    // Below 100 EUR Nettopreis shipping costs 5,95 EUR; free from
+    // 100 EUR on - and always free with an active PRO trial.
+    var shipping = (!empty && net < 100 && !pro) ? SHIPPING : 0;
     document.querySelector('[data-sum-net]').textContent = fmt(net);
     document.querySelector('[data-sum-shipping]').textContent = empty
       ? '—'
       : (shipping > 0 ? fmt(shipping) : 'Kostenfrei');
+    document.querySelector('[data-sum-pro-row]').hidden = !pro;
     document.querySelector('[data-sum-vat]').textContent = fmt(vat);
     document.querySelector('[data-sum-total]').textContent = fmt(net + vat + shipping);
+
+    // PRO upsell module: hidden for an empty cart; savings line
+    // reflects what the tick changes for THIS order.
+    var upsell = document.querySelector('[data-pro-upsell]');
+    upsell.style.display = empty ? 'none' : '';
+    var saving = document.querySelector('[data-pro-saving]');
+    if (pro) {
+      saving.textContent = 'PRO Testphase aktiv: Versand heute kostenfrei.';
+    } else if (net < 100) {
+      saving.textContent = 'Mit PRO sparen Sie heute ' + fmt(SHIPPING) + ' Versand.';
+    } else {
+      saving.textContent = 'Mit PRO versandkostenfrei bei jeder Bestellung – auch unter 100 €.';
+    }
+    document.querySelector('[data-pro-checkbox]').checked = pro;
 
     document.querySelector('[data-cart-count]').textContent = items.length + ' Artikel';
     var badge = document.querySelector('[data-cart-badge]');
@@ -2954,6 +3048,20 @@ button { font: inherit; cursor: pointer; }
       item.note = e.target.value;
       save();
     }
+  });
+
+  document.querySelector('[data-pro-checkbox]').addEventListener('change', function (e) {
+    pro = e.target.checked;
+    if (pro) localStorage.setItem(PRO_KEY, '1');
+    else localStorage.removeItem(PRO_KEY);
+    render();
+    // Draw the eye to what just changed in the summary.
+    [document.querySelector('[data-sum-shipping]').closest('.summary-row'),
+     document.querySelector('.summary-total-row')].forEach(function (row) {
+      row.classList.remove('pulse');
+      void row.offsetWidth;
+      row.classList.add('pulse');
+    });
   });
 
   document.querySelector('[data-cart-clear]').addEventListener('click', function () {
