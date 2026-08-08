@@ -3476,8 +3476,13 @@ button { font: inherit; cursor: pointer; }
 
   var items = loadCart();
 
-  var PRO_KEY = 'conradProTrial';
-  var pro = localStorage.getItem(PRO_KEY) === '1';
+  // Die Zustimmung zu einer kostenpflichtigen Zusatzleistung muss fuer
+  // die konkrete Bestellung aktiv erklaert werden (§ 312a Abs. 3 BGB).
+  // Ein Haken, den der Nutzer beim Aufruf des Warenkorbs bereits gesetzt
+  // vorfindet, waere eine Voreinstellung - der Zustand wird deshalb
+  // nicht gespeichert und startet immer unangehakt.
+  var pro = false;
+  try { localStorage.removeItem('conradProTrial'); } catch (e) { /* ohne Speicher */ }
 
   function save() {
     try { localStorage.setItem(CART_KEY, JSON.stringify(items)); } catch (e) { /* quota */ }
@@ -3964,8 +3969,6 @@ button { font: inherit; cursor: pointer; }
 
   document.querySelector('[data-pro-checkbox]').addEventListener('change', function (e) {
     pro = e.target.checked;
-    if (pro) localStorage.setItem(PRO_KEY, '1');
-    else localStorage.removeItem(PRO_KEY);
     render();
     // Draw the eye to what just changed in the summary.
     [document.querySelector('[data-sum-shipping]').closest('.summary-row'),
