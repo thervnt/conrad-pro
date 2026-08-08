@@ -176,9 +176,37 @@ button { font: inherit; cursor: pointer; }
 .header-row1 {
   display: flex;
   align-items: center;
-  gap: 28px;
+  gap: 8px;
   margin-bottom: 24px;
 }
+/* Jede Kopfzeilen-Interaktion ist eine eigene Klickflaeche mit
+   abgerundetem Hover-Hintergrund. */
+.header-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  color: var(--c-text-on-dark);
+  font-size: 15px;
+  font-weight: 500;
+  white-space: nowrap;
+  transition: background 0.15s ease;
+}
+.header-btn:hover { background: rgba(255, 255, 255, 0.12); text-decoration: none; }
+.header-btn:active { background: rgba(255, 255, 255, 0.18); }
+.header-btn svg { height: 22px; width: auto; display: block; flex-shrink: 0; }
+.header-btn.icon-only { padding: 8px; }
+/* Das PRO-Logo im Badge behaelt seine eigene Groesse. */
+.header-btn .pro-badge svg { width: 38px; height: 9px; }
+/* Schmale Viewports: nur Icons, Labels aus. */
+@media (max-width: 1279px) {
+  .header-btn .header-btn-label { display: none; }
+  .header-btn { padding: 8px; gap: 0; }
+  .conrad-pro-link .header-btn-label { display: inline; }
+  .conrad-pro-link { padding: 8px 12px; gap: 8px; }
+}
+.icon-wrap { position: relative; display: inline-flex; }
 .logo {
   display: inline-flex;
   align-items: center;
@@ -186,25 +214,13 @@ button { font: inherit; cursor: pointer; }
 }
 .logo svg { width: 130px; height: auto; display: block; }
 
-.menu-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  color: var(--c-text-on-dark);
-  font-size: 15px;
-  font-weight: 500;
-  padding: 6px 12px;
-}
-.menu-btn svg { width: 20px; height: 20px; }
-
 .conrad-pro-link {
   color: var(--c-text-on-dark);
   font-weight: 600;
   font-size: 14px;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
+  background: rgba(255, 255, 255, 0.08);
 }
+.conrad-pro-link:hover { background: rgba(255, 255, 255, 0.16); }
 .conrad-pro-link .pro-badge {
   background: var(--c-bg-white);
   width: 56px;
@@ -223,17 +239,8 @@ button { font: inherit; cursor: pointer; }
   margin-left: auto;
   display: flex;
   align-items: center;
-  gap: 28px;
+  gap: 4px;
 }
-.header-action {
-  color: var(--c-text-on-dark);
-  font-size: 13px;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  position: relative;
-}
-.header-action svg { width: 20px; height: 20px; stroke: var(--c-text-on-dark); }
 .icon-badge.bump { animation: badge-bump 0.55s cubic-bezier(0.34, 1.56, 0.64, 1); }
 @keyframes badge-bump {
   0%   { transform: scale(1);    box-shadow: 0 0 0 0 rgba(255, 255, 0, 0.85); }
@@ -255,15 +262,6 @@ button { font: inherit; cursor: pointer; }
   display: flex;
   align-items: center;
   justify-content: center;
-}
-.user-name {
-  display: flex;
-  flex-direction: column;
-  line-height: 1.25;
-}
-.user-name .secondary {
-  font-size: 11px;
-  opacity: 0.7;
 }
 
 /* ===== SEARCH BAR (white card on navy bg) ===== */
@@ -426,17 +424,8 @@ button { font: inherit; cursor: pointer; }
   .header-inner { padding: 0 16px; }
   .header-row1 { gap: 12px; margin-bottom: 12px; }
   .logo svg { width: 96px; }
-  .menu-btn { font-size: 0; padding: 6px; gap: 0; }  /* hide text, keep icon */
-  .menu-btn svg { width: 22px; height: 22px; }
   .conrad-pro-link { display: none; }                /* hide PRO inline link */
-  .header-right { gap: 14px; margin-left: auto; }
-  .header-right .header-action:first-of-type,        /* Hilfe & Support */
-  .header-right .header-action:last-of-type {        /* User name block */
-    font-size: 0;                                    /* hide labels */
-    gap: 0;
-  }
-  .header-right .header-action:last-of-type .user-name { display: none; }
-  .header-right .header-action svg { width: 22px; height: 22px; }
+  .header-right { gap: 2px; margin-left: auto; }
 
   /* --- Search card ------------------------------------------ */
   .search-card { height: 48px; padding: 0 6px 0 12px; gap: 8px; }
@@ -2601,33 +2590,32 @@ button { font: inherit; cursor: pointer; }
 </defs>
 </svg>
       </a>
-      <a href="#" class="menu-btn">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-        Menü
+      <a href="#" class="header-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        <span class="header-btn-label">Kategorien</span>
       </a>
-      <a href="https://www.conrad.de/de/service/conrad-pro.html" target="_blank" rel="noopener noreferrer" class="conrad-pro-link">
-        Conrad <span class="pro-badge"><svg width="38" height="9" viewBox="0 0 38 9" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M22.5387 8.85372L20.3429 6.05665C22.3755 5.61932 23.4462 4.47042 23.4462 2.69746C23.4462 0.774114 22.3266 0 19.5155 0H13.6735L11.6777 8.85372H15.1095L16.5947 2.2729H18.7727C19.7467 2.2729 20.2576 2.57252 20.2576 3.13458C20.2576 3.93394 19.7952 4.33317 18.8462 4.33317H16.4482L18.0915 7.16776C19.0528 8.80413 19.138 8.85372 21.0612 8.85372H22.5387Z" fill="#376EEF"/><path fill-rule="evenodd" clip-rule="evenodd" d="M7.09494 2.2729C8.06898 2.2729 8.57991 2.57252 8.57991 3.13458C8.57991 3.93394 8.11744 4.33316 7.1685 4.33316H4.77051L5.82403 6.15128H7.2955C8.31421 6.15128 8.66512 6.05665 8.66512 6.05665C10.6978 5.61933 11.7685 4.47042 11.7685 2.69745C11.7685 0.774122 10.6489 0 7.83776 0H1.99574L0 8.85372H3.43179L4.91696 2.2729H7.09494Z" fill="#376EEF"/><path fill-rule="evenodd" clip-rule="evenodd" d="M7.09494 2.2729C8.06898 2.2729 8.57991 2.57252 8.57991 3.13458C8.57991 3.93394 8.11744 4.33316 7.1685 4.33316H4.452L4.04168 6.15128H7.2955C8.31421 6.15128 8.66512 6.05665 8.66512 6.05665C10.6978 5.61933 11.7685 4.47042 11.7685 2.69745C11.7685 0.774122 10.6489 0 7.83776 0H1.99574L0 8.85372H3.43179L4.91696 2.2729H7.09494Z" fill="#376EEF"/><path d="M34.2872 0H29.1727C25.9115 0 24.1348 2.0724 24.1348 5.89341C24.1348 8.09139 25.0718 8.85305 27.7977 8.85305L32.8025 8.85259C36.1126 8.85259 37.9986 6.83001 37.9986 3.27142C37.9986 0.874272 37.0132 0 34.2872 0ZM31.7927 6.71809L29.574 6.71786C28.0535 6.71786 27.5744 6.39289 27.5744 5.30668C27.5744 3.3961 28.5886 2.34712 30.3531 2.34712L32.5961 2.34735C33.9954 2.34735 34.3604 2.62187 34.3604 3.67108C34.3604 5.65612 33.4596 6.71809 31.7927 6.71809Z" fill="#376EEF"/></svg></span>
+      <a href="https://www.conrad.de/de/service/conrad-pro.html" target="_blank" rel="noopener noreferrer" class="header-btn conrad-pro-link">
+        <span class="header-btn-label">Conrad</span> <span class="pro-badge"><svg width="38" height="9" viewBox="0 0 38 9" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M22.5387 8.85372L20.3429 6.05665C22.3755 5.61932 23.4462 4.47042 23.4462 2.69746C23.4462 0.774114 22.3266 0 19.5155 0H13.6735L11.6777 8.85372H15.1095L16.5947 2.2729H18.7727C19.7467 2.2729 20.2576 2.57252 20.2576 3.13458C20.2576 3.93394 19.7952 4.33317 18.8462 4.33317H16.4482L18.0915 7.16776C19.0528 8.80413 19.138 8.85372 21.0612 8.85372H22.5387Z" fill="#376EEF"/><path fill-rule="evenodd" clip-rule="evenodd" d="M7.09494 2.2729C8.06898 2.2729 8.57991 2.57252 8.57991 3.13458C8.57991 3.93394 8.11744 4.33316 7.1685 4.33316H4.77051L5.82403 6.15128H7.2955C8.31421 6.15128 8.66512 6.05665 8.66512 6.05665C10.6978 5.61933 11.7685 4.47042 11.7685 2.69745C11.7685 0.774122 10.6489 0 7.83776 0H1.99574L0 8.85372H3.43179L4.91696 2.2729H7.09494Z" fill="#376EEF"/><path fill-rule="evenodd" clip-rule="evenodd" d="M7.09494 2.2729C8.06898 2.2729 8.57991 2.57252 8.57991 3.13458C8.57991 3.93394 8.11744 4.33316 7.1685 4.33316H4.452L4.04168 6.15128H7.2955C8.31421 6.15128 8.66512 6.05665 8.66512 6.05665C10.6978 5.61933 11.7685 4.47042 11.7685 2.69745C11.7685 0.774122 10.6489 0 7.83776 0H1.99574L0 8.85372H3.43179L4.91696 2.2729H7.09494Z" fill="#376EEF"/><path d="M34.2872 0H29.1727C25.9115 0 24.1348 2.0724 24.1348 5.89341C24.1348 8.09139 25.0718 8.85305 27.7977 8.85305L32.8025 8.85259C36.1126 8.85259 37.9986 6.83001 37.9986 3.27142C37.9986 0.874272 37.0132 0 34.2872 0ZM31.7927 6.71809L29.574 6.71786C28.0535 6.71786 27.5744 6.39289 27.5744 5.30668C27.5744 3.3961 28.5886 2.34712 30.3531 2.34712L32.5961 2.34735C33.9954 2.34735 34.3604 2.62187 34.3604 3.67108C34.3604 5.65612 33.4596 6.71809 31.7927 6.71809Z" fill="#376EEF"/></svg></span>
       </a>
 
       <div class="header-right">
-        <a href="#" class="header-action">
-          <svg width="24" height="22" viewBox="0 0 24 22" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6.375 7.5C6.375 8.00781 5.94531 8.4375 5.4375 8.4375C4.92969 8.4375 4.5 8.00781 4.5 7.5C4.5 3.35938 7.85938 0 12 0C16.1406 0 19.5 3.35938 19.5 7.5V12.8125C19.5 13.3203 19.0703 13.75 18.5625 13.75H11.375C10.3594 13.75 9.5 12.9297 9.5 11.875C9.5 10.8594 10.3594 10 11.375 10H12.625C13.6797 10 14.5 10.8594 14.5 11.875H17.625V7.5C17.625 4.41406 15.125 1.875 12 1.875C8.91406 1.875 6.375 4.41406 6.375 7.5ZM14.5 7.5C14.5 6.13281 13.3672 5 12 5C10.6328 5 9.5 6.13281 9.5 7.5C9.5 7.96875 9.61719 8.39844 9.85156 8.78906C9.26562 9.0625 8.79688 9.53125 8.44531 10.0781C7.9375 9.33594 7.625 8.47656 7.625 7.5C7.625 5.07812 9.57812 3.125 12 3.125C14.4219 3.125 16.375 5.07812 16.375 7.5C16.375 8.47656 16.0625 9.33594 15.5547 10.0781C15.2031 9.53125 14.7344 9.0625 14.1484 8.78906C14.3828 8.39844 14.5 7.96875 14.5 7.5ZM5.125 20.3125C5.125 20.8203 4.69531 21.25 4.1875 21.25C3.67969 21.25 3.25 20.8203 3.25 20.3125C3.25 17.3828 5.63281 15 8.5625 15H15.4375C18.3672 15 20.75 17.3828 20.75 20.3125C20.75 20.8203 20.3203 21.25 19.8125 21.25C19.3047 21.25 18.875 20.8203 18.875 20.3125C18.875 18.3984 17.3516 16.875 15.4375 16.875H8.5625C6.64844 16.875 5.125 18.3984 5.125 20.3125Z" fill="#FEFEFF"/></svg>
-          Hilfe &amp; Support
+        <a href="#" class="header-btn">
+          <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M16.3359 3.60156C15.9844 3.25 15.9844 2.625 16.3359 2.27344C16.6875 1.92188 17.3125 1.92188 17.6641 2.27344L21.7266 6.33594C22.0781 6.6875 22.0781 7.3125 21.7266 7.66406L17.6641 11.7266C17.3125 12.0781 16.6875 12.0781 16.3359 11.7266C15.9844 11.375 15.9844 10.75 16.3359 10.3984L18.7969 7.9375H2.9375C2.42969 7.9375 2 7.50781 2 7C2 6.49219 2.42969 6.0625 2.9375 6.0625H18.7969L16.3359 3.60156ZM7.66406 13.6016L5.20312 16.0625H21.0625C21.5703 16.0625 22 16.4922 22 17C22 17.5078 21.5703 17.9375 21.0625 17.9375H5.20312L7.66406 20.3984C8.01562 20.75 8.01562 21.375 7.66406 21.7266C7.3125 22.0781 6.6875 22.0781 6.33594 21.7266L2.27344 17.6641C1.92188 17.3125 1.92188 16.6875 2.27344 16.3359L6.33594 12.2734C6.6875 11.9219 7.3125 11.9219 7.66406 12.2734C8.01562 12.625 8.01562 13.25 7.66406 13.6016Z"/></svg>
+          <span class="header-btn-label">Geschäftskunde</span>
         </a>
-        <a href="#" class="header-action">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-          <span class="icon-badge" data-wishlist-badge>1</span>
+        <a href="#" class="header-btn">
+          <svg viewBox="0 0 18 22" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M3.125 7.5C3.125 8.00781 2.69531 8.4375 2.1875 8.4375C1.67969 8.4375 1.25 8.00781 1.25 7.5C1.25 3.35938 4.60938 0 8.75 0C12.8906 0 16.25 3.35938 16.25 7.5V12.8125C16.25 13.3203 15.8203 13.75 15.3125 13.75H8.125C7.10938 13.75 6.25 12.9297 6.25 11.875C6.25 10.8594 7.10938 10 8.125 10H9.375C10.4297 10 11.25 10.8594 11.25 11.875H14.375V7.5C14.375 4.41406 11.875 1.875 8.75 1.875C5.66406 1.875 3.125 4.41406 3.125 7.5ZM11.25 7.5C11.25 6.13281 10.1172 5 8.75 5C7.38281 5 6.25 6.13281 6.25 7.5C6.25 7.96875 6.36719 8.39844 6.60156 8.78906C6.01562 9.0625 5.54688 9.53125 5.19531 10.0781C4.6875 9.33594 4.375 8.47656 4.375 7.5C4.375 5.07812 6.32812 3.125 8.75 3.125C11.1719 3.125 13.125 5.07812 13.125 7.5C13.125 8.47656 12.8125 9.33594 12.3047 10.0781C11.9531 9.53125 11.4844 9.0625 10.8984 8.78906C11.1328 8.39844 11.25 7.96875 11.25 7.5ZM1.875 20.3125C1.875 20.8203 1.44531 21.25 0.9375 21.25C0.429688 21.25 0 20.8203 0 20.3125C0 17.3828 2.38281 15 5.3125 15H12.1875C15.1172 15 17.5 17.3828 17.5 20.3125C17.5 20.8203 17.0703 21.25 16.5625 21.25C16.0547 21.25 15.625 20.8203 15.625 20.3125C15.625 18.3984 14.1016 16.875 12.1875 16.875H5.3125C3.39844 16.875 1.875 18.3984 1.875 20.3125Z"/></svg>
+          <span class="header-btn-label">Hilfe &amp; Support</span>
         </a>
-        <a href="cart.html" class="header-action">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
-          <span class="icon-badge" data-cart-badge>1</span>
+        <a href="#" class="header-btn icon-only" aria-label="Merkliste">
+          <span class="icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg><span class="icon-badge" data-wishlist-badge>1</span></span>
         </a>
-        <a href="#" class="header-action">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-          <div class="user-name">
-            <span>Max Mustermann</span>
-            <span class="secondary">BSH Hausgeräte GmbH</span>
-          </div>
+        <a href="cart.html" class="header-btn icon-only" aria-label="Einkaufswagen">
+          <span class="icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg><span class="icon-badge" data-cart-badge>1</span></span>
+        </a>
+        <a href="#" class="header-btn">
+          <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M8.875 7A3.134 3.134 0 0 0 12 10.125 3.134 3.134 0 0 0 15.125 7 3.134 3.134 0 0 0 12 3.875 3.134 3.134 0 0 0 8.875 7ZM17 7c0 2.773-2.227 5-5 5S7 9.773 7 7s2.227-5 5-5 5 2.227 5 5ZM5.125 20.75v.313a.95.95 0 0 1-.938.937.95.95 0 0 1-.937-.938v-.312c0-3.79 3.086-6.875 6.875-6.875h3.75c3.79 0 6.875 3.086 6.875 6.875v.313a.95.95 0 0 1-.938.937.95.95 0 0 1-.937-.938v-.312c0-2.773-2.227-5-5-5h-3.75c-2.773 0-5 2.227-5 5Z"/></svg>
+          <span class="header-btn-label">Konto</span>
         </a>
       </div>
     </div>
