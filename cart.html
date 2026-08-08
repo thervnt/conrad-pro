@@ -2789,35 +2789,7 @@ button { font: inherit; cursor: pointer; }
 .quickadd-msg { font-size: 13px; margin: 8px 0 0; }
 .quickadd-msg.ok { color: #218972; font-weight: 500; }
 .quickadd-msg.err { color: #d9234c; font-weight: 500; }
-.quickadd-csv-row[hidden] { display: none; }
-.quickadd-csv-row {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  flex-wrap: wrap;
-  margin-top: 12px;
-  padding-top: 12px;
-  border-top: 1px solid var(--c-border);
-}
-.quickadd-file {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  height: 40px;
-  padding: 0 16px;
-  background: var(--c-bg-white);
-  border: 1px solid var(--c-border);
-  border-radius: var(--radius-sm);
-  font: inherit;
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--c-text);
-  cursor: pointer;
-}
-.quickadd-file:hover { border-color: var(--c-blue); }
-.quickadd-file svg { width: 16px; height: 16px; }
-.quickadd-csv-row a { font-size: 13px; color: var(--c-blue); }
-.quickadd-csv-note { font-size: 13px; color: var(--c-text-secondary); }
+.quickadd-hint a { color: var(--c-blue); }
 
 /* ===== EMPTY CART STATE ===== */
 .cart-empty {
@@ -3273,17 +3245,9 @@ button { font: inherit; cursor: pointer; }
           </div>
           <button type="button" class="quickadd-add" data-qa-add>Hinzufügen</button>
         </div>
-        <p class="quickadd-hint">Mehrere Artikel: Bestell-Nr. und Menge mit Semikolon, weitere mit Komma trennen – z. B. 1188440;4, 1188441;2</p>
+        <input type="file" accept=".csv,text/csv" hidden data-qa-file>
+        <p class="quickadd-hint">Mehrere Artikel: Bestell-Nr. und Menge mit Semikolon, weitere mit Komma trennen – z. B. 1188440;4, 1188441;2 · CSV-Spalten: Bestell-Nr.; Menge · <a href="#" data-qa-template>Vorlage herunterladen</a></p>
         <p class="quickadd-msg" data-qa-msg hidden></p>
-        <div class="quickadd-csv-row" data-qa-csv hidden>
-          <input type="file" accept=".csv,text/csv" hidden data-qa-file>
-          <button type="button" class="quickadd-file" data-qa-file-btn>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-            CSV auswählen
-          </button>
-          <span class="quickadd-csv-note">Spalten: Bestell-Nr.; Menge</span>
-          <a href="#" data-qa-template>CSV-Vorlage herunterladen</a>
-        </div>
       </div>
     </div>
 
@@ -3571,7 +3535,6 @@ button { font: inherit; cursor: pointer; }
   var qaNr = qaNode.querySelector('[data-qa-nr]');
   var qaQty = qaNode.querySelector('[data-qa-qty]');
   var qaMsg = qaNode.querySelector('[data-qa-msg]');
-  var qaCsv = qaNode.querySelector('[data-qa-csv]');
   var qaFile = qaNode.querySelector('[data-qa-file]');
 
   function qaShow(text, kind) {
@@ -3658,14 +3621,10 @@ button { font: inherit; cursor: pointer; }
     qaSetQty((parseInt(qaQty.value, 10) || 2) - 1);
   });
 
-  var qaCsvBtn = qaNode.querySelector('[data-qa-csv-toggle]');
-  qaCsvBtn.addEventListener('click', function () {
-    qaCsv.hidden = !qaCsv.hidden;
-    var label = qaCsv.hidden ? 'CSV importieren' : 'CSV-Import schließen';
-    qaCsvBtn.setAttribute('data-tooltip', label);
-    qaCsvBtn.setAttribute('aria-label', label);
+  // Icon oeffnet direkt den Dateidialog des Systems.
+  qaNode.querySelector('[data-qa-csv-toggle]').addEventListener('click', function () {
+    qaFile.click();
   });
-  qaNode.querySelector('[data-qa-file-btn]').addEventListener('click', function () { qaFile.click(); });
 
   qaFile.addEventListener('change', function () {
     var file = qaFile.files && qaFile.files[0];
