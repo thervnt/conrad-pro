@@ -176,7 +176,7 @@ button { font: inherit; cursor: pointer; }
 .header-row1 {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 16px;
   margin-bottom: 24px;
 }
 /* Jede Kopfzeilen-Interaktion ist eine eigene Klickflaeche mit
@@ -237,7 +237,7 @@ button { font: inherit; cursor: pointer; }
   margin-left: auto;
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 12px;
 }
 .icon-badge.bump { animation: badge-bump 0.55s cubic-bezier(0.34, 1.56, 0.64, 1); }
 @keyframes badge-bump {
@@ -423,7 +423,7 @@ button { font: inherit; cursor: pointer; }
   .header-row1 { gap: 12px; margin-bottom: 12px; }
   .logo svg { width: 96px; }
   .conrad-pro-link { display: none; }                /* hide PRO inline link */
-  .header-right { gap: 2px; margin-left: auto; }
+  .header-right { gap: 4px; margin-left: auto; }
 
   /* --- Search card ------------------------------------------ */
   .search-card { height: 48px; padding: 0 6px 0 12px; gap: 8px; }
@@ -2368,6 +2368,160 @@ button { font: inherit; cursor: pointer; }
   height: auto;
   display: block;
 }
+
+/* ===== HEADER DRAWERS (Kategorien / Konto) ===== */
+.hdr-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 31, 66, 0.45);
+  z-index: 950;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+.hdr-backdrop.open { opacity: 1; }
+.hdr-backdrop[hidden] { display: none; }
+.hdr-drawer {
+  position: fixed;
+  top: 0;
+  height: 100%;
+  width: 420px;
+  max-width: 92vw;
+  background: var(--c-bg-white);
+  z-index: 951;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.26s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+.hdr-drawer[hidden] { display: none; }
+.hdr-drawer.left {
+  left: 0;
+  transform: translateX(-100%);
+  box-shadow: 12px 0 32px rgba(15, 23, 42, 0.18);
+  border-radius: 0 12px 12px 0;
+}
+.hdr-drawer.right {
+  right: 0;
+  transform: translateX(100%);
+  box-shadow: -12px 0 32px rgba(15, 23, 42, 0.18);
+  border-radius: 12px 0 0 12px;
+}
+.hdr-drawer.open { transform: none; }
+.hdr-drawer-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 18px 20px 6px;
+}
+.hdr-drawer-title { font-size: 15px; font-weight: 600; color: var(--c-text-secondary); margin: 0; }
+.hdr-drawer-close {
+  background: none;
+  border: none;
+  padding: 6px;
+  border-radius: 4px;
+  color: var(--c-text-secondary);
+  cursor: pointer;
+  display: inline-flex;
+}
+.hdr-drawer-close:hover { color: var(--c-text); background: var(--c-bg-tint); }
+.hdr-drawer-close svg { width: 18px; height: 18px; }
+.hdr-drawer-body { flex: 1; overflow-y: auto; padding: 4px 8px 20px; }
+.hdr-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 12px;
+  border-radius: 4px;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--c-text);
+  text-decoration: none;
+}
+.hdr-item:hover { background: var(--c-bg-tint); text-decoration: none; }
+.hdr-item > svg { width: 18px; height: 18px; color: var(--c-text-tertiary); flex-shrink: 0; }
+.hdr-item-lead { display: inline-flex; align-items: center; gap: 10px; min-width: 0; }
+.hdr-item-lead svg { width: 18px; height: 18px; color: var(--c-text-secondary); flex-shrink: 0; }
+.hdr-item-lead .pro-logo-inline { width: 38px; height: 9px; }
+.hdr-sep { border: none; border-top: 1px solid var(--c-border); margin: 10px 12px; }
+.hdr-login {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 48px;
+  margin: 6px 12px 10px;
+  background: var(--c-blue);
+  color: var(--c-text-on-dark);
+  border: none;
+  border-radius: var(--radius-sm);
+  font: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+}
+.hdr-login:hover { background: var(--c-blue-hover); text-decoration: none; }
+
+/* ===== "Einkaufen als" Flyout ===== */
+.gk-wrap { position: relative; display: inline-flex; }
+.gk-flyout {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 0;
+  width: 330px;
+  background: var(--c-bg-white);
+  border-radius: 12px;
+  box-shadow: 0 14px 32px rgba(15, 23, 42, 0.18);
+  z-index: 940;
+  display: none;
+  text-align: left;
+  overflow: hidden;
+}
+.gk-wrap:hover .gk-flyout,
+.gk-wrap:focus-within .gk-flyout { display: block; }
+.gk-wrap.suppress .gk-flyout { display: none; }
+.gk-flyout-title {
+  font-size: 15px;
+  color: var(--c-text);
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--c-border);
+}
+.gk-option {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  width: 100%;
+  padding: 14px 18px;
+  background: none;
+  border: none;
+  border-top: 1px solid var(--c-border);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.gk-option:first-of-type { border-top: none; }
+.gk-option:hover { background: var(--c-bg-tint); }
+.gk-radio {
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  border: 2px solid var(--c-text-tertiary);
+  flex-shrink: 0;
+  margin-top: 2px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--c-text-on-dark);
+}
+.gk-option.selected .gk-radio { background: var(--c-navy); border-color: var(--c-navy); }
+.gk-radio svg { width: 12px; height: 12px; display: none; }
+.gk-option.selected .gk-radio svg { display: block; }
+.gk-option-name { font-size: 15px; font-weight: 700; color: var(--c-text); }
+.gk-option ul { margin: 4px 0 0; padding-left: 18px; font-size: 14px; color: var(--c-text-secondary); }
+.gk-option li { padding: 1px 0; }
+@media (prefers-reduced-motion: reduce) {
+  .hdr-drawer, .hdr-backdrop { transition: none; }
+}
 </style>
 <style>
 /* ===== CART PAGE ===== */
@@ -2894,7 +3048,7 @@ button { font: inherit; cursor: pointer; }
 </defs>
 </svg>
       </a>
-      <a href="#" class="header-btn">
+      <a href="#" class="header-btn" data-open-drawer="categories">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
         <span class="header-btn-label">Kategorien</span>
       </a>
@@ -2903,10 +3057,29 @@ button { font: inherit; cursor: pointer; }
       </a>
 
       <div class="header-right">
-        <a href="#" class="header-btn">
-          <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M16.3359 3.60156C15.9844 3.25 15.9844 2.625 16.3359 2.27344C16.6875 1.92188 17.3125 1.92188 17.6641 2.27344L21.7266 6.33594C22.0781 6.6875 22.0781 7.3125 21.7266 7.66406L17.6641 11.7266C17.3125 12.0781 16.6875 12.0781 16.3359 11.7266C15.9844 11.375 15.9844 10.75 16.3359 10.3984L18.7969 7.9375H2.9375C2.42969 7.9375 2 7.50781 2 7C2 6.49219 2.42969 6.0625 2.9375 6.0625H18.7969L16.3359 3.60156ZM7.66406 13.6016L5.20312 16.0625H21.0625C21.5703 16.0625 22 16.4922 22 17C22 17.5078 21.5703 17.9375 21.0625 17.9375H5.20312L7.66406 20.3984C8.01562 20.75 8.01562 21.375 7.66406 21.7266C7.3125 22.0781 6.6875 22.0781 6.33594 21.7266L2.27344 17.6641C1.92188 17.3125 1.92188 16.6875 2.27344 16.3359L6.33594 12.2734C6.6875 11.9219 7.3125 11.9219 7.66406 12.2734C8.01562 12.625 8.01562 13.25 7.66406 13.6016Z"/></svg>
-          <span class="header-btn-label">Geschäftskunde</span>
-        </a>
+        <div class="gk-wrap">
+          <a href="#" class="header-btn">
+            <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M16.3359 3.60156C15.9844 3.25 15.9844 2.625 16.3359 2.27344C16.6875 1.92188 17.3125 1.92188 17.6641 2.27344L21.7266 6.33594C22.0781 6.6875 22.0781 7.3125 21.7266 7.66406L17.6641 11.7266C17.3125 12.0781 16.6875 12.0781 16.3359 11.7266C15.9844 11.375 15.9844 10.75 16.3359 10.3984L18.7969 7.9375H2.9375C2.42969 7.9375 2 7.50781 2 7C2 6.49219 2.42969 6.0625 2.9375 6.0625H18.7969L16.3359 3.60156ZM7.66406 13.6016L5.20312 16.0625H21.0625C21.5703 16.0625 22 16.4922 22 17C22 17.5078 21.5703 17.9375 21.0625 17.9375H5.20312L7.66406 20.3984C8.01562 20.75 8.01562 21.375 7.66406 21.7266C7.3125 22.0781 6.6875 22.0781 6.33594 21.7266L2.27344 17.6641C1.92188 17.3125 1.92188 16.6875 2.27344 16.3359L6.33594 12.2734C6.6875 11.9219 7.3125 11.9219 7.66406 12.2734C8.01562 12.625 8.01562 13.25 7.66406 13.6016Z"/></svg>
+            <span class="header-btn-label" data-gk-label>Geschäftskunde</span>
+          </a>
+          <div class="gk-flyout" role="menu">
+          <div class="gk-flyout-title">Einkaufen als</div>
+          <button type="button" class="gk-option selected" data-gk-option="business" role="menuitemradio" aria-checked="true">
+            <span class="gk-radio"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg></span>
+            <span>
+              <span class="gk-option-name">Geschäftskunde</span>
+              <ul><li>10.000.000+ Produktvariationen</li><li>Nettopreise (exkl. MwSt.)</li></ul>
+            </span>
+          </button>
+          <button type="button" class="gk-option" data-gk-option="private" role="menuitemradio" aria-checked="false">
+            <span class="gk-radio"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg></span>
+            <span>
+              <span class="gk-option-name">Privatkunde</span>
+              <ul><li>1.000.000+ Produkte</li><li>Bruttopreise (inkl. MwSt.)</li></ul>
+            </span>
+          </button>
+        </div>
+        </div>
         <a href="#" class="header-btn">
           <svg viewBox="0 0 18 22" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M3.125 7.5C3.125 8.00781 2.69531 8.4375 2.1875 8.4375C1.67969 8.4375 1.25 8.00781 1.25 7.5C1.25 3.35938 4.60938 0 8.75 0C12.8906 0 16.25 3.35938 16.25 7.5V12.8125C16.25 13.3203 15.8203 13.75 15.3125 13.75H8.125C7.10938 13.75 6.25 12.9297 6.25 11.875C6.25 10.8594 7.10938 10 8.125 10H9.375C10.4297 10 11.25 10.8594 11.25 11.875H14.375V7.5C14.375 4.41406 11.875 1.875 8.75 1.875C5.66406 1.875 3.125 4.41406 3.125 7.5ZM11.25 7.5C11.25 6.13281 10.1172 5 8.75 5C7.38281 5 6.25 6.13281 6.25 7.5C6.25 7.96875 6.36719 8.39844 6.60156 8.78906C6.01562 9.0625 5.54688 9.53125 5.19531 10.0781C4.6875 9.33594 4.375 8.47656 4.375 7.5C4.375 5.07812 6.32812 3.125 8.75 3.125C11.1719 3.125 13.125 5.07812 13.125 7.5C13.125 8.47656 12.8125 9.33594 12.3047 10.0781C11.9531 9.53125 11.4844 9.0625 10.8984 8.78906C11.1328 8.39844 11.25 7.96875 11.25 7.5ZM1.875 20.3125C1.875 20.8203 1.44531 21.25 0.9375 21.25C0.429688 21.25 0 20.8203 0 20.3125C0 17.3828 2.38281 15 5.3125 15H12.1875C15.1172 15 17.5 17.3828 17.5 20.3125C17.5 20.8203 17.0703 21.25 16.5625 21.25C16.0547 21.25 15.625 20.8203 15.625 20.3125C15.625 18.3984 14.1016 16.875 12.1875 16.875H5.3125C3.39844 16.875 1.875 18.3984 1.875 20.3125Z"/></svg>
           <span class="header-btn-label">Hilfe &amp; Support</span>
@@ -2917,7 +3090,7 @@ button { font: inherit; cursor: pointer; }
         <a href="cart.html" class="header-btn icon-only" aria-label="Einkaufswagen">
           <span class="icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg><span class="icon-badge" data-cart-badge>1</span></span>
         </a>
-        <a href="#" class="header-btn">
+        <a href="#" class="header-btn" data-open-drawer="account">
           <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M8.875 7A3.134 3.134 0 0 0 12 10.125 3.134 3.134 0 0 0 15.125 7 3.134 3.134 0 0 0 12 3.875 3.134 3.134 0 0 0 8.875 7ZM17 7c0 2.773-2.227 5-5 5S7 9.773 7 7s2.227-5 5-5 5 2.227 5 5ZM5.125 20.75v.313a.95.95 0 0 1-.938.937.95.95 0 0 1-.937-.938v-.312c0-3.79 3.086-6.875 6.875-6.875h3.75c3.79 0 6.875 3.086 6.875 6.875v.313a.95.95 0 0 1-.938.937.95.95 0 0 1-.937-.938v-.312c0-2.773-2.227-5-5-5h-3.75c-2.773 0-5 2.227-5 5Z"/></svg>
           <span class="header-btn-label">Konto</span>
         </a>
@@ -3554,6 +3727,136 @@ button { font: inherit; cursor: pointer; }
 
   save();   // persist the seed on first visit so PDP and cart agree
   render();
+})();
+</script>
+
+
+<!-- HEADER DRAWERS -->
+<div class="hdr-backdrop" data-hdr-backdrop hidden></div>
+
+<aside class="hdr-drawer left" data-drawer="categories" role="dialog" aria-modal="true" aria-label="Kategorien" hidden>
+  <div class="hdr-drawer-head">
+    <p class="hdr-drawer-title">Kategorien</p>
+    <button type="button" class="hdr-drawer-close" data-hdr-close aria-label="Schließen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+  </div>
+  <div class="hdr-drawer-body">
+        <a class="hdr-item" href="#">Computer & Büro<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></a>
+        <a class="hdr-item" href="#">Multimedia<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></a>
+        <a class="hdr-item" href="#">Kfz, Hobby & Haushalt<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></a>
+        <a class="hdr-item" href="#">Werkzeug & Werkstatt<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></a>
+        <a class="hdr-item" href="#">Gebäudetechnik & Smart Living<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></a>
+        <a class="hdr-item" href="#">Steckverbinder & Kabel<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></a>
+        <a class="hdr-item" href="#">Messtechnik & Stromversorgung<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></a>
+        <a class="hdr-item" href="#">Education & Entwicklungskits<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></a>
+        <a class="hdr-item" href="#">Aktive Bauelemente<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></a>
+        <a class="hdr-item" href="#">Passive Bauelemente<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></a>
+        <a class="hdr-item" href="#">Elektromechanik<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></a>
+        <a class="hdr-item" href="#">Automation & Pneumatik<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></a>
+  </div>
+</aside>
+
+<aside class="hdr-drawer right" data-drawer="account" role="dialog" aria-modal="true" aria-label="Konto" hidden>
+  <div class="hdr-drawer-head">
+    <p class="hdr-drawer-title">Willkommen</p>
+    <button type="button" class="hdr-drawer-close" data-hdr-close aria-label="Schließen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+  </div>
+  <a class="hdr-login" href="#">Anmelden</a>
+  <div class="hdr-drawer-body">
+        <a class="hdr-item" href="#">Konto</a>
+        <a class="hdr-item" href="#"><span class="hdr-item-lead">Conrad <span class="pro-logo-inline"><svg width="38" height="9" viewBox="0 0 38 9" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="PRO"><path fill-rule="evenodd" clip-rule="evenodd" d="M22.5387 8.85372L20.3429 6.05665C22.3755 5.61932 23.4462 4.47042 23.4462 2.69746C23.4462 0.774114 22.3266 0 19.5155 0H13.6735L11.6777 8.85372H15.1095L16.5947 2.2729H18.7727C19.7467 2.2729 20.2576 2.57252 20.2576 3.13458C20.2576 3.93394 19.7952 4.33317 18.8462 4.33317H16.4482L18.0915 7.16776C19.0528 8.80413 19.138 8.85372 21.0612 8.85372H22.5387Z" fill="#376EEF"/><path fill-rule="evenodd" clip-rule="evenodd" d="M7.09494 2.2729C8.06898 2.2729 8.57991 2.57252 8.57991 3.13458C8.57991 3.93394 8.11744 4.33316 7.1685 4.33316H4.77051L5.82403 6.15128H7.2955C8.31421 6.15128 8.66512 6.05665 8.66512 6.05665C10.6978 5.61933 11.7685 4.47042 11.7685 2.69745C11.7685 0.774122 10.6489 0 7.83776 0H1.99574L0 8.85372H3.43179L4.91696 2.2729H7.09494Z" fill="#376EEF"/><path d="M34.2872 0H29.1727C25.9115 0 24.1348 2.0724 24.1348 5.89341C24.1348 8.09139 25.0718 8.85305 27.7977 8.85305L32.8025 8.85259C36.1126 8.85259 37.9986 6.83001 37.9986 3.27142C37.9986 0.874272 37.0132 0 34.2872 0ZM31.7927 6.71809L29.574 6.71786C28.0535 6.71786 27.5744 6.39289 27.5744 5.30668C27.5744 3.3961 28.5886 2.34712 30.3531 2.34712L32.5961 2.34735C33.9954 2.34735 34.3604 2.62187 34.3604 3.67108C34.3604 5.65612 33.4596 6.71809 31.7927 6.71809Z" fill="#376EEF"/></svg></span></span></a>
+        <a class="hdr-item" href="#">Bestellungen</a>
+        <a class="hdr-item" href="#">Merklisten</a>
+        <a class="hdr-item" href="#">Angebotsanforderung</a>
+        <a class="hdr-item" href="#">Rechnungen & Gutschriften</a>
+        <a class="hdr-item" href="#">Adressen</a>
+        <a class="hdr-item" href="#">Zahlungsart</a>
+        <a class="hdr-item" href="#">Rücksendungen</a>
+        <a class="hdr-item" href="#">Newsletter</a>
+    <hr class="hdr-sep">
+    <a class="hdr-item" href="#"><span class="hdr-item-lead"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.3359 3.60156C15.9844 3.25 15.9844 2.625 16.3359 2.27344C16.6875 1.92188 17.3125 1.92188 17.6641 2.27344L21.7266 6.33594C22.0781 6.6875 22.0781 7.3125 21.7266 7.66406L17.6641 11.7266C17.3125 12.0781 16.6875 12.0781 16.3359 11.7266C15.9844 11.375 15.9844 10.75 16.3359 10.3984L18.7969 7.9375H2.9375C2.42969 7.9375 2 7.50781 2 7C2 6.49219 2.42969 6.0625 2.9375 6.0625H18.7969L16.3359 3.60156ZM7.66406 13.6016L5.20312 16.0625H21.0625C21.5703 16.0625 22 16.4922 22 17C22 17.5078 21.5703 17.9375 21.0625 17.9375H5.20312L7.66406 20.3984C8.01562 20.75 8.01562 21.375 7.66406 21.7266C7.3125 22.0781 6.6875 22.0781 6.33594 21.7266L2.27344 17.6641C1.92188 17.3125 1.92188 16.6875 2.27344 16.3359L6.33594 12.2734C6.6875 11.9219 7.3125 11.9219 7.66406 12.2734C8.01562 12.625 8.01562 13.25 7.66406 13.6016Z"/></svg> Geschäftskunde</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></a>
+    <a class="hdr-item" href="#"><span class="hdr-item-lead"><svg viewBox="0 0 18 22" fill="currentColor" aria-hidden="true"><path d="M3.125 7.5C3.125 8.00781 2.69531 8.4375 2.1875 8.4375C1.67969 8.4375 1.25 8.00781 1.25 7.5C1.25 3.35938 4.60938 0 8.75 0C12.8906 0 16.25 3.35938 16.25 7.5V12.8125C16.25 13.3203 15.8203 13.75 15.3125 13.75H8.125C7.10938 13.75 6.25 12.9297 6.25 11.875C6.25 10.8594 7.10938 10 8.125 10H9.375C10.4297 10 11.25 10.8594 11.25 11.875H14.375V7.5C14.375 4.41406 11.875 1.875 8.75 1.875C5.66406 1.875 3.125 4.41406 3.125 7.5ZM11.25 7.5C11.25 6.13281 10.1172 5 8.75 5C7.38281 5 6.25 6.13281 6.25 7.5C6.25 7.96875 6.36719 8.39844 6.60156 8.78906C6.01562 9.0625 5.54688 9.53125 5.19531 10.0781C4.6875 9.33594 4.375 8.47656 4.375 7.5C4.375 5.07812 6.32812 3.125 8.75 3.125C11.1719 3.125 13.125 5.07812 13.125 7.5C13.125 8.47656 12.8125 9.33594 12.3047 10.0781C11.9531 9.53125 11.4844 9.0625 10.8984 8.78906C11.1328 8.39844 11.25 7.96875 11.25 7.5ZM1.875 20.3125C1.875 20.8203 1.44531 21.25 0.9375 21.25C0.429688 21.25 0 20.8203 0 20.3125C0 17.3828 2.38281 15 5.3125 15H12.1875C15.1172 15 17.5 17.3828 17.5 20.3125C17.5 20.8203 17.0703 21.25 16.5625 21.25C16.0547 21.25 15.625 20.8203 15.625 20.3125C15.625 18.3984 14.1016 16.875 12.1875 16.875H5.3125C3.39844 16.875 1.875 18.3984 1.875 20.3125Z"/></svg> Kundenservice</span></a>
+  </div>
+</aside>
+
+<script>
+(function () {
+  var backdrop = document.querySelector('[data-hdr-backdrop]');
+  var openEl = null;
+  var returnFocus = null;
+
+  function openDrawer(el) {
+    openEl = el;
+    returnFocus = document.activeElement;
+    el.hidden = false;
+    backdrop.hidden = false;
+    requestAnimationFrame(function () { el.classList.add('open'); backdrop.classList.add('open'); });
+    document.body.style.overflow = 'hidden';
+    document.addEventListener('keydown', onKey);
+    var close = el.querySelector('[data-hdr-close]');
+    if (close) close.focus();
+  }
+
+  function closeDrawer() {
+    if (!openEl) return;
+    var el = openEl;
+    openEl = null;
+    el.classList.remove('open');
+    backdrop.classList.remove('open');
+    document.body.style.overflow = '';
+    document.removeEventListener('keydown', onKey);
+    setTimeout(function () { el.hidden = true; backdrop.hidden = true; }, 260);
+    if (returnFocus && returnFocus.focus) returnFocus.focus();
+  }
+
+  function onKey(e) {
+    if (e.key === 'Escape') { closeDrawer(); return; }
+    if (e.key !== 'Tab' || !openEl) return;
+    var f = openEl.querySelectorAll('a[href], button:not([disabled])');
+    if (!f.length) return;
+    var first = f[0], last = f[f.length - 1];
+    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+  }
+
+  backdrop.addEventListener('click', closeDrawer);
+  document.querySelectorAll('[data-hdr-close]').forEach(function (b) {
+    b.addEventListener('click', closeDrawer);
+  });
+  document.querySelectorAll('[data-open-drawer]').forEach(function (btn) {
+    btn.addEventListener('click', function (e) {
+      e.preventDefault();
+      var target = document.querySelector('[data-drawer="' + btn.dataset.openDrawer + '"]');
+      if (target) openDrawer(target);
+    });
+  });
+
+  // ---- "Einkaufen als": Auswahl merken, Flyout nach Klick schliessen ----
+  var KEY = 'conradCustomerType';
+  var wrap = document.querySelector('.gk-wrap');
+  if (!wrap) return;
+  var label = wrap.querySelector('[data-gk-label]');
+
+  function apply(type) {
+    label.textContent = type === 'private' ? 'Privatkunde' : 'Geschäftskunde';
+    wrap.querySelectorAll('[data-gk-option]').forEach(function (o) {
+      o.classList.toggle('selected', o.dataset.gkOption === type);
+      o.setAttribute('aria-checked', o.dataset.gkOption === type ? 'true' : 'false');
+    });
+  }
+
+  apply(localStorage.getItem(KEY) === 'private' ? 'private' : 'business');
+
+  wrap.querySelectorAll('[data-gk-option]').forEach(function (o) {
+    o.addEventListener('click', function () {
+      var type = o.dataset.gkOption;
+      if (type === 'private') localStorage.setItem(KEY, 'private');
+      else localStorage.removeItem(KEY);
+      apply(type);
+      // Overlay sofort schliessen, bis der Zeiger die Flaeche verlaesst
+      wrap.classList.add('suppress');
+    });
+  });
+  wrap.addEventListener('mouseleave', function () { wrap.classList.remove('suppress'); });
 })();
 </script>
 
