@@ -2716,12 +2716,35 @@ button { font: inherit; cursor: pointer; }
 }
 .quickadd-input:focus { outline: none; border-color: var(--c-blue); }
 .quickadd-nr { flex: 1 1 220px; min-width: 0; }
-.quickadd-qty { flex: 0 0 88px; text-align: center; font-variant-numeric: tabular-nums; }
+/* Kompakter Stepper wie im Mini-Warenkorb. */
+.quickadd-stepper { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+.quickadd-stepper button {
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--c-border);
+  background: var(--c-bg-white);
+  border-radius: var(--radius-sm);
+  color: var(--c-text-secondary);
+  font: inherit;
+  font-size: 15px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.quickadd-stepper button:hover { border-color: var(--c-blue); }
+.quickadd-qty {
+  flex: 0 0 44px;
+  width: 44px;
+  padding: 0 4px;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
 .quickadd-add {
   height: 40px;
   padding: 0 20px;
-  background: var(--c-blue);
-  color: var(--c-text-on-dark);
+  background: #E2E5FA;
+  color: var(--c-navy);
   border: none;
   border-radius: var(--radius-sm);
   font: inherit;
@@ -2730,18 +2753,8 @@ button { font: inherit; cursor: pointer; }
   cursor: pointer;
   flex-shrink: 0;
 }
-.quickadd-add:hover { background: var(--c-blue-hover); }
-.quickadd-csv-link {
-  background: none;
-  border: none;
-  padding: 0 4px;
-  font: inherit;
-  font-size: 13px;
-  color: var(--c-blue);
-  cursor: pointer;
-  flex-shrink: 0;
-}
-.quickadd-csv-link:hover { text-decoration: underline; }
+.quickadd-add:hover { background: #d6dcf8; }
+.quickadd-form .icon-btn { width: 40px; height: 40px; }
 .quickadd-hint { font-size: 12px; color: var(--c-text-tertiary); margin: 8px 0 0; }
 .quickadd-msg { font-size: 13px; margin: 8px 0 0; }
 .quickadd-msg.ok { color: #218972; font-weight: 500; }
@@ -3209,9 +3222,15 @@ button { font: inherit; cursor: pointer; }
         <p class="quickadd-title">Artikel per Bestell-Nr. hinzufügen</p>
         <div class="quickadd-form">
           <input class="quickadd-input quickadd-nr" type="text" placeholder="Bestell-Nr., z. B. 1188440" aria-label="Bestell-Nr." data-qa-nr>
-          <input class="quickadd-input quickadd-qty" type="text" inputmode="numeric" value="1" aria-label="Menge" data-qa-qty>
+          <div class="quickadd-stepper">
+            <button type="button" data-qa-minus aria-label="Menge verringern">−</button>
+            <input class="quickadd-input quickadd-qty" type="text" inputmode="numeric" value="1" aria-label="Menge" data-qa-qty>
+            <button type="button" data-qa-plus aria-label="Menge erhöhen">+</button>
+          </div>
           <button type="button" class="quickadd-add" data-qa-add>Hinzufügen</button>
-          <button type="button" class="quickadd-csv-link" data-qa-csv-toggle>oder CSV importieren</button>
+          <button type="button" class="icon-btn" data-qa-csv-toggle data-tooltip="CSV importieren" aria-label="CSV importieren">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          </button>
         </div>
         <p class="quickadd-hint">Mehrere Artikel: Bestell-Nr. und Menge mit Semikolon, weitere mit Komma trennen – z. B. 1188440;4, 1188441;2</p>
         <p class="quickadd-msg" data-qa-msg hidden></p>
@@ -3582,9 +3601,23 @@ button { font: inherit; cursor: pointer; }
   });
   qaNr.addEventListener('input', function () { qaMsg.hidden = true; });
 
-  qaNode.querySelector('[data-qa-csv-toggle]').addEventListener('click', function (e) {
+  function qaSetQty(n) {
+    qaQty.value = Math.max(1, n);
+    qaMsg.hidden = true;
+  }
+  qaNode.querySelector('[data-qa-plus]').addEventListener('click', function () {
+    qaSetQty((parseInt(qaQty.value, 10) || 0) + 1);
+  });
+  qaNode.querySelector('[data-qa-minus]').addEventListener('click', function () {
+    qaSetQty((parseInt(qaQty.value, 10) || 2) - 1);
+  });
+
+  var qaCsvBtn = qaNode.querySelector('[data-qa-csv-toggle]');
+  qaCsvBtn.addEventListener('click', function () {
     qaCsv.hidden = !qaCsv.hidden;
-    e.target.textContent = qaCsv.hidden ? 'oder CSV importieren' : 'CSV-Import schließen';
+    var label = qaCsv.hidden ? 'CSV importieren' : 'CSV-Import schließen';
+    qaCsvBtn.setAttribute('data-tooltip', label);
+    qaCsvBtn.setAttribute('aria-label', label);
   });
   qaNode.querySelector('[data-qa-file-btn]').addEventListener('click', function () { qaFile.click(); });
 
