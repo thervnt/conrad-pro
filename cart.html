@@ -2727,6 +2727,14 @@ button { font: inherit; cursor: pointer; }
 
 
 /* ===== QUICK ADD (Bestell-Nr. / CSV) ===== */
+/* Trennt das PRO-Modul von der Schnellerfassung - gleicher Abstand
+   ueber und unter der Linie. */
+.cart-section-divider {
+  border: none;
+  border-top: 1px solid var(--c-border);
+  margin: 20px 0;
+}
+.cart-section-divider + .quickadd { margin-top: 0; }
 .quickadd {
   background: var(--c-bg-white);
   border-radius: var(--radius);
@@ -3287,6 +3295,7 @@ button { font: inherit; cursor: pointer; }
           <span><strong>30 Tage kostenlos testen</strong> – danach 59 €/Jahr. Ich akzeptiere die <a href="#">AGB</a> und <a href="#">Kündigungsbedingungen</a>.</span>
         </label>
       </div>
+      <hr class="cart-section-divider" data-pro-qa-divider>
       <div class="quickadd" data-quickadd>
         <p class="quickadd-title">Artikel per Bestell-Nr. hinzufügen</p>
         <div class="quickadd-form">
@@ -3764,6 +3773,8 @@ button { font: inherit; cursor: pointer; }
     // reflects what the tick changes for THIS order.
     var upsell = document.querySelector('[data-pro-upsell]');
     upsell.style.display = empty ? 'none' : '';
+    var upsellDivider = document.querySelector('[data-pro-qa-divider]');
+    if (upsellDivider) upsellDivider.style.display = empty ? 'none' : '';
     var saving = document.querySelector('[data-pro-saving]');
     document.querySelector('[data-summary-pro-usp]').hidden = pro || empty;
     // Shipping is free from 100 EUR net anyway - pitch the next-best
