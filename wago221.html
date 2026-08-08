@@ -874,16 +874,16 @@ button { font: inherit; cursor: pointer; }
 }
 /* Transparenzhinweis nach Art. 50 EU AI Act (gilt seit 02.08.2026):
    KI-erzeugte Inhalte muessen als solche gekennzeichnet sein. */
-/* Symbol links, Kennzeichnung rechts oben - beide auf einer Linie. */
+/* Kennzeichnung oben rechts, Symbol direkt davor. */
 .ai-callout-label {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 8px;
+  justify-content: flex-end;
+  gap: 6px;
   font-size: 12px;
   font-weight: 600;
   color: var(--c-purple-icon);
-  margin-bottom: 8px;
+  margin-bottom: 2px;
 }
 .ai-callout-icon {
   width: 16px;
