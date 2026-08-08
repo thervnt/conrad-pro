@@ -2200,6 +2200,17 @@ button { font: inherit; cursor: pointer; }
   overflow: hidden;
 }
 .bundle-card-name strong { font-weight: 700; }
+/* Die Zubehoerkarte fuehrt auf die Produktseite - der Schatten beim
+   Ueberfahren zeigt, dass die ganze Flaeche klickbar ist. */
+.bundle-card-reco { cursor: pointer; transition: box-shadow 0.15s ease; }
+.bundle-card-reco:hover,
+.bundle-card-reco:focus-within {
+  box-shadow:
+    0 10px 20px -4px rgba(17, 18, 19, 0.12),
+    0 2px 6px 0 rgba(17, 18, 19, 0.10);
+}
+.bundle-card-name a { color: inherit; text-decoration: none; }
+.bundle-card-reco:hover .bundle-card-name a { text-decoration: underline; }
 /* Lager, Lieferpille und Verkaeuferzeile folgen exakt der Buybox. */
 .bundle-card-stock {
   margin: 0;
@@ -5133,6 +5144,7 @@ function renderBundle() {
     ? pricing.packs[sz]
     : (pricing.baselineUnit * sz);
   const adapterPrice = 0.87;
+  const RECO_URL = 'https://www.conrad.de/de/p/wago-221-500-serie-221-befestigungsadapter-1-st-1489577.html';
   // Bold the brand prefix in titles so "WAGO" stands out the way
   // the screenshot pattern does. Match the literal at the start so
   // any later WAGO mentions in the body stay regular weight.
@@ -5177,7 +5189,8 @@ function renderBundle() {
       // === Recommended add-on (Befestigungsadapter) - only one with a CTA ===
       '<article class="bundle-card bundle-card-reco" data-bundle-reco>' +
         '<div class="bundle-card-image"><img src="' + adapterImg + '" alt="WAGO 221-500 Befestigungsadapter"></div>' +
-        '<p class="bundle-card-name"><strong>WAGO</strong> 221-500 Serie 221 Befestigungsadapter 1 St.</p>' +
+        '<p class="bundle-card-name"><a href="' + RECO_URL + '" target="_blank" rel="noopener noreferrer">' +
+          '<strong>WAGO</strong> 221-500 Serie 221 Befestigungsadapter 1 St.</a></p>' +
         '<p class="bundle-card-stock">12.500 St\u00fcck auf Lager</p>' +
         '<div class="bundle-card-delivery">' + deliveryIcon + 'Sofort-Lieferung ' + deliveryDate + '</div>' +
         '<p class="bundle-card-seller">Verkauft und versendet von <strong>Conrad Electronic</strong></p>' +
@@ -5255,6 +5268,16 @@ function renderBundle() {
       if (typeof window.addLineToCart === 'function') window.addLineToCart(item);
     });
   }
+  // Klick auf die Karte oeffnet die Produktseite - Bedienelemente
+  // behalten ihre eigene Funktion.
+  const recoCard = root.querySelector('[data-bundle-reco]');
+  if (recoCard) {
+    recoCard.addEventListener('click', function (e) {
+      if (e.target.closest('button, input, a, label')) return;
+      window.open(RECO_URL, '_blank', 'noopener');
+    });
+  }
+
   const bundleWish = root.querySelector('[data-bundle-wishlist]');
   if (bundleWish && typeof window.wireWishlistButton === 'function') {
     window.wireWishlistButton(bundleWish, active => {
