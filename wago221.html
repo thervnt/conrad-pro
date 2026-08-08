@@ -4254,6 +4254,7 @@ function render() {
   attachInteractions();
   renderProductSide();
   if (typeof renderBundle === 'function') renderBundle();
+  if (typeof window.syncDatenblatt === 'function') window.syncDatenblatt();
 }
 
 // Qty controls (with seller-enforced minimum of MIN_PIECES Stück)
@@ -4981,6 +4982,28 @@ document.addEventListener('click', e => {
   const currentEl = root.querySelector('[data-datenblatt-current-lang]');
   const labelEl = root.querySelector('[data-datenblatt-label]');
 
+  // Hinterlegte Datenblaetter. Vorhanden sind die 4-mm²-Ausfuehrungen;
+  // fuer 6 mm² und Green Range faellt die Auswahl auf das Blatt mit
+  // derselben Polzahl zurueck, bis eigene Dateien vorliegen.
+  const SHEETS = {
+    '221-412': 'datenblatt/wago-221-412.pdf',
+    '221-413': 'datenblatt/wago-221-413.pdf',
+    '221-415': 'datenblatt/wago-221-415.pdf',
+    '221-420': 'datenblatt/wago-221-420.pdf'
+  };
+  const SHEET_BY_POLZAHL = {
+    2: SHEETS['221-412'], 3: SHEETS['221-413'],
+    5: SHEETS['221-415'], 10: SHEETS['221-420']
+  };
+
+  function currentSheet() {
+    if (typeof state === 'undefined') return null;
+    const sku = (typeof skuByCombo !== 'undefined')
+      ? skuByCombo[state.polzahl + '|' + state.stil + '|' + state.hebel]
+      : null;
+    return SHEETS[sku] || SHEET_BY_POLZAHL[state.polzahl] || null;
+  }
+
   // Die Beschriftung steht in der Sprache, in der das PDF geoeffnet wird.
   const LABELS = {
     de: 'Datenblatt \u00f6ffnen',
@@ -4997,8 +5020,11 @@ document.addEventListener('click', e => {
     currentEl.textContent = lang.toUpperCase();
     labelEl.textContent = LABELS[lang];
     labelEl.setAttribute('lang', lang);
-    openLink.href = '#datenblatt-' + lang;
-    openLink.setAttribute('hreflang', lang);
+    // Die hinterlegten PDFs sind deutschsprachig - hreflang benennt die
+    // Sprache der Datei, nicht die der Beschriftung.
+    const sheet = currentSheet();
+    openLink.href = sheet || ('#datenblatt-' + lang);
+    openLink.setAttribute('hreflang', sheet ? 'de' : lang);
     root.querySelectorAll('[data-datenblatt-lang]').forEach(btn => {
       btn.classList.toggle('selected', btn.dataset.datenblattLang === lang);
     });
@@ -5017,6 +5043,9 @@ document.addEventListener('click', e => {
     if (dd.open && !dd.contains(e.target)) dd.open = false;
   });
 
+  // Die Auswahl im Konfigurator bestimmt die Datei - render() ruft das
+  // nach jeder Aenderung erneut auf.
+  window.syncDatenblatt = apply;
   apply();
 })();
 
