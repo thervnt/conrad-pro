@@ -1402,18 +1402,30 @@ button { font: inherit; cursor: pointer; }
   width: 220px;
   padding-left: 14px;
 }
+/* Die Zahl ist ein echtes Eingabefeld - weisser Grund, Rahmen und
+   Textcursor machen das sichtbar, der Fokusring ist zugleich die
+   Tastaturmarkierung. */
 .qty-input-wrap input {
-  background: transparent;
-  border: none;
-  text-align: left;
-  padding: 0;
-  min-width: 1ch;
-  width: 1ch;
+  background: var(--c-bg-white);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-sm);
+  text-align: center;
+  padding: 5px 6px;
+  min-width: 3.5ch;
+  width: 3.5ch;
   field-sizing: content;
   font: inherit;
   font-size: 14px;
   font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  cursor: text;
   outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.qty-input-wrap input:hover { border-color: var(--c-border-strong); }
+.qty-input-wrap input:focus {
+  border-color: var(--c-blue);
+  box-shadow: 0 0 0 3px rgba(55, 110, 239, 0.16);
 }
 .qty-btn {
   background: transparent;
@@ -2195,7 +2207,7 @@ button { font: inherit; cursor: pointer; }
   height: 44px;
   padding-left: 12px;
 }
-.bundle-card-actions .qty-input-wrap input { min-width: 1.5ch; }
+.bundle-card-actions .qty-input-wrap input { min-width: 3.5ch; }
 .bundle-cta-row {
   display: flex;
   align-items: stretch;
