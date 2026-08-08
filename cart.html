@@ -2557,8 +2557,10 @@ button { font: inherit; cursor: pointer; }
   cursor: pointer;
 }
 .pro-upsell-optin a { color: var(--c-blue); }
-.summary-label-sub { font-weight: 400; color: var(--c-text-secondary); font-size: 12px; }
 .summary-row[hidden] { display: none; }
+.summary-row .summary-label { display: inline-flex; align-items: center; gap: 6px; }
+.summary-row .pro-logo[hidden] { display: none; }
+.summary-value .discount-badge { margin-right: 4px; }
 .summary-pro-usp { margin: 0 0 12px; }
 .summary-pro-usp[hidden] { display: none; }
 /* Brief highlight when the PRO tick changes shipping/total. */
@@ -2626,7 +2628,7 @@ button { font: inherit; cursor: pointer; }
   padding: 0 18px;
   border-radius: var(--radius-sm);
   font: inherit;
-  font-size: 15px;
+  font-size: 13px;
   font-weight: 600;
   text-align: center;
   cursor: pointer;
@@ -2804,12 +2806,11 @@ button { font: inherit; cursor: pointer; }
     <aside>
       <div class="summary-card">
         <div class="summary-row"><span class="summary-label">Nettopreis</span><span class="summary-value" data-sum-net>59,96 €</span></div>
-        <div class="summary-row"><span class="summary-label">Versand</span><span class="summary-value" data-sum-shipping>Kostenfrei</span></div>
+        <div class="summary-row"><span class="summary-label">Versand <svg class="pro-logo" data-versand-pro hidden width="30" height="7" viewBox="0 0 38 9" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M22.5387 8.85372L20.3429 6.05665C22.3755 5.61932 23.4462 4.47042 23.4462 2.69746C23.4462 0.774114 22.3266 0 19.5155 0H13.6735L11.6777 8.85372H15.1095L16.5947 2.2729H18.7727C19.7467 2.2729 20.2576 2.57252 20.2576 3.13458C20.2576 3.93394 19.7952 4.33317 18.8462 4.33317H16.4482L18.0915 7.16776C19.0528 8.80413 19.138 8.85372 21.0612 8.85372H22.5387Z" fill="#376EEF"/><path fill-rule="evenodd" clip-rule="evenodd" d="M7.09494 2.2729C8.06898 2.2729 8.57991 2.57252 8.57991 3.13458C8.57991 3.93394 8.11744 4.33316 7.1685 4.33316H4.77051L5.82403 6.15128H7.2955C8.31421 6.15128 8.66512 6.05665 8.66512 6.05665C10.6978 5.61933 11.7685 4.47042 11.7685 2.69745C11.7685 0.774122 10.6489 0 7.83776 0H1.99574L0 8.85372H3.43179L4.91696 2.2729H7.09494Z" fill="#376EEF"/><path fill-rule="evenodd" clip-rule="evenodd" d="M7.09494 2.2729C8.06898 2.2729 8.57991 2.57252 8.57991 3.13458C8.57991 3.93394 8.11744 4.33316 7.1685 4.33316H4.452L4.04168 6.15128H7.2955C8.31421 6.15128 8.66512 6.05665 8.66512 6.05665C10.6978 5.61933 11.7685 4.47042 11.7685 2.69745C11.7685 0.774122 10.6489 0 7.83776 0H1.99574L0 8.85372H3.43179L4.91696 2.2729H7.09494Z" fill="#376EEF"/><path d="M34.2872 0H29.1727C25.9115 0 24.1348 2.0724 24.1348 5.89341C24.1348 8.09139 25.0718 8.85305 27.7977 8.85305L32.8025 8.85259C36.1126 8.85259 37.9986 6.83001 37.9986 3.27142C37.9986 0.874272 37.0132 0 34.2872 0ZM31.7927 6.71809L29.574 6.71786C28.0535 6.71786 27.5744 6.39289 27.5744 5.30668C27.5744 3.3961 28.5886 2.34712 30.3531 2.34712L32.5961 2.34735C33.9954 2.34735 34.3604 2.62187 34.3604 3.67108C34.3604 5.65612 33.4596 6.71809 31.7927 6.71809Z" fill="#376EEF"/></svg></span><span class="summary-value" data-sum-shipping>Kostenfrei</span></div>
         <div class="pro-usp summary-pro-usp" data-summary-pro-usp>
           <div class="pro-usp-main">Kostenfreier Versand mit
           <svg class="pro-logo" width="38" height="9" viewBox="0 0 38 9" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M22.5387 8.85372L20.3429 6.05665C22.3755 5.61932 23.4462 4.47042 23.4462 2.69746C23.4462 0.774114 22.3266 0 19.5155 0H13.6735L11.6777 8.85372H15.1095L16.5947 2.2729H18.7727C19.7467 2.2729 20.2576 2.57252 20.2576 3.13458C20.2576 3.93394 19.7952 4.33317 18.8462 4.33317H16.4482L18.0915 7.16776C19.0528 8.80413 19.138 8.85372 21.0612 8.85372H22.5387Z" fill="#376EEF"/><path fill-rule="evenodd" clip-rule="evenodd" d="M7.09494 2.2729C8.06898 2.2729 8.57991 2.57252 8.57991 3.13458C8.57991 3.93394 8.11744 4.33316 7.1685 4.33316H4.77051L5.82403 6.15128H7.2955C8.31421 6.15128 8.66512 6.05665 8.66512 6.05665C10.6978 5.61933 11.7685 4.47042 11.7685 2.69745C11.7685 0.774122 10.6489 0 7.83776 0H1.99574L0 8.85372H3.43179L4.91696 2.2729H7.09494Z" fill="#376EEF"/><path fill-rule="evenodd" clip-rule="evenodd" d="M7.09494 2.2729C8.06898 2.2729 8.57991 2.57252 8.57991 3.13458C8.57991 3.93394 8.11744 4.33316 7.1685 4.33316H4.452L4.04168 6.15128H7.2955C8.31421 6.15128 8.66512 6.05665 8.66512 6.05665C10.6978 5.61933 11.7685 4.47042 11.7685 2.69745C11.7685 0.774122 10.6489 0 7.83776 0H1.99574L0 8.85372H3.43179L4.91696 2.2729H7.09494Z" fill="#376EEF"/><path d="M34.2872 0H29.1727C25.9115 0 24.1348 2.0724 24.1348 5.89341C24.1348 8.09139 25.0718 8.85305 27.7977 8.85305L32.8025 8.85259C36.1126 8.85259 37.9986 6.83001 37.9986 3.27142C37.9986 0.874272 37.0132 0 34.2872 0ZM31.7927 6.71809L29.574 6.71786C28.0535 6.71786 27.5744 6.39289 27.5744 5.30668C27.5744 3.3961 28.5886 2.34712 30.3531 2.34712L32.5961 2.34735C33.9954 2.34735 34.3604 2.62187 34.3604 3.67108C34.3604 5.65612 33.4596 6.71809 31.7927 6.71809Z" fill="#376EEF"/></svg></div>
         </div>
-        <div class="summary-row" data-sum-pro-row hidden><span class="summary-label">Conrad PRO <span class="summary-label-sub">(30 Tage kostenlos)</span></span><span class="summary-value">0,00 €</span></div>
         <div class="summary-row"><span class="summary-label">MwSt. (19 %)</span><span class="summary-value" data-sum-vat>11,39 €</span></div>
         <hr class="summary-divider">
         <div class="summary-total-row">
@@ -2975,13 +2976,23 @@ button { font: inherit; cursor: pointer; }
     var net = items.reduce(function (sum, it) { return sum + priceOf(it) * it.qty; }, 0);
     var vat = net * VAT_RATE;
     // Below 100 EUR Nettopreis shipping costs 5,95 EUR; free from
-    // 100 EUR on - and always free with an active PRO trial.
-    var shipping = (!empty && net < 100 && !pro) ? SHIPPING : 0;
+    // 100 EUR on - and always free once PRO is in the order.
+    var wouldShip = (!empty && net < 100) ? SHIPPING : 0;
+    var shipping = pro ? 0 : wouldShip;
     document.querySelector('[data-sum-net]').textContent = fmt(net);
-    document.querySelector('[data-sum-shipping]').textContent = empty
-      ? '—'
-      : (shipping > 0 ? fmt(shipping) : 'Kostenfrei');
-    document.querySelector('[data-sum-pro-row]').hidden = !pro;
+    var shipEl = document.querySelector('[data-sum-shipping]');
+    if (empty) {
+      shipEl.textContent = '—';
+    } else if (pro) {
+      // Red badge shows what the PRO tick saves on this order.
+      shipEl.innerHTML = (wouldShip > 0 ? '<span class="discount-badge">−' + fmt(wouldShip) + '</span> ' : '') + 'Kostenfrei';
+    } else {
+      shipEl.textContent = shipping > 0 ? fmt(shipping) : 'Kostenfrei';
+    }
+    // SVG has no `hidden` IDL property - toggle the attribute directly.
+    var versandLogo = document.querySelector('[data-versand-pro]');
+    if (pro) versandLogo.removeAttribute('hidden');
+    else versandLogo.setAttribute('hidden', '');
     document.querySelector('[data-sum-vat]').textContent = fmt(vat);
     document.querySelector('[data-sum-total]').textContent = fmt(net + vat + shipping);
 
