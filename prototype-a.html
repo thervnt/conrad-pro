@@ -3352,7 +3352,7 @@ function renderProductSide() {
   // Unit label inside the qty stepper: "Stück" for the single-piece
   // pack, "Set" for any multi-piece pack.
   const qtyUnitEl = document.querySelector('[data-qty-unit]');
-  if (qtyUnitEl) qtyUnitEl.textContent = state.packSize === 1 ? 'Stück' : 'Set';
+  if (qtyUnitEl) qtyUnitEl.textContent = state.packSize === 1 ? 'Stk.' : 'Set';
 
   // The min-order note only matters when the user is buying
   // single pieces (where the 3-Stück seller minimum kicks in).

@@ -2425,6 +2425,7 @@ button { font: inherit; cursor: pointer; }
 .cart-card-seller { font-size: 14px; font-weight: 500; color: var(--c-text); }
 .cart-card-seller strong { font-weight: 600; }
 .cart-card-actions { display: flex; gap: 8px; align-self: flex-start; flex-shrink: 0; }
+.cart-card-actions .icon-btn-danger { margin-left: 16px; }
 /* Pack pills, stepper and item actions on one horizontal line. */
 /* Bottom row: interactions left, price right, top-aligned. */
 .cart-card-bottom {
@@ -2862,7 +2863,7 @@ button { font: inherit; cursor: pointer; }
           '<div class="qty-row">' +
             '<div class="qty-input-wrap">' +
               '<input type="text" value="' + item.qty + '" data-qty-input style="width:' + Math.max(1, String(item.qty).length) + 'ch">' +
-              '<span class="qty-unit">' + (item.packSize === 1 ? 'Stück' : 'Set') + '</span>' +
+              '<span class="qty-unit">' + (item.packSize === 1 ? 'Stk.' : 'Set') + '</span>' +
               '<div class="qty-btn-group">' +
                 '<button class="qty-btn" data-act="minus" aria-label="Menge verringern"><span class="qty-btn-puck">−</span></button>' +
                 '<button class="qty-btn" data-act="plus" aria-label="Menge erhöhen"><span class="qty-btn-puck">+</span></button>' +
