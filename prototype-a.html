@@ -2632,7 +2632,9 @@ button { font: inherit; cursor: pointer; }
 .hdr-item > svg { width: 18px; height: 18px; color: var(--c-text-tertiary); flex-shrink: 0; }
 .hdr-item-lead { display: inline-flex; align-items: center; gap: 10px; min-width: 0; }
 .hdr-item-lead svg { width: 18px; height: 18px; color: var(--c-text-secondary); flex-shrink: 0; }
-.hdr-item-lead .pro-logo-inline { width: 38px; height: 9px; }
+.hdr-item-lead .pro-logo-inline { display: inline-flex; align-items: center; }
+/* Muss die generische 18px-Icon-Regel darueber ueberschreiben. */
+.hdr-item-lead .pro-logo-inline svg { width: 56px; height: 13px; }
 .hdr-sep { border: none; border-top: 1px solid var(--c-border); margin: 10px 12px; }
 .hdr-login {
   display: flex;
@@ -2667,6 +2669,20 @@ button { font: inherit; cursor: pointer; }
   text-align: left;
   overflow: hidden;
 }
+/* Unsichtbare Bruecke ueber die Luecke, damit der Zeiger vom Button
+   ins Overlay wandern kann, ohne den Hover zu verlieren. Sie haengt am
+   Wrapper, weil das Flyout selbst overflow:hidden hat. */
+.gk-wrap::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 330px;
+  height: 12px;
+  display: none;
+}
+.gk-wrap:hover::after { display: block; }
+.gk-wrap.suppress::after { display: none; }
 .gk-wrap:hover .gk-flyout,
 .gk-wrap:focus-within .gk-flyout { display: block; }
 .gk-wrap.suppress .gk-flyout { display: none; }
