@@ -1467,9 +1467,9 @@ button { font: inherit; cursor: pointer; }
   line-height: 1;
   transition: background 0.15s, color 0.15s;
 }
-.qty-btn:hover .qty-btn-puck { background: #eaf0fe; color: var(--c-blue); }
-.qty-btn:active .qty-btn-puck { background: #d6e2fc; }
-.qty-btn:hover { color: var(--c-blue); }
+/* Hover = blue border, matching the configurator tiles and pack pills. */
+.qty-btn:hover .qty-btn-puck { border-color: var(--c-blue); }
+.qty-btn:active .qty-btn-puck { background: #eaf0fe; }
 .qty-min-note {
   margin: 6px 0 0;
   font-size: 12px;

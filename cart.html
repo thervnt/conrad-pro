@@ -1467,9 +1467,9 @@ button { font: inherit; cursor: pointer; }
   line-height: 1;
   transition: background 0.15s, color 0.15s;
 }
-.qty-btn:hover .qty-btn-puck { background: #eaf0fe; color: var(--c-blue); }
-.qty-btn:active .qty-btn-puck { background: #d6e2fc; }
-.qty-btn:hover { color: var(--c-blue); }
+/* Hover = blue border, matching the configurator tiles and pack pills. */
+.qty-btn:hover .qty-btn-puck { border-color: var(--c-blue); }
+.qty-btn:active .qty-btn-puck { background: #eaf0fe; }
 .qty-min-note {
   margin: 6px 0 0;
   font-size: 12px;
@@ -2450,7 +2450,7 @@ button { font: inherit; cursor: pointer; }
   margin: 12px 0;
 }
 .cart-card > .cart-card-price { margin-top: 6px; }
-.icon-btn.icon-btn-danger:hover { color: #d9234c; background: #fdf0f3; }
+.icon-btn.icon-btn-danger:hover { border-color: #d9234c; color: #d9234c; }
 .icon-btn.icon-btn-danger:hover svg { stroke: #d9234c; }
 .cart-card-img {
   width: 110px;
@@ -2483,7 +2483,7 @@ button { font: inherit; cursor: pointer; }
   cursor: pointer;
   padding: 0;
 }
-.icon-btn:hover { background: var(--c-bg-tint); color: var(--c-text); }
+.icon-btn:hover { border-color: var(--c-blue); }
 .icon-btn svg { width: 18px; height: 18px; }
 .icon-btn[data-tooltip]:hover::after,
 .icon-btn[data-tooltip]:focus-visible::after {
