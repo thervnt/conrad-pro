@@ -3425,13 +3425,26 @@ button { font: inherit; cursor: pointer; }
   }
 
   var fmt = function (n) { return n.toFixed(2).replace('.', ',') + ' €'; };
-  function minQtyFor(sz) { return Math.max(1, Math.ceil(MIN_PIECES / sz)); }
+  // Die Mindestabnahme haengt am Artikel: die 221er-Klemme hat eine,
+  // Zubehoer nicht.
+  function floorFor(item) {
+    var min = (item.minPieces == null) ? MIN_PIECES : item.minPieces;
+    return Math.max(1, Math.ceil(min / (item.packSize || 1)));
+  }
   function priceOf(item) { return item.packPrices[item.packSize] || 0; }
 
+  // Zubehoer bringt seinen Titel mit; die 221er-Zeilen leiten ihn aus
+  // der gewaehlten Konfiguration ab.
   function titleFor(item) {
+    if (item.title) return item.title;
     return 'WAGO ' + item.sku + (item.packSize === 1 ? '' : '-' + item.packSize) +
       ' 221' + item.variantTag + ' Verbindungsklemme ' + item.range +
       ' Polzahl: ' + item.polzahl + ' ' + item.packSize + ' St. Transparent, Orange';
+  }
+
+  // Aeltere Warenkorbstaende kennen kein href - die sind immer die 221.
+  function hrefFor(item) {
+    return Object.prototype.hasOwnProperty.call(item, 'href') ? item.href : 'wago221.html';
   }
 
   function esc(s) {
@@ -3456,14 +3469,23 @@ button { font: inherit; cursor: pointer; }
     var unitLine = item.packSize === 1
       ? fmt(price) + ' / Stück'
       : fmt(price) + ' / Set (' + (price / item.packSize).toFixed(2).replace('.', ',') + ' €/Stück)';
+    var href = hrefFor(item);
+    var title = esc(titleFor(item));
+    var imgInner = '<img src="' + item.img + '" alt="' + title + '">';
     return '' +
       '<div class="cart-card" data-idx="' + idx + '">' +
         '<div class="cart-card-top">' +
-          '<a class="cart-card-img" href="wago221.html" target="_blank" rel="noopener noreferrer"><img src="' + item.img + '" alt="' + esc(titleFor(item)) + '"></a>' +
+          (href
+            ? '<a class="cart-card-img" href="' + href + '" target="_blank" rel="noopener noreferrer">' + imgInner + '</a>'
+            : '<div class="cart-card-img">' + imgInner + '</div>') +
           '<div class="cart-card-body">' +
-            '<p class="cart-card-name"><a href="wago221.html" target="_blank" rel="noopener noreferrer">' + esc(titleFor(item)) + '</a></p>' +
+            '<p class="cart-card-name">' +
+              (href
+                ? '<a href="' + href + '" target="_blank" rel="noopener noreferrer">' + title + '</a>'
+                : title) +
+            '</p>' +
             '<div class="cart-card-id">Bestell-Nr. ' + esc(item.bestellNr) + '</div>' +
-            '<div class="stock-text">264.150 Stück auf Lager</div>' +
+            '<div class="stock-text">' + esc(item.stock || '264.150 Stück auf Lager') + '</div>' +
             '<div class="delivery-pill"><span class="delivery-pill-icon">' + SVG_BOLT + '</span>Sofort-Lieferung&nbsp; Mo., 10. Aug.</div>' +
             '<div class="cart-card-seller">Verkauft und versendet von <strong>Conrad Electronic</strong></div>' +
             '<div class="cart-card-note"' + (item.noteOpen ? '' : ' hidden') + '><input class="cart-acc-input" data-note-input type="text" placeholder="Notiz zu diesem Artikel (z. B. Kostenstelle, Projekt)" value="' + esc(item.note || '') + '"></div>' +
@@ -3477,7 +3499,9 @@ button { font: inherit; cursor: pointer; }
         '<hr class="cart-card-divider">' +
         '<div class="cart-card-bottom">' +
         '<div class="cart-card-interact">' +
-          '<div class="pack-row">' + item.packSizes.map(function (sz) { return pillHtml(item, sz); }).join('') + '</div>' +
+          (item.packSizes.length > 1
+            ? '<div class="pack-row">' + item.packSizes.map(function (sz) { return pillHtml(item, sz); }).join('') + '</div>'
+            : '') +
           '<div class="qty-row">' +
             '<div class="qty-input-wrap">' +
               '<input type="text" value="' + item.qty + '" data-qty-input style="width:' + (Math.max(3, String(item.qty).length) + 0.5) + 'ch">' +
@@ -3813,11 +3837,11 @@ button { font: inherit; cursor: pointer; }
     if (act === 'pack') {
       item.packSize = Number(btn.dataset.pack);
       // Picking a new pack resets qty to its floor, like on the PDP.
-      item.qty = minQtyFor(item.packSize);
+      item.qty = floorFor(item);
     } else if (act === 'plus') {
       item.qty += 1;
     } else if (act === 'minus') {
-      if (item.qty > minQtyFor(item.packSize)) item.qty -= 1;
+      if (item.qty > floorFor(item)) item.qty -= 1;
     } else if (act === 'note') {
       item.noteOpen = !item.noteOpen;
     } else if (act === 'remove') {
@@ -3847,7 +3871,7 @@ button { font: inherit; cursor: pointer; }
     var item = items[Number(card.dataset.idx)];
     if (e.target.hasAttribute('data-qty-input')) {
       var v = parseInt(e.target.value, 10);
-      var floor = minQtyFor(item.packSize);
+      var floor = floorFor(item);
       item.qty = (!isNaN(v) && v >= floor) ? v : floor;
       save();
       render();

@@ -4412,6 +4412,7 @@ if (countdownEl) {
       packSizes: (packSizesByPolzahl[p] || [1]).slice(),
       packPrices: getPricing(p, s, h).packs,
       img: imageBySku[resolveImageSku(p, s, h)] || '',
+      href: 'wago221.html',
       note: ''
     };
   }
@@ -4447,9 +4448,9 @@ if (countdownEl) {
   setBadge(loadCart().length, false);
 
   // ---- Mini-cart drawer -------------------------------------------
-  // Confirmation after add-to-cart: shows the configured variant, the
-  // free-shipping progress and the ways forward. Replaces the toast
-  // for the buy-box CTA (the bundle button keeps using the toast).
+  // Confirmation after add-to-cart: shows the added line, the
+  // free-shipping progress and the ways forward. Used by the buy-box
+  // CTA and by the accessory card in "Wird oft zusammen gekauft".
   const FREE_SHIPPING_NET = 100;
   const mcEl = document.querySelector('[data-minicart]');
   const mcBackdrop = document.querySelector('[data-minicart-backdrop]');
@@ -4459,13 +4460,25 @@ if (countdownEl) {
 
   function euro(n) { return n.toFixed(2).replace('.', ',') + ' €'; }
 
+  // Die Mindestabnahme haengt am Artikel - Zubehoer hat keine.
+  function floorForLine(line) {
+    const min = (line.minPieces == null)
+      ? (typeof MIN_PIECES !== 'undefined' ? MIN_PIECES : 1)
+      : line.minPieces;
+    return Math.max(1, Math.ceil(min / (line.packSize || 1)));
+  }
+
+  // Zubehoerzeilen bringen Titel und Konfigurationstext selbst mit,
+  // die 221er-Zeilen leiten beides aus ihrer Auswahl ab.
   function lineTitle(it) {
+    if (it.title) return it.title;
     return 'WAGO ' + it.sku + (it.packSize === 1 ? '' : '-' + it.packSize) +
       ' 221' + it.variantTag + ' Verbindungsklemme ' + it.range +
       ' Polzahl: ' + it.polzahl + ' ' + it.packSize + ' St. Transparent, Orange';
   }
 
   function lineConfig(it) {
+    if (it.config != null) return it.config;
     const mm = it.range.indexOf('0.5-6') !== -1 ? '6 mm²' : '4 mm²';
     const hebel = it.variantTag ? 'Green Range' : 'Standard';
     const pack = it.packSize === 1 ? 'Einzelstück' : it.packSize + 'er-Set';
@@ -4527,7 +4540,7 @@ if (countdownEl) {
       return it.sku === mcKey.sku && it.packSize === mcKey.packSize;
     })[0];
     if (!line) return;
-    const floor = (typeof minQtyFor === 'function') ? minQtyFor(line.packSize) : 1;
+    const floor = floorForLine(line);
     line.qty = Math.max(floor, line.qty + delta);
     saveCart(list);
     renderMiniCart();
@@ -4580,16 +4593,23 @@ if (countdownEl) {
 
   const cta = document.querySelector('[data-cart-cta]');
   if (!cta) return;
-  cta.addEventListener('click', () => {
-    if (cta.classList.contains('is-disabled')) return;
-    const q = state.qty, sz = state.packSize;
-    const item = buildCartItem(state.polzahl, state.stil, state.hebel, sz, q);
+  // Eine Zeile in den Warenkorb legen und die Bestaetigung oeffnen -
+  // gleicher Weg fuer die Buybox und fuer die Zubehoerkarte.
+  window.addLineToCart = function (item) {
     const items = loadCart();
-    const existing = items.find(function (it) { return it.sku === item.sku && it.packSize === item.packSize; });
-    if (existing) existing.qty += q;
+    const existing = items.find(function (it) {
+      return it.sku === item.sku && it.packSize === item.packSize;
+    });
+    if (existing) existing.qty += item.qty;
     else items.push(item);
     saveCart(items);
     openMiniCart({ sku: item.sku, packSize: item.packSize });
+  };
+
+  cta.addEventListener('click', () => {
+    if (cta.classList.contains('is-disabled')) return;
+    const item = buildCartItem(state.polzahl, state.stil, state.hebel, state.packSize, state.qty);
+    window.addLineToCart(item);
   });
 })();
 
@@ -4645,12 +4665,6 @@ document.addEventListener('click', e => {
 
   // Expose to other modules (e.g. the bundle add-to-cart button).
   window.showToast = showToast;
-
-  // Shared add-to-cart toast. The header badge is driven by the
-  // persisted cart (see the buy-box CTA block), not bumped here.
-  window.addToCart = function (qtyLabel) {
-    showToast(qtyLabel + ' zum Einkaufswagen hinzugefügt');
-  };
 
   function showToast(message) {
     hideToast();
@@ -5133,9 +5147,25 @@ function renderBundle() {
   }
   if (cartBtn) {
     cartBtn.addEventListener('click', () => {
-      const n = qtyEl ? Number(qtyEl.value) : 1;
-      const label = n + ' St\u00fcck';
-      if (typeof window.addToCart === 'function') window.addToCart(label);
+      const n = qtyEl ? Math.max(1, Number(qtyEl.value) || 1) : 1;
+      // Der Adapter ist ein eigener Artikel: eigener Titel, eigener
+      // Preis, nur Einzelstueck und ohne Mindestabnahme.
+      const item = {
+        sku: '221-500',
+        bestellNr: '2462952',
+        title: 'WAGO 221-500 Serie 221 Befestigungsadapter 1 St.',
+        config: 'Befestigungsadapter \u00b7 Einzelst\u00fcck',
+        stock: '12.500 St\u00fcck auf Lager',
+        packSize: 1,
+        qty: n,
+        packSizes: [1],
+        packPrices: { 1: adapterPrice },
+        minPieces: 1,
+        img: adapterImg,
+        href: null,
+        note: ''
+      };
+      if (typeof window.addLineToCart === 'function') window.addLineToCart(item);
     });
   }
   const bundleWish = root.querySelector('[data-bundle-wishlist]');
