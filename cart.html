@@ -2279,11 +2279,36 @@ button { font: inherit; cursor: pointer; }
 .footer {
   background: var(--c-navy);
   color: var(--c-text-on-dark);
-  padding: 24px;
-  text-align: center;
-  font-size: 12px;
   margin-top: 60px;
-  opacity: 0.85;
+  padding: 28px 0;
+}
+.footer-inner { max-width: 1680px; margin: 0 auto; padding: 0 24px; }
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 26px;
+  margin-bottom: 18px;
+}
+.footer-links a {
+  color: var(--c-text-on-dark);
+  font-size: 14px;
+  opacity: 0.88;
+  text-decoration: none;
+}
+.footer-links a:hover { opacity: 1; text-decoration: underline; }
+.footer-legal {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px 24px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  font-size: 12px;
+  color: rgba(254, 254, 255, 0.65);
+}
+@media (max-width: 640px) {
+  .footer-links { gap: 10px 18px; }
+  .footer-inner { padding: 0 16px; }
 }
 
 /* ===== IMAGE ZOOM OVERLAY ===== */
@@ -2351,10 +2376,9 @@ button { font: inherit; cursor: pointer; }
 
 /* ===== FOOTER PROTOTYPE LABEL ===== */
 .footer-proto {
-  display: inline-block;
-  margin-top: 6px;
+  margin-left: auto;
   font-size: 11px;
-  opacity: 0.65;
+  opacity: 0.7;
   letter-spacing: 0.3px;
 }
 
@@ -3256,9 +3280,22 @@ button { font: inherit; cursor: pointer; }
 </main>
 
 <footer class="footer">
-  Conrad Electronic SE · Klaus-Conrad-Straße 1 · 92240 Hirschau · © 2026
-  <br>
-  <span class="footer-proto">Prototyp A · Einkaufswagen</span>
+  <div class="footer-inner">
+    <nav class="footer-links" aria-label="Rechtliches und Service">
+      <a href="#">Impressum</a>
+      <a href="#">Datenschutz</a>
+      <a href="#">Cookie-Einstellungen</a>
+      <a href="#">AGB</a>
+      <a href="#">Widerrufsrecht</a>
+      <a href="#">Versand &amp; Zahlung</a>
+      <a href="#">Kontakt</a>
+    </nav>
+    <div class="footer-legal">
+      <span>Alle Preise zzgl. gesetzlicher MwSt. und Versandkosten.</span>
+      <span>Conrad Electronic SE · Klaus-Conrad-Straße 1 · 92240 Hirschau · © 2026</span>
+      <span class="footer-proto">Prototyp A · Einkaufswagen</span>
+    </div>
+  </div>
 </footer>
 
 <script>
