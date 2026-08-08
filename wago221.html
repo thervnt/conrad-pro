@@ -891,6 +891,8 @@ button { font: inherit; cursor: pointer; }
   font-weight: 600;
   color: var(--c-purple-icon);
 }
+/* Der Stern sass im 24er viewBox 3 Einheiten zu hoch (y 2..16 statt
+   5..19) - deshalb wirkte er trotz align-items:center angehoben. */
 .ai-callout-icon {
   width: 16px;
   height: 16px;
@@ -2949,7 +2951,7 @@ button { font: inherit; cursor: pointer; }
 
       <!-- AI CALLOUT (adaptive) -->
       <div class="ai-callout">
-        <p class="ai-callout-label"><svg class="ai-callout-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l1.8 5.4L19 9l-5.2 1.6L12 16l-1.8-5.4L5 9l5.2-1.6z"/></svg><span>KI-generiert</span></p>
+        <p class="ai-callout-label"><svg class="ai-callout-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 5l1.8 5.4L19 12l-5.2 1.6L12 19l-1.8-5.4L5 12l5.2-1.6z"/></svg><span>KI-generiert</span></p>
         <ul data-ai-bullets>
           <li><strong>Kompaktheit:</strong> Bis zu 40 % kleiner als die Vorgängerserie 222</li>
           <li><strong>Sicherheit:</strong> Transparente Gehäuse und Prüföffnungen</li>
