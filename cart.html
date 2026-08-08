@@ -3037,365 +3037,44 @@ button { font: inherit; cursor: pointer; }
   border-top: 1px solid var(--c-border);
 }
 .summary-acc summary {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--c-text);
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--c-blue);
   cursor: pointer;
   list-style: none;
   user-select: none;
 }
+.summary-acc summary:hover { text-decoration: underline; }
 .summary-acc summary::-webkit-details-marker { display: none; }
-.summary-acc-caret { color: var(--c-blue); transition: transform 0.15s; flex-shrink: 0; }
+.summary-acc-caret { width: 14px; height: 14px; color: var(--c-blue); transition: transform 0.15s; flex-shrink: 0; }
 .summary-acc[open] .summary-acc-caret { transform: rotate(180deg); }
 .summary-acc-body { margin-top: 12px; }
 .summary-acc-row { display: flex; gap: 8px; }
 .summary-acc-pin { flex: 0 0 80px; }
 .summary-acc-pin[hidden] { display: none; }
-.summary-acc-pin-toggle {
-  background: none;
-  border: none;
-  padding: 8px 0 0;
-  font: inherit;
-  font-size: 12px;
-  color: var(--c-blue);
-  cursor: pointer;
-}
-.summary-acc-pin-toggle:hover { text-decoration: underline; }
-.cart-acc-input { width: 100%; }
-.cart-card-body .stock-text { margin: 2px 0 0; }
-.cart-card-body .delivery-pill { align-self: flex-start; margin: 2px 0; padding-right: 12px; height: auto; min-height: 32px; }
-.cart-card-price { text-align: right; display: flex; flex-direction: column; gap: 2px; flex-shrink: 0; }
-.cart-card-total { font-size: 18px; font-weight: 700; }
-.cart-card-unit { font-size: 12px; color: var(--c-text-secondary); }
-
-
-/* ===== QUICK ADD (Bestell-Nr. / CSV) ===== */
-.quickadd {
-  background: var(--c-bg-white);
-  border-radius: var(--radius);
-  box-shadow:
-    0 8px 12px -1px rgba(17, 18, 19, 0.06),
-    0 1px 2px 0 rgba(17, 18, 19, 0.08);
-  padding: 16px 20px;
-  margin-top: 16px;
-}
-.quickadd-title { font-size: 14px; font-weight: 600; color: var(--c-text); margin: 0 0 10px; }
-.quickadd-form { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-.quickadd-input {
-  border: 1px solid var(--c-border);
-  border-radius: var(--radius-sm);
-  padding: 0 12px;
-  height: 48px;
-  font: inherit;
-  font-size: 14px;
-  color: var(--c-text);
-  background: var(--c-bg-white);
-}
-.quickadd-input:focus { outline: none; border-color: var(--c-blue); }
-.quickadd-nr { flex: 1 1 220px; min-width: 0; }
-/* Bestell-Nr.-Feld mit CSV-Icon rechts im Feld. */
-.quickadd-nr-wrap { position: relative; flex: 1 1 220px; min-width: 0; display: flex; }
-.quickadd-nr-wrap .quickadd-nr { flex: 1; padding-right: 44px; }
-.quickadd-csv-btn {
-  position: absolute;
-  top: 50%;
-  right: 4px;
-  transform: translateY(-50%);
-  width: 32px;
-  height: 32px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  background: none;
-  border: none;
-  border-radius: var(--radius-sm);
-  color: var(--c-text-secondary);
-  cursor: pointer;
-  padding: 0;
-}
-.quickadd-csv-btn:hover { color: var(--c-text); background: var(--c-bg-tint); }
-.quickadd-csv-btn svg { width: 18px; height: 18px; }
-.quickadd-csv-btn[data-tooltip]:hover::after,
-.quickadd-csv-btn[data-tooltip]:focus-visible::after {
-  content: attr(data-tooltip);
-  position: absolute;
-  top: calc(100% + 8px);
-  right: 0;
-  background: var(--c-navy);
-  color: var(--c-text-on-dark);
-  font-size: 12px;
-  font-weight: 400;
-  line-height: 1.4;
-  padding: 6px 10px;
-  border-radius: 6px;
-  white-space: nowrap;
-  z-index: 50;
-  pointer-events: none;
-  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.18);
-}
-.quickadd-form .qty-input-wrap { flex: 0 0 200px; width: 200px; height: 48px; }
-.quickadd-add {
-  height: 48px;
-  padding: 0 20px;
-  background: #E2E5FA;
-  color: var(--c-navy);
-  border: none;
-  border-radius: var(--radius-sm);
-  font: inherit;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  flex-shrink: 0;
-}
-.quickadd-add:hover { background: #d6dcf8; }
-.quickadd-hint { font-size: 12px; color: var(--c-text-tertiary); margin: 8px 0 0; }
-.quickadd-msg { font-size: 13px; margin: 8px 0 0; }
-.quickadd-msg.ok { color: #218972; font-weight: 500; }
-.quickadd-msg.err { color: #d9234c; font-weight: 500; }
-.quickadd-hint a { color: var(--c-blue); }
-
-/* ===== EMPTY CART STATE ===== */
-.cart-empty {
-  background: transparent;
-  box-shadow: none;
-  border-radius: 0;
-  padding: 0;
-  text-align: left;
-  display: none;
-}
-.cart-empty-head { max-width: 760px; }
-.cart-empty-title {
-  font-size: 28px;
-  font-weight: 700;
-  color: var(--c-navy);
-  margin: 8px 0 8px;
-}
-.cart-empty-sub {
-  font-size: 14px;
-  color: var(--c-text-secondary);
-  margin: 0 0 18px;
-}
-.cart-empty-actions { display: flex; gap: 10px; flex-wrap: wrap; }
-.cart-empty-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  height: 40px;
-  padding: 0 20px;
-  border-radius: var(--radius-sm);
-  font-size: 15px;
-  font-weight: 600;
-  text-decoration: none;
-  cursor: pointer;
-  border: 1px solid transparent;
-}
-.cart-empty-btn.primary { background: var(--c-blue); color: var(--c-text-on-dark); }
-.cart-empty-btn.primary:hover { background: var(--c-blue-hover); text-decoration: none; }
-.cart-empty-btn.secondary {
-  background: var(--c-bg-white);
-  color: var(--c-text);
-  border-color: var(--c-border);
-}
-.cart-empty-btn.secondary:hover { border-color: var(--c-blue); text-decoration: none; }
-.cart-empty-divider {
-  border: none;
-  border-top: 1px solid var(--c-border);
-  margin: 28px 0 20px;
-}
-.recent-title { font-size: 18px; font-weight: 600; color: var(--c-navy); margin: 0 0 14px; }
-.recent-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-  gap: 16px;
-}
-.recent-card {
-  background: var(--c-bg-white);
-  border-radius: var(--radius);
-  box-shadow:
-    0 8px 12px -1px rgba(17, 18, 19, 0.06),
-    0 1px 2px 0 rgba(17, 18, 19, 0.08);
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-}
-.recent-card-img {
-  height: 150px;
+.summary-acc-pin-switch {
   display: flex;
   align-items: center;
-  justify-content: center;
-  margin-bottom: 12px;
-}
-.recent-card-img img { max-width: 88%; max-height: 100%; object-fit: contain; }
-.recent-card-name {
-  font-size: 14px;
-  font-weight: 600;
-  line-height: 1.35;
-  margin: 0 0 8px;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-.recent-card-stock { font-size: 12px; color: var(--c-text-secondary); margin-bottom: 6px; }
-.recent-card .delivery-pill {
-  height: auto;
-  min-height: 28px;
-  font-size: 12px;
-  margin-bottom: 10px;
-  padding-right: 10px;
-}
-.recent-card .delivery-pill-icon { width: 28px; height: 28px; }
-.recent-card .delivery-pill-icon svg { width: 15px; height: 15px; }
-/* PDP buy-box components, tuned for the narrower card. */
-.recent-card .price-main { margin-bottom: 2px; }
-.recent-card .price-main .amount { font-size: 20px; }
-.recent-card .price-main .unit { font-size: 12px; }
-.recent-card .tax-note { margin-bottom: 10px; }
-.recent-card .stock-text { font-size: 13px; margin-bottom: 6px; }
-.recent-card .shipper-line {
-  border-bottom: none;
-  padding-bottom: 0;
-  margin-bottom: 0;
-  font-size: 12px;
-}
-.recent-card .shipper-line strong { font-weight: 600; }
-.recent-card .cta-row { margin-top: auto; padding-top: 12px; }
-.recent-card .wishlist-btn { width: 44px; }
-.recent-card .wishlist-btn svg { width: 18px; height: 18px; }
-.recent-card .cta { padding: 11px 14px; font-size: 14px; gap: 8px; }
-.recent-card .cta svg { width: 16px; height: 16px; }
-@media (max-width: 640px) {
-  .recent-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
-}
-
-/* PRO membership opt-in card below the item list. */
-.pro-upsell {
-  background: var(--c-bg-white);
-  border-radius: var(--radius);
-  box-shadow:
-    0 8px 12px -1px rgba(17, 18, 19, 0.06),
-    0 1px 2px 0 rgba(17, 18, 19, 0.08);
-  padding: 20px;
-  margin-top: 16px;
-}
-.pro-upsell-head { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
-.pro-upsell-head svg { flex-shrink: 0; display: block; }
-.pro-upsell-price { font-size: 18px; font-weight: 700; white-space: nowrap; }
-.pro-upsell-price-sub { font-size: 12px; font-weight: 500; color: var(--c-text-secondary); }
-.pro-upsell-saving { margin-left: auto; font-size: 13px; font-weight: 600; color: #218972; }
-.pro-upsell-benefits-row {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 4px 20px;
+  gap: 8px;
   margin-top: 10px;
-  font-size: 13px;
-}
-.pro-benefit { display: inline-flex; align-items: center; gap: 6px; }
-.pro-benefit svg { width: 12px; height: 12px; fill: var(--c-navy); flex-shrink: 0; }
-.pro-upsell-all { font-size: 13px; color: var(--c-blue); }
-.pro-upsell-optin {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  margin-top: 12px;
-  padding-top: 12px;
-  border-top: 1px solid var(--c-border);
-  font-size: 13px;
-  color: var(--c-text);
+  font-size: 12px;
+  color: var(--c-text-secondary);
   cursor: pointer;
 }
-.pro-upsell-optin input {
-  width: 18px;
-  height: 18px;
+.summary-acc-pin-switch input {
+  width: 16px;
+  height: 16px;
   margin: 0;
-  margin-top: 1px;
-  flex-shrink: 0;
   accent-color: var(--c-blue);
   cursor: pointer;
 }
-.pro-upsell-optin a { color: var(--c-blue); }
-.summary-row[hidden] { display: none; }
-.summary-row .summary-label { display: inline-flex; align-items: center; gap: 6px; }
-.summary-row .pro-logo[hidden] { display: none; }
-.summary-value .shipping-was {
-  color: var(--c-text-tertiary);
-  font-weight: 400;
-  text-decoration: line-through;
-  margin-right: 6px;
+.cart-acc-input { width: 100%; }
+@media (max-width: 640px) {
+  .recent-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
 }
-.summary-pro-usp { margin: 0 0 12px; }
-.summary-pro-usp[hidden] { display: none; }
-/* Brief highlight when the PRO tick changes shipping/total. */
-@keyframes sum-pulse {
-  0% { background: #eaf0fe; }
-  100% { background: transparent; }
-}
-.summary-row.pulse, .summary-total-row.pulse { animation: sum-pulse 0.9s ease; }
-
-
-.summary-card { padding: 20px; }
-.summary-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  font-size: 14px;
-  margin-bottom: 12px;
-}
-.summary-row .summary-label { font-weight: 600; }
-.summary-row .summary-value { font-variant-numeric: tabular-nums; font-weight: 600; }
-.summary-divider { border: none; border-top: 1px solid var(--c-border); margin: 14px 0; }
-.summary-total-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  margin-bottom: 2px;
-}
-.summary-total-label { font-size: 18px; font-weight: 700; }
-.summary-total-value { font-size: 20px; font-weight: 700; font-variant-numeric: tabular-nums; }
-.summary-total-sub { font-size: 12px; color: var(--c-text-secondary); margin: 0 0 14px; }
-.summary-cta {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 48px;
-  background: var(--c-blue);
-  color: var(--c-text-on-dark);
-  border: none;
-  padding: 0 18px;
-  border-radius: var(--radius-sm);
-  font: inherit;
-  font-size: 15px;
-  font-weight: 600;
-  text-align: center;
-  cursor: pointer;
-}
-.summary-cta:hover { background: var(--c-blue-hover); }
-.summary-cta-secondary {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 48px;
-  background: #E2E5FA;
-  color: var(--c-navy);
-  border: none;
-  padding: 0 18px;
-  border-radius: var(--radius-sm);
-  font: inherit;
-  font-size: 15px;
-  font-weight: 600;
-  text-align: center;
-  cursor: pointer;
-  margin-top: 8px;
-}
-.summary-cta-secondary:hover { background: #d6dcf8; }
-.summary-cta:disabled, .summary-cta-secondary:disabled { opacity: 0.45; cursor: default; }
 
 .cart-acc-input {
   flex: 1;
@@ -3425,8 +3104,7 @@ button { font: inherit; cursor: pointer; }
   .cart-title-row { grid-template-columns: 1fr; }
   .cart-card-top { flex-wrap: wrap; }
   .cart-card-interact .pack-row { flex: 1 1 100%; }
-}
-</style>
+}</style>
 </head>
 <body>
 <!-- TOP PROMO -->
@@ -3630,7 +3308,10 @@ button { font: inherit; cursor: pointer; }
               <input class="cart-acc-input summary-acc-pin" type="text" inputmode="numeric" maxlength="6" placeholder="PIN" aria-label="PIN" hidden>
               <button type="button" class="cart-acc-apply">Einlösen</button>
             </div>
-            <button type="button" class="summary-acc-pin-toggle" data-pin-toggle>Guthabenkarte mit PIN</button>
+            <label class="summary-acc-pin-switch">
+              <input type="checkbox" data-pin-toggle>
+              <span>Guthabenkarte mit PIN</span>
+            </label>
           </div>
         </details>
       </div>
@@ -4137,10 +3818,9 @@ button { font: inherit; cursor: pointer; }
     var toggle = document.querySelector('[data-pin-toggle]');
     if (!toggle) return;
     var pin = document.querySelector('.summary-acc-pin');
-    toggle.addEventListener('click', function () {
-      pin.hidden = !pin.hidden;
-      toggle.textContent = pin.hidden ? 'Guthabenkarte mit PIN' : 'Nur Vorteilscode';
-      if (!pin.hidden) pin.focus();
+    toggle.addEventListener('change', function () {
+      pin.hidden = !toggle.checked;
+      if (toggle.checked) pin.focus();
     });
   })();
 
