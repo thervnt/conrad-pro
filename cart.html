@@ -2452,6 +2452,11 @@ button { font: inherit; cursor: pointer; }
 .cart-card > .cart-card-price { margin-top: 6px; }
 .icon-btn.icon-btn-danger:hover { border-color: #d9234c; color: #d9234c; }
 .icon-btn.icon-btn-danger:hover svg { stroke: #d9234c; }
+/* Heart buttons behave like the PDP wishlist button. */
+.wishlist-btn:hover { border-color: var(--c-blue); }
+.icon-btn.bounce svg { animation: wishlist-bounce 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); }
+.icon-btn[data-act="wishlist"].active { color: var(--c-blue); border-color: var(--c-blue); background: #eaf0fe; }
+.icon-btn[data-act="wishlist"].active svg path { fill: var(--c-blue); stroke: var(--c-blue); }
 .cart-card-img {
   width: 110px;
   height: 110px;
@@ -3154,8 +3159,29 @@ button { font: inherit; cursor: pointer; }
       return;
     }
     var fav = e.target.closest('[data-recent-fav]');
-    if (fav) fav.classList.toggle('active');
+    if (fav) toggleWishlist(fav);
   });
+
+  // Same wishlist behaviour as the PDP buy box: active state, bounce +
+  // pulse animation and header badge count.
+  function toggleWishlist(btn) {
+    var badge = document.querySelector('[data-wishlist-badge]');
+    var wasActive = btn.classList.contains('active');
+    if (wasActive) {
+      btn.classList.remove('active');
+      btn.setAttribute('aria-pressed', 'false');
+      btn.setAttribute('aria-label', 'Auf Wunschliste');
+      if (badge) badge.textContent = String(Math.max(0, (parseInt(badge.textContent, 10) || 0) - 1));
+    } else {
+      btn.classList.add('active');
+      btn.setAttribute('aria-pressed', 'true');
+      btn.setAttribute('aria-label', 'Von Wunschliste entfernen');
+      if (badge) badge.textContent = String((parseInt(badge.textContent, 10) || 0) + 1);
+      btn.classList.remove('bounce', 'pulse');
+      void btn.offsetWidth;
+      btn.classList.add('bounce', 'pulse');
+    }
+  }
 
   var listEl = document.querySelector('[data-cart-list]');
 
@@ -3242,7 +3268,9 @@ button { font: inherit; cursor: pointer; }
     } else if (act === 'remove') {
       items.splice(idx, 1);
     } else if (act === 'wishlist') {
-      return; // prototype: no wishlist persistence on the cart page
+      // Toggle in place - re-rendering would drop the animation.
+      toggleWishlist(btn);
+      return;
     }
     save();
     render();
