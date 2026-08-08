@@ -743,6 +743,13 @@ button { font: inherit; cursor: pointer; }
   line-height: 1.3;
   white-space: nowrap;
 }
+/* Auf der ausgewaehlten Kachel liegt der blaue Tint - das graue Pill
+   verschwindet darin. Weisser Grund plus blaue Schrift holt es zurueck. */
+.vtile.selected .vtile-history {
+  background: var(--c-bg-white);
+  color: var(--c-blue);
+  box-shadow: inset 0 0 0 1px rgba(55, 110, 239, 0.35);
+}
 .vtile-history svg { width: 10px; height: 10px; flex-shrink: 0; }
 .vtile-divider {
   display: block;
@@ -1432,6 +1439,8 @@ button { font: inherit; cursor: pointer; }
   width: 220px;
   /* Gleicher optischer Innenabstand links wie rechts an den Pucks. */
   padding-left: 8px;
+  /* Nicht vom Kontext erben - im Tab-Inhalt gilt 1.7, in der Buybox 1.5. */
+  line-height: 1.5;
 }
 /* Die Zahl ist ein echtes Eingabefeld - weisser Grund, Rahmen und
    Textcursor machen das sichtbar, der Fokusring ist zugleich die
@@ -1884,7 +1893,6 @@ button { font: inherit; cursor: pointer; }
   letter-spacing: 0.02em;
   padding: 2px 7px;
   border-radius: 999px;
-  margin-top: 2px;
   white-space: nowrap;
 }
 .compare-card {
@@ -2017,11 +2025,12 @@ button { font: inherit; cursor: pointer; }
 .serie-block .compare-tab-text {
   display: flex;
   flex-direction: column;
-  gap: 1px;
+  /* 2px wie in .serie-card-body - beide Kartentypen stehen nebeneinander. */
+  gap: 2px;
   min-width: 0;
 }
 .serie-block .compare-tab-name { font-size: 14px; }
-.serie-block .compare-tab-sub { font-size: 11px; }
+.serie-block .compare-tab-sub { font-size: 12px; }
 .serie-block .compare-card {
   padding: 10px 12px;
   display: flex;
@@ -2150,10 +2159,12 @@ button { font: inherit; cursor: pointer; }
   left: 16px;
   background: var(--c-blue);
   color: var(--c-text-on-dark);
-  font-size: 12px;
-  font-weight: 600;
-  padding: 3px 10px;
-  border-radius: var(--radius-pill);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  padding: 2px 7px;
+  border-radius: 999px;
+  white-space: nowrap;
   z-index: 1;
 }
 .bundle-card-name {
@@ -2171,9 +2182,11 @@ button { font: inherit; cursor: pointer; }
   overflow: hidden;
 }
 .bundle-card-name strong { font-weight: 700; }
+/* Lager, Lieferpille und Verkaeuferzeile folgen exakt der Buybox. */
 .bundle-card-stock {
   margin: 0;
   font-size: 13px;
+  font-weight: 500;
   color: var(--c-text);
 }
 .bundle-card-delivery {
@@ -2182,7 +2195,7 @@ button { font: inherit; cursor: pointer; }
   height: 32px;
   border-radius: 6px;
   padding: 0 8px;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
   display: flex;
   align-items: center;
@@ -2200,14 +2213,19 @@ button { font: inherit; cursor: pointer; }
   flex-shrink: 0;
   margin-left: -8px;
 }
-.bundle-card-delivery-icon svg { width: 16px; height: 16px; }
+.bundle-card-delivery-icon svg { width: 18px; height: 18px; }
+/* Niedrige Viewports: gleiche kompakte Pille wie in der Buybox. */
+@media (max-height: 900px) {
+  .bundle-card-delivery { height: 28px; }
+  .bundle-card-delivery-icon { width: 28px; height: 28px; }
+  .bundle-card-delivery-icon svg { width: 16px; height: 16px; }
+}
 .bundle-card-seller {
   margin: 0;
   font-size: 13px;
-  color: var(--c-text-secondary);
+  color: var(--c-text);
 }
-.bundle-card-seller a { color: var(--c-blue); text-decoration: none; }
-.bundle-card-seller a:hover { text-decoration: underline; }
+.bundle-card-seller strong { font-weight: 600; }
 .bundle-card-price-block {
   margin: auto 0 0;
   text-align: right;
@@ -2239,10 +2257,7 @@ button { font: inherit; cursor: pointer; }
      parent that 220px becomes HEIGHT, so reset basis here. */
   flex: 0 0 auto;
   width: 100%;
-  height: 44px;
-  padding-left: 12px;
 }
-.bundle-card-actions .qty-input-wrap input { min-width: 3.5ch; }
 .bundle-cta-row {
   display: flex;
   align-items: stretch;
@@ -5014,12 +5029,12 @@ function renderBundle() {
     '<div class="bundle-row">' +
       // === Current item card (mirrors the configurator selection) ===
       '<article class="bundle-card bundle-card-current">' +
-        '<span class="bundle-card-product-tag">Dieses Produkt</span>' +
+        '<span class="bundle-card-product-tag">Aktuelles Produkt</span>' +
         '<div class="bundle-card-image"><img src="' + mainImg + '" alt="WAGO ' + skuExact + '"></div>' +
         '<p class="bundle-card-name">' + boldBrand(variantTitle) + '</p>' +
         '<p class="bundle-card-stock">264.150 Stück auf Lager</p>' +
         '<div class="bundle-card-delivery">' + deliveryIcon + 'Sofort-Lieferung ' + deliveryDate + '</div>' +
-        '<p class="bundle-card-seller">Verkauft und versendet von <a href="#" target="_blank" rel="noopener noreferrer">Conrad Electronic</a></p>' +
+        '<p class="bundle-card-seller">Verkauft und versendet von <strong>Conrad Electronic</strong></p>' +
         '<div class="bundle-card-price-block">' +
           '<span class="bundle-card-price">' + fmtEur(packPrice) + '</span>' +
           '<p class="bundle-card-tax">zzgl. MwSt. &amp; Versand</p>' +
@@ -5032,7 +5047,7 @@ function renderBundle() {
         '<p class="bundle-card-name"><strong>WAGO</strong> 221-500 Serie 221 Befestigungsadapter 1 St.</p>' +
         '<p class="bundle-card-stock">12.500 St\u00fcck auf Lager</p>' +
         '<div class="bundle-card-delivery">' + deliveryIcon + 'Sofort-Lieferung ' + deliveryDate + '</div>' +
-        '<p class="bundle-card-seller">Verkauft und versendet von <a href="#" target="_blank" rel="noopener noreferrer">Conrad Electronic</a></p>' +
+        '<p class="bundle-card-seller">Verkauft und versendet von <strong>Conrad Electronic</strong></p>' +
         '<div class="bundle-card-price-block">' +
           '<span class="bundle-card-price">' + fmtEur(adapterPrice) + '</span>' +
           '<p class="bundle-card-tax">zzgl. MwSt. &amp; Versand</p>' +
@@ -5040,7 +5055,7 @@ function renderBundle() {
         '<div class="bundle-card-actions">' +
           '<div class="qty-input-wrap">' +
             '<input type="text" inputmode="numeric" value="1" data-bundle-qty aria-label="Menge">' +
-            '<span class="qty-unit">St\u00fcck</span>' +
+            '<span class="qty-unit">Stk.</span>' +
             '<div class="qty-btn-group">' +
               '<button class="qty-btn" type="button" data-bundle-minus aria-label="Menge verringern"><span class="qty-btn-puck">\u2212</span></button>' +
               '<button class="qty-btn" type="button" data-bundle-plus aria-label="Menge erh\u00f6hen"><span class="qty-btn-puck">+</span></button>' +
