@@ -2989,7 +2989,14 @@ button { font: inherit; cursor: pointer; }
 .summary-row.pulse, .summary-total-row.pulse { animation: sum-pulse 0.9s ease; }
 
 
-.summary-card { padding: 20px; }
+.summary-card {
+  padding: 20px;
+  position: sticky;
+  top: 16px;
+}
+/* Die Spalte muss die Zeilenhoehe fuellen, sonst hat sticky keinen
+   Weg zum Mitlaufen. */
+.cart-layout > aside { align-self: stretch; }
 .summary-row {
   display: flex;
   justify-content: space-between;
@@ -3053,6 +3060,7 @@ button { font: inherit; cursor: pointer; }
   margin-top: 14px;
   padding-top: 14px;
   border-top: 1px solid var(--c-border);
+  text-align: center;
 }
 .summary-acc summary {
   display: inline-flex;
@@ -3069,7 +3077,7 @@ button { font: inherit; cursor: pointer; }
 .summary-acc summary::-webkit-details-marker { display: none; }
 .summary-acc-caret { width: 14px; height: 14px; color: var(--c-blue); transition: transform 0.15s; flex-shrink: 0; }
 .summary-acc[open] .summary-acc-caret { transform: rotate(180deg); }
-.summary-acc-body { margin-top: 12px; }
+.summary-acc-body { margin-top: 12px; text-align: left; }
 .summary-acc-group + .summary-acc-group { margin-top: 14px; }
 .summary-acc-label {
   font-size: 12px;
