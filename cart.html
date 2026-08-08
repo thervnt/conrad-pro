@@ -2975,26 +2975,6 @@ button { font: inherit; cursor: pointer; }
 
     <div class="cart-items">
       <div data-cart-list></div>
-      <div class="quickadd" data-quickadd>
-        <p class="quickadd-title">Artikel per Bestell-Nr. hinzufügen</p>
-        <div class="quickadd-form">
-          <input class="quickadd-input quickadd-nr" type="text" placeholder="Bestell-Nr., z. B. 1188440" aria-label="Bestell-Nr." data-qa-nr>
-          <input class="quickadd-input quickadd-qty" type="text" inputmode="numeric" value="1" aria-label="Menge" data-qa-qty>
-          <button type="button" class="quickadd-add" data-qa-add>Hinzufügen</button>
-          <button type="button" class="quickadd-csv-link" data-qa-csv-toggle>oder CSV importieren</button>
-        </div>
-        <p class="quickadd-hint">Mehrere Artikel: Bestell-Nr. und Menge mit Semikolon, weitere mit Komma trennen – z. B. 1188440;4, 1188441;2</p>
-        <p class="quickadd-msg" data-qa-msg hidden></p>
-        <div class="quickadd-csv-row" data-qa-csv hidden>
-          <input type="file" accept=".csv,text/csv" hidden data-qa-file>
-          <button type="button" class="quickadd-file" data-qa-file-btn>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-            CSV auswählen
-          </button>
-          <span class="quickadd-csv-note">Spalten: Bestell-Nr.; Menge</span>
-          <a href="#" data-qa-template>CSV-Vorlage herunterladen</a>
-        </div>
-      </div>
       <div class="cart-empty" data-cart-empty>
         <div class="cart-empty-head">
           <h2 class="cart-empty-title">Ihr Einkaufswagen ist noch leer.</h2>
@@ -3026,6 +3006,26 @@ button { font: inherit; cursor: pointer; }
           <input type="checkbox" data-pro-checkbox>
           <span><strong>30 Tage kostenlos testen</strong> – danach 59 €/Jahr. Ich akzeptiere die <a href="#">AGB</a> und <a href="#">Kündigungsbedingungen</a>.</span>
         </label>
+      </div>
+      <div class="quickadd" data-quickadd>
+        <p class="quickadd-title">Artikel per Bestell-Nr. hinzufügen</p>
+        <div class="quickadd-form">
+          <input class="quickadd-input quickadd-nr" type="text" placeholder="Bestell-Nr., z. B. 1188440" aria-label="Bestell-Nr." data-qa-nr>
+          <input class="quickadd-input quickadd-qty" type="text" inputmode="numeric" value="1" aria-label="Menge" data-qa-qty>
+          <button type="button" class="quickadd-add" data-qa-add>Hinzufügen</button>
+          <button type="button" class="quickadd-csv-link" data-qa-csv-toggle>oder CSV importieren</button>
+        </div>
+        <p class="quickadd-hint">Mehrere Artikel: Bestell-Nr. und Menge mit Semikolon, weitere mit Komma trennen – z. B. 1188440;4, 1188441;2</p>
+        <p class="quickadd-msg" data-qa-msg hidden></p>
+        <div class="quickadd-csv-row" data-qa-csv hidden>
+          <input type="file" accept=".csv,text/csv" hidden data-qa-file>
+          <button type="button" class="quickadd-file" data-qa-file-btn>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            CSV auswählen
+          </button>
+          <span class="quickadd-csv-note">Spalten: Bestell-Nr.; Menge</span>
+          <a href="#" data-qa-template>CSV-Vorlage herunterladen</a>
+        </div>
       </div>
     </div>
 
@@ -3424,7 +3424,7 @@ button { font: inherit; cursor: pointer; }
     var qaSlot = document.querySelector('[data-quickadd-slot]');
     var qa = document.querySelector('[data-quickadd]');
     if (empty && qa.parentElement !== qaSlot) qaSlot.appendChild(qa);
-    else if (!empty && qa.parentElement === qaSlot) listEl.parentElement.insertBefore(qa, listEl.nextSibling);
+    else if (!empty && qa.parentElement === qaSlot) listEl.parentElement.appendChild(qa);
 
     var net = items.reduce(function (sum, it) { return sum + priceOf(it) * it.qty; }, 0);
     var vat = net * VAT_RATE;
