@@ -2719,30 +2719,47 @@ button { font: inherit; cursor: pointer; }
 }
 .quickadd-input:focus { outline: none; border-color: var(--c-blue); }
 .quickadd-nr { flex: 1 1 220px; min-width: 0; }
-/* Kompakter Stepper wie im Mini-Warenkorb. */
-.quickadd-stepper { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
-.quickadd-stepper button {
+/* Bestell-Nr.-Feld mit CSV-Icon rechts im Feld. */
+.quickadd-nr-wrap { position: relative; flex: 1 1 220px; min-width: 0; display: flex; }
+.quickadd-nr-wrap .quickadd-nr { flex: 1; padding-right: 44px; }
+.quickadd-csv-btn {
+  position: absolute;
+  top: 50%;
+  right: 4px;
+  transform: translateY(-50%);
   width: 32px;
   height: 32px;
-  border: 1px solid var(--c-border);
-  background: var(--c-bg-white);
-  border-radius: var(--radius-sm);
-  color: var(--c-text-secondary);
-  font: inherit;
-  font-size: 15px;
-  cursor: pointer;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  background: none;
+  border: none;
+  border-radius: var(--radius-sm);
+  color: var(--c-text-secondary);
+  cursor: pointer;
+  padding: 0;
 }
-.quickadd-stepper button:hover { border-color: var(--c-blue); }
-.quickadd-qty {
-  flex: 0 0 44px;
-  width: 44px;
-  padding: 0 4px;
-  text-align: center;
-  font-variant-numeric: tabular-nums;
+.quickadd-csv-btn:hover { color: var(--c-text); background: var(--c-bg-tint); }
+.quickadd-csv-btn svg { width: 18px; height: 18px; }
+.quickadd-csv-btn[data-tooltip]:hover::after,
+.quickadd-csv-btn[data-tooltip]:focus-visible::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  background: var(--c-navy);
+  color: var(--c-text-on-dark);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.4;
+  padding: 6px 10px;
+  border-radius: 6px;
+  white-space: nowrap;
+  z-index: 50;
+  pointer-events: none;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.18);
 }
+.quickadd-form .qty-input-wrap { flex: 0 0 200px; width: 200px; }
 .quickadd-add {
   height: 40px;
   padding: 0 20px;
@@ -2757,7 +2774,6 @@ button { font: inherit; cursor: pointer; }
   flex-shrink: 0;
 }
 .quickadd-add:hover { background: #d6dcf8; }
-.quickadd-form .icon-btn { width: 40px; height: 40px; }
 .quickadd-hint { font-size: 12px; color: var(--c-text-tertiary); margin: 8px 0 0; }
 .quickadd-msg { font-size: 13px; margin: 8px 0 0; }
 .quickadd-msg.ok { color: #218972; font-weight: 500; }
@@ -3224,16 +3240,21 @@ button { font: inherit; cursor: pointer; }
       <div class="quickadd" data-quickadd>
         <p class="quickadd-title">Artikel per Bestell-Nr. hinzufügen</p>
         <div class="quickadd-form">
-          <input class="quickadd-input quickadd-nr" type="text" placeholder="Bestell-Nr., z. B. 1188440" aria-label="Bestell-Nr." data-qa-nr>
-          <div class="quickadd-stepper">
-            <button type="button" data-qa-minus aria-label="Menge verringern">−</button>
-            <input class="quickadd-input quickadd-qty" type="text" inputmode="numeric" value="1" aria-label="Menge" data-qa-qty>
-            <button type="button" data-qa-plus aria-label="Menge erhöhen">+</button>
+          <div class="quickadd-nr-wrap">
+            <input class="quickadd-input quickadd-nr" type="text" placeholder="Bestell-Nr., z. B. 1188440" aria-label="Bestell-Nr." data-qa-nr>
+            <button type="button" class="quickadd-csv-btn" data-qa-csv-toggle data-tooltip="CSV importieren" aria-label="CSV importieren">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            </button>
+          </div>
+          <div class="qty-input-wrap">
+            <input type="text" inputmode="numeric" value="1" aria-label="Menge" data-qa-qty>
+            <span class="qty-unit">Stk.</span>
+            <div class="qty-btn-group">
+              <button class="qty-btn" type="button" data-qa-minus aria-label="Menge verringern"><span class="qty-btn-puck">−</span></button>
+              <button class="qty-btn" type="button" data-qa-plus aria-label="Menge erhöhen"><span class="qty-btn-puck">+</span></button>
+            </div>
           </div>
           <button type="button" class="quickadd-add" data-qa-add>Hinzufügen</button>
-          <button type="button" class="icon-btn" data-qa-csv-toggle data-tooltip="CSV importieren" aria-label="CSV importieren">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-          </button>
         </div>
         <p class="quickadd-hint">Mehrere Artikel: Bestell-Nr. und Menge mit Semikolon, weitere mit Komma trennen – z. B. 1188440;4, 1188441;2</p>
         <p class="quickadd-msg" data-qa-msg hidden></p>
@@ -3606,8 +3627,13 @@ button { font: inherit; cursor: pointer; }
 
   function qaSetQty(n) {
     qaQty.value = Math.max(1, n);
+    qaQty.style.width = Math.max(1, String(qaQty.value).length) + 'ch';
     qaMsg.hidden = true;
   }
+  qaQty.addEventListener('input', function () {
+    qaQty.style.width = Math.max(1, String(qaQty.value).length) + 'ch';
+  });
+  qaSetQty(1);
   qaNode.querySelector('[data-qa-plus]').addEventListener('click', function () {
     qaSetQty((parseInt(qaQty.value, 10) || 0) + 1);
   });
