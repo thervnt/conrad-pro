@@ -872,9 +872,11 @@ button { font: inherit; cursor: pointer; }
 }
 /* Transparenzhinweis nach Art. 50 EU AI Act (gilt seit 02.08.2026):
    KI-erzeugte Inhalte muessen als solche gekennzeichnet sein. */
+/* Symbol links, Kennzeichnung rechts oben - beide auf einer Linie. */
 .ai-callout-label {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 8px;
   font-size: 12px;
   font-weight: 600;
@@ -2933,7 +2935,7 @@ button { font: inherit; cursor: pointer; }
 
       <!-- AI CALLOUT (adaptive) -->
       <div class="ai-callout">
-        <p class="ai-callout-label"><svg class="ai-callout-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l1.8 5.4L19 9l-5.2 1.6L12 16l-1.8-5.4L5 9l5.2-1.6z"/></svg>KI-generiert</p>
+        <p class="ai-callout-label"><svg class="ai-callout-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l1.8 5.4L19 9l-5.2 1.6L12 16l-1.8-5.4L5 9l5.2-1.6z"/></svg><span>KI-generiert</span></p>
         <ul data-ai-bullets>
           <li><strong>Kompaktheit:</strong> Bis zu 40 % kleiner als die Vorgängerserie 222</li>
           <li><strong>Sicherheit:</strong> Transparente Gehäuse und Prüföffnungen</li>
