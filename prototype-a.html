@@ -1126,12 +1126,6 @@ button { font: inherit; cursor: pointer; }
   align-items: center;
   gap: 4px;
 }
-.discount-badge svg {
-  width: 12px;
-  height: 12px;
-  display: block;
-  opacity: 0.9;
-}
 .discount-popover {
   position: absolute;
   top: calc(100% + 8px);
@@ -3707,12 +3701,7 @@ function renderProductSide() {
     const savingsContainer = document.querySelector('[data-price-savings]');
     if (showDiscount) {
       listEl.textContent = list.toFixed(2).replace('.', ',') + ' €';
-      badgeEl.innerHTML = '\u2212' + Math.round(savingsPct) + '%' +
-        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
-          '<circle cx="12" cy="12" r="10"/>' +
-          '<line x1="12" y1="16" x2="12" y2="12"/>' +
-          '<line x1="12" y1="8" x2="12.01" y2="8"/>' +
-        '</svg>';
+      badgeEl.textContent = '\u2212' + Math.round(savingsPct) + '%';
       listEl.style.display = '';
       if (badgeWrap) badgeWrap.style.display = '';
       if (savingsContainer) savingsContainer.style.display = '';
