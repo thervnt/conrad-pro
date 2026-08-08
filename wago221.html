@@ -3694,6 +3694,8 @@ const state = {
   qty: 1,
   packSize: 50,  // current selected pack size in Stück
   qtyChosen: false,  // user actively picked a pack/qty; carry it across config changes
+  qtyUserSet: false, // Menge wurde unten selbst eingestellt - dann keine
+                     // Ruecksetzung durch Klicks auf die Verpackung
   interacted: false,
   showAll: false
 };
@@ -3871,15 +3873,15 @@ function renderProductSide() {
     packRow.querySelectorAll('[data-pack]').forEach(btn => {
       btn.addEventListener('click', () => {
         const next = Number(btn.dataset.pack);
-        // Erneuter Klick auf die aktive Verpackung aendert nichts -
-        // die eingestellte Menge bleibt stehen.
+        // Erneuter Klick auf die aktive Verpackung aendert nichts.
         if (next === state.packSize) return;
-        // Beim Wechsel bleibt die gewuenschte Stueckzahl erhalten und
-        // wird auf die neue Verpackung umgerechnet, mindestens aber
-        // auf deren Untergrenze.
-        const pieces = state.qty * state.packSize;
         state.packSize = next;
-        state.qty = Math.max(minQtyFor(next), Math.round(pieces / next));
+        // Ohne eigene Eingabe startet jede Verpackung bei ihrer
+        // Untergrenze (1 Set, 3 Stueck). Hat der Nutzer die Menge
+        // unten selbst gesetzt, bleibt sie stehen.
+        state.qty = state.qtyUserSet
+          ? Math.max(minQtyFor(next), state.qty)
+          : minQtyFor(next);
         state.qtyChosen = true;
         // Picking a pack is a configurator interaction - unlock the
         // discount-badge / 'Zuletzt gekauft' label story the same
@@ -4322,6 +4324,7 @@ function minQtyFor(packSize) {
 document.querySelector('[data-qty-plus]').addEventListener('click', () => {
   state.qty += 1;
   state.qtyChosen = true;
+  state.qtyUserSet = true;
   document.querySelector('[data-qty]').value = state.qty;
   renderProductSide();
 });
@@ -4329,6 +4332,7 @@ document.querySelector('[data-qty-minus]').addEventListener('click', () => {
   const floor = minQtyFor(state.packSize);
   if (state.qty > floor) state.qty -= 1;
   state.qtyChosen = true;
+  state.qtyUserSet = true;
   document.querySelector('[data-qty]').value = state.qty;
   renderProductSide();
 });
@@ -4338,6 +4342,7 @@ document.querySelector('[data-qty]').addEventListener('change', e => {
   if (!isNaN(v) && v >= floor) state.qty = v;
   else state.qty = floor;
   state.qtyChosen = true;
+  state.qtyUserSet = true;
   e.target.value = state.qty;
   renderProductSide();
 });
