@@ -2922,7 +2922,12 @@ button { font: inherit; cursor: pointer; }
 .summary-row[hidden] { display: none; }
 .summary-row .summary-label { display: inline-flex; align-items: center; gap: 6px; }
 .summary-row .pro-logo[hidden] { display: none; }
-.summary-value .shipping-saved { color: #d9234c; margin-right: 4px; }
+.summary-value .shipping-was {
+  color: var(--c-text-tertiary);
+  font-weight: 400;
+  text-decoration: line-through;
+  margin-right: 6px;
+}
 .summary-pro-usp { margin: 0 0 12px; }
 .summary-pro-usp[hidden] { display: none; }
 /* Brief highlight when the PRO tick changes shipping/total. */
@@ -3612,8 +3617,9 @@ button { font: inherit; cursor: pointer; }
     if (empty) {
       shipEl.textContent = '—';
     } else if (pro) {
-      // Red text shows what the PRO tick saves on this order.
-      shipEl.innerHTML = (wouldShip > 0 ? '<span class="shipping-saved">−' + fmt(wouldShip) + '</span> ' : '') + 'Kostenfrei';
+      // Streichpreis statt Minusbetrag: eindeutig als entfallener
+      // Versandpreis lesbar, ohne als Abzug missverstanden zu werden.
+      shipEl.innerHTML = (wouldShip > 0 ? '<s class="shipping-was">' + fmt(wouldShip) + '</s> ' : '') + 'Kostenfrei';
     } else {
       shipEl.textContent = shipping > 0 ? fmt(shipping) : 'Kostenfrei';
     }
