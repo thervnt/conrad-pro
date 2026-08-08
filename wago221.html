@@ -3818,13 +3818,21 @@ function renderProductSide() {
     const popEl = document.querySelector('[data-discount-popover]');
     if (popEl) {
       const sizes = packSizesByPolzahl[p] || [];
+      // Die Staffel richtet sich nach der Gesamtmenge in Stueck, nicht
+      // nach der gewaehlten Verpackung: 16 Einzelstuecke erreichen die
+      // 15er-Stufe. Markiert wird die hoechste erreichte Stufe.
+      const totalPieces = (state.qty || 0) * sz;
+      const reached = sizes.filter(function (packSz) { return packSz <= totalPieces; });
+      const activeTier = reached.length
+        ? Math.max.apply(null, reached)
+        : Math.min.apply(null, sizes);
       const rows = sizes.map(function (packSz) {
         const price = (pricing.packs && pricing.packs[packSz] != null) ? pricing.packs[packSz] : null;
         if (price == null) return '';
         const listSz = pricing.baselineUnit * packSz;
         const sav = listSz - price;
         const pct = (sav > 0.01 && listSz > 0) ? Math.round(sav / listSz * 100) : 0;
-        const cur = packSz === sz;
+        const cur = packSz === activeTier;
         const savCell = pct > 0
           ? ('\u2212' + pct + '% = ' + sav.toFixed(2).replace('.', ',') + ' \u20ac')
           : '\u2014';
