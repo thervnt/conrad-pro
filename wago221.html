@@ -1943,6 +1943,66 @@ button { font: inherit; cursor: pointer; }
   border-top: 1px solid var(--c-border);
   border-bottom: 1px solid var(--c-border);
 }
+/* Gegenueberstellung: aktuelle Serie links, gewaehlte rechts. Was sich
+   unterscheidet, wird hervorgehoben - Gleiches bleibt zurueckhaltend. */
+.compare-vs {
+  padding: 4px 0 2px;
+  border-top: 1px solid var(--c-border);
+  border-bottom: 1px solid var(--c-border);
+}
+.compare-vs-row {
+  display: grid;
+  grid-template-columns: minmax(96px, 0.9fr) 1fr 1fr;
+  gap: 12px;
+  align-items: baseline;
+  padding: 7px 0;
+}
+.compare-vs-row + .compare-vs-row { border-top: 1px solid var(--c-border-light, #eef0f4); }
+.compare-vs-row.is-head { padding-top: 10px; }
+.compare-vs-label {
+  font-size: 11px;
+  color: var(--c-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.compare-vs-col {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--c-text);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.compare-vs-note {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--c-blue);
+  text-transform: none;
+}
+.compare-vs-val { font-size: 14px; color: var(--c-text-secondary); }
+.compare-vs-row.is-diff .compare-vs-val.is-other {
+  color: var(--c-text);
+  font-weight: 600;
+}
+/* Der Ausschluss ist die entscheidende Zeile - eigene Flaeche statt
+   letzter Satz im Absatz. */
+.compare-notfor {
+  margin: 14px 0 0;
+  padding: 8px 12px;
+  border-left: 3px solid #b45309;
+  background: #fdf6ec;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--c-text);
+}
+.compare-notfor-label { font-weight: 600; }
+@media (max-width: 720px) {
+  .compare-vs-row { grid-template-columns: 1fr 1fr; }
+  .compare-vs-label { grid-column: 1 / -1; padding-bottom: 2px; }
+  .compare-vs-row.is-head .compare-vs-label { display: none; }
+}
 .compare-spec-label {
   font-size: 11px; color: var(--c-text-secondary);
   text-transform: uppercase; letter-spacing: 0.04em;
@@ -3134,7 +3194,7 @@ button { font: inherit; cursor: pointer; }
         <p class="eyebrow">Passt die 221 zu Ihrem Einsatz?</p>
         <p class="serie-section-desc">Wählen Sie eine Serie, um die wichtigsten Unterschiede zu sehen.</p>
         <div class="compare-wrap">
-          <div class="compare-tabs" role="tablist" aria-label="WAGO Serien" data-compare-tabs></div>
+          <div class="compare-tabs" role="tablist" aria-orientation="vertical" aria-label="WAGO Serien" data-compare-tabs></div>
           <div class="compare-card" role="tabpanel" id="compare-panel" data-compare-panel></div>
         </div>
       </div>
@@ -4849,10 +4909,10 @@ document.addEventListener('click', e => {
   };
 
   const COMPARISON_DATA = {
-    '221':    { thumb: 'k221',  title: 'Verbindungsklemme mit Hebel',           desc: 'Werkzeuglos für alle Leiterarten. Lösbar, prüfbar, mischbar.', statusLabel: 'Aktuelles Produkt', statusVariant: 'current',     specs: { leiter: 'alle Leiterarten',       querschnitt: '0,14–6 mm²',  bedienung: 'Hebel, werkzeuglos', loesbar: 'Ja' },             usecase: 'Die WAGO 221 ist die richtige Wahl, wenn Sie ein- und mehrdrähtige Leiter (0,14 bis 6 mm²) werkzeuglos, sichtbar und wieder lösbar verbinden wollen, typisch in Abzweigdosen, Verteilern und bei Leuchtenanschlüssen. Der orange Hebel öffnet und schließt die Klemme mit einer Hand, das transparente Gehäuse macht die Verbindung prüfbar, und die kompakte Bauform passt auch in volle Dosen. Nicht die richtige Wahl bei Strömen über 32 A, Querschnitten über 6 mm² oder wenn die Verbindung dauerhaft unzugänglich verbaut wird.', href: null },
-    '2273':   { thumb: 'k2273', title: 'Steckklemme für eindrähtige Leiter',    desc: 'Kleiner als 221, ohne Hebel. Stecken statt klemmen.',          statusLabel: 'Alternative',       statusVariant: 'alternative', specs: { leiter: 'nur eindrähtig',         querschnitt: '0,5–2,5 mm²', bedienung: 'stecken',            loesbar: 'eingeschränkt' }, usecase: 'Die WAGO 2273 ist die kompakte Steckklemme für starre Leiter (0,5 bis 2,5 mm²), gedacht für klassische Neuinstallationen in Abzweigdosen, wo Sie viele gleichartige Verbindungen schnell setzen und nicht wieder lösen müssen. Sie ist deutlich kleiner und günstiger als die 221, hat aber keinen Hebel: Leiter abisolieren, einstecken, fertig. Nicht geeignet für flexible oder feindrähtige Leiter und nicht für Anwendungen, bei denen Sie die Verbindung später noch einmal öffnen wollen.', href: 'https://www.conrad.de/de/search.html?search=WAGO%202273' },
-    '224':    { thumb: 'k224',  title: 'Leuchtenklemme',                        desc: 'Eindrähtig auf feindrähtig. Speziell für Leuchten und Geräte.', statusLabel: 'Alternative',       statusVariant: 'alternative', specs: { leiter: 'eindräht. + feindräht.', querschnitt: '0,5–2,5 mm²', bedienung: 'stecken',            loesbar: 'Nein' },          usecase: 'Die WAGO 224 ist die spezialisierte Leuchtenklemme für den Anschluss von Leuchten an die feste Installationsleitung, ein Anschluss starr, einer flexibel, vorbereitet für genau diesen Anwendungsfall. Sie nutzen sie, wenn Sie Deckenleuchten, Wandleuchten oder Außenleuchten anschließen und eine zugelassene, schnelle Lösung ohne Werkzeug brauchen. Außerhalb des Leuchtenanschlusses ist die 221 die universellere Wahl.', href: 'https://www.conrad.de/de/search.html?search=WAGO%20224' },
-    '243':    { thumb: 'k243',  title: 'Mikro-Verbindungsklemme', desc: 'Für sehr feine Leiter in Klingel-, Telefon- und Signalinstallationen.', statusLabel: 'Alternative', statusVariant: 'alternative', specs: { leiter: 'Massivdraht', querschnitt: '0,6–0,8 mm Ø', bedienung: 'stecken', loesbar: 'Ja' }, usecase: 'Die WAGO 243 ist die Mikro-Verbindungsklemme für sehr feine Leiter (0,6 bis 0,8 mm Massivdraht), gedacht für Klingel-, Telefon-, Signal- und Niederspannungsinstallationen, also überall dort, wo nur geringe Ströme und kleine Querschnitte zusammenkommen. Sie nutzen sie, wenn Sie in einer Klingeldose, an einer Türsprechanlage oder bei einer 24-V-Steueranlage mehrere dünne Drähte sauber und wieder lösbar verbinden wollen. Für normale 230-V-Installationen oder Querschnitte ab 1,5 mm² ist sie nicht geeignet, dafür greifen Sie zur 221 oder 2273.', href: 'https://www.conrad.de/de/search.html?search=wago%20243' }
+    '221':    { thumb: 'k221',  title: 'Verbindungsklemme mit Hebel',           desc: 'Werkzeuglos für alle Leiterarten. Lösbar, prüfbar, mischbar.', statusLabel: 'Aktuelles Produkt', statusVariant: 'current',     specs: { leiter: 'alle Leiterarten',       querschnitt: '0,14–6 mm²',  bedienung: 'Hebel, werkzeuglos', loesbar: 'Ja' },             usecase: 'Die WAGO 221 ist die richtige Wahl, wenn Sie ein- und mehrdrähtige Leiter (0,14 bis 6 mm²) werkzeuglos, sichtbar und wieder lösbar verbinden wollen, typisch in Abzweigdosen, Verteilern und bei Leuchtenanschlüssen. Der orange Hebel öffnet und schließt die Klemme mit einer Hand, das transparente Gehäuse macht die Verbindung prüfbar, und die kompakte Bauform passt auch in volle Dosen.', notFor: 'Ströme über 32 A, Querschnitte über 6 mm² und dauerhaft unzugänglich verbaute Verbindungen.', href: null },
+    '2273':   { thumb: 'k2273', title: 'Steckklemme für eindrähtige Leiter',    desc: 'Kleiner als 221, ohne Hebel. Stecken statt klemmen.',          statusLabel: 'Alternative',       statusVariant: 'alternative', specs: { leiter: 'nur eindrähtig',         querschnitt: '0,5–2,5 mm²', bedienung: 'stecken',            loesbar: 'eingeschränkt' }, usecase: 'Die WAGO 2273 ist die kompakte Steckklemme für starre Leiter (0,5 bis 2,5 mm²), gedacht für klassische Neuinstallationen in Abzweigdosen, wo Sie viele gleichartige Verbindungen schnell setzen und nicht wieder lösen müssen. Sie ist deutlich kleiner und günstiger als die 221, hat aber keinen Hebel: Leiter abisolieren, einstecken, fertig.', notFor: 'Flexible oder feindrähtige Leiter und Verbindungen, die Sie später wieder öffnen wollen.', href: 'https://www.conrad.de/de/search.html?search=WAGO%202273' },
+    '224':    { thumb: 'k224',  title: 'Leuchtenklemme',                        desc: 'Eindrähtig auf feindrähtig. Speziell für Leuchten und Geräte.', statusLabel: 'Alternative',       statusVariant: 'alternative', specs: { leiter: 'eindräht. + feindräht.', querschnitt: '0,5–2,5 mm²', bedienung: 'stecken',            loesbar: 'Nein' },          usecase: 'Die WAGO 224 ist die spezialisierte Leuchtenklemme für den Anschluss von Leuchten an die feste Installationsleitung, ein Anschluss starr, einer flexibel, vorbereitet für genau diesen Anwendungsfall. Sie nutzen sie, wenn Sie Deckenleuchten, Wandleuchten oder Außenleuchten anschließen und eine zugelassene, schnelle Lösung ohne Werkzeug brauchen.', notFor: 'Alles außerhalb des Leuchtenanschlusses – dort ist die 221 die universellere Wahl.', href: 'https://www.conrad.de/de/search.html?search=WAGO%20224' },
+    '243':    { thumb: 'k243',  title: 'Mikro-Verbindungsklemme', desc: 'Für sehr feine Leiter in Klingel-, Telefon- und Signalinstallationen.', statusLabel: 'Alternative', statusVariant: 'alternative', specs: { leiter: 'Massivdraht', querschnitt: '0,6–0,8 mm Ø', bedienung: 'stecken', loesbar: 'Ja' }, usecase: 'Die WAGO 243 ist die Mikro-Verbindungsklemme für sehr feine Leiter (0,6 bis 0,8 mm Massivdraht), gedacht für Klingel-, Telefon-, Signal- und Niederspannungsinstallationen, also überall dort, wo nur geringe Ströme und kleine Querschnitte zusammenkommen. Sie nutzen sie, wenn Sie in einer Klingeldose, an einer Türsprechanlage oder bei einer 24-V-Steueranlage mehrere dünne Drähte sauber und wieder lösbar verbinden wollen.', notFor: 'Normale 230-V-Installationen und Querschnitte ab 1,5 mm² – dafür 221 oder 2273.', href: 'https://www.conrad.de/de/search.html?search=wago%20243' }
   };
 
   // Series thumbnails for the comparison segmented control. SVG
@@ -4872,7 +4932,8 @@ document.addEventListener('click', e => {
     { id: '243',    name: 'Serie 243',     sub: 'Mikro' }
   ];
 
-  let compareActive = '221';
+  const CURRENT_SERIES = '221';
+  let compareActive = CURRENT_SERIES;
 
   function track(event, props) {
     // Prototype stub - real analytics layer wires in here.
@@ -4936,12 +4997,19 @@ document.addEventListener('click', e => {
     }).join('');
     el.querySelectorAll('[data-compare-tab]').forEach(btn => {
       btn.addEventListener('click', () => selectCompareTab(btn.dataset.compareTab));
+      // Die Leiste steht senkrecht, also gehoeren Hoch/Runter dazu -
+      // Links/Rechts bleiben zusaetzlich erlaubt. Home/End springen an
+      // den Anfang bzw. das Ende (WAI-ARIA Tabs-Muster).
       btn.addEventListener('keydown', e => {
-        if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
-        e.preventDefault();
+        const last = COMPARE_TAB_ORDER.length - 1;
         const idx = COMPARE_TAB_ORDER.findIndex(o => o.id === compareActive);
-        const dir = e.key === 'ArrowRight' ? 1 : -1;
-        const next = (idx + dir + COMPARE_TAB_ORDER.length) % COMPARE_TAB_ORDER.length;
+        let next = null;
+        if (e.key === 'ArrowDown' || e.key === 'ArrowRight') next = (idx + 1) % (last + 1);
+        else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') next = (idx - 1 + last + 1) % (last + 1);
+        else if (e.key === 'Home') next = 0;
+        else if (e.key === 'End') next = last;
+        if (next === null) return;
+        e.preventDefault();
         selectCompareTab(COMPARE_TAB_ORDER[next].id);
         const focusEl = el.querySelector('[data-compare-tab="' + COMPARE_TAB_ORDER[next].id + '"]');
         if (focusEl) focusEl.focus();
@@ -4960,6 +5028,42 @@ document.addEventListener('click', e => {
     const iconHtml = d.icon
       ? '<div class="compare-card-icon" aria-hidden="true">' + (ICONS[d.icon] || '') + '</div>'
       : '';
+
+    const FELDER = [
+      ['Leiterart', 'leiter'], ['Querschnitt', 'querschnitt'],
+      ['Bedienung', 'bedienung'], ['Wiederlösbar', 'loesbar']
+    ];
+    const cur = COMPARISON_DATA[CURRENT_SERIES];
+    // Beim aktuellen Produkt gibt es nichts gegenueberzustellen - dort
+    // bleibt die einspaltige Liste. Sonst stehen beide Serien
+    // nebeneinander, damit der Vergleich nicht im Kopf stattfinden muss.
+    const specsHtml = (compareActive === CURRENT_SERIES)
+      ? '<div class="compare-specs">' + FELDER.map(function (f) {
+          return '<div class="compare-spec"><div class="compare-spec-label">' + f[0] +
+            '</div><div class="compare-spec-value">' + d.specs[f[1]] + '</div></div>';
+        }).join('') + '</div>'
+      : '<div class="compare-vs">' +
+          '<div class="compare-vs-row is-head">' +
+            '<span class="compare-vs-label"></span>' +
+            '<span class="compare-vs-col">Serie ' + CURRENT_SERIES +
+              '<span class="compare-vs-note">Aktuelles Produkt</span></span>' +
+            '<span class="compare-vs-col">Serie ' + compareActive + '</span>' +
+          '</div>' +
+          FELDER.map(function (f) {
+            const a = cur.specs[f[1]], b = d.specs[f[1]];
+            const diff = a !== b;
+            return '<div class="compare-vs-row' + (diff ? ' is-diff' : '') + '">' +
+              '<span class="compare-vs-label">' + f[0] + '</span>' +
+              '<span class="compare-vs-val">' + a + '</span>' +
+              '<span class="compare-vs-val is-other">' + b + '</span>' +
+            '</div>';
+          }).join('') +
+        '</div>';
+
+    // Der entscheidende Satz steht vor dem Fliesstext, nicht darin.
+    const notForHtml = d.notFor
+      ? '<p class="compare-notfor"><span class="compare-notfor-label">Nicht geeignet für:</span> ' + d.notFor + '</p>'
+      : '';
     panel.innerHTML =
       '<div class="compare-card-header">' +
         iconHtml +
@@ -4968,12 +5072,8 @@ document.addEventListener('click', e => {
           '<p class="compare-card-desc">' + d.desc + '</p>' +
         '</div>' +
       '</div>' +
-      '<div class="compare-specs">' +
-        '<div class="compare-spec"><div class="compare-spec-label">Leiterart</div><div class="compare-spec-value">'    + d.specs.leiter      + '</div></div>' +
-        '<div class="compare-spec"><div class="compare-spec-label">Querschnitt</div><div class="compare-spec-value">'  + d.specs.querschnitt + '</div></div>' +
-        '<div class="compare-spec"><div class="compare-spec-label">Bedienung</div><div class="compare-spec-value">'    + d.specs.bedienung   + '</div></div>' +
-        '<div class="compare-spec"><div class="compare-spec-label">Wiederlösbar</div><div class="compare-spec-value">' + d.specs.loesbar     + '</div></div>' +
-      '</div>' +
+      specsHtml +
+      notForHtml +
       '<p class="compare-usecase">' + d.usecase + '</p>' +
       linkHtml;
     const linkEl = panel.querySelector('[data-compare-link]');
