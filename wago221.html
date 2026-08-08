@@ -5361,6 +5361,39 @@ function renderBundle() {
   });
 })();
 
+// Konfiguration aus der URL uebernehmen (z. B. Sprung von einer
+// Produktkachel im Warenkorb). Nur gueltige Werte werden gesetzt.
+(function () {
+  const q = new URLSearchParams(location.search);
+  if (![...q.keys()].length) return;
+
+  const pol = Number(q.get('polzahl'));
+  if (polzahlOptions.some(o => o.id === pol)) state.polzahl = pol;
+
+  const stil = q.get('stil');
+  if (stil === '4' || stil === '6') state.stil = stil;
+
+  const hebel = q.get('hebel');
+  if (hebel === 'standard' || hebel === 'green-range') state.hebel = hebel;
+
+  // Nur Kombinationen, die es wirklich gibt. Zuerst den Leiterbereich
+  // zuruecknehmen, damit eine gueltige Hebel-Variante erhalten bleibt.
+  const exists = () => !!skuByCombo[state.polzahl + '|' + state.stil + '|' + state.hebel];
+  if (!exists()) {
+    state.stil = '4';
+    if (!exists()) state.hebel = 'standard';
+  }
+
+  const pack = Number(q.get('pack'));
+  const sizes = packSizesByPolzahl[state.polzahl] || [];
+  if (sizes.includes(pack)) {
+    state.packSize = pack;
+    state.qty = minQtyFor(pack);
+    state.qtyChosen = true;
+  }
+  state.interacted = true;
+})();
+
 render();
 </script>
 

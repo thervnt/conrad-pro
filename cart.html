@@ -2869,6 +2869,8 @@ button { font: inherit; cursor: pointer; }
   border-top: 1px solid var(--c-border);
   margin: 28px 0 20px;
 }
+/* Der Abstand kommt von der Trennlinie, nicht zusaetzlich vom Block. */
+[data-quickadd-slot] .quickadd { margin-top: 0; }
 .recent-title { font-size: 18px; font-weight: 600; color: var(--c-navy); margin: 0 0 14px; }
 .recent-grid {
   display: grid;
@@ -2884,7 +2886,19 @@ button { font: inherit; cursor: pointer; }
   padding: 16px;
   display: flex;
   flex-direction: column;
+  /* Ganze Kachel fuehrt auf die PDP - Schatten wie bei der
+     Zubehoerkarte dort. */
+  cursor: pointer;
+  transition: box-shadow 0.15s ease;
 }
+.recent-card:hover,
+.recent-card:focus-within {
+  box-shadow:
+    0 10px 20px -4px rgba(17, 18, 19, 0.12),
+    0 2px 6px 0 rgba(17, 18, 19, 0.10);
+}
+.recent-card-name a { color: inherit; text-decoration: none; }
+.recent-card:hover .recent-card-name a { text-decoration: underline; }
 .recent-card-img {
   height: 150px;
   display: flex;
@@ -3313,6 +3327,7 @@ button { font: inherit; cursor: pointer; }
             <a class="cart-empty-btn secondary" href="#">Zur Startseite</a>
           </div>
         </div>
+        <hr class="cart-empty-divider">
         <div data-quickadd-slot></div>
         <hr class="cart-empty-divider">
         <h3 class="recent-title">Zuletzt gesehen</h3>
@@ -3590,6 +3605,14 @@ button { font: inherit; cursor: pointer; }
 
   var SVG_CART = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>';
 
+  // Ziel-URL der PDP mit vorgewaehlter Konfiguration.
+  function recentHref(p) {
+    return 'wago221.html?polzahl=' + p.polzahl +
+      '&stil=' + (p.sku.indexOf('221-6') === 0 ? '6' : '4') +
+      '&hebel=' + (p.variantTag ? 'green-range' : 'standard') +
+      '&pack=' + p.packSize;
+  }
+
   function recentItem(p) {
     return {
       sku: p.sku, bestellNr: p.bestellNr, polzahl: p.polzahl,
@@ -3609,9 +3632,11 @@ button { font: inherit; cursor: pointer; }
       var price = p.packPrices[p.packSize];
       var perPiece = (price / p.packSize).toFixed(2).replace('.', ',');
       // Same building blocks and order as the PDP buy box.
-      return '<div class="recent-card">' +
+      var href = recentHref(p);
+      return '<div class="recent-card" data-recent-href="' + href + '">' +
         '<div class="recent-card-img"><img src="' + RECENT_IMG[p.sku] + '" alt=""></div>' +
-        '<p class="recent-card-name">' + esc(titleFor(item)) + '</p>' +
+        '<p class="recent-card-name"><a href="' + href + '" target="_blank" rel="noopener noreferrer">' +
+          esc(titleFor(item)) + '</a></p>' +
         '<div class="price-main">' +
           '<span class="amount">' + fmt(price) + '</span>' +
           '<span class="unit">(' + perPiece + '\u20ac/St\u00fcck)</span>' +
@@ -3638,7 +3663,12 @@ button { font: inherit; cursor: pointer; }
       return;
     }
     var fav = e.target.closest('[data-recent-fav]');
-    if (fav) toggleWishlist(fav);
+    if (fav) { toggleWishlist(fav); return; }
+    // Restliche Flaeche der Kachel: ab auf die PDP, Bedienelemente
+    // behalten ihre eigene Funktion.
+    if (e.target.closest('button, input, a, label')) return;
+    var card = e.target.closest('[data-recent-href]');
+    if (card) window.open(card.dataset.recentHref, '_blank', 'noopener');
   });
 
   // Same wishlist behaviour as the PDP buy box: active state, bounce +
