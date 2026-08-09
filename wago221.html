@@ -2601,9 +2601,10 @@ button { font: inherit; cursor: pointer; }
 .newsletter-benefit + .newsletter-benefit { margin-top: 5px; }
 .newsletter-benefit svg { width: 16px; height: 16px; flex-shrink: 0; margin-top: 2px; color: var(--c-success); }
 .newsletter-form { max-width: 620px; margin: 0 auto; }
-.newsletter-field { display: flex; gap: 8px; }
+/* Feste Feldbreite, damit die Beschriftung des Knopfes sie nicht bestimmt. */
+.newsletter-field { display: flex; justify-content: center; gap: 8px; }
 .newsletter-input {
-  flex: 1;
+  flex: 0 1 330px;
   min-width: 0;
   height: 44px;
   padding: 0 14px;
@@ -3851,7 +3852,7 @@ button { font: inherit; cursor: pointer; }
                placeholder="E-Mail-Adresse" autocomplete="email" inputmode="email"
                list="newsletter-mails" aria-describedby="newsletter-consent" data-newsletter-input>
         <datalist id="newsletter-mails" data-newsletter-list></datalist>
-        <button type="submit" class="newsletter-btn">Anmelden und Gutschein sichern</button>
+        <button type="submit" class="newsletter-btn">Vorteile sichern</button>
       </div>
       <p class="newsletter-error" role="alert" data-newsletter-error hidden></p>
       <p class="newsletter-consent" id="newsletter-consent">Mit dem Klick stimmen Sie dem Empfang des Newsletters und der Auswertung von Öffnungs- und Klickraten zu. Widerruf jederzeit möglich. <a href="#">Datenschutzerklärung</a> · <a href="#">Teilnahmebedingungen</a></p>
