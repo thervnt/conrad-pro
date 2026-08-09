@@ -2634,6 +2634,17 @@ button { font: inherit; cursor: pointer; }
   color: var(--c-text-on-dark) !important;
   font-size: 13px;
 }
+/* Preishinweis und Betreiber - inhaltsgleich mit dem Fuss im Warenkorb. */
+.footer-legalbar-meta {
+  max-width: 1680px;
+  margin: 0 auto;
+  padding: 0 24px 16px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 24px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.62);
+}
 @media (max-width: 1023px) {
   .footer-cols { grid-template-columns: repeat(2, 1fr); }
 }
@@ -3746,6 +3757,10 @@ button { font: inherit; cursor: pointer; }
   <div class="footer-legalbar">
     <div class="footer-legalbar-inner">
       <a href="#">AGB</a><a href="#">Impressum</a><a href="#">Datenschutz</a><a href="#">Widerruf einreichen</a><a href="#">Verträge kündigen</a><a href="#">Nutzungsbedingungen</a><a href="#">Cookie-Einstellungen</a><a href="#">Barrierefreiheit</a>
+    </div>
+    <div class="footer-legalbar-meta">
+      <span>Alle Preise zzgl. MwSt. &amp; Versand</span>
+      <span>Conrad Electronic SE · Klaus-Conrad-Straße 1 · 92240 Hirschau · © 2026</span>
     </div>
   </div>
 </footer>
