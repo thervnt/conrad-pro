@@ -4454,6 +4454,7 @@ function render() {
   renderProductSide();
   if (typeof renderBundle === 'function') renderBundle();
   if (typeof window.syncDatenblatt === 'function') window.syncDatenblatt();
+  if (typeof window.syncWishlistButton === 'function') window.syncWishlistButton();
 }
 
 // Qty controls (with seller-enforced minimum of MIN_PIECES Stück)
@@ -4826,6 +4827,8 @@ if (countdownEl) {
   if (!cta) return;
   // Eine Zeile in den Warenkorb legen und die Bestaetigung oeffnen -
   // gleicher Weg fuer die Buybox und fuer die Zubehoerkarte.
+  window.buildCartItem = buildCartItem;
+
   window.addLineToCart = function (item) {
     const items = loadCart();
     const existing = items.find(function (it) {
@@ -4939,23 +4942,25 @@ document.addEventListener('click', e => {
   // buy-box button and by the bundle adapter button (the latter
   // is rebuilt on every renderBundle, so wireWishlistButton is
   // exposed on window for callers to re-attach).
-  function wireWishlistButton(btn, onChange) {
+  function wireWishlistButton(btn, onChange, itemFn) {
     if (!btn || btn.dataset.wishlistWired === '1') return;
     btn.dataset.wishlistWired = '1';
     btn.setAttribute('aria-pressed', btn.classList.contains('active') ? 'true' : 'false');
     btn.addEventListener('click', () => {
+      // Der Speicher fuehrt Buch, der Zustand des Knopfes folgt ihm.
+      if (typeof itemFn === 'function' && window.conradWish) {
+        window.conradWish.toggle(itemFn());
+      }
       const wasActive = btn.classList.contains('active');
       if (wasActive) {
         btn.classList.remove('active');
         btn.setAttribute('aria-pressed', 'false');
         btn.setAttribute('aria-label', 'Auf Wunschliste');
-        updateHeaderBadge(-1);
         hideToast();
       } else {
         btn.classList.add('active');
         btn.setAttribute('aria-pressed', 'true');
         btn.setAttribute('aria-label', 'Von Wunschliste entfernen');
-        updateHeaderBadge(+1);
         btn.classList.remove('bounce', 'pulse');
         void btn.offsetWidth;
         btn.classList.add('bounce', 'pulse');
@@ -4964,8 +4969,21 @@ document.addEventListener('click', e => {
       if (typeof onChange === 'function') onChange(btn.classList.contains('active'));
     });
   }
-  wireWishlistButton(wishlistBtn);
+  wireWishlistButton(wishlistBtn, null, function () {
+    return window.buildCartItem(state.polzahl, state.stil, state.hebel, state.packSize, 1);
+  });
   window.wireWishlistButton = wireWishlistButton;
+
+  // Nach jeder Konfigurationsaenderung zeigt das Herz, ob genau diese
+  // Ausfuehrung schon gemerkt ist.
+  window.syncWishlistButton = function () {
+    if (!wishlistBtn || !window.conradWish) return;
+    var it = window.buildCartItem(state.polzahl, state.stil, state.hebel, state.packSize, 1);
+    var aktiv = window.conradWish.has(it);
+    wishlistBtn.classList.toggle('active', aktiv);
+    wishlistBtn.setAttribute('aria-pressed', String(aktiv));
+    wishlistBtn.setAttribute('aria-label', aktiv ? 'Von Wunschliste entfernen' : 'Auf Wunschliste');
+  };
 })();
 
 // === Serie & Zubehör tab (tab switching + content rendering) ===
@@ -5414,7 +5432,13 @@ function renderBundle() {
       const n = qtyEl ? Math.max(1, Number(qtyEl.value) || 1) : 1;
       // Der Adapter ist ein eigener Artikel: eigener Titel, eigener
       // Preis, nur Einzelstueck und ohne Mindestabnahme.
-      const item = {
+      const item = adapterItem(n);
+      if (typeof window.addLineToCart === 'function') window.addLineToCart(item);
+    });
+  }
+
+  function adapterItem(n) {
+      return {
         sku: '221-500',
         bestellNr: '2462952',
         title: 'WAGO 221-500 Serie 221 Befestigungsadapter 1 St.',
@@ -5429,8 +5453,6 @@ function renderBundle() {
         href: null,
         note: ''
       };
-      if (typeof window.addLineToCart === 'function') window.addLineToCart(item);
-    });
   }
   // Klick auf die Karte oeffnet die Produktseite - Bedienelemente
   // behalten ihre eigene Funktion.
@@ -5449,7 +5471,7 @@ function renderBundle() {
       // changes; the bundle adapter is the same SKU regardless of
       // which 221 variant is selected.
       window.__bundleWishlistActive = active;
-    });
+    }, function () { return adapterItem(1); });
   }
 }
 
@@ -5738,14 +5760,75 @@ render();
       : '<p class="fly-empty">Ihr Einkaufswagen ist leer</p>';
   }
 
+  // --- Merkliste: eigener Speicher, damit das Menue echte Produkte
+  //     zeigen kann. Eintraege haben dieselbe Form wie Warenkorbzeilen.
+  var WISH_KEY = 'conradWishlist';
+  function readWish() {
+    try {
+      var v = JSON.parse(localStorage.getItem(WISH_KEY));
+      return Array.isArray(v) ? v : [];
+    } catch (e) { return []; }
+  }
+  function writeWish(list) {
+    try { localStorage.setItem(WISH_KEY, JSON.stringify(list)); } catch (e) { /* voll */ }
+    renderWish();
+    setWishBadge();
+  }
+  function wishKey(it) { return it.sku + '|' + it.packSize; }
+  function setWishBadge() {
+    var badge = document.querySelector('[data-wishlist-badge]');
+    if (!badge) return;
+    var n = readWish().length;
+    badge.textContent = String(n);
+    badge.style.display = n > 0 ? '' : 'none';
+  }
+  window.conradWish = {
+    read: readWish,
+    has: function (it) {
+      var k = wishKey(it);
+      return readWish().some(function (w) { return wishKey(w) === k; });
+    },
+    toggle: function (it) {
+      var list = readWish();
+      var k = wishKey(it);
+      var i = list.findIndex(function (w) { return wishKey(w) === k; });
+      if (i >= 0) list.splice(i, 1);
+      else list.push(it);
+      writeWish(list);
+      return i < 0;
+    }
+  };
+
   function renderWish() {
     if (!wishEl) return;
-    var badge = document.querySelector('[data-wishlist-badge]');
-    var n = badge && badge.style.display !== 'none' ? parseInt(badge.textContent, 10) || 0 : 0;
-    wishEl.innerHTML = n > 0
-      ? '<p class="fly-empty">' + n + (n === 1 ? ' Artikel gemerkt' : ' Artikel gemerkt') + '</p>'
+    var list = readWish();
+    wishEl.innerHTML = list.length
+      ? '<div class="fly-list">' + list.map(function (it, i) {
+          return '<div class="fly-item">' +
+            '<span class="fly-item-img"><img src="' + it.img + '" alt=""></span>' +
+            '<span><span class="fly-item-name">' + esc(titel(it)) + '</span>' +
+              '<span class="fly-item-qty">' + (it.packSize === 1 ? 'Einzelst\u00fcck' : it.packSize + 'er-Set') + '</span></span>' +
+            '<span class="fly-item-right">' +
+              '<button type="button" class="fly-item-del" data-wish-del="' + i + '" ' +
+                'aria-label="Von der Merkliste entfernen">' + TRASH + '</button>' +
+              '<span class="fly-item-price">' + fmt((it.packPrices && it.packPrices[it.packSize]) || 0) + '</span>' +
+            '</span>' +
+          '</div>';
+        }).join('') + '</div>'
       : '<p class="fly-empty">Sie haben noch keine Merkliste erstellt</p>';
   }
+
+  if (wishEl) {
+    wishEl.addEventListener('click', function (e) {
+      var btn = e.target.closest('[data-wish-del]');
+      if (!btn) return;
+      var list = readWish();
+      list.splice(Number(btn.dataset.wishDel), 1);
+      writeWish(list);
+      document.dispatchEvent(new CustomEvent('conrad:wishlist-changed'));
+    });
+  }
+  document.addEventListener('conrad:wishlist-changed', function () { renderWish(); setWishBadge(); });
 
   if (listEl) {
     listEl.addEventListener('click', function (e) {
@@ -5758,11 +5841,9 @@ render();
     });
   }
   document.addEventListener('conrad:cart-changed', function () { render(); renderWish(); });
-  document.addEventListener('click', function (e) {
-    if (e.target.closest('.wishlist-btn, [data-recent-fav]')) setTimeout(renderWish, 0);
-  });
   render();
   renderWish();
+  setWishBadge();
   window.refreshHeaderFlyouts = function () { render(); renderWish(); };
 })();
 </script>

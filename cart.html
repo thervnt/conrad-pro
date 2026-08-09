@@ -3907,7 +3907,12 @@ button { font: inherit; cursor: pointer; }
       return;
     }
     var fav = e.target.closest('[data-recent-fav]');
-    if (fav) { toggleWishlist(fav); return; }
+    if (fav) {
+      var karte = fav.closest('.recent-card');
+      var idx = [...document.querySelectorAll('.recent-card')].indexOf(karte);
+      toggleWishlist(fav, idx >= 0 ? recentItem(RECENT[idx]) : null);
+      return;
+    }
     // Restliche Flaeche der Kachel: ab auf die PDP, Bedienelemente
     // behalten ihre eigene Funktion.
     if (e.target.closest('button, input, a, label')) return;
@@ -3917,19 +3922,18 @@ button { font: inherit; cursor: pointer; }
 
   // Same wishlist behaviour as the PDP buy box: active state, bounce +
   // pulse animation and header badge count.
-  function toggleWishlist(btn) {
-    var badge = document.querySelector('[data-wishlist-badge]');
+  function toggleWishlist(btn, item) {
+    // Der Speicher fuehrt Buch; Zaehler und Menue folgen ihm.
+    if (item && window.conradWish) window.conradWish.toggle(item);
     var wasActive = btn.classList.contains('active');
     if (wasActive) {
       btn.classList.remove('active');
       btn.setAttribute('aria-pressed', 'false');
       btn.setAttribute('aria-label', 'Auf Wunschliste');
-      if (badge) badge.textContent = String(Math.max(0, (parseInt(badge.textContent, 10) || 0) - 1));
     } else {
       btn.classList.add('active');
       btn.setAttribute('aria-pressed', 'true');
       btn.setAttribute('aria-label', 'Von Wunschliste entfernen');
-      if (badge) badge.textContent = String((parseInt(badge.textContent, 10) || 0) + 1);
       btn.classList.remove('bounce', 'pulse');
       void btn.offsetWidth;
       btn.classList.add('bounce', 'pulse');
@@ -4102,9 +4106,10 @@ button { font: inherit; cursor: pointer; }
     if (empty && qa.parentElement !== qaSlot) qaSlot.appendChild(qa);
     else if (!empty && qa.parentElement === qaSlot) listEl.parentElement.appendChild(qa);
     // Im leeren Warenkorb ist die Schnellerfassung das Hauptwerkzeug und
-    // steht offen; sonst zugeklappt. Ein selbst geoeffneter Zustand
-    // bleibt bestehen.
-    if (!qaManuell) setQuickaddOffen(empty);
+    // steht immer offen - eine vorher selbst getroffene Entscheidung
+    // galt fuer den gefuellten Wagen und wird hier zurueckgesetzt.
+    if (empty) { qaManuell = false; setQuickaddOffen(true); }
+    else if (!qaManuell) setQuickaddOffen(false);
 
     var net = items.reduce(function (sum, it) { return sum + priceOf(it) * it.qty; }, 0);
     var vat = net * VAT_RATE;
@@ -4202,7 +4207,7 @@ button { font: inherit; cursor: pointer; }
       items.splice(idx, 1);
     } else if (act === 'wishlist') {
       // Toggle in place - re-rendering would drop the animation.
-      toggleWishlist(btn);
+      toggleWishlist(btn, item);
       return;
     }
     save();
@@ -4462,14 +4467,75 @@ button { font: inherit; cursor: pointer; }
       : '<p class="fly-empty">Ihr Einkaufswagen ist leer</p>';
   }
 
+  // --- Merkliste: eigener Speicher, damit das Menue echte Produkte
+  //     zeigen kann. Eintraege haben dieselbe Form wie Warenkorbzeilen.
+  var WISH_KEY = 'conradWishlist';
+  function readWish() {
+    try {
+      var v = JSON.parse(localStorage.getItem(WISH_KEY));
+      return Array.isArray(v) ? v : [];
+    } catch (e) { return []; }
+  }
+  function writeWish(list) {
+    try { localStorage.setItem(WISH_KEY, JSON.stringify(list)); } catch (e) { /* voll */ }
+    renderWish();
+    setWishBadge();
+  }
+  function wishKey(it) { return it.sku + '|' + it.packSize; }
+  function setWishBadge() {
+    var badge = document.querySelector('[data-wishlist-badge]');
+    if (!badge) return;
+    var n = readWish().length;
+    badge.textContent = String(n);
+    badge.style.display = n > 0 ? '' : 'none';
+  }
+  window.conradWish = {
+    read: readWish,
+    has: function (it) {
+      var k = wishKey(it);
+      return readWish().some(function (w) { return wishKey(w) === k; });
+    },
+    toggle: function (it) {
+      var list = readWish();
+      var k = wishKey(it);
+      var i = list.findIndex(function (w) { return wishKey(w) === k; });
+      if (i >= 0) list.splice(i, 1);
+      else list.push(it);
+      writeWish(list);
+      return i < 0;
+    }
+  };
+
   function renderWish() {
     if (!wishEl) return;
-    var badge = document.querySelector('[data-wishlist-badge]');
-    var n = badge && badge.style.display !== 'none' ? parseInt(badge.textContent, 10) || 0 : 0;
-    wishEl.innerHTML = n > 0
-      ? '<p class="fly-empty">' + n + (n === 1 ? ' Artikel gemerkt' : ' Artikel gemerkt') + '</p>'
+    var list = readWish();
+    wishEl.innerHTML = list.length
+      ? '<div class="fly-list">' + list.map(function (it, i) {
+          return '<div class="fly-item">' +
+            '<span class="fly-item-img"><img src="' + it.img + '" alt=""></span>' +
+            '<span><span class="fly-item-name">' + esc(titel(it)) + '</span>' +
+              '<span class="fly-item-qty">' + (it.packSize === 1 ? 'Einzelst\u00fcck' : it.packSize + 'er-Set') + '</span></span>' +
+            '<span class="fly-item-right">' +
+              '<button type="button" class="fly-item-del" data-wish-del="' + i + '" ' +
+                'aria-label="Von der Merkliste entfernen">' + TRASH + '</button>' +
+              '<span class="fly-item-price">' + fmt((it.packPrices && it.packPrices[it.packSize]) || 0) + '</span>' +
+            '</span>' +
+          '</div>';
+        }).join('') + '</div>'
       : '<p class="fly-empty">Sie haben noch keine Merkliste erstellt</p>';
   }
+
+  if (wishEl) {
+    wishEl.addEventListener('click', function (e) {
+      var btn = e.target.closest('[data-wish-del]');
+      if (!btn) return;
+      var list = readWish();
+      list.splice(Number(btn.dataset.wishDel), 1);
+      writeWish(list);
+      document.dispatchEvent(new CustomEvent('conrad:wishlist-changed'));
+    });
+  }
+  document.addEventListener('conrad:wishlist-changed', function () { renderWish(); setWishBadge(); });
 
   if (listEl) {
     listEl.addEventListener('click', function (e) {
@@ -4482,11 +4548,9 @@ button { font: inherit; cursor: pointer; }
     });
   }
   document.addEventListener('conrad:cart-changed', function () { render(); renderWish(); });
-  document.addEventListener('click', function (e) {
-    if (e.target.closest('.wishlist-btn, [data-recent-fav]')) setTimeout(renderWish, 0);
-  });
   render();
   renderWish();
+  setWishBadge();
   window.refreshHeaderFlyouts = function () { render(); renderWish(); };
 })();
 </script>
