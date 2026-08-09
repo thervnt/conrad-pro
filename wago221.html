@@ -1842,11 +1842,39 @@ button { font: inherit; cursor: pointer; }
 .warranty-body { flex: 1; overflow-y: auto; padding: 18px 20px; }
 .warranty-lead { margin: 0 0 14px; font-size: 14px; color: var(--c-text); }
 .warranty-figure {
-  margin: 0 0 18px;
-  padding: 14px;
-  background: var(--c-bg-tint);
+  margin: 0 0 20px;
+  padding: 0;
   border: 1px solid var(--c-border);
   border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+.warranty-figure a { display: block; }
+.warranty-figure-note {
+  padding: 8px 12px;
+  border-top: 1px solid var(--c-border);
+  background: var(--c-bg-tint);
+}
+.warranty-figure-note a { color: var(--c-blue); }
+/* GARAN-Kennzeichnung: nur zulaessig bei kostenloser Haltbarkeits-
+   garantie ueber zwei Jahre, die die gesamte Ware abdeckt. */
+.warranty-sub { font-size: 14px; font-weight: 600; margin: 0 0 8px; color: var(--c-text); }
+.warranty-garan {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+.warranty-garan-label {
+  display: block;
+  width: 132px;
+  height: auto;
+  flex-shrink: 0;
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-sm);
+}
+.warranty-garan-text { margin: 0; font-size: 13px; line-height: 1.5; color: var(--c-text); }
+@media (max-width: 480px) {
+  .warranty-garan { flex-direction: column; }
 }
 .warranty-figure img { display: block; width: 100%; height: auto; }
 .warranty-figure img[hidden] { display: none; }
@@ -3618,13 +3646,13 @@ button { font: inherit; cursor: pointer; }
       +495718870<br>
       <a href="https://www.wago.com/" target="_blank" rel="noopener noreferrer">https://www.wago.com/</a>
     </p>
-    <h3>Herstellergarantie</h3>
+    <h3>Gewährleistung &amp; Garantie</h3>
     <p class="recht-warranty">
-      WAGO gewährt auf dieses Produkt eine Herstellergarantie. Die vollständige
-      Garantieerklärung mit Dauer, Geltungsbereich und Verfahren steht hier bereit.
+      Für Waren in der EU gilt eine gesetzliche Gewährleistung von mindestens zwei Jahren.
+      WAGO gewährt darüber hinaus eine gewerbliche Haltbarkeitsgarantie.
     </p>
     <p>
-      <button type="button" class="warranty-link" data-warranty-open><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="15" y2="17"/></svg>Garantieerklärung ansehen</button>
+      <button type="button" class="warranty-link" data-warranty-open><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="15" y2="17"/></svg>Gewährleistung &amp; Garantie</button>
     </p>
     <p>
       <a class="recht-flag-link" href="https://www.conrad.de/de/about/legal/digital-services-act.html?product=1341805" target="_blank" rel="noopener noreferrer">Rechtliche Bedenken melden →</a>
@@ -3768,24 +3796,37 @@ button { font: inherit; cursor: pointer; }
 <aside class="warranty-drawer" data-warranty role="dialog" aria-modal="true"
        aria-labelledby="warranty-title" hidden>
   <div class="warranty-head">
-    <h2 class="warranty-title" id="warranty-title">Garantieerklärung</h2>
+    <h2 class="warranty-title" id="warranty-title">Gewährleistung &amp; Garantie</h2>
     <button type="button" class="warranty-close" data-warranty-close aria-label="Schließen">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
     </button>
   </div>
 
   <div class="warranty-body">
-    <p class="warranty-lead">Herstellergarantie der WAGO GmbH &amp; Co. KG für
-      <strong data-warranty-product>WAGO 221 Verbindungsklemme</strong>.</p>
+    <p class="warranty-lead">Gilt für <strong data-warranty-product>WAGO 221 Verbindungsklemme</strong>.</p>
 
+    <!-- Harmonisierte Bekanntmachung der EU-Kommission. Form und Inhalt
+         sind vorgegeben - die Grafik wird unveraendert eingebunden. -->
     <figure class="warranty-figure">
-      <img data-warranty-img alt="Garantieerklärung des Herstellers" hidden>
-      <figcaption class="warranty-figure-note" data-warranty-placeholder>
-        Hier steht die vom Hersteller bereitgestellte Garantieerklärung als Grafik.
-        Im Prototyp ist die Datei noch nicht hinterlegt – die Pflichtangaben stehen
-        darunter im Text.
+      <a href="recht/gesetzliche-gewaehrleistung.pdf" target="_blank" rel="noopener noreferrer"
+         aria-label="Bekanntmachung in voller Größe öffnen">
+        <img src="recht/gesetzliche-gewaehrleistung.svg"
+             alt="Harmonisierte Bekanntmachung der EU-Kommission zur gesetzlichen Gewährleistung: mindestens zwei Jahre Gewährleistung der Vertragsmäßigkeit für Waren, die in der Europäischen Union verkauft werden.">
+      </a>
+      <figcaption class="warranty-figure-note">Harmonisierte Bekanntmachung der Europäischen Kommission ·
+        <a href="recht/gesetzliche-gewaehrleistung.pdf" target="_blank" rel="noopener noreferrer">in voller Größe öffnen</a>
       </figcaption>
     </figure>
+
+    <h3 class="warranty-sub">Gewerbliche Haltbarkeitsgarantie des Herstellers</h3>
+    <div class="warranty-garan">
+      <img class="warranty-garan-label" src="recht/garan-label.svg"
+           alt="GARAN-Kennzeichnung: 3 Jahre gewerbliche Haltbarkeitsgarantie des Herstellers"
+           data-garan-label>
+      <p class="warranty-garan-text">WAGO gewährt auf dieses Produkt eine
+        <strong>kostenlose Haltbarkeitsgarantie von 3 Jahren</strong>, die die gesamte Ware abdeckt.
+        Sie gilt zusätzlich zur gesetzlichen Gewährleistung.</p>
+    </div>
 
     <dl class="warranty-list">
       <dt>Garantiegeber</dt>
@@ -3795,7 +3836,7 @@ button { font: inherit; cursor: pointer; }
       <dd data-warranty-scope>Verbindungsklemmen der Serie 221, alle Ausführungen</dd>
 
       <dt>Dauer</dt>
-      <dd>24 Monate ab Kaufdatum, mit Conrad PRO 36 Monate</dd>
+      <dd>36 Monate ab Kaufdatum</dd>
 
       <dt>Räumlicher Geltungsbereich</dt>
       <dd>Europäische Union, Schweiz, Vereinigtes Königreich</dd>
@@ -3817,11 +3858,11 @@ button { font: inherit; cursor: pointer; }
   </div>
 
   <div class="warranty-foot">
-    <a class="warranty-download" href="#" data-warranty-pdf>
+    <a class="warranty-download" href="recht/gesetzliche-gewaehrleistung.pdf" download>
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
       Als PDF herunterladen
     </a>
-    <p class="warranty-foot-note">Damit erhalten Sie die Erklärung in Textform,
+    <p class="warranty-foot-note">Bekanntmachung und Garantiebedingungen in Textform,
       wie es § 479 BGB verlangt.</p>
   </div>
 </aside>
@@ -6474,23 +6515,6 @@ render();
   });
   backdrop.addEventListener('click', schliessen);
 
-  // Prototyp: erzeugt die Erklaerung als Textdatei, damit der Weg
-  // "in Textform erhalten" vollstaendig durchspielbar ist.
-  var pdf = drawer.querySelector('[data-warranty-pdf]');
-  if (pdf) {
-    pdf.addEventListener('click', function (e) {
-      e.preventDefault();
-      var text = drawer.querySelector('.warranty-body').innerText.replace(/\n{3,}/g, '\n\n');
-      var blob = new Blob(['Garantieerklärung\n\n' + text], { type: 'text/plain;charset=utf-8' });
-      var a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = 'Garantieerklaerung-WAGO-221.txt';
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(a.href);
-    });
-  }
 })();
 </script>
 </body>
