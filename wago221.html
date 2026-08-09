@@ -1892,11 +1892,12 @@ button { font: inherit; cursor: pointer; }
 }
 .collapsible.is-collapsed .collapsible-fade { display: block; }
 .collapsible-toggle {
-  display: inline-flex;
+  display: flex;
   align-items: center;
+  justify-content: center;
   gap: 6px;
-  margin-top: 4px;
-  padding: 8px 12px 8px 0;
+  margin: 4px auto 0;
+  padding: 8px 12px;
   background: none;
   border: none;
   font: inherit;
@@ -3134,7 +3135,7 @@ button { font: inherit; cursor: pointer; }
       </div>
       <button type="button" class="collapsible-toggle" data-collapse-toggle
               aria-expanded="false" aria-controls="serien-vergleich">
-        <span data-collapse-label>Alle Serien vergleichen</span><svg class="collapse-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
+        <span data-collapse-label>Unterschiede anzeigen</span><svg class="collapse-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
     </div>
   </section>
 </div>
@@ -5050,7 +5051,7 @@ document.addEventListener('click', e => {
     btn.addEventListener('click', function () {
       const offen = box.classList.toggle('is-collapsed') === false;
       btn.setAttribute('aria-expanded', String(offen));
-      label.textContent = offen ? 'Weniger anzeigen' : 'Alle Serien vergleichen';
+      label.textContent = offen ? 'Unterschiede ausblenden' : 'Unterschiede anzeigen';
       if (!offen) box.scrollIntoView({ block: 'nearest' });
     });
   })();
