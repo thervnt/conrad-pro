@@ -1874,6 +1874,152 @@ button { font: inherit; cursor: pointer; }
 /* Current-product tab: marker persists independent of selection. */
 .compare-tab.is-current { background: #F4F5FE; }
 .compare-tab.is-current[aria-selected="true"] { background: #eaf0fe; }
+/* ===== PRODUKTDATEN MELDEN =====
+   Zurueckhaltender Einstieg in der Chip-Zeile, Dialog nach dem Muster
+   der Kauf-Bestaetigung (Backdrop, ESC, Fokusfalle). */
+.report-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 0;
+  background: none;
+  border: none;
+  font: inherit;
+  font-size: 13px;
+  color: var(--c-text-secondary);
+  cursor: pointer;
+}
+.report-trigger svg { width: 14px; height: 14px; }
+.report-trigger:hover { color: var(--c-blue); text-decoration: underline; }
+.report-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.45);
+  z-index: 1000;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+.report-backdrop.open { opacity: 1; }
+.report-backdrop[hidden] { display: none; }
+.report-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -48%);
+  width: min(480px, calc(100vw - 32px));
+  max-height: calc(100vh - 48px);
+  overflow-y: auto;
+  background: var(--c-bg-white);
+  border-radius: 12px;
+  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.28);
+  z-index: 1001;
+  opacity: 0;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+.report-modal.open { opacity: 1; transform: translate(-50%, -50%); }
+.report-modal[hidden] { display: none; }
+.report-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 18px 20px 12px;
+}
+.report-title { margin: 0; font-size: 17px; font-weight: 600; color: var(--c-text); }
+.report-close {
+  width: 32px; height: 32px;
+  padding: 0;
+  background: none;
+  border: none;
+  border-radius: var(--radius-sm);
+  color: var(--c-text-secondary);
+  cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.report-close svg { width: 18px; height: 18px; }
+.report-close:hover { background: var(--c-bg-tint); color: var(--c-text); }
+.report-body { padding: 0 20px 20px; }
+.report-label {
+  display: block;
+  margin: 12px 0 5px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--c-text);
+}
+.report-optional { font-weight: 400; color: var(--c-text-secondary); }
+.report-select, .report-input, .report-textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 9px 12px;
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-sm);
+  font: inherit;
+  font-size: 14px;
+  color: var(--c-text);
+  background: var(--c-bg-white);
+}
+.report-textarea { resize: vertical; }
+.report-select:focus, .report-input:focus, .report-textarea:focus {
+  outline: none;
+  border-color: var(--c-blue);
+  box-shadow: 0 0 0 3px rgba(55, 110, 239, 0.16);
+}
+.report-context {
+  margin: 14px 0 0;
+  padding: 10px 12px;
+  background: var(--c-bg-tint);
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--c-text-secondary);
+}
+.report-support { margin: 10px 0 0; font-size: 12px; color: var(--c-text-secondary); }
+.report-support a { color: var(--c-blue); }
+.report-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 18px; }
+.report-cancel {
+  height: 40px;
+  padding: 0 16px;
+  background: none;
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-sm);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--c-text);
+  cursor: pointer;
+}
+.report-cancel:hover { border-color: var(--c-border-strong); }
+.report-submit {
+  height: 40px;
+  padding: 0 18px;
+  background: var(--c-blue);
+  border: none;
+  border-radius: var(--radius-sm);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--c-text-on-dark);
+  cursor: pointer;
+}
+.report-submit:hover { background: var(--c-blue-hover); }
+.report-done { padding: 8px 20px 24px; text-align: center; }
+.report-done[hidden] { display: none; }
+.report-done-icon {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  background: #E0F4EE;
+  color: #218972;
+  margin-bottom: 10px;
+}
+.report-done-icon svg { width: 22px; height: 22px; }
+.report-done-title { margin: 0 0 6px; font-size: 16px; font-weight: 600; color: var(--c-text); }
+.report-done-text { margin: 0 0 18px; font-size: 13px; color: var(--c-text-secondary); }
+@media (prefers-reduced-motion: reduce) {
+  .report-modal, .report-backdrop { transition: none; }
+}
+
 /* ===== EINKLAPPBARER KARTENINHALT =====
    Eingeklappt bleibt ein Ausschnitt sichtbar und laeuft nach unten ins
    Weiss aus - das zeigt, dass da noch etwas kommt, ohne es zu zeigen. */
@@ -3157,6 +3303,7 @@ button { font: inherit; cursor: pointer; }
       <span class="id-chip">EAN <button class="id-chip-value" data-copy data-ean title="In Zwischenablage kopieren"><span class="id-chip-num">4050821808442</span><svg class="id-chip-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button></span>
       <span class="id-chip">Hst.-Teile-Nr. <button class="id-chip-value" data-copy data-hst title="In Zwischenablage kopieren"><span class="id-chip-num">221-413-50</span><svg class="id-chip-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button></span>
       <span class="id-chip">Bestell-Nr. <button class="id-chip-value" data-copy data-bestell title="In Zwischenablage kopieren"><span class="id-chip-num">1188440</span><svg class="id-chip-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button></span>
+      <button type="button" class="report-trigger" data-report-open><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>Fehler melden</button>
       <div class="id-chip-actions">
         <div class="datenblatt-group" data-datenblatt>
           <details class="datenblatt-dropdown">
@@ -3448,6 +3595,51 @@ button { font: inherit; cursor: pointer; }
     <button class="minicart-cta tertiary" type="button" data-minicart-close>Weiter einkaufen</button>
   </div>
 </aside>
+
+
+<!-- PRODUKTDATEN MELDEN -->
+<div class="report-backdrop" data-report-backdrop hidden></div>
+<div class="report-modal" data-report role="dialog" aria-modal="true" aria-labelledby="report-title" hidden>
+  <div class="report-head">
+    <h2 class="report-title" id="report-title">Fehlerhafte Produktdaten melden</h2>
+    <button type="button" class="report-close" data-report-close aria-label="Schließen">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+  <form class="report-body" data-report-form>
+    <label class="report-label" for="report-kind">Was stimmt nicht?</label>
+    <select class="report-select" id="report-kind" data-report-kind required>
+      <option value="">Bitte wählen</option>
+      <option>Technische Daten</option>
+      <option>Produktbild</option>
+      <option>Beschreibung oder Übersetzung</option>
+      <option>Datenblatt</option>
+      <option>Verpackungseinheit oder Preis</option>
+      <option>Sonstiges</option>
+    </select>
+
+    <label class="report-label" for="report-text">Richtiger Wert oder Anmerkung</label>
+    <textarea class="report-textarea" id="report-text" rows="3" data-report-text
+              placeholder="z. B. Bemessungsstrom ist 32 A, nicht 41 A"></textarea>
+
+    <label class="report-label" for="report-mail">E-Mail <span class="report-optional">– optional, nur für Rückfragen</span></label>
+    <input class="report-input" id="report-mail" type="email" data-report-mail placeholder="name@firma.de">
+
+    <p class="report-context">Mitgesendet wird: <span data-report-context></span></p>
+    <p class="report-support">Artikel beschädigt oder falsch geliefert? Das ist kein Datenfehler – <a href="#">zum Support</a>.</p>
+
+    <div class="report-actions">
+      <button type="button" class="report-cancel" data-report-close>Abbrechen</button>
+      <button type="submit" class="report-submit">Meldung senden</button>
+    </div>
+  </form>
+  <div class="report-done" data-report-done hidden>
+    <span class="report-done-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+    <p class="report-done-title">Danke, wir prüfen die Angabe.</p>
+    <p class="report-done-text">Ihre Meldung geht an die Katalogredaktion. Eine Antwort erhalten Sie nur, wenn wir Rückfragen haben.</p>
+    <button type="button" class="report-submit" data-report-close>Schließen</button>
+  </div>
+</div>
 
 <!-- IMAGE ZOOM OVERLAY -->
 <div class="image-overlay" data-overlay>
@@ -5874,6 +6066,100 @@ render();
   // beim ersten Aufbau der Seite noch ohne ihn gezeichnet.
   if (typeof window.syncWishlistButton === 'function') window.syncWishlistButton();
   window.refreshHeaderFlyouts = function () { render(); renderWish(); };
+})();
+</script>
+
+<script>
+// Meldung fehlerhafter Produktdaten. Der Kontext (Artikelnummern und
+// gewaehlte Ausfuehrung) haengt automatisch an - ohne ihn ist eine
+// Meldung fuer die Katalogredaktion wertlos. Er wird sichtbar gezeigt,
+// nicht stillschweigend mitgeschickt.
+(function () {
+  var modal = document.querySelector('[data-report]');
+  var backdrop = document.querySelector('[data-report-backdrop]');
+  if (!modal || !backdrop) return;
+  var form = modal.querySelector('[data-report-form]');
+  var done = modal.querySelector('[data-report-done]');
+  var kontextEl = modal.querySelector('[data-report-context]');
+  var rueckFokus = null;
+
+  function text(sel) {
+    var el = document.querySelector(sel);
+    return el ? el.textContent.trim() : '';
+  }
+  function kontext() {
+    var teile = [];
+    var bestell = text('[data-bestell] .id-chip-num');
+    var ean = text('[data-ean] .id-chip-num');
+    if (bestell) teile.push('Bestell-Nr. ' + bestell);
+    if (ean) teile.push('EAN ' + ean);
+    if (typeof state !== 'undefined') {
+      teile.push('Ausf\u00fchrung: Polzahl ' + state.polzahl + ' \u00b7 ' +
+        (state.stil === '6' ? '6 mm\u00b2' : '4 mm\u00b2') + ' \u00b7 ' +
+        (state.hebel === 'green-range' ? 'Green Range' : 'Standard') + ' \u00b7 ' +
+        (state.packSize === 1 ? 'Einzelst\u00fcck' : state.packSize + 'er-Set'));
+    }
+    teile.push('Seite: ' + location.pathname.replace(/^\//, ''));
+    return teile.join(' \u00b7 ');
+  }
+
+  function fokusfalle(e) {
+    if (e.key === 'Escape') { schliessen(); return; }
+    if (e.key !== 'Tab') return;
+    var f = modal.querySelectorAll('button:not([disabled]), select, input, textarea, a[href]');
+    var sichtbar = [].filter.call(f, function (el) { return el.offsetParent !== null; });
+    if (!sichtbar.length) return;
+    var erste = sichtbar[0], letzte = sichtbar[sichtbar.length - 1];
+    if (e.shiftKey && document.activeElement === erste) { e.preventDefault(); letzte.focus(); }
+    else if (!e.shiftKey && document.activeElement === letzte) { e.preventDefault(); erste.focus(); }
+  }
+
+  function oeffnen() {
+    rueckFokus = document.activeElement;
+    form.hidden = false;
+    done.hidden = true;
+    form.reset();
+    kontextEl.textContent = kontext();
+    modal.hidden = false;
+    backdrop.hidden = false;
+    requestAnimationFrame(function () { modal.classList.add('open'); backdrop.classList.add('open'); });
+    document.body.style.overflow = 'hidden';
+    document.addEventListener('keydown', fokusfalle);
+    var erstes = modal.querySelector('[data-report-kind]');
+    if (erstes) erstes.focus();
+  }
+
+  function schliessen() {
+    modal.classList.remove('open');
+    backdrop.classList.remove('open');
+    document.body.style.overflow = '';
+    document.removeEventListener('keydown', fokusfalle);
+    setTimeout(function () { modal.hidden = true; backdrop.hidden = true; }, 200);
+    if (rueckFokus && typeof rueckFokus.focus === 'function') rueckFokus.focus();
+  }
+
+  document.addEventListener('click', function (e) {
+    if (e.target.closest('[data-report-open]')) { e.preventDefault(); oeffnen(); }
+    else if (e.target.closest('[data-report-close]')) schliessen();
+  });
+  backdrop.addEventListener('click', schliessen);
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    // Prototyp: die Meldung wird nur protokolliert.
+    if (window.console) {
+      console.log('[produktdaten-meldung]', {
+        art: modal.querySelector('[data-report-kind]').value,
+        anmerkung: modal.querySelector('[data-report-text]').value,
+        email: modal.querySelector('[data-report-mail]').value,
+        kontext: kontext()
+      });
+    }
+    form.hidden = true;
+    done.hidden = false;
+    var btn = done.querySelector('[data-report-close]');
+    if (btn) btn.focus();
+  });
 })();
 </script>
 </body>
