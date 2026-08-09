@@ -1510,6 +1510,9 @@ button { font: inherit; cursor: pointer; }
 }
 .quickadd-add:hover { background: var(--c-blue-soft-hover); }
 .quickadd-hint { font-size: 12px; color: var(--c-text-tertiary); margin: 8px 0 0; }
+/* Ab einer gewissen Groesse ist die Stueckliste das richtige Werkzeug. */
+.quickadd-bom { margin: 10px 0 0; padding-top: 10px; border-top: 1px solid var(--c-border); font-size: 13px; color: var(--c-text-secondary); }
+.quickadd-bom a { color: var(--c-blue); font-weight: 600; }
 .quickadd-msg { font-size: 13px; margin: 8px 0 0; }
 .quickadd-msg.ok { color: var(--c-success); font-weight: 500; }
 .quickadd-msg.err { color: var(--c-danger); font-weight: 500; }
@@ -2151,6 +2154,7 @@ button { font: inherit; cursor: pointer; }
         <input type="file" accept=".csv,text/csv" hidden data-qa-file>
         <p class="quickadd-hint">Mehrere Artikel: Bestell-Nr. und Menge mit Semikolon, weitere mit Komma trennen – z. B. 1188440;4, 1188441;2 · CSV-Spalten: Bestell-Nr.; Menge · <a href="#" data-qa-template>Vorlage herunterladen</a></p>
         <p class="quickadd-msg" data-qa-msg hidden></p>
+        <p class="quickadd-bom">Größere Liste aus Excel oder ERP? <a href="stueckliste.html">Als Stückliste anlegen</a></p>
         </div>
       </div>
     </div>
