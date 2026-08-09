@@ -45,6 +45,7 @@
   --c-disabled-text: #6e7588;
 
   --radius: 8px;
+  --radius-xs: 4px;
   --radius-sm: 6px;
   --radius-pill: 999px;
   --radius-lg: 12px;   /* Overlays, Dialoge, Suchfeld */
@@ -922,7 +923,7 @@ button { font: inherit; cursor: pointer; }
   background: var(--c-bg-white);
   border: 1px solid var(--c-border);
   padding: 6px 14px;
-  border-radius: var(--radius-pill);
+  border-radius: var(--radius-xs);
   font-size: 13px;
   color: var(--c-text);
   display: inline-flex;
@@ -940,7 +941,7 @@ button { font: inherit; cursor: pointer; }
   white-space: nowrap;
   background: var(--c-bg-white);
   border: 1px solid var(--c-border);
-  border-radius: var(--radius-pill);
+  border-radius: var(--radius-xs);
 }
 .datenblatt-open {
   display: inline-flex;
@@ -963,7 +964,7 @@ button { font: inherit; cursor: pointer; }
   background: none;
   border: none;
   padding: 6px 10px 6px 12px;
-  border-radius: var(--radius-pill) 0 0 var(--radius-pill);
+  border-radius: var(--radius-xs) 0 0 var(--radius-xs);
   font-size: 13px;
   color: var(--c-text);
   display: inline-flex;
@@ -1718,7 +1719,7 @@ button { font: inherit; cursor: pointer; }
 /* Serie & Zubehör keeps its single-panel look (two internal headings). */
 .serie-block {
   background: var(--c-bg-white);
-  padding: 24px;
+  padding: 20px;
   border-radius: var(--radius);
   box-shadow:
     0 2px 4px -1px rgba(17, 18, 19, 0.06),
@@ -1733,9 +1734,9 @@ button { font: inherit; cursor: pointer; }
   position: relative;
   display: flex;
   align-items: center;
-  min-height: 240px;
+  min-height: 200px;
   margin-bottom: 16px;
-  padding: 26px;
+  padding: 22px;
   border-radius: var(--radius);
   overflow: hidden;
   background-color: var(--c-bg-tint);
@@ -1745,7 +1746,7 @@ button { font: inherit; cursor: pointer; }
 }
 .probanner-card {
   max-width: 50%;
-  padding: 20px 24px;
+  padding: 18px 22px;
   background: var(--c-bg-white);
   border-radius: var(--radius);
   box-shadow:
@@ -1756,7 +1757,7 @@ button { font: inherit; cursor: pointer; }
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  margin-bottom: 10px;
+  margin-bottom: 6px;
   font-size: 13px;
   font-weight: 600;
   color: var(--c-text);
@@ -1766,33 +1767,33 @@ button { font: inherit; cursor: pointer; }
   margin: 0;
   font-size: 20px;
   font-weight: 700;
-  line-height: 1.3;
+  line-height: 1.25;
   color: var(--c-text);
 }
 .probanner-sub {
-  margin: 8px 0 0;
+  margin: 6px 0 0;
   font-size: 14px;
-  line-height: 1.5;
+  line-height: 1.45;
   color: var(--c-text-secondary);
 }
+/* Zweitrangiger Knopf - wie im Warenkorb. */
 .probanner-cta {
   display: inline-flex;
   align-items: center;
-  height: 44px;
-  margin-top: 16px;
-  padding: 0 22px;
-  background: var(--c-blue);
+  height: 40px;
+  margin-top: 12px;
+  padding: 0 20px;
+  background: var(--c-blue-soft);
   border-radius: var(--radius-sm);
   font-size: 15px;
   font-weight: 600;
-  color: var(--c-text-on-dark);
+  color: var(--c-navy);
   text-decoration: none;
   transition: background 0.15s;
 }
-.probanner-cta:hover { background: var(--c-blue-hover); }
-.probanner-terms { margin: 10px 0 0; font-size: 12px; color: var(--c-text-tertiary); }
+.probanner-cta:hover { background: var(--c-blue-soft-hover); text-decoration: none; }
 @media (max-width: 900px) {
-  .probanner { min-height: 0; padding: 20px; }
+  .probanner { min-height: 0; padding: 18px; }
   .probanner-card { max-width: 100%; }
 }
 .tab-content-body table {
@@ -1849,7 +1850,7 @@ button { font: inherit; cursor: pointer; }
   padding: 8px 14px;
   background: var(--c-bg-white);
   border: 1px solid var(--c-border);
-  border-radius: var(--radius-pill);
+  border-radius: var(--radius-xs);
   font: inherit;
   font-size: 13px;
   font-weight: 600;
@@ -2008,7 +2009,7 @@ button { font: inherit; cursor: pointer; }
   padding: 6px 14px;
   background: var(--c-bg-white);
   border: 1px solid var(--c-border);
-  border-radius: var(--radius-pill);
+  border-radius: var(--radius-xs);
   font: inherit;
   font-size: 13px;
   font-weight: 600;
@@ -2152,14 +2153,14 @@ button { font: inherit; cursor: pointer; }
    Weiss aus - das zeigt, dass da noch etwas kommt, ohne es zu zeigen. */
 .collapsible { position: relative; }
 .collapsible.is-collapsed .collapsible-body {
-  max-height: 190px;
+  max-height: 160px;
   overflow: hidden;
 }
 .collapsible-fade {
   display: none;
   position: absolute;
   left: 0; right: 0; bottom: 0;
-  height: 90px;
+  height: 70px;
   background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, var(--c-bg-white) 85%);
   pointer-events: none;
 }
@@ -2238,21 +2239,24 @@ button { font: inherit; cursor: pointer; }
   white-space: nowrap;
 }
 .compare-table thead th {
-  padding: 0 14px 12px;
+  padding: 0 14px 10px;
   border-bottom: 1px solid var(--c-border);
   display: table-cell;
 }
+/* Zeichen und Seriennummer nebeneinander - spart Kopfhoehe, damit die
+   eingeklappte Ansicht auch Daten zeigt und nicht nur Ueberschriften. */
+.compare-col-head { display: flex; align-items: center; gap: 8px; margin-bottom: 3px; }
 .compare-col-thumb {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 30px; height: 30px;
+  width: 24px; height: 24px;
+  flex-shrink: 0;
   border-radius: var(--radius-sm);
   background: var(--c-bg-tint);
   color: var(--c-text-secondary);
-  margin-bottom: 6px;
 }
-.compare-col-thumb svg { width: 18px; height: 18px; }
+.compare-col-thumb svg { width: 16px; height: 16px; }
 .compare-col-name { display: block; font-size: 14px; font-weight: 600; color: var(--c-text); }
 .compare-col-sub { display: block; font-size: 12px; font-weight: 400; color: var(--c-text-secondary); }
 .compare-col-pill {
@@ -2265,14 +2269,6 @@ button { font: inherit; cursor: pointer; }
   padding: 2px 7px;
   border-radius: var(--radius-pill);
   white-space: nowrap;
-}
-.compare-col-title {
-  display: block;
-  margin-top: 6px;
-  font-size: 12px;
-  font-weight: 400;
-  color: var(--c-text-secondary);
-  white-space: normal;
 }
 .compare-table tbody td {
   padding: 12px 14px;
@@ -3758,8 +3754,7 @@ button { font: inherit; cursor: pointer; }
       </span>
       <h2 class="probanner-title" id="probanner-title">Versandkostenfrei bestellen – ab der ersten Position</h2>
       <p class="probanner-sub">Dazu 36 Monate Garantie, 30 Tage Preisgarantie und 30 Tage Zahlungsziel.</p>
-      <a class="probanner-cta" href="#">30 Tage kostenlos testen</a>
-      <p class="probanner-terms">danach 59 €/Jahr zzgl. MwSt. · jederzeit online kündbar</p>
+      <a class="probanner-cta" href="#">Vorteile entdecken</a>
     </div>
   </aside>
 </div>
@@ -5878,12 +5873,13 @@ document.addEventListener('click', e => {
     const kopf = spalten.map(function (s) {
       const thumb = (s.d.thumb && SERIES_THUMBS[s.d.thumb]) ? SERIES_THUMBS[s.d.thumb] : '';
       return '<th scope="col" class="compare-col' + (s.opt.current ? ' is-current' : '') + '">' +
-        '<span class="compare-col-thumb" aria-hidden="true">' + thumb + '</span>' +
-        '<span class="compare-col-name">Serie ' + s.opt.id + '</span>' +
+        '<span class="compare-col-head">' +
+          '<span class="compare-col-thumb" aria-hidden="true">' + thumb + '</span>' +
+          '<span class="compare-col-name">Serie ' + s.opt.id + '</span>' +
+        '</span>' +
         (s.opt.current
           ? '<span class="compare-col-pill">Aktuelles Produkt</span>'
           : '<span class="compare-col-sub">' + s.opt.sub + '</span>') +
-        '<span class="compare-col-title">' + (s.d.title || '') + '</span>' +
       '</th>';
     }).join('');
 
