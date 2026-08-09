@@ -1281,6 +1281,40 @@ button { font: inherit; cursor: pointer; }
 }
 /* Same rhythm as summary card -> Vorteilscode accordion (16px). */
 [data-cart-list] { display: flex; flex-direction: column; gap: 16px; }
+/* Sachlicher Hinweis, kein Fehler - deshalb die Blaufamilie und kein
+   Schliessen-Knopf: die Bedingung gilt weiter, auch weggeklickt. */
+.login-note {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  padding: 12px 14px;
+  background: var(--c-blue-tint-soft);
+  border-radius: var(--radius-sm);
+}
+.login-note[hidden] { display: none; }
+.login-note-icon { display: inline-flex; color: var(--c-blue); flex-shrink: 0; }
+.login-note-icon svg { width: 18px; height: 18px; display: block; }
+.login-note-text { margin: 0; flex: 1; font-size: 13px; line-height: 1.45; color: var(--c-text); }
+.login-note-text strong { font-weight: 600; }
+.login-note-btn {
+  height: 36px;
+  padding: 0 16px;
+  flex-shrink: 0;
+  background: var(--c-blue-soft);
+  border: none;
+  border-radius: var(--radius-sm);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--c-navy);
+  cursor: pointer;
+}
+.login-note-btn:hover { background: var(--c-blue-soft-hover); }
+@media (max-width: 640px) {
+  .login-note { flex-wrap: wrap; }
+  .login-note-btn { width: 100%; }
+}
 .cart-card { display: flex; flex-direction: column; padding: 20px; }
 .cart-card-top { display: flex; gap: 16px; }
 /* Wie .shipper-line auf der PDP. */
@@ -2090,6 +2124,12 @@ button { font: inherit; cursor: pointer; }
   <div class="cart-layout">
 
     <div class="cart-items">
+      <div class="login-note" data-login-note hidden>
+        <span class="login-note-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></span>
+        <p class="login-note-text"><strong>Zum Bestellen anmelden.</strong>
+          Diese Artikel geben wir nur an Geschäftskunden ab.</p>
+        <button type="button" class="login-note-btn" data-open-drawer="account">Anmelden</button>
+      </div>
       <div data-cart-list></div>
       <div class="cart-empty" data-cart-empty>
         <div class="cart-empty-head">
@@ -2688,6 +2728,9 @@ button { font: inherit; cursor: pointer; }
     // reflects what the tick changes for THIS order.
     var upsell = document.querySelector('[data-pro-upsell]');
     upsell.style.display = empty ? 'none' : '';
+    // Im leeren Wagen fuehrt der Leerzustand schon zur Anmeldung.
+    var loginNote = document.querySelector('[data-login-note]');
+    if (loginNote) loginNote.hidden = empty;
     var upsellDivider = document.querySelector('[data-pro-qa-divider]');
     if (upsellDivider) upsellDivider.style.display = empty ? 'none' : '';
     var saving = document.querySelector('[data-pro-saving]');
