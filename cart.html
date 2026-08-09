@@ -2763,7 +2763,9 @@ button { font: inherit; cursor: pointer; }
   cursor: pointer;
   color: var(--c-text);
 }
+.quickadd-heading { display: inline-flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
 .quickadd-title { font-size: 14px; font-weight: 600; color: var(--c-text); margin: 0; }
+.quickadd-sub { font-size: 13px; color: var(--c-text-secondary); }
 .quickadd-chevron {
   width: 18px; height: 18px;
   flex-shrink: 0;
@@ -3384,15 +3386,15 @@ button { font: inherit; cursor: pointer; }
     <div class="cart-title-left">
     <h1 class="cart-title">Einkaufswagen<span class="cart-count" data-cart-count>4 Artikel</span></h1>
     <div class="cart-toolbar">
-      <button type="button" class="icon-btn" data-cart-csv>
+      <button type="button" class="icon-btn" data-cart-csv data-tooltip="Artikelliste als CSV herunterladen">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
       <span>Exportieren</span>
         </button>
-      <button type="button" class="icon-btn" data-cart-print>
+      <button type="button" class="icon-btn" data-cart-print data-tooltip="Druckansicht des Einkaufswagens öffnen">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
       <span>Drucken</span>
         </button>
-      <button type="button" class="icon-btn icon-btn-danger" data-cart-clear>
+      <button type="button" class="icon-btn icon-btn-danger" data-cart-clear data-tooltip="Alle Artikel aus dem Einkaufswagen entfernen">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
       <span>Einkaufswagen leeren</span>
         </button>
@@ -3440,7 +3442,10 @@ button { font: inherit; cursor: pointer; }
       <div class="quickadd" data-quickadd>
         <button type="button" class="quickadd-head" data-qa-toggle
                 aria-expanded="false" aria-controls="quickadd-body">
-          <span class="quickadd-title">Artikel per Bestell-Nr. hinzufügen</span><svg class="quickadd-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
+          <span class="quickadd-heading">
+            <span class="quickadd-title">Schnellerfassung</span>
+            <span class="quickadd-sub">Bestell-Nr. oder CSV</span>
+          </span><svg class="quickadd-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
         <div class="quickadd-body" id="quickadd-body" hidden>
         <div class="quickadd-form">
           <div class="quickadd-nr-wrap">
