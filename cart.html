@@ -1289,7 +1289,10 @@ button { font: inherit; cursor: pointer; }
   gap: 12px;
   margin-bottom: 16px;
   padding: 12px 14px;
-  background: var(--c-blue-tint-soft);
+  background: var(--c-blue-tint);
+  /* Der Tint hat fast dieselbe Helligkeit wie die Seite - die Kante
+     kommt aus dem Blauton, nicht aus dem Helligkeitsunterschied. */
+  border: 1px solid rgba(55, 110, 239, 0.22);
   border-radius: var(--radius-sm);
 }
 .login-note[hidden] { display: none; }
@@ -1301,8 +1304,8 @@ button { font: inherit; cursor: pointer; }
   height: 36px;
   padding: 0 16px;
   flex-shrink: 0;
-  background: var(--c-blue-soft);
-  border: none;
+  background: var(--c-bg-white);
+  border: 1px solid var(--c-border);
   border-radius: var(--radius-sm);
   font: inherit;
   font-size: 14px;
@@ -1310,7 +1313,7 @@ button { font: inherit; cursor: pointer; }
   color: var(--c-navy);
   cursor: pointer;
 }
-.login-note-btn:hover { background: var(--c-blue-soft-hover); }
+.login-note-btn:hover { border-color: var(--c-blue); }
 @media (max-width: 640px) {
   .login-note { flex-wrap: wrap; }
   .login-note-btn { width: 100%; }
