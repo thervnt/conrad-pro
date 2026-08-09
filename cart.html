@@ -1489,123 +1489,22 @@ button { font: inherit; cursor: pointer; }
   .bomcard { flex-wrap: wrap; }
   .bomcard-cta { width: 100%; justify-content: flex-end; }
 }
-.quickadd {
-  background: var(--c-bg-white);
-  border-radius: var(--radius);
-  box-shadow:
-    0 8px 12px -1px rgba(17, 18, 19, 0.06),
-    0 1px 2px 0 rgba(17, 18, 19, 0.08);
-  padding: 16px 20px;
-  margin-top: 16px;
-}
+
 /* Weniger als jeder zwanzigste nutzt die Schnellerfassung - im
    gefuellten Warenkorb steht sie deshalb zugeklappt da. */
-.quickadd-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  width: 100%;
-  padding: 0;
-  background: none;
-  border: none;
-  font: inherit;
-  text-align: left;
-  cursor: pointer;
-  color: var(--c-text);
-}
-.quickadd-heading { display: inline-flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
-.quickadd-title { font-size: 14px; font-weight: 600; color: var(--c-text); margin: 0; }
-.quickadd-sub { font-size: 13px; color: var(--c-text-secondary); }
-.quickadd-chevron {
-  width: 18px; height: 18px;
-  flex-shrink: 0;
-  color: var(--c-text-secondary);
-  transition: transform 0.15s ease;
-}
-.quickadd-head[aria-expanded="true"] .quickadd-chevron { transform: rotate(180deg); }
-.quickadd-head:hover .quickadd-chevron { color: var(--c-text); }
-.quickadd-body { margin-top: 12px; }
-.quickadd-body[hidden] { display: none; }
+
 @media (prefers-reduced-motion: reduce) {
   .quickadd-chevron { transition: none; }
 }
-.quickadd-form { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-.quickadd-input {
-  border: 1px solid var(--c-border);
-  border-radius: var(--radius-sm);
-  padding: 0 12px;
-  height: 48px;
-  font: inherit;
-  font-size: 14px;
-  color: var(--c-text);
-  background: var(--c-bg-white);
-}
-.quickadd-input:focus { outline: none; border-color: var(--c-blue); }
-.quickadd-nr { flex: 1 1 220px; min-width: 0; }
+
 /* Bestell-Nr.-Feld mit CSV-Icon rechts im Feld. */
-.quickadd-nr-wrap { position: relative; flex: 1 1 220px; min-width: 0; display: flex; }
-.quickadd-nr-wrap .quickadd-nr { flex: 1; padding-right: 44px; }
-.quickadd-csv-btn {
-  position: absolute;
-  top: 50%;
-  right: 4px;
-  transform: translateY(-50%);
-  width: 32px;
-  height: 32px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  background: none;
-  border: none;
-  border-radius: var(--radius-sm);
-  color: var(--c-text-secondary);
-  cursor: pointer;
-  padding: 0;
-}
-.quickadd-csv-btn:hover { color: var(--c-text); background: var(--c-bg-tint); }
-.quickadd-csv-btn svg { width: 18px; height: 18px; }
-.quickadd-csv-btn[data-tooltip]:hover::after,
-.quickadd-csv-btn[data-tooltip]:focus-visible::after {
-  content: attr(data-tooltip);
-  position: absolute;
-  top: calc(100% + 8px);
-  right: 0;
-  background: var(--c-navy);
-  color: var(--c-text-on-dark);
-  font-size: 12px;
-  font-weight: 400;
-  line-height: 1.4;
-  padding: 6px 10px;
-  border-radius: var(--radius-sm);
-  white-space: nowrap;
-  z-index: 50;
-  pointer-events: none;
-  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.18);
-}
+
 .quickadd-form .qty-input-wrap { flex: 0 0 200px; width: 200px; height: 48px; }
-.quickadd-add {
-  height: 48px;
-  padding: 0 20px;
-  background: var(--c-blue-soft);
-  color: var(--c-navy);
-  border: none;
-  border-radius: var(--radius-sm);
-  font: inherit;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  flex-shrink: 0;
-}
-.quickadd-add:hover { background: var(--c-blue-soft-hover); }
-.quickadd-hint { font-size: 12px; color: var(--c-text-tertiary); margin: 8px 0 0; }
+
 /* Ab einer gewissen Groesse ist die Stueckliste das richtige Werkzeug. */
-.quickadd-bom { margin: 10px 0 0; padding-top: 10px; border-top: 1px solid var(--c-border); font-size: 13px; color: var(--c-text-secondary); }
-.quickadd-bom a { color: var(--c-blue); font-weight: 600; }
-.quickadd-msg { font-size: 13px; margin: 8px 0 0; }
+
 .quickadd-msg.ok { color: var(--c-success); font-weight: 500; }
 .quickadd-msg.err { color: var(--c-danger); font-weight: 500; }
-.quickadd-hint a { color: var(--c-blue); }
 
 /* ===== EMPTY CART STATE ===== */
 .cart-empty {
@@ -1657,7 +1556,7 @@ button { font: inherit; cursor: pointer; }
   margin: 28px 0 20px;
 }
 /* Der Abstand kommt von der Trennlinie, nicht zusaetzlich vom Block. */
-[data-quickadd-slot] .quickadd { margin-top: 0; }
+[data-tool-slot] .bomcard { margin-top: 0; }
 .recent-title { font-size: 18px; font-weight: 600; color: var(--c-navy); margin: 0 0 14px; }
 .recent-grid {
   display: grid;
@@ -2220,7 +2119,7 @@ button { font: inherit; cursor: pointer; }
           </div>
         </div>
         <hr class="cart-empty-divider">
-        <div data-quickadd-slot></div>
+        <div data-tool-slot></div>
         <hr class="cart-empty-divider">
         <h3 class="recent-title">Zuletzt gesehen</h3>
         <div class="recent-grid" data-recent-grid></div>
@@ -2254,32 +2153,6 @@ button { font: inherit; cursor: pointer; }
         </span>
         <span class="bomcard-cta">Öffnen<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></span>
       </a>
-      <div class="quickadd" data-quickadd>
-        <button type="button" class="quickadd-head" data-qa-toggle
-                aria-expanded="false" aria-controls="quickadd-body">
-          <span class="quickadd-heading">
-            <span class="quickadd-title">Schnellerfassung</span>
-            <span class="quickadd-sub">einzelne Bestell-Nr.</span>
-          </span><svg class="quickadd-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
-        <div class="quickadd-body" id="quickadd-body" hidden>
-        <div class="quickadd-form">
-          <div class="quickadd-nr-wrap">
-            <input class="quickadd-input quickadd-nr" type="text" placeholder="Bestell-Nr., z. B. 1188440" aria-label="Bestell-Nr." data-qa-nr>
-                    </div>
-          <div class="qty-input-wrap">
-            <input type="text" inputmode="numeric" value="1" aria-label="Menge" data-qa-qty>
-            <span class="qty-unit">Stk.</span>
-            <div class="qty-btn-group">
-              <button class="qty-btn" type="button" data-qa-minus aria-label="Menge verringern"><span class="qty-btn-puck">−</span></button>
-              <button class="qty-btn" type="button" data-qa-plus aria-label="Menge erhöhen"><span class="qty-btn-puck">+</span></button>
-            </div>
-          </div>
-          <button type="button" class="quickadd-add" data-qa-add>Hinzufügen</button>
-        </div>
-        <p class="quickadd-hint">Mehrere Positionen mit Komma trennen – z. B. 1188440;4, 1188441;2</p>
-        <p class="quickadd-msg" data-qa-msg hidden></p>
-        </div>
-      </div>
     </div>
 
     <aside data-cart-aside>
@@ -2612,117 +2485,6 @@ button { font: inherit; cursor: pointer; }
 
   var listEl = document.querySelector('[data-cart-list]');
 
-  // ---- Quick add: Bestell-Nr. / CSV -------------------------------
-  // Resolves against the same catalogue the PDP uses, so an added
-  // line is a real cart item.
-  var CATALOG = {};
-  RECENT.forEach(function (p) { CATALOG[p.bestellNr] = p; });
-
-  var qaNode = document.querySelector('[data-quickadd]');
-  var qaNr = qaNode.querySelector('[data-qa-nr]');
-  var qaQty = qaNode.querySelector('[data-qa-qty]');
-  var qaMsg = qaNode.querySelector('[data-qa-msg]');
-  var qaToggle = qaNode.querySelector('[data-qa-toggle]');
-  var qaBody = qaNode.querySelector('#quickadd-body');
-  var qaManuell = false;   // Nutzer hat den Zustand selbst gesetzt
-
-  function setQuickaddOffen(offen) {
-    if (!qaToggle || !qaBody) return;
-    qaToggle.setAttribute('aria-expanded', String(offen));
-    qaBody.hidden = !offen;
-  }
-  if (qaToggle) {
-    qaToggle.addEventListener('click', function () {
-      qaManuell = true;
-      setQuickaddOffen(qaToggle.getAttribute('aria-expanded') !== 'true');
-    });
-  }
-
-  function qaShow(text, kind) {
-    qaMsg.textContent = text;
-    qaMsg.className = 'quickadd-msg ' + kind;
-    qaMsg.hidden = false;
-  }
-
-  // Merge into an existing line of the same variant, like the PDP does.
-  function addByProduct(p, qty) {
-    var line = items.filter(function (it) {
-      return it.sku === p.sku && it.packSize === p.packSize;
-    })[0];
-    if (line) line.qty += qty;
-    else {
-      var it = recentItem(p);
-      it.qty = qty;
-      items.push(it);
-    }
-  }
-
-  // "1188440;4, 1188441;2" -> [{nr:'1188440',qty:4}, ...]
-  function qaParse(value) {
-    return value.split(',').map(function (chunk) {
-      var parts = chunk.trim().split(/[;\s\t]+/).filter(Boolean);
-      if (!parts.length) return null;
-      var qty = parseInt(parts[1], 10);
-      return { nr: parts[0], qty: (!isNaN(qty) && qty > 0) ? qty : null };
-    }).filter(Boolean);
-  }
-
-  function qaAddEntries(entries, fallbackQty) {
-    var added = 0, missing = [];
-    entries.forEach(function (e) {
-      var p = CATALOG[e.nr];
-      if (!p) { missing.push(e.nr); return; }
-      addByProduct(p, e.qty || fallbackQty || 1);
-      added++;
-    });
-    if (added) { save(); render(); }
-    return { added: added, missing: missing };
-  }
-
-  function qaSubmit() {
-    var raw = qaNr.value.trim();
-    if (!raw) { qaShow('Bitte eine Bestell-Nr. eingeben.', 'err'); qaNr.focus(); return; }
-    var fallback = parseInt(qaQty.value, 10);
-    if (isNaN(fallback) || fallback < 1) fallback = 1;
-    var res = qaAddEntries(qaParse(raw), fallback);
-    if (res.added && !res.missing.length) {
-      qaShow(res.added === 1 ? 'Artikel hinzugefügt.' : res.added + ' Artikel hinzugefügt.', 'ok');
-      qaNr.value = '';
-      qaQty.value = '1';
-    } else if (res.added) {
-      qaShow(res.added + ' Artikel hinzugefügt · nicht gefunden: ' + res.missing.join(', '), 'err');
-      qaNr.value = '';
-    } else {
-      qaShow('Bestell-Nr. nicht gefunden: ' + res.missing.join(', '), 'err');
-    }
-    qaNr.focus();   // keep typing the next number
-  }
-
-  qaNode.querySelector('[data-qa-add]').addEventListener('click', qaSubmit);
-  [qaNr, qaQty].forEach(function (el) {
-    el.addEventListener('keydown', function (e) {
-      if (e.key === 'Enter') { e.preventDefault(); qaSubmit(); }
-    });
-  });
-  qaNr.addEventListener('input', function () { qaMsg.hidden = true; });
-
-  function qaSetQty(n) {
-    qaQty.value = Math.max(1, n);
-    qaQty.style.width = (Math.max(3, String(qaQty.value).length) + 0.5) + 'ch';
-    qaMsg.hidden = true;
-  }
-  qaQty.addEventListener('input', function () {
-    qaQty.style.width = (Math.max(3, String(qaQty.value).length) + 0.5) + 'ch';
-  });
-  qaSetQty(1);
-  qaNode.querySelector('[data-qa-plus]').addEventListener('click', function () {
-    qaSetQty((parseInt(qaQty.value, 10) || 0) + 1);
-  });
-  qaNode.querySelector('[data-qa-minus]').addEventListener('click', function () {
-    qaSetQty((parseInt(qaQty.value, 10) || 2) - 1);
-  });
-
-
   function render() {
     listEl.innerHTML = items.map(cardHtml).join('');
     var empty = items.length === 0;
@@ -2732,17 +2494,14 @@ button { font: inherit; cursor: pointer; }
     document.querySelector('[data-cart-aside]').style.display = empty ? 'none' : '';
     document.querySelector('.cart-title-row').style.display = empty ? 'none' : '';
     if (empty) renderRecent();
-    // Empty cart: the bulk-entry tool sits right under the CTAs.
-    // Filled cart: it follows the item list.
-    var qaSlot = document.querySelector('[data-quickadd-slot]');
-    var qa = document.querySelector('[data-quickadd]');
-    if (empty && qa.parentElement !== qaSlot) qaSlot.appendChild(qa);
-    else if (!empty && qa.parentElement === qaSlot) listEl.parentElement.appendChild(qa);
-    // Im leeren Warenkorb ist die Schnellerfassung das Hauptwerkzeug und
-    // steht immer offen - eine vorher selbst getroffene Entscheidung
-    // galt fuer den gefuellten Wagen und wird hier zurueckgesetzt.
-    if (empty) { qaManuell = false; setQuickaddOffen(true); }
-    else if (!qaManuell) setQuickaddOffen(false);
+    // Leerer Warenkorb: die Stueckliste steht direkt unter den CTAs,
+    // gefuellter Warenkorb: sie folgt der Positionsliste.
+    var bomSlot = document.querySelector('[data-tool-slot]');
+    var bom = document.querySelector('.bomcard');
+    if (bom) {
+      if (empty && bom.parentElement !== bomSlot) bomSlot.appendChild(bom);
+      else if (!empty && bom.parentElement === bomSlot) listEl.parentElement.appendChild(bom);
+    }
 
     var net = items.reduce(function (sum, it) { return sum + priceOf(it) * it.qty; }, 0);
     var vat = net * VAT_RATE;
