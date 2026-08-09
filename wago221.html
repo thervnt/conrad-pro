@@ -1769,6 +1769,135 @@ button { font: inherit; cursor: pointer; }
 /* Current-product tab: marker persists independent of selection. */
 .compare-tab.is-current { background: var(--c-blue-tint-soft); }
 .compare-tab.is-current[aria-selected="true"] { background: var(--c-blue-tint); }
+/* ===== GARANTIEERKLÄRUNG =====
+   Schublade von rechts, gleiche Mechanik wie die Kauf-Bestaetigung. */
+.warranty-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  background: var(--c-bg-white);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-pill);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--c-text);
+  cursor: pointer;
+}
+.warranty-link svg { width: 16px; height: 16px; color: var(--c-text-secondary); flex-shrink: 0; }
+.warranty-link:hover { background: var(--c-bg-tint); }
+.recht-warranty { font-size: 14px; color: var(--c-text); margin: 0 0 10px; }
+
+.warranty-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.45);
+  z-index: 900;
+  opacity: 0;
+  transition: opacity 0.24s ease;
+}
+.warranty-backdrop.open { opacity: 1; }
+.warranty-backdrop[hidden] { display: none; }
+.warranty-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100%;
+  width: 460px;
+  max-width: 92vw;
+  background: var(--c-bg-white);
+  z-index: 901;
+  display: flex;
+  flex-direction: column;
+  box-shadow: -12px 0 32px rgba(15, 23, 42, 0.18);
+  transform: translateX(100%);
+  transition: transform 0.26s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+.warranty-drawer.open { transform: translateX(0); }
+.warranty-drawer[hidden] { display: none; }
+.warranty-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 18px 20px;
+  border-bottom: 1px solid var(--c-border);
+  flex-shrink: 0;
+}
+.warranty-title { margin: 0; font-size: 16px; font-weight: 600; color: var(--c-text); }
+.warranty-close {
+  width: 32px; height: 32px;
+  padding: 0;
+  background: none;
+  border: none;
+  border-radius: var(--radius-sm);
+  color: var(--c-text-secondary);
+  cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.warranty-close svg { width: 18px; height: 18px; }
+.warranty-close:hover { background: var(--c-bg-tint); color: var(--c-text); }
+.warranty-body { flex: 1; overflow-y: auto; padding: 18px 20px; }
+.warranty-lead { margin: 0 0 14px; font-size: 14px; color: var(--c-text); }
+.warranty-figure {
+  margin: 0 0 18px;
+  padding: 14px;
+  background: var(--c-bg-tint);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-sm);
+}
+.warranty-figure img { display: block; width: 100%; height: auto; }
+.warranty-figure img[hidden] { display: none; }
+.warranty-figure-note { margin: 0; font-size: 12px; line-height: 1.5; color: var(--c-text-tertiary); }
+.warranty-list { margin: 0; font-size: 13px; }
+.warranty-list dt {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--c-text-secondary);
+  margin-top: 14px;
+}
+.warranty-list dt:first-child { margin-top: 0; }
+.warranty-list dd { margin: 3px 0 0; color: var(--c-text); line-height: 1.5; }
+/* Pflichthinweis nach § 479 Abs. 1 Nr. 1 BGB - deshalb abgesetzt. */
+.warranty-statutory {
+  margin: 20px 0 0;
+  padding: 12px 14px;
+  background: var(--c-blue-tint);
+  border: 1px solid rgba(55, 110, 239, 0.22);
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--c-text);
+}
+.warranty-foot {
+  border-top: 1px solid var(--c-border);
+  padding: 16px 20px;
+  flex-shrink: 0;
+}
+.warranty-download {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 44px;
+  padding: 0 18px;
+  background: var(--c-blue-soft);
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--c-navy);
+  text-decoration: none;
+}
+.warranty-download:hover { background: var(--c-blue-soft-hover); text-decoration: none; }
+.warranty-download svg { width: 16px; height: 16px; }
+.warranty-foot-note { margin: 8px 0 0; font-size: 12px; color: var(--c-text-tertiary); }
+@media (prefers-reduced-motion: reduce) {
+  .warranty-drawer, .warranty-backdrop { transition: none; }
+}
+
 /* ===== PRODUKTDATEN MELDEN =====
    Zurueckhaltender Einstieg in der Chip-Zeile, Dialog nach dem Muster
    der Kauf-Bestaetigung (Backdrop, ESC, Fokusfalle). */
@@ -3489,6 +3618,14 @@ button { font: inherit; cursor: pointer; }
       +495718870<br>
       <a href="https://www.wago.com/" target="_blank" rel="noopener noreferrer">https://www.wago.com/</a>
     </p>
+    <h3>Herstellergarantie</h3>
+    <p class="recht-warranty">
+      WAGO gewährt auf dieses Produkt eine Herstellergarantie. Die vollständige
+      Garantieerklärung mit Dauer, Geltungsbereich und Verfahren steht hier bereit.
+    </p>
+    <p>
+      <button type="button" class="warranty-link" data-warranty-open><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="15" y2="17"/></svg>Garantieerklärung ansehen</button>
+    </p>
     <p>
       <a class="recht-flag-link" href="https://www.conrad.de/de/about/legal/digital-services-act.html?product=1341805" target="_blank" rel="noopener noreferrer">Rechtliche Bedenken melden →</a>
     </p>
@@ -3624,6 +3761,70 @@ button { font: inherit; cursor: pointer; }
     </div>
   </div>
 </footer>
+
+
+<!-- GARANTIEERKLÄRUNG (§ 479 BGB) -->
+<div class="warranty-backdrop" data-warranty-backdrop hidden></div>
+<aside class="warranty-drawer" data-warranty role="dialog" aria-modal="true"
+       aria-labelledby="warranty-title" hidden>
+  <div class="warranty-head">
+    <h2 class="warranty-title" id="warranty-title">Garantieerklärung</h2>
+    <button type="button" class="warranty-close" data-warranty-close aria-label="Schließen">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+
+  <div class="warranty-body">
+    <p class="warranty-lead">Herstellergarantie der WAGO GmbH &amp; Co. KG für
+      <strong data-warranty-product>WAGO 221 Verbindungsklemme</strong>.</p>
+
+    <figure class="warranty-figure">
+      <img data-warranty-img alt="Garantieerklärung des Herstellers" hidden>
+      <figcaption class="warranty-figure-note" data-warranty-placeholder>
+        Hier steht die vom Hersteller bereitgestellte Garantieerklärung als Grafik.
+        Im Prototyp ist die Datei noch nicht hinterlegt – die Pflichtangaben stehen
+        darunter im Text.
+      </figcaption>
+    </figure>
+
+    <dl class="warranty-list">
+      <dt>Garantiegeber</dt>
+      <dd>WAGO GmbH &amp; Co. KG · Hansastr. 27 · 32423 Minden · Deutschland</dd>
+
+      <dt>Betroffene Ware</dt>
+      <dd data-warranty-scope>Verbindungsklemmen der Serie 221, alle Ausführungen</dd>
+
+      <dt>Dauer</dt>
+      <dd>24 Monate ab Kaufdatum, mit Conrad PRO 36 Monate</dd>
+
+      <dt>Räumlicher Geltungsbereich</dt>
+      <dd>Europäische Union, Schweiz, Vereinigtes Königreich</dd>
+
+      <dt>Inhalt der Garantie</dt>
+      <dd>Kostenfreier Ersatz oder Reparatur bei Material- und Fertigungsfehlern.
+        Ausgenommen sind Schäden durch unsachgemäße Montage, Überlastung oder
+        Veränderung des Produkts.</dd>
+
+      <dt>Geltendmachung</dt>
+      <dd>Garantiefall über das Conrad-Kundenkonto unter „Rücksendungen“ melden
+        oder direkt beim Hersteller unter service@wago.com. Kaufbeleg beilegen.</dd>
+    </dl>
+
+    <p class="warranty-statutory">
+      Ihre gesetzlichen Rechte bei Mängeln bestehen unabhängig von dieser Garantie
+      und werden durch sie nicht eingeschränkt. Sie stehen Ihnen unentgeltlich zu.
+    </p>
+  </div>
+
+  <div class="warranty-foot">
+    <a class="warranty-download" href="#" data-warranty-pdf>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      Als PDF herunterladen
+    </a>
+    <p class="warranty-foot-note">Damit erhalten Sie die Erklärung in Textform,
+      wie es § 479 BGB verlangt.</p>
+  </div>
+</aside>
 
 <!-- MINI CART DRAWER -->
 <div class="minicart-backdrop" data-minicart-backdrop hidden></div>
@@ -6209,6 +6410,87 @@ render();
     var btn = done.querySelector('[data-report-close]');
     if (btn) btn.focus();
   });
+})();
+</script>
+
+<script>
+// Garantieerklaerung nach § 479 BGB. Die Erklaerung muss vor
+// Vertragsschluss zugaenglich und in Textform erhaeltlich sein - deshalb
+// die Schublade plus PDF, nicht nur ein Textblock.
+(function () {
+  var drawer = document.querySelector('[data-warranty]');
+  var backdrop = document.querySelector('[data-warranty-backdrop]');
+  if (!drawer || !backdrop) return;
+  var rueckFokus = null, ausblendTimer = null;
+
+  function produktname() {
+    var el = document.querySelector('[data-name]');
+    return el ? el.textContent.trim() : 'diesem Produkt';
+  }
+
+  function tasten(e) {
+    if (e.key === 'Escape') { schliessen(); return; }
+    if (e.key !== 'Tab') return;
+    var f = drawer.querySelectorAll('button:not([disabled]), a[href]');
+    if (!f.length) return;
+    var erste = f[0], letzte = f[f.length - 1];
+    if (e.shiftKey && document.activeElement === erste) { e.preventDefault(); letzte.focus(); }
+    else if (!e.shiftKey && document.activeElement === letzte) { e.preventDefault(); erste.focus(); }
+  }
+
+  function oeffnen() {
+    if (ausblendTimer) { clearTimeout(ausblendTimer); ausblendTimer = null; }
+    rueckFokus = document.activeElement;
+    var p = document.querySelector('[data-warranty-product]');
+    if (p) p.textContent = produktname();
+    drawer.hidden = false;
+    backdrop.hidden = false;
+    requestAnimationFrame(function () {
+      drawer.classList.add('open');
+      backdrop.classList.add('open');
+    });
+    document.body.style.overflow = 'hidden';
+    document.addEventListener('keydown', tasten);
+    var close = drawer.querySelector('[data-warranty-close]');
+    if (close) close.focus();
+  }
+
+  function schliessen() {
+    drawer.classList.remove('open');
+    backdrop.classList.remove('open');
+    document.body.style.overflow = '';
+    document.removeEventListener('keydown', tasten);
+    ausblendTimer = setTimeout(function () {
+      drawer.hidden = true;
+      backdrop.hidden = true;
+      ausblendTimer = null;
+    }, 260);
+    if (rueckFokus && typeof rueckFokus.focus === 'function') rueckFokus.focus();
+  }
+
+  document.addEventListener('click', function (e) {
+    if (e.target.closest('[data-warranty-open]')) { e.preventDefault(); oeffnen(); }
+    else if (e.target.closest('[data-warranty-close]')) schliessen();
+  });
+  backdrop.addEventListener('click', schliessen);
+
+  // Prototyp: erzeugt die Erklaerung als Textdatei, damit der Weg
+  // "in Textform erhalten" vollstaendig durchspielbar ist.
+  var pdf = drawer.querySelector('[data-warranty-pdf]');
+  if (pdf) {
+    pdf.addEventListener('click', function (e) {
+      e.preventDefault();
+      var text = drawer.querySelector('.warranty-body').innerText.replace(/\n{3,}/g, '\n\n');
+      var blob = new Blob(['Garantieerklärung\n\n' + text], { type: 'text/plain;charset=utf-8' });
+      var a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'Garantieerklaerung-WAGO-221.txt';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(a.href);
+    });
+  }
 })();
 </script>
 </body>
