@@ -2296,6 +2296,36 @@ button { font: inherit; cursor: pointer; }
 
 
 /* ===== FOOTER ===== */
+/* --- Rechtsleiste --- */
+.footer-legalbar { background: var(--c-navy); }
+.footer-legalbar-inner {
+  max-width: 1680px;
+  margin: 0 auto;
+  padding: 14px 24px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px 28px;
+}
+.footer-legalbar a {
+  color: var(--c-text-on-dark) !important;
+  font-size: 13px;
+}
+/* Preishinweis und Betreiber - inhaltsgleich mit dem Fuss im Warenkorb. */
+.footer-legalbar-meta {
+  max-width: 1680px;
+  margin: 0 auto;
+  padding: 0 24px 16px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px 24px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.62);
+}
+/* Im Warenkorb steht die Leiste allein - sie braucht den Abstand,
+   den sonst der helle Block darueber mitbringt. */
+.footer-legalbar-solo { display: block; margin-top: 60px; }
 .footer {
   background: var(--c-navy);
   color: var(--c-text-on-dark);
@@ -3662,23 +3692,16 @@ button { font: inherit; cursor: pointer; }
   </div>
 </main>
 
-<footer class="footer">
-  <div class="footer-inner">
-    <nav class="footer-links" aria-label="Rechtliches und Service">
-      <a href="#">AGB</a>
-      <a href="#">Impressum</a>
-      <a href="#">Datenschutz</a>
-      <a href="#">Widerruf einreichen</a>
-      <a href="#">Verträge kündigen</a>
-      <a href="#">Nutzungsbedingungen</a>
-      <a href="#">Cookie-Einstellungen</a>
-      <a href="#">Barrierefreiheit</a>
-    </nav>
-    <div class="footer-legal">
-      <span>Alle Preise zzgl. MwSt. &amp; Versand</span>
-      <span>Conrad Electronic SE · Klaus-Conrad-Straße 1 · 92240 Hirschau · © 2026</span>
-    </div>
+<footer class="footer-legalbar-solo">
+<div class="footer-legalbar">
+  <div class="footer-legalbar-inner">
+    <a href="#">AGB</a><a href="#">Impressum</a><a href="#">Datenschutz</a><a href="#">Widerruf einreichen</a><a href="#">Verträge kündigen</a><a href="#">Nutzungsbedingungen</a><a href="#">Cookie-Einstellungen</a><a href="#">Barrierefreiheit</a>
   </div>
+  <div class="footer-legalbar-meta">
+    <span>Alle Preise zzgl. MwSt. &amp; Versand</span>
+    <span>Conrad Electronic SE · Klaus-Conrad-Straße 1 · 92240 Hirschau · © 2026</span>
+  </div>
+</div>
 </footer>
 
 <script>
