@@ -1874,6 +1874,48 @@ button { font: inherit; cursor: pointer; }
 /* Current-product tab: marker persists independent of selection. */
 .compare-tab.is-current { background: #F4F5FE; }
 .compare-tab.is-current[aria-selected="true"] { background: #eaf0fe; }
+/* ===== EINKLAPPBARER KARTENINHALT =====
+   Eingeklappt bleibt ein Ausschnitt sichtbar und laeuft nach unten ins
+   Weiss aus - das zeigt, dass da noch etwas kommt, ohne es zu zeigen. */
+.collapsible { position: relative; }
+.collapsible.is-collapsed .collapsible-body {
+  max-height: 190px;
+  overflow: hidden;
+}
+.collapsible-fade {
+  display: none;
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 90px;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, var(--c-bg-white) 85%);
+  pointer-events: none;
+}
+.collapsible.is-collapsed .collapsible-fade { display: block; }
+.collapsible-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 4px;
+  padding: 8px 12px 8px 0;
+  background: none;
+  border: none;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--c-blue);
+  cursor: pointer;
+}
+.collapsible-toggle:hover { text-decoration: underline; }
+.collapse-chevron {
+  width: 16px; height: 16px;
+  flex-shrink: 0;
+  transition: transform 0.15s ease;
+}
+.collapsible-toggle[aria-expanded="true"] .collapse-chevron { transform: rotate(180deg); }
+@media (prefers-reduced-motion: reduce) {
+  .collapse-chevron { transition: none; }
+}
+
 /* ===== SERIENVERGLEICH ALS TABELLE =====
    Kriterien links, je Serie eine Spalte. Die Spalte des aktuellen
    Produkts ist getoent und dient als Bezugsgroesse - abweichende Werte
@@ -3084,13 +3126,15 @@ button { font: inherit; cursor: pointer; }
   <section class="tab-content">
     <h2>Alternative Serien</h2>
     <div class="serie-block">
-      <div class="compare-table-wrap" data-compare-table></div>
-    </div>
-  </section>
-  <section class="tab-content">
-    <h2>Zubehör &amp; verwandte Produkte</h2>
-    <div class="serie-block">
-      <div class="serie-grid" data-series-grid></div>
+      <div class="collapsible is-collapsed" data-collapsible>
+        <div class="collapsible-body" id="serien-vergleich">
+          <div class="compare-table-wrap" data-compare-table></div>
+        </div>
+        <span class="collapsible-fade" aria-hidden="true"></span>
+      </div>
+      <button type="button" class="collapsible-toggle" data-collapse-toggle
+              aria-expanded="false" aria-controls="serien-vergleich">
+        <span data-collapse-label>Alle Serien vergleichen</span><svg class="collapse-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
     </div>
   </section>
 </div>
@@ -3101,6 +3145,7 @@ button { font: inherit; cursor: pointer; }
     <button class="tab active" data-tab-link="beschreibung">Beschreibung</button>
     <button class="tab" data-tab-link="tech">Technische Daten</button>
     <button class="tab" data-tab-link="zusammen">Oft zusammen gekauft</button>
+    <button class="tab" data-tab-link="zubehoer">Zubehör</button>
     <button class="tab" data-tab-link="recht">Produktsicherheit</button>
     <button class="tab" data-tab-link="faq">Häufige Fragen</button>
   </div>
@@ -3140,6 +3185,12 @@ button { font: inherit; cursor: pointer; }
   <section class="tab-content" id="section-zusammen" data-section="zusammen">
     <h2>Wird oft zusammen gekauft</h2>
     <div class="bundle" data-bundle></div>
+  </section>
+  <section class="tab-content" id="section-zubehoer" data-section="zubehoer">
+    <h2>Zubehör &amp; verwandte Produkte</h2>
+    <div class="serie-block">
+      <div class="serie-grid" data-series-grid></div>
+    </div>
   </section>
   <section class="tab-content" id="section-recht" data-section="recht">
     <h2>Produktsicherheit &amp; rechtliche Hinweise</h2>
@@ -4988,6 +5039,21 @@ document.addEventListener('click', e => {
   // Render Serie & Zubehör content on load (it's always visible now).
   renderSeriesGrid();
   renderCompareTable();
+
+  // Vergleich startet eingeklappt - er ist ein Nachschlagewerk, kein
+  // Pflichtinhalt. Beschriftung und Pfeil folgen dem Zustand.
+  (function () {
+    const box = document.querySelector('[data-collapsible]');
+    const btn = document.querySelector('[data-collapse-toggle]');
+    if (!box || !btn) return;
+    const label = btn.querySelector('[data-collapse-label]');
+    btn.addEventListener('click', function () {
+      const offen = box.classList.toggle('is-collapsed') === false;
+      btn.setAttribute('aria-expanded', String(offen));
+      label.textContent = offen ? 'Weniger anzeigen' : 'Alle Serien vergleichen';
+      if (!offen) box.scrollIntoView({ block: 'nearest' });
+    });
+  })();
 })();
 
 // Datenblatt: one-click open in the language derived from the shop

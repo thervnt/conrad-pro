@@ -2747,7 +2747,36 @@ button { font: inherit; cursor: pointer; }
   padding: 16px 20px;
   margin-top: 16px;
 }
-.quickadd-title { font-size: 14px; font-weight: 600; color: var(--c-text); margin: 0 0 10px; }
+/* Weniger als jeder zwanzigste nutzt die Schnellerfassung - im
+   gefuellten Warenkorb steht sie deshalb zugeklappt da. */
+.quickadd-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  padding: 0;
+  background: none;
+  border: none;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  color: var(--c-text);
+}
+.quickadd-title { font-size: 14px; font-weight: 600; color: var(--c-text); margin: 0; }
+.quickadd-chevron {
+  width: 18px; height: 18px;
+  flex-shrink: 0;
+  color: var(--c-text-secondary);
+  transition: transform 0.15s ease;
+}
+.quickadd-head[aria-expanded="true"] .quickadd-chevron { transform: rotate(180deg); }
+.quickadd-head:hover .quickadd-chevron { color: var(--c-text); }
+.quickadd-body { margin-top: 12px; }
+.quickadd-body[hidden] { display: none; }
+@media (prefers-reduced-motion: reduce) {
+  .quickadd-chevron { transition: none; }
+}
 .quickadd-form { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
 .quickadd-input {
   border: 1px solid var(--c-border);
@@ -3355,7 +3384,10 @@ button { font: inherit; cursor: pointer; }
       </div>
       <hr class="cart-section-divider" data-pro-qa-divider>
       <div class="quickadd" data-quickadd>
-        <p class="quickadd-title">Artikel per Bestell-Nr. hinzufügen</p>
+        <button type="button" class="quickadd-head" data-qa-toggle
+                aria-expanded="false" aria-controls="quickadd-body">
+          <span class="quickadd-title">Artikel per Bestell-Nr. hinzufügen</span><svg class="quickadd-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
+        <div class="quickadd-body" id="quickadd-body" hidden>
         <div class="quickadd-form">
           <div class="quickadd-nr-wrap">
             <input class="quickadd-input quickadd-nr" type="text" placeholder="Bestell-Nr., z. B. 1188440" aria-label="Bestell-Nr." data-qa-nr>
@@ -3376,6 +3408,7 @@ button { font: inherit; cursor: pointer; }
         <input type="file" accept=".csv,text/csv" hidden data-qa-file>
         <p class="quickadd-hint">Mehrere Artikel: Bestell-Nr. und Menge mit Semikolon, weitere mit Komma trennen – z. B. 1188440;4, 1188441;2 · CSV-Spalten: Bestell-Nr.; Menge · <a href="#" data-qa-template>Vorlage herunterladen</a></p>
         <p class="quickadd-msg" data-qa-msg hidden></p>
+        </div>
       </div>
     </div>
 
@@ -3712,6 +3745,21 @@ button { font: inherit; cursor: pointer; }
   var qaQty = qaNode.querySelector('[data-qa-qty]');
   var qaMsg = qaNode.querySelector('[data-qa-msg]');
   var qaFile = qaNode.querySelector('[data-qa-file]');
+  var qaToggle = qaNode.querySelector('[data-qa-toggle]');
+  var qaBody = qaNode.querySelector('#quickadd-body');
+  var qaManuell = false;   // Nutzer hat den Zustand selbst gesetzt
+
+  function setQuickaddOffen(offen) {
+    if (!qaToggle || !qaBody) return;
+    qaToggle.setAttribute('aria-expanded', String(offen));
+    qaBody.hidden = !offen;
+  }
+  if (qaToggle) {
+    qaToggle.addEventListener('click', function () {
+      qaManuell = true;
+      setQuickaddOffen(qaToggle.getAttribute('aria-expanded') !== 'true');
+    });
+  }
 
   function qaShow(text, kind) {
     qaMsg.textContent = text;
@@ -3849,6 +3897,10 @@ button { font: inherit; cursor: pointer; }
     var qa = document.querySelector('[data-quickadd]');
     if (empty && qa.parentElement !== qaSlot) qaSlot.appendChild(qa);
     else if (!empty && qa.parentElement === qaSlot) listEl.parentElement.appendChild(qa);
+    // Im leeren Warenkorb ist die Schnellerfassung das Hauptwerkzeug und
+    // steht offen; sonst zugeklappt. Ein selbst geoeffneter Zustand
+    // bleibt bestehen.
+    if (!qaManuell) setQuickaddOffen(empty);
 
     var net = items.reduce(function (sum, it) { return sum + priceOf(it) * it.qty; }, 0);
     var vat = net * VAT_RATE;
