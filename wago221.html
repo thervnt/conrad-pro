@@ -1812,18 +1812,18 @@ button { font: inherit; cursor: pointer; }
     0 2px 4px -1px rgba(17, 18, 19, 0.06),
     0 1px 2px 0 rgba(17, 18, 19, 0.08);
 }
-.tab-content table {
+.tab-content-body table {
   width: 100%;
   border-collapse: collapse;
 }
-.tab-content td {
+.tab-content-body td {
   padding: 10px 14px;
   border-bottom: 1px solid var(--c-border);
   font-size: 13px;
 }
-.tab-content td:first-child { color: var(--c-text-secondary); width: 35%; }
-.tab-content td:last-child { color: var(--c-text); font-weight: 500; }
-.tab-content tr:nth-child(even) td { background: var(--c-bg-tint); }
+.tab-content-body td:first-child { color: var(--c-text-secondary); width: 35%; }
+.tab-content-body td:last-child { color: var(--c-text); font-weight: 500; }
+.tab-content-body tr:nth-child(even) td { background: var(--c-bg-tint); }
 
 /* === Serie & Zubehör tab content === */
 .tab-content { scroll-margin-top: 84px; margin-bottom: 28px; }
@@ -1894,12 +1894,19 @@ button { font: inherit; cursor: pointer; }
 }
 .compare-table {
   width: 100%;
+  /* Feste Aufteilung: schmale Kriterienspalte, der Rest geht zu
+     gleichen Teilen an die Serien. Bei "auto" zieht die erste Spalte
+     den freien Platz an sich. */
+  table-layout: fixed;
   border-collapse: collapse;
   font-size: 14px;
-  min-width: 720px;
+  min-width: 880px;
 }
 .compare-table th,
 .compare-table td { text-align: left; vertical-align: top; }
+/* Die Kriterienspalte nur so breit wie noetig - der Platz gehoert den
+   Serien. */
+.compare-corner { width: 150px; }
 .compare-table tbody th,
 .compare-corner {
   position: sticky;
@@ -1975,7 +1982,7 @@ button { font: inherit; cursor: pointer; }
 .compare-col-link:hover { text-decoration: underline; }
 .compare-col-here { font-size: 13px; color: var(--c-text-secondary); }
 @media (max-width: 720px) {
-  .compare-table { min-width: 640px; }
+  .compare-table { min-width: 820px; }
   .compare-table tbody th, .compare-corner { padding-right: 10px; }
 }
 .compare-vs-row.is-head { padding-top: 10px; }
@@ -3075,19 +3082,15 @@ button { font: inherit; cursor: pointer; }
   <!-- ALTERNATIVE SERIEN & ZUBEHÖR (above the section nav) -->
 <div class="tab-content-wrap">
   <section class="tab-content">
-    <h2>Alternative Serien &amp; Zubehör</h2>
+    <h2>Alternative Serien</h2>
     <div class="serie-block">
-      <div class="serie-section">
-        <p class="eyebrow">Passt die 221 zu Ihrem Einsatz?</p>
-        <p class="serie-section-desc">Wählen Sie eine Serie, um die wichtigsten Unterschiede zu sehen.</p>
-        <div class="compare-table-wrap" data-compare-table></div>
-        <p class="compare-usecase" data-compare-usecase></p>
-      </div>
-      <hr class="serie-divider">
-      <div class="serie-section">
-        <h3>Zubehör &amp; verwandte Produkte</h3>
-        <div class="serie-grid" data-series-grid></div>
-      </div>
+      <div class="compare-table-wrap" data-compare-table></div>
+    </div>
+  </section>
+  <section class="tab-content">
+    <h2>Zubehör &amp; verwandte Produkte</h2>
+    <div class="serie-block">
+      <div class="serie-grid" data-series-grid></div>
     </div>
   </section>
 </div>
@@ -4795,6 +4798,7 @@ document.addEventListener('click', e => {
 
   const COMPARISON_DATA = {
     '221':    { thumb: 'k221',  title: 'Verbindungsklemme mit Hebel',           desc: 'Werkzeuglos für alle Leiterarten. Lösbar, prüfbar, mischbar.', statusLabel: 'Aktuelles Produkt', statusVariant: 'current',     specs: { leiter: 'alle Leiterarten',       querschnitt: '0,14–6 mm²',  bedienung: 'Hebel, werkzeuglos', loesbar: 'Ja' },             usecase: 'Die WAGO 221 ist die richtige Wahl, wenn Sie ein- und mehrdrähtige Leiter (0,14 bis 6 mm²) werkzeuglos, sichtbar und wieder lösbar verbinden wollen, typisch in Abzweigdosen, Verteilern und bei Leuchtenanschlüssen. Der orange Hebel öffnet und schließt die Klemme mit einer Hand, das transparente Gehäuse macht die Verbindung prüfbar, und die kompakte Bauform passt auch in volle Dosen.', notFor: 'Ströme über 32 A, Querschnitte über 6 mm² und dauerhaft unzugänglich verbaute Verbindungen.', href: null },
+    '222':    { thumb: 'k221',   title: 'Vorgänger mit gleichem Bedienprinzip', desc: 'Wie die 221, nur größer. Bis 4 mm², feindrähtig bis 2,5 mm².', statusLabel: 'Alternative', statusVariant: 'alternative', specs: { leiter: 'alle Leiterarten', querschnitt: '0,08–4 mm²', bedienung: 'Hebel, werkzeuglos', loesbar: 'Ja' }, usecase: '', notFor: 'Beengte Abzweigdosen – die 222 baut spürbar größer als die 221.', href: 'https://www.conrad.de/de/search.html?search=WAGO%20222' },
     '2273':   { thumb: 'k2273', title: 'Steckklemme für eindrähtige Leiter',    desc: 'Kleiner als 221, ohne Hebel. Stecken statt klemmen.',          statusLabel: 'Alternative',       statusVariant: 'alternative', specs: { leiter: 'nur eindrähtig',         querschnitt: '0,5–2,5 mm²', bedienung: 'stecken',            loesbar: 'eingeschränkt' }, usecase: 'Die WAGO 2273 ist die kompakte Steckklemme für starre Leiter (0,5 bis 2,5 mm²), gedacht für klassische Neuinstallationen in Abzweigdosen, wo Sie viele gleichartige Verbindungen schnell setzen und nicht wieder lösen müssen. Sie ist deutlich kleiner und günstiger als die 221, hat aber keinen Hebel: Leiter abisolieren, einstecken, fertig.', notFor: 'Flexible oder feindrähtige Leiter und Verbindungen, die Sie später wieder öffnen wollen.', href: 'https://www.conrad.de/de/search.html?search=WAGO%202273' },
     '224':    { thumb: 'k224',  title: 'Leuchtenklemme',                        desc: 'Eindrähtig auf feindrähtig. Speziell für Leuchten und Geräte.', statusLabel: 'Alternative',       statusVariant: 'alternative', specs: { leiter: 'eindräht. + feindräht.', querschnitt: '0,5–2,5 mm²', bedienung: 'stecken',            loesbar: 'Nein' },          usecase: 'Die WAGO 224 ist die spezialisierte Leuchtenklemme für den Anschluss von Leuchten an die feste Installationsleitung, ein Anschluss starr, einer flexibel, vorbereitet für genau diesen Anwendungsfall. Sie nutzen sie, wenn Sie Deckenleuchten, Wandleuchten oder Außenleuchten anschließen und eine zugelassene, schnelle Lösung ohne Werkzeug brauchen.', notFor: 'Alles außerhalb des Leuchtenanschlusses – dort ist die 221 die universellere Wahl.', href: 'https://www.conrad.de/de/search.html?search=WAGO%20224' },
     '243':    { thumb: 'k243',  title: 'Mikro-Verbindungsklemme', desc: 'Für sehr feine Leiter in Klingel-, Telefon- und Signalinstallationen.', statusLabel: 'Alternative', statusVariant: 'alternative', specs: { leiter: 'Massivdraht', querschnitt: '0,6–0,8 mm Ø', bedienung: 'stecken', loesbar: 'Ja' }, usecase: 'Die WAGO 243 ist die Mikro-Verbindungsklemme für sehr feine Leiter (0,6 bis 0,8 mm Massivdraht), gedacht für Klingel-, Telefon-, Signal- und Niederspannungsinstallationen, also überall dort, wo nur geringe Ströme und kleine Querschnitte zusammenkommen. Sie nutzen sie, wenn Sie in einer Klingeldose, an einer Türsprechanlage oder bei einer 24-V-Steueranlage mehrere dünne Drähte sauber und wieder lösbar verbinden wollen.', notFor: 'Normale 230-V-Installationen und Querschnitte ab 1,5 mm² – dafür 221 oder 2273.', href: 'https://www.conrad.de/de/search.html?search=wago%20243' }
@@ -4812,6 +4816,7 @@ document.addEventListener('click', e => {
 
   const COMPARE_SERIES = [
     { id: '221',    name: 'Serie 221',     sub: 'Aktuelles Produkt', current: true },
+    { id: '222',    name: 'Serie 222',     sub: 'Vorgängerserie' },
     { id: '2273',   name: 'Serie 2273',    sub: 'zum Stecken' },
     { id: '224',    name: 'Serie 224',     sub: 'für Leuchten' },
     { id: '243',    name: 'Serie 243',     sub: 'Mikro' }
@@ -4915,11 +4920,6 @@ document.addEventListener('click', e => {
         '<tbody>' + zeilen + '</tbody>' +
         '<tfoot><tr><th scope="row" class="visually-hidden">Zur Serie</th>' + ctas + '</tr></tfoot>' +
       '</table>';
-
-    // Der Fliesstext gehoert zu dem Produkt, auf dessen Seite man ist -
-    // die Geschichte der Alternativen steht auf deren eigener Seite.
-    const textEl = document.querySelector('[data-compare-usecase]');
-    if (textEl) textEl.textContent = (COMPARISON_DATA[CURRENT_SERIES] || {}).usecase || '';
 
     wrap.querySelectorAll('[data-compare-link]').forEach(function (a) {
       a.addEventListener('click', function () {
