@@ -1251,60 +1251,6 @@ button { font: inherit; cursor: pointer; }
 .bom-title { font-size: 20px; font-weight: 700; margin: 0; color: var(--c-text); }
 .bom-sub { margin: 6px 0 0; font-size: 14px; color: var(--c-text-secondary); }
 
-/* Einzelne Position: der schnelle Weg fuer bekannte Nummern - ohne
-   Umweg ueber den dreistufigen Ablauf. */
-.single {
-  background: var(--c-bg-white);
-  border-radius: var(--radius);
-  box-shadow:
-    0 8px 12px -1px rgba(17, 18, 19, 0.06),
-    0 1px 2px 0 rgba(17, 18, 19, 0.08);
-  padding: 18px 20px;
-  margin-bottom: 20px;
-}
-.single-title { font-size: 16px; font-weight: 600; margin: 0; color: var(--c-text); }
-.single-sub { margin: 2px 0 12px; font-size: 13px; color: var(--c-text-secondary); }
-.single-form { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-.single-input {
-  flex: 1;
-  min-width: 220px;
-  height: 48px;
-  box-sizing: border-box;
-  padding: 0 14px;
-  border: 1px solid var(--c-border);
-  border-radius: var(--radius-sm);
-  font: inherit;
-  font-size: 14px;
-  color: var(--c-text);
-  background: var(--c-bg-white);
-}
-.single-input:focus {
-  outline: none;
-  border-color: var(--c-blue);
-  box-shadow: 0 0 0 3px rgba(55, 110, 239, 0.16);
-}
-.single-form .qty-input-wrap { flex: 0 0 200px; width: 200px; height: 48px; }
-.single-add {
-  height: 48px;
-  padding: 0 20px;
-  flex-shrink: 0;
-  background: var(--c-blue-soft);
-  border: none;
-  border-radius: var(--radius-sm);
-  font: inherit;
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--c-navy);
-  cursor: pointer;
-}
-.single-add:hover { background: var(--c-blue-soft-hover); }
-.single-msg { margin: 10px 0 0; font-size: 13px; font-weight: 500; }
-.single-msg[hidden] { display: none; }
-.single-msg.ok { color: var(--c-success); }
-.single-msg.err { color: var(--c-danger); }
-.single-hint { margin: 10px 0 0; font-size: 12px; color: var(--c-text-tertiary); }
-.bom-split { border: none; border-top: 1px solid var(--c-border); margin: 0 0 20px; }
-
 /* Fortschritt */
 .bom-steps {
   display: flex;
@@ -2403,31 +2349,6 @@ button { font: inherit; cursor: pointer; }
     <p class="bom-sub">Liste hochladen oder einfügen, Spalten zuordnen, Positionen prüfen und in den Einkaufswagen übernehmen.</p>
   </div>
 
-  <section class="single" data-single>
-    <div class="single-head">
-      <h2 class="single-title">Einzelne Position</h2>
-      <p class="single-sub">Bestell-Nr. eingeben und direkt in den Einkaufswagen legen.</p>
-    </div>
-    <div class="single-form">
-      <input class="single-input" type="text" data-single-nr aria-label="Bestell-Nr."
-             placeholder="Bestell-Nr., z. B. 1188440">
-      <div class="qty-input-wrap">
-        <input type="text" inputmode="numeric" value="1" aria-label="Menge" data-single-qty>
-        <span class="qty-unit">Stk.</span>
-        <div class="qty-btn-group">
-          <button class="qty-btn" type="button" data-single-minus aria-label="Menge verringern"><span class="qty-btn-puck">−</span></button>
-          <button class="qty-btn" type="button" data-single-plus aria-label="Menge erhöhen"><span class="qty-btn-puck">+</span></button>
-        </div>
-      </div>
-      <button type="button" class="single-add" data-single-add>In den Einkaufswagen</button>
-    </div>
-    <p class="single-msg" data-single-msg hidden></p>
-    <p class="single-hint">Mehrere Positionen mit Komma trennen – z. B. 1188440;4, 1188441;2.
-      Ganze Listen aus Datei oder Zwischenablage: unten.</p>
-  </section>
-
-  <hr class="bom-split">
-
   <ol class="bom-steps" aria-label="Fortschritt">
     <li class="bom-step is-current" data-step-marker="1"><span class="bom-step-nr">1</span>Liste einlesen</li>
     <li class="bom-step" data-step-marker="2"><span class="bom-step-nr">2</span>Spalten zuordnen</li>
@@ -3206,99 +3127,6 @@ button { font: inherit; cursor: pointer; }
       zeichneErgebnis();
     });
   });
-
-  // --- Einzelne Position: sofort in den Warenkorb ----------------------
-  var sNr = $('[data-single-nr]'), sQty = $('[data-single-qty]'), sMsg = $('[data-single-msg]');
-
-  function sMeldung(text, art) {
-    sMsg.textContent = text;
-    sMsg.className = 'single-msg ' + art;
-    sMsg.hidden = false;
-  }
-  function sQtySetzen(n) {
-    sQty.value = Math.max(1, n);
-    sQty.style.width = (Math.max(3, String(sQty.value).length) + 0.5) + 'ch';
-  }
-  sQtySetzen(1);
-  sQty.addEventListener('input', function () {
-    sQty.style.width = (Math.max(3, String(sQty.value).length) + 0.5) + 'ch';
-  });
-  $('[data-single-plus]').addEventListener('click', function () {
-    sQtySetzen((parseInt(sQty.value, 10) || 0) + 1);
-  });
-  $('[data-single-minus]').addEventListener('click', function () {
-    sQtySetzen((parseInt(sQty.value, 10) || 2) - 1);
-  });
-  sNr.addEventListener('input', function () { sMsg.hidden = true; });
-  [sNr, sQty].forEach(function (el) {
-    el.addEventListener('keydown', function (e) {
-      if (e.key === 'Enter') { e.preventDefault(); sHinzufuegen(); }
-    });
-  });
-  $('[data-single-add]').addEventListener('click', sHinzufuegen);
-
-  function sHinzufuegen() {
-    var roh = sNr.value.trim();
-    if (!roh) { sMeldung('Bitte eine Bestell-Nr. eingeben.', 'err'); sNr.focus(); return; }
-    var fallback = Math.max(1, parseInt(sQty.value, 10) || 1);
-    var eintraege = roh.split(',').map(function (teil) {
-      var st = teil.split(';').map(function (s) { return s.trim(); });
-      var m = parseInt(st[1], 10);
-      return { nr: st[0], menge: (!isNaN(m) && m > 0) ? m : fallback };
-    }).filter(function (e) { return e.nr; });
-
-    var wagen = [], fehlend = [], zahl = 0, letzte = null;
-    try {
-      var v = JSON.parse(localStorage.getItem(CART_KEY));
-      if (Array.isArray(v)) wagen = v;
-    } catch (err) { /* beschaedigt */ }
-
-    eintraege.forEach(function (e) {
-      var t = treffer({ bestellNr: e.nr, mpn: e.nr, ean: e.nr });
-      var artikel = t.treffer.length === 1 ? t.treffer[0] : null;
-      if (!artikel) { fehlend.push(e.nr); return; }
-      var b = bestellmenge(artikel, e.menge);
-      var vorhanden = wagen.filter(function (it) {
-        return it.sku === artikel.mpn && it.packSize === artikel.packSize;
-      })[0];
-      if (vorhanden) { vorhanden.qty += b.sets; }
-      else {
-        var preise = {}; preise[artikel.packSize] = artikel.preis;
-        wagen.push({
-          sku: artikel.mpn, bestellNr: artikel.bestellNr, title: artikel.name,
-          config: artikel.packSize === 1 ? 'Einzelstück' : artikel.packSize + 'er-Set',
-          stock: artikel.bestand.toLocaleString('de-DE') + ' Stück auf Lager',
-          packSize: artikel.packSize, qty: b.sets, packSizes: [artikel.packSize],
-          packPrices: preise, minPieces: 1, img: '', href: null, note: ''
-        });
-      }
-      zahl++;
-      letzte = { artikel: artikel, bedarf: e.menge, sets: b.sets, stueck: b.stueck };
-    });
-
-    if (zahl) {
-      try { localStorage.setItem(CART_KEY, JSON.stringify(wagen)); } catch (err) { /* voll */ }
-      if (typeof window.refreshHeaderFlyouts === 'function') window.refreshHeaderFlyouts();
-      sNr.value = ''; sQtySetzen(1);
-    }
-    if (zahl && !fehlend.length) {
-      if (zahl === 1 && letzte) {
-        // Verpackungseinheiten koennen die Menge aufrunden - das gehoert
-        // in die Bestaetigung, sonst ist es eine Ueberraschung im Wagen.
-        var t = letzte.artikel.packSize === 1
-          ? letzte.stueck + ' Stück'
-          : letzte.sets + ' × ' + letzte.artikel.packSize + 'er-Set (' + letzte.stueck + ' Stück)';
-        sMeldung(t + ' in den Einkaufswagen gelegt'
-          + (letzte.stueck > letzte.bedarf ? ' – ' + (letzte.stueck - letzte.bedarf) + ' mehr als angefordert.' : '.'), 'ok');
-      } else {
-        sMeldung(zahl + ' Positionen in den Einkaufswagen gelegt.', 'ok');
-      }
-    } else if (zahl) {
-      sMeldung(zahl + ' hinzugefügt · nicht gefunden: ' + fehlend.join(', '), 'err');
-    } else {
-      sMeldung('Nicht gefunden: ' + fehlend.join(', '), 'err');
-    }
-  }
 
   // --- In den Warenkorb ------------------------------------------------
   $('[data-bom-tocart]').addEventListener('click', function () {
