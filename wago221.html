@@ -2793,12 +2793,12 @@ button { font: inherit; cursor: pointer; }
 .hdr-login:hover { background: var(--c-blue-hover); text-decoration: none; }
 
 /* ===== "Einkaufen als" Flyout ===== */
-.gk-wrap { position: relative; display: inline-flex; }
-.gk-flyout {
+.gk-wrap, .fly-wrap { position: relative; display: inline-flex; }
+.gk-flyout, .fly-panel {
   position: absolute;
   top: calc(100% + 10px);
   left: 0;
-  width: 330px;
+  width: var(--fly-w, 330px);
   background: var(--c-bg-white);
   border-radius: 12px;
   box-shadow: 0 14px 32px rgba(15, 23, 42, 0.18);
@@ -2810,20 +2810,125 @@ button { font: inherit; cursor: pointer; }
 /* Unsichtbare Bruecke ueber die Luecke, damit der Zeiger vom Button
    ins Overlay wandern kann, ohne den Hover zu verlieren. Sie haengt am
    Wrapper, weil das Flyout selbst overflow:hidden hat. */
-.gk-wrap::after {
+.gk-wrap::after, .fly-wrap::after {
   content: "";
   position: absolute;
   top: 100%;
   left: 0;
-  width: 330px;
+  right: 0;
   height: 12px;
   display: none;
 }
-.gk-wrap:hover::after { display: block; }
-.gk-wrap.suppress::after { display: none; }
+.gk-wrap:hover::after, .fly-wrap:hover::after { display: block; }
+.gk-wrap.suppress::after, .fly-wrap.suppress::after { display: none; }
 .gk-wrap:hover .gk-flyout,
-.gk-wrap:focus-within .gk-flyout { display: block; }
-.gk-wrap.suppress .gk-flyout { display: none; }
+.gk-wrap:focus-within .gk-flyout,
+.fly-wrap:hover .fly-panel,
+.fly-wrap:focus-within .fly-panel { display: block; }
+.gk-wrap.suppress .gk-flyout, .fly-wrap.suppress .fly-panel { display: none; }
+/* Auskappmenues der Kopfzeile: gleiche Karte wie das Kundenart-Menue,
+   aber rechtsbuendig unter dem Symbol. */
+.fly-panel { left: auto; right: 0; }
+.fly-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--c-border);
+}
+.fly-title { font-size: 15px; font-weight: 600; color: var(--c-text); }
+.fly-link { font-size: 14px; color: var(--c-blue); white-space: nowrap; }
+.fly-link:hover { text-decoration: underline; }
+.fly-sub {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 4px;
+  font-size: 13px;
+  color: var(--c-text-secondary);
+}
+.fly-empty {
+  padding: 28px 16px;
+  text-align: center;
+  font-size: 14px;
+  color: var(--c-text-tertiary);
+}
+/* --- Einkaufswagen --- */
+.fly-list { max-height: 340px; overflow-y: auto; }
+.fly-item {
+  display: grid;
+  grid-template-columns: 44px 1fr auto;
+  gap: 12px;
+  align-items: start;
+  padding: 12px 16px;
+}
+.fly-item + .fly-item { border-top: 1px solid var(--c-border); }
+.fly-item-img {
+  width: 44px; height: 44px;
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-sm);
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
+}
+.fly-item-img img { max-width: 90%; max-height: 90%; object-fit: contain; }
+.fly-item-name {
+  font-size: 13px;
+  line-height: 1.35;
+  color: var(--c-text);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.fly-item-qty { margin-top: 3px; font-size: 12px; color: var(--c-text-secondary); }
+.fly-item-right { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
+.fly-item-price { font-size: 14px; font-weight: 700; color: var(--c-text); white-space: nowrap; }
+.fly-item-del {
+  width: 28px; height: 28px;
+  padding: 0;
+  background: none;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  color: var(--c-text-tertiary);
+  cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center;
+  transition: color 0.15s, border-color 0.15s;
+}
+.fly-item-del svg { width: 15px; height: 15px; }
+.fly-item-del:hover { color: #d9234c; border-color: var(--c-border); }
+/* --- Hilfe & Support --- */
+.fly-tiles {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  padding: 14px 16px;
+}
+.fly-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 62px;
+  padding: 10px 8px;
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  color: var(--c-text);
+  text-align: center;
+  transition: border-color 0.15s, background 0.15s;
+}
+.fly-tile:hover { border-color: var(--c-blue); background: var(--c-bg-tint); text-decoration: none; }
+.fly-tile svg { width: 18px; height: 18px; color: var(--c-text-secondary); }
+.fly-foot {
+  padding: 12px 16px;
+  border-top: 1px solid var(--c-border);
+  font-size: 13px;
+}
+.fly-foot-tel { display: flex; align-items: center; gap: 8px; font-weight: 600; color: var(--c-text); }
+.fly-foot-tel svg { width: 15px; height: 15px; color: var(--c-text-secondary); }
+.fly-foot-hours { margin: 4px 0 0 23px; font-size: 12px; color: var(--c-text-secondary); }
 .gk-flyout-title {
   font-size: 15px;
   color: var(--c-text);
@@ -2927,16 +3032,49 @@ button { font: inherit; cursor: pointer; }
           </button>
         </div>
         </div>
+        <div class="fly-wrap">
         <a href="#" class="header-btn">
           <svg viewBox="0 0 18 22" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M3.125 7.5C3.125 8.00781 2.69531 8.4375 2.1875 8.4375C1.67969 8.4375 1.25 8.00781 1.25 7.5C1.25 3.35938 4.60938 0 8.75 0C12.8906 0 16.25 3.35938 16.25 7.5V12.8125C16.25 13.3203 15.8203 13.75 15.3125 13.75H8.125C7.10938 13.75 6.25 12.9297 6.25 11.875C6.25 10.8594 7.10938 10 8.125 10H9.375C10.4297 10 11.25 10.8594 11.25 11.875H14.375V7.5C14.375 4.41406 11.875 1.875 8.75 1.875C5.66406 1.875 3.125 4.41406 3.125 7.5ZM11.25 7.5C11.25 6.13281 10.1172 5 8.75 5C7.38281 5 6.25 6.13281 6.25 7.5C6.25 7.96875 6.36719 8.39844 6.60156 8.78906C6.01562 9.0625 5.54688 9.53125 5.19531 10.0781C4.6875 9.33594 4.375 8.47656 4.375 7.5C4.375 5.07812 6.32812 3.125 8.75 3.125C11.1719 3.125 13.125 5.07812 13.125 7.5C13.125 8.47656 12.8125 9.33594 12.3047 10.0781C11.9531 9.53125 11.4844 9.0625 10.8984 8.78906C11.1328 8.39844 11.25 7.96875 11.25 7.5ZM1.875 20.3125C1.875 20.8203 1.44531 21.25 0.9375 21.25C0.429688 21.25 0 20.8203 0 20.3125C0 17.3828 2.38281 15 5.3125 15H12.1875C15.1172 15 17.5 17.3828 17.5 20.3125C17.5 20.8203 17.0703 21.25 16.5625 21.25C16.0547 21.25 15.625 20.8203 15.625 20.3125C15.625 18.3984 14.1016 16.875 12.1875 16.875H5.3125C3.39844 16.875 1.875 18.3984 1.875 20.3125Z"/></svg>
           <span class="header-btn-label">Hilfe &amp; Support</span>
         </a>
+          <div class="fly-panel" style="--fly-w: 400px">
+            <div class="fly-head"><span class="fly-title">Hilfe und Support</span><a class="fly-link" href="#">anzeigen</a></div>
+            <div class="fly-tiles">
+              <a class="fly-tile" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg><span>Bestellung</span></a>
+              <a class="fly-tile" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg><span>Versand</span></a>
+              <a class="fly-tile" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg><span>Bezahlung</span></a>
+              <a class="fly-tile" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 14 4 9 9 4"/><path d="M20 20v-7a4 4 0 0 0-4-4H4"/></svg><span>Rücksendung & Garantie</span></a>
+              <a class="fly-tile" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg><span>Virtueller Assistent</span></a>
+              <a class="fly-tile" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><span>Häufige Fragen</span></a>
+            </div>
+            <div class="fly-foot">
+              <span class="fly-foot-tel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>Tel.: 09604 / 40 87 87</span>
+              <p class="fly-foot-hours">Mo. – Fr. 08:00 – 17:00 Uhr (außer an gesetzlichen Feiertagen)</p>
+            </div>
+          </div>
+        </div>
+        <div class="fly-wrap">
         <a href="#" class="header-btn icon-only" aria-label="Merkliste">
           <span class="icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg><span class="icon-badge" data-wishlist-badge>1</span></span>
         </a>
+          <div class="fly-panel" style="--fly-w: 320px">
+            <div class="fly-head"><span class="fly-title">Merkliste</span><a class="fly-link" href="#">anzeigen</a></div>
+            <div data-fly-wishlist></div>
+          </div>
+        </div>
+        <div class="fly-wrap">
         <a href="cart.html" class="header-btn icon-only" aria-label="Einkaufswagen">
           <span class="icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg><span class="icon-badge" data-cart-badge>1</span></span>
         </a>
+          <div class="fly-panel" style="--fly-w: 400px">
+            <div class="fly-head">
+              <span><span class="fly-title">Einkaufswagen</span>
+                <span class="fly-sub"><span data-fly-count>0 Artikel</span><span data-fly-sum></span></span></span>
+              <a class="fly-link" href="cart.html">anzeigen</a>
+            </div>
+            <div data-fly-cart></div>
+          </div>
+        </div>
         <a href="#" class="header-btn" data-open-drawer="account">
           <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M8.875 7A3.134 3.134 0 0 0 12 10.125 3.134 3.134 0 0 0 15.125 7 3.134 3.134 0 0 0 12 3.875 3.134 3.134 0 0 0 8.875 7ZM17 7c0 2.773-2.227 5-5 5S7 9.773 7 7s2.227-5 5-5 5 2.227 5 5ZM5.125 20.75v.313a.95.95 0 0 1-.938.937.95.95 0 0 1-.937-.938v-.312c0-3.79 3.086-6.875 6.875-6.875h3.75c3.79 0 6.875 3.086 6.875 6.875v.313a.95.95 0 0 1-.938.937.95.95 0 0 1-.937-.938v-.312c0-2.773-2.227-5-5-5h-3.75c-2.773 0-5 2.227-5 5Z"/></svg>
           <span class="header-btn-label">Konto</span>
@@ -4507,10 +4645,15 @@ if (countdownEl) {
   function saveCart(items) {
     try { localStorage.setItem(CART_KEY, JSON.stringify(items)); } catch (e) { /* quota */ }
     setBadge(items.length, true);
+    if (typeof window.refreshHeaderFlyouts === 'function') window.refreshHeaderFlyouts();
   }
 
   // Header badge reflects the persisted cart (distinct products).
   setBadge(loadCart().length, false);
+  // Loeschen im Kopfzeilen-Menue aendert den Wagen - Zaehler nachziehen.
+  document.addEventListener('conrad:cart-changed', function () {
+    setBadge(loadCart().length, false);
+  });
 
   // ---- Mini-cart drawer -------------------------------------------
   // Confirmation after add-to-cart: shows the added line, the
@@ -5540,5 +5683,88 @@ render();
 })();
 </script>
 
+
+<script>
+// Auskappmenues der Kopfzeile: Einkaufswagen und Merkliste zeigen den
+// echten Stand aus dem Speicher und aktualisieren sich, sobald sich
+// etwas aendert (auch aus anderen Modulen heraus).
+(function () {
+  var CART_KEY = 'conradCart';
+  var listEl  = document.querySelector('[data-fly-cart]');
+  var countEl = document.querySelector('[data-fly-count]');
+  var sumEl   = document.querySelector('[data-fly-sum]');
+  var wishEl  = document.querySelector('[data-fly-wishlist]');
+  var TRASH = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" ' +
+    'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+    '<polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>' +
+    '<line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>';
+
+  function fmt(n) { return n.toFixed(2).replace('.', ',') + ' \u20ac'; }
+  function esc(s) {
+    return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
+  }
+  function read() {
+    try {
+      var v = JSON.parse(localStorage.getItem(CART_KEY));
+      return Array.isArray(v) ? v : [];
+    } catch (e) { return []; }
+  }
+  function titel(it) {
+    if (it.title) return it.title;
+    return 'WAGO ' + it.sku + (it.packSize === 1 ? '' : '-' + it.packSize) +
+      ' 221' + (it.variantTag || '') + ' Verbindungsklemme Polzahl: ' + it.polzahl;
+  }
+  function preis(it) { return ((it.packPrices && it.packPrices[it.packSize]) || 0) * it.qty; }
+
+  function render() {
+    if (!listEl) return;
+    var items = read();
+    var summe = items.reduce(function (s, it) { return s + preis(it); }, 0);
+    if (countEl) countEl.textContent = items.length + (items.length === 1 ? ' Artikel' : ' Artikel');
+    if (sumEl) sumEl.textContent = items.length ? 'Zwischensumme: ' + fmt(summe) : '';
+    listEl.innerHTML = items.length
+      ? '<div class="fly-list">' + items.map(function (it, i) {
+          return '<div class="fly-item">' +
+            '<span class="fly-item-img"><img src="' + it.img + '" alt=""></span>' +
+            '<span><span class="fly-item-name">' + esc(titel(it)) + '</span>' +
+              '<span class="fly-item-qty">' + it.qty + (it.packSize === 1 ? ' St\u00fcck' : ' Sets') + '</span></span>' +
+            '<span class="fly-item-right">' +
+              '<button type="button" class="fly-item-del" data-fly-del="' + i + '" ' +
+                'aria-label="Artikel entfernen">' + TRASH + '</button>' +
+              '<span class="fly-item-price">' + fmt(preis(it)) + '</span>' +
+            '</span>' +
+          '</div>';
+        }).join('') + '</div>'
+      : '<p class="fly-empty">Ihr Einkaufswagen ist leer</p>';
+  }
+
+  function renderWish() {
+    if (!wishEl) return;
+    var badge = document.querySelector('[data-wishlist-badge]');
+    var n = badge && badge.style.display !== 'none' ? parseInt(badge.textContent, 10) || 0 : 0;
+    wishEl.innerHTML = n > 0
+      ? '<p class="fly-empty">' + n + (n === 1 ? ' Artikel gemerkt' : ' Artikel gemerkt') + '</p>'
+      : '<p class="fly-empty">Sie haben noch keine Merkliste erstellt</p>';
+  }
+
+  if (listEl) {
+    listEl.addEventListener('click', function (e) {
+      var btn = e.target.closest('[data-fly-del]');
+      if (!btn) return;
+      var items = read();
+      items.splice(Number(btn.dataset.flyDel), 1);
+      try { localStorage.setItem(CART_KEY, JSON.stringify(items)); } catch (err) { /* voll */ }
+      document.dispatchEvent(new CustomEvent('conrad:cart-changed'));
+    });
+  }
+  document.addEventListener('conrad:cart-changed', function () { render(); renderWish(); });
+  document.addEventListener('click', function (e) {
+    if (e.target.closest('.wishlist-btn, [data-recent-fav]')) setTimeout(renderWish, 0);
+  });
+  render();
+  renderWish();
+  window.refreshHeaderFlyouts = function () { render(); renderWish(); };
+})();
+</script>
 </body>
 </html>
