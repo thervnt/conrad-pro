@@ -2561,12 +2561,102 @@ button { font: inherit; cursor: pointer; }
   line-height: 1.6;
 }
 
+/* ===== NEWSLETTER =====
+   Band ueber dem Fussbereich. Nutzen links, Eingabe rechts, darunter
+   Einwilligung und Gutscheinbedingungen als Pflichtangaben. */
+.newsletter { margin-top: 60px; background: var(--c-blue-tint); border-top: 1px solid var(--c-border); }
+.newsletter-inner {
+  max-width: 1680px;
+  margin: 0 auto;
+  padding: 28px 24px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 480px);
+  align-items: center;
+  gap: 20px 48px;
+}
+.newsletter-eyebrow {
+  margin: 0 0 4px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--c-blue);
+}
+.newsletter-title { margin: 0; font-size: 20px; font-weight: 700; color: var(--c-text); }
+.newsletter-sub {
+  margin: 6px 0 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--c-text-secondary);
+  max-width: 62ch;
+}
+.newsletter-terms {
+  margin: 8px 0 0;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--c-text-tertiary);
+  max-width: 62ch;
+}
+.newsletter-form { margin: 0; }
+.newsletter-field { display: flex; gap: 8px; }
+.newsletter-input {
+  flex: 1;
+  min-width: 0;
+  height: 44px;
+  padding: 0 14px;
+  background: var(--c-bg-white);
+  border: 1px solid var(--c-border-strong);
+  border-radius: var(--radius-sm);
+  font: inherit;
+  font-size: 15px;
+  color: var(--c-text);
+}
+.newsletter-input::placeholder { color: var(--c-text-tertiary); }
+.newsletter-input:focus {
+  outline: none;
+  border-color: var(--c-blue);
+  box-shadow: 0 0 0 3px rgba(55, 110, 239, 0.16);
+}
+.newsletter-input.is-invalid { border-color: var(--c-danger); }
+.newsletter-btn {
+  height: 44px;
+  padding: 0 22px;
+  background: var(--c-blue);
+  border: none;
+  border-radius: var(--radius-sm);
+  font: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--c-text-on-dark);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.newsletter-btn:hover { background: var(--c-blue-hover); }
+.newsletter-error { margin: 8px 0 0; font-size: 13px; font-weight: 500; color: var(--c-danger); }
+.newsletter-error[hidden] { display: none; }
+.newsletter-consent { margin: 10px 0 0; font-size: 12px; line-height: 1.5; color: var(--c-text-tertiary); }
+.newsletter-consent a { color: var(--c-text-secondary); text-decoration: underline; }
+.newsletter-consent a:hover { color: var(--c-blue); }
+/* Bestaetigung nach dem Absenden - Double-Opt-in, daher noch kein Abschluss. */
+.newsletter-done { display: flex; align-items: flex-start; gap: 10px; }
+.newsletter-done[hidden] { display: none; }
+.newsletter-done svg { width: 20px; height: 20px; flex-shrink: 0; color: var(--c-success); margin-top: 1px; }
+.newsletter-done-text { margin: 0; font-size: 14px; line-height: 1.5; color: var(--c-text); }
+@media (max-width: 900px) {
+  .newsletter-inner { grid-template-columns: 1fr; gap: 16px; }
+}
+@media (max-width: 520px) {
+  .newsletter-field { flex-direction: column; }
+  .newsletter-btn { width: 100%; }
+}
+
 /* ===== FOOTER ===== */
 /* ===== VOLLSTAENDIGER FUSSBEREICH (PDP) =====
    Heller Block mit Zahlarten, Rubriken und Siegeln, darunter die
    dunkle Rechtsleiste. Der Warenkorb behaelt den schlanken Fuss. */
+/* Der Fuss schliesst direkt an das Newsletter-Band an. */
 .footer-full {
-  margin-top: 60px;
   background: var(--c-bg-white);
   border-top: 1px solid var(--c-border);
 }
@@ -3714,6 +3804,75 @@ button { font: inherit; cursor: pointer; }
     In den Einkaufswagen
   </button>
 </aside>
+
+<section class="newsletter" aria-labelledby="newsletter-title">
+  <div class="newsletter-inner">
+    <div class="newsletter-text">
+      <p class="newsletter-eyebrow">Newsletter</p>
+      <h2 class="newsletter-title" id="newsletter-title">10 € Gutschein für Ihre nächste Bestellung</h2>
+      <p class="newsletter-sub">Einmal pro Woche: neue Produkte, Preisaktionen und technische Hinweise aus Ihrem Sortiment. Jederzeit mit einem Klick abbestellbar.</p>
+      <p class="newsletter-terms">Gutschein ab 50 € Bestellwert (netto), einmalig einlösbar, gültig 3 Monate, nicht mit anderen Aktionen kombinierbar.</p>
+    </div>
+
+    <form class="newsletter-form" data-newsletter-form novalidate>
+      <div class="newsletter-field">
+        <label class="visually-hidden" for="newsletter-mail">E-Mail-Adresse</label>
+        <input type="email" id="newsletter-mail" name="email" class="newsletter-input"
+               placeholder="E-Mail-Adresse" autocomplete="email" inputmode="email"
+               aria-describedby="newsletter-consent" data-newsletter-input>
+        <button type="submit" class="newsletter-btn">Newsletter abonnieren</button>
+      </div>
+      <p class="newsletter-error" role="alert" data-newsletter-error hidden></p>
+      <p class="newsletter-consent" id="newsletter-consent">Mit der Anmeldung willigen Sie in den Erhalt des Newsletters ein. Sie können die Einwilligung jederzeit widerrufen. <a href="#">Datenschutzhinweise</a></p>
+    </form>
+
+    <div class="newsletter-done" data-newsletter-done hidden>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+      <p class="newsletter-done-text">Fast geschafft: Wir haben Ihnen eine E-Mail an <strong data-newsletter-mail></strong> geschickt. Bestätigen Sie darin die Anmeldung, dann erhalten Sie den Gutscheincode.</p>
+    </div>
+  </div>
+</section>
+
+<script>
+/* Newsletter: Prototyp ohne Versand. Prueft die Eingabe und zeigt den
+   Zwischenstand des Double-Opt-in an. */
+(function () {
+  var form = document.querySelector('[data-newsletter-form]');
+  if (!form) return;
+  var input = form.querySelector('[data-newsletter-input]');
+  var error = form.querySelector('[data-newsletter-error]');
+  var done = document.querySelector('[data-newsletter-done]');
+  var mailOut = done.querySelector('[data-newsletter-mail]');
+
+  function zeigeFehler(text) {
+    error.textContent = text;
+    error.hidden = false;
+    input.classList.add('is-invalid');
+    input.setAttribute('aria-invalid', 'true');
+    input.focus();
+  }
+
+  input.addEventListener('input', function () {
+    error.hidden = true;
+    input.classList.remove('is-invalid');
+    input.removeAttribute('aria-invalid');
+  });
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var wert = input.value.trim();
+    if (!wert) return zeigeFehler('Bitte geben Sie Ihre E-Mail-Adresse ein.');
+    if (!/^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i.test(wert)) {
+      return zeigeFehler('Diese E-Mail-Adresse ist unvollständig. Beispiel: name@firma.de');
+    }
+    mailOut.textContent = wert;
+    form.hidden = true;
+    done.hidden = false;
+    done.setAttribute('tabindex', '-1');
+    done.focus();
+  });
+})();
+</script>
 
 <footer class="footer-full">
   <div class="footer-full-inner">
