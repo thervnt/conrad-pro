@@ -2569,23 +2569,23 @@ button { font: inherit; cursor: pointer; }
 .newsletter-inner {
   max-width: 780px;
   margin: 0 auto;
-  padding: 34px 24px 36px;
+  padding: 24px 24px 26px;
   text-align: center;
 }
 .newsletter-eyebrow {
-  margin: 0 0 6px;
+  margin: 0 0 4px;
   font-size: 12px;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.06em;
   color: var(--c-blue);
 }
-.newsletter-title { margin: 0; font-size: 28px; font-weight: 700; line-height: 1.25; color: var(--c-text); }
+.newsletter-title { margin: 0; font-size: 24px; font-weight: 700; line-height: 1.25; color: var(--c-text); }
 /* Vorteile linksbuendig, der Block als Ganzes mittig - eine zentrierte
    Aufzaehlung waere ohne feste Lesekante schwer zu erfassen. */
 .newsletter-benefits {
   display: inline-block;
-  margin: 16px 0 22px;
+  margin: 12px 0 16px;
   padding: 0;
   list-style: none;
   text-align: left;
@@ -2594,12 +2594,12 @@ button { font: inherit; cursor: pointer; }
   display: flex;
   align-items: flex-start;
   gap: 9px;
-  font-size: 15px;
-  line-height: 1.45;
+  font-size: 14px;
+  line-height: 1.4;
   color: var(--c-text);
 }
-.newsletter-benefit + .newsletter-benefit { margin-top: 8px; }
-.newsletter-benefit svg { width: 17px; height: 17px; flex-shrink: 0; margin-top: 2px; color: var(--c-success); }
+.newsletter-benefit + .newsletter-benefit { margin-top: 5px; }
+.newsletter-benefit svg { width: 16px; height: 16px; flex-shrink: 0; margin-top: 2px; color: var(--c-success); }
 .newsletter-form { max-width: 700px; margin: 0 auto; }
 .newsletter-field { display: flex; gap: 8px; }
 .newsletter-input {
@@ -2639,37 +2639,14 @@ button { font: inherit; cursor: pointer; }
 .newsletter-error { margin: 8px 0 0; font-size: 13px; font-weight: 500; color: var(--c-danger); }
 .newsletter-error[hidden] { display: none; }
 .newsletter-consent {
-  max-width: 680px;
-  margin: 12px auto 0;
+  max-width: 620px;
+  margin: 10px auto 0;
   font-size: 12px;
   line-height: 1.5;
   color: var(--c-text-tertiary);
 }
 .newsletter-consent a { color: var(--c-text-secondary); text-decoration: underline; }
 .newsletter-consent a:hover { color: var(--c-blue); }
-/* Teilnahmebedingungen eingeklappt - vollstaendig verfuegbar, aber ohne
-   den Aufruf zu erschlagen. */
-.newsletter-terms { max-width: 680px; margin: 12px auto 0; }
-.newsletter-terms summary {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  font-size: 12px;
-  color: var(--c-text-secondary);
-  cursor: pointer;
-  list-style: none;
-}
-.newsletter-terms summary::-webkit-details-marker { display: none; }
-.newsletter-terms summary::after { content: '+'; font-size: 14px; line-height: 1; }
-.newsletter-terms[open] summary::after { content: '−'; }
-.newsletter-terms summary:hover { color: var(--c-blue); }
-.newsletter-terms p {
-  margin: 8px 0 0;
-  text-align: left;
-  font-size: 11px;
-  line-height: 1.55;
-  color: var(--c-text-tertiary);
-}
 /* Bestaetigung nach dem Absenden - Double-Opt-in, daher noch kein Abschluss. */
 .newsletter-done {
   display: flex;
@@ -2683,7 +2660,7 @@ button { font: inherit; cursor: pointer; }
 .newsletter-done svg { width: 20px; height: 20px; flex-shrink: 0; color: var(--c-success); margin-top: 1px; }
 .newsletter-done-text { margin: 0; font-size: 14px; line-height: 1.5; color: var(--c-text); }
 @media (max-width: 640px) {
-  .newsletter-inner { padding: 28px 20px 30px; }
+  .newsletter-inner { padding: 22px 20px 24px; }
   .newsletter-title { font-size: 20px; }
 }
 @media (max-width: 520px) {
@@ -3847,14 +3824,10 @@ button { font: inherit; cursor: pointer; }
 
 <section class="newsletter" aria-labelledby="newsletter-title">
   <div class="newsletter-inner">
-    <p class="newsletter-eyebrow">Newsletter für Geschäftskunden</p>
-    <h2 class="newsletter-title" id="newsletter-title">10 € Gutschein sichern – ab 100 € Einkaufswert</h2>
+    <p class="newsletter-eyebrow">Newsletter</p>
+    <h2 class="newsletter-title" id="newsletter-title">10 € Gutschein sichern</h2>
 
     <ul class="newsletter-benefits">
-      <li class="newsletter-benefit">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
-        Gutscheincode direkt mit dem ersten Newsletter
-      </li>
       <li class="newsletter-benefit">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
         Rabattaktionen und Vorteilscodes dauerhaft zuerst erhalten
@@ -3875,18 +3848,13 @@ button { font: inherit; cursor: pointer; }
         <button type="submit" class="newsletter-btn">Anmelden und Gutschein sichern</button>
       </div>
       <p class="newsletter-error" role="alert" data-newsletter-error hidden></p>
-      <p class="newsletter-consent" id="newsletter-consent">Mit Ihrem Klick stimmen Sie dem Empfang des Newsletters zu und sind damit einverstanden, dass Öffnungs- und Klickraten in einem Empfängerprofil gemessen und ausgewertet werden, um künftige Newsletter zu gestalten. Sie können die Einwilligung jederzeit widerrufen, etwa über den Abmeldebutton in jedem Newsletter. <a href="#">Datenschutzerklärung</a></p>
+      <p class="newsletter-consent" id="newsletter-consent">Mit dem Klick stimmen Sie dem Empfang des Newsletters und der Auswertung von Öffnungs- und Klickraten zu. Widerruf jederzeit möglich. <a href="#">Datenschutzerklärung</a> · <a href="#">Teilnahmebedingungen</a></p>
     </form>
 
     <div class="newsletter-done" data-newsletter-done hidden>
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
       <p class="newsletter-done-text">Fast geschafft: Wir haben Ihnen eine E-Mail an <strong data-newsletter-mail></strong> geschickt. Bestätigen Sie darin die Anmeldung, dann erhalten Sie den Gutscheincode.</p>
     </div>
-
-    <details class="newsletter-terms">
-      <summary>Teilnahmebedingungen</summary>
-      <p>Nicht mit anderen Vorteilscodes kombinierbar. 1× pro Person. Keine Barauszahlung. Nach Erhalt dieses Newsletters ist der Gutschein 4 Wochen gültig auf conrad.de oder in Ihrer Filiale. Mindesteinkaufswert: 100 € zzgl. MwSt. Von Rabatten ausgenommen sind Artikel der Marken Apple, Samsung, BambuLab und Raspberry Pi sowie Marketplace-Bestellungen (Drittanbieter), Prepaid- und Geschenkkarten, Bücher und die Conrad PRO Mitgliedsgebühr. Beim Filialkauf den Vorteilscode an der Kasse vorlegen. Fällt durch Rücksendung im Rahmen des Rückgaberechts der Rechnungsbetrag unter den Mindesteinkaufswert, verliert der Gutschein seine Gültigkeit und es wird der reguläre Preis für die verbleibende Ware berechnet.</p>
-    </details>
   </div>
 </section>
 
