@@ -2990,43 +2990,69 @@ button { font: inherit; cursor: pointer; }
   padding: 20px;
   margin-top: 16px;
 }
-.pro-upsell-head { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
-.pro-upsell-head svg { flex-shrink: 0; display: block; }
-.pro-upsell-price { font-size: 18px; font-weight: 700; white-space: nowrap; }
-.pro-upsell-price-sub { font-size: 12px; font-weight: 500; color: var(--c-text-secondary); }
-.pro-upsell-saving { margin-left: auto; font-size: 13px; font-weight: 600; color: #218972; }
-.pro-upsell-benefits-row {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 4px 20px;
-  margin-top: 10px;
-  font-size: 13px;
-}
-.pro-benefit { display: inline-flex; align-items: center; gap: 6px; }
-.pro-benefit svg { width: 12px; height: 12px; fill: var(--c-navy); flex-shrink: 0; }
-.pro-upsell-all { font-size: 13px; color: var(--c-blue); }
+/* Kopfzeile: Haken, PRO-Zeichen, Aussage. Die Folgezeilen ruecken auf
+   die Textkante der Aussage ein (18px Haken + 10px + 46px Zeichen). */
 .pro-upsell-optin {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 10px;
-  margin-top: 12px;
-  padding-top: 12px;
-  border-top: 1px solid var(--c-border);
-  font-size: 13px;
-  color: var(--c-text);
   cursor: pointer;
 }
 .pro-upsell-optin input {
   width: 18px;
   height: 18px;
   margin: 0;
-  margin-top: 1px;
   flex-shrink: 0;
   accent-color: var(--c-blue);
   cursor: pointer;
 }
-.pro-upsell-optin a { color: var(--c-blue); }
+.pro-upsell-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 22px;
+  flex-shrink: 0;
+  border-radius: 3px;
+  background: var(--c-navy);
+}
+.pro-upsell-badge svg { display: block; }
+.pro-upsell-badge svg path { fill: var(--c-text-on-dark); }
+.pro-upsell-claim { font-size: 15px; color: var(--c-text); line-height: 1.35; }
+.pro-upsell-claim strong { font-weight: 700; }
+.pro-upsell-terms {
+  margin: 6px 0 0;
+  padding-left: 84px;
+  font-size: 13px;
+  color: var(--c-text-secondary);
+}
+.pro-upsell-benefits-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px 20px;
+  margin-top: 8px;
+  padding-left: 84px;
+  font-size: 13px;
+  color: var(--c-text);
+}
+.pro-benefit { display: inline-flex; align-items: center; gap: 6px; }
+.pro-benefit svg { width: 12px; height: 12px; fill: #218972; flex-shrink: 0; }
+.pro-upsell-all { font-size: 13px; color: var(--c-blue); }
+.pro-upsell-divider {
+  border: none;
+  border-top: 1px solid var(--c-border);
+  margin: 14px 0 0;
+}
+.pro-upsell-legal {
+  margin: 12px 0 0;
+  font-size: 13px;
+  color: var(--c-text-secondary);
+}
+.pro-upsell-legal a { color: var(--c-blue); }
+@media (max-width: 640px) {
+  .pro-upsell-terms, .pro-upsell-benefits-row { padding-left: 0; }
+}
 .summary-row[hidden] { display: none; }
 /* Erklaerknopf in einer Summenzeile - mehrzeiliger Tooltip, weil die
    Regel laenger als eine Zeile ist. */
@@ -3366,21 +3392,20 @@ button { font: inherit; cursor: pointer; }
       </div>
 
       <div class="pro-upsell" data-pro-upsell>
-        <div class="pro-upsell-head">
-          <svg width="63" height="15" viewBox="0 0 38 9" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Conrad PRO"><path fill-rule="evenodd" clip-rule="evenodd" d="M22.5387 8.85372L20.3429 6.05665C22.3755 5.61932 23.4462 4.47042 23.4462 2.69746C23.4462 0.774114 22.3266 0 19.5155 0H13.6735L11.6777 8.85372H15.1095L16.5947 2.2729H18.7727C19.7467 2.2729 20.2576 2.57252 20.2576 3.13458C20.2576 3.93394 19.7952 4.33317 18.8462 4.33317H16.4482L18.0915 7.16776C19.0528 8.80413 19.138 8.85372 21.0612 8.85372H22.5387Z" fill="#376EEF"/><path fill-rule="evenodd" clip-rule="evenodd" d="M7.09494 2.2729C8.06898 2.2729 8.57991 2.57252 8.57991 3.13458C8.57991 3.93394 8.11744 4.33316 7.1685 4.33316H4.77051L5.82403 6.15128H7.2955C8.31421 6.15128 8.66512 6.05665 8.66512 6.05665C10.6978 5.61933 11.7685 4.47042 11.7685 2.69745C11.7685 0.774122 10.6489 0 7.83776 0H1.99574L0 8.85372H3.43179L4.91696 2.2729H7.09494Z" fill="#376EEF"/><path fill-rule="evenodd" clip-rule="evenodd" d="M7.09494 2.2729C8.06898 2.2729 8.57991 2.57252 8.57991 3.13458C8.57991 3.93394 8.11744 4.33316 7.1685 4.33316H4.452L4.04168 6.15128H7.2955C8.31421 6.15128 8.66512 6.05665 8.66512 6.05665C10.6978 5.61933 11.7685 4.47042 11.7685 2.69745C11.7685 0.774122 10.6489 0 7.83776 0H1.99574L0 8.85372H3.43179L4.91696 2.2729H7.09494Z" fill="#376EEF"/><path d="M34.2872 0H29.1727C25.9115 0 24.1348 2.0724 24.1348 5.89341C24.1348 8.09139 25.0718 8.85305 27.7977 8.85305L32.8025 8.85259C36.1126 8.85259 37.9986 6.83001 37.9986 3.27142C37.9986 0.874272 37.0132 0 34.2872 0ZM31.7927 6.71809L29.574 6.71786C28.0535 6.71786 27.5744 6.39289 27.5744 5.30668C27.5744 3.3961 28.5886 2.34712 30.3531 2.34712L32.5961 2.34735C33.9954 2.34735 34.3604 2.62187 34.3604 3.67108C34.3604 5.65612 33.4596 6.71809 31.7927 6.71809Z" fill="#376EEF"/></svg>
-          <span class="pro-upsell-price">59 € <span class="pro-upsell-price-sub">/ Jahr · zzgl. MwSt. · Separate Rechnung · Jederzeit Kündbar</span></span>
-          <span class="pro-upsell-saving" data-pro-saving>Mit PRO sparen Sie heute 5,95 € Versand.</span>
-        </div>
+        <label class="pro-upsell-optin">
+          <input type="checkbox" data-pro-checkbox>
+          <span class="pro-upsell-badge"><svg width="38" height="9" viewBox="0 0 38 9" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Conrad PRO"><path fill-rule="evenodd" clip-rule="evenodd" d="M22.5387 8.85372L20.3429 6.05665C22.3755 5.61932 23.4462 4.47042 23.4462 2.69746C23.4462 0.774114 22.3266 0 19.5155 0H13.6735L11.6777 8.85372H15.1095L16.5947 2.2729H18.7727C19.7467 2.2729 20.2576 2.57252 20.2576 3.13458C20.2576 3.93394 19.7952 4.33317 18.8462 4.33317H16.4482L18.0915 7.16776C19.0528 8.80413 19.138 8.85372 21.0612 8.85372H22.5387Z" fill="#376EEF"/><path fill-rule="evenodd" clip-rule="evenodd" d="M7.09494 2.2729C8.06898 2.2729 8.57991 2.57252 8.57991 3.13458C8.57991 3.93394 8.11744 4.33316 7.1685 4.33316H4.77051L5.82403 6.15128H7.2955C8.31421 6.15128 8.66512 6.05665 8.66512 6.05665C10.6978 5.61933 11.7685 4.47042 11.7685 2.69745C11.7685 0.774122 10.6489 0 7.83776 0H1.99574L0 8.85372H3.43179L4.91696 2.2729H7.09494Z" fill="#376EEF"/><path fill-rule="evenodd" clip-rule="evenodd" d="M7.09494 2.2729C8.06898 2.2729 8.57991 2.57252 8.57991 3.13458C8.57991 3.93394 8.11744 4.33316 7.1685 4.33316H4.452L4.04168 6.15128H7.2955C8.31421 6.15128 8.66512 6.05665 8.66512 6.05665C10.6978 5.61933 11.7685 4.47042 11.7685 2.69745C11.7685 0.774122 10.6489 0 7.83776 0H1.99574L0 8.85372H3.43179L4.91696 2.2729H7.09494Z" fill="#376EEF"/><path d="M34.2872 0H29.1727C25.9115 0 24.1348 2.0724 24.1348 5.89341C24.1348 8.09139 25.0718 8.85305 27.7977 8.85305L32.8025 8.85259C36.1126 8.85259 37.9986 6.83001 37.9986 3.27142C37.9986 0.874272 37.0132 0 34.2872 0ZM31.7927 6.71809L29.574 6.71786C28.0535 6.71786 27.5744 6.39289 27.5744 5.30668C27.5744 3.3961 28.5886 2.34712 30.3531 2.34712L32.5961 2.34735C33.9954 2.34735 34.3604 2.62187 34.3604 3.67108C34.3604 5.65612 33.4596 6.71809 31.7927 6.71809Z" fill="#376EEF"/></svg></span>
+          <span class="pro-upsell-claim"><strong>30 Tage kostenlos testen</strong> <span data-pro-saving>und heute 5,95 € Versand sparen</span></span>
+        </label>
+        <p class="pro-upsell-terms">danach 59 €/Jahr zzgl. MwSt. · Jederzeit online kündbar · Separate Rechnung</p>
         <div class="pro-upsell-benefits-row">
           <span class="pro-benefit"><svg viewBox="0 0 640 640" aria-hidden="true"><path d="M530.8 134.1C545.1 144.5 548.3 164.5 537.9 178.8L281.9 530.8C276.4 538.4 267.9 543.1 258.5 543.9C249.1 544.7 240 541.2 233.4 534.6L105.4 406.6C92.9 394.1 92.9 373.8 105.4 361.3C117.9 348.8 138.2 348.8 150.7 361.3L252.2 462.8L486.2 141.1C496.6 126.8 516.6 123.6 530.9 134z"/></svg>Versandkostenfreie Lieferung</span>
           <span class="pro-benefit"><svg viewBox="0 0 640 640" aria-hidden="true"><path d="M530.8 134.1C545.1 144.5 548.3 164.5 537.9 178.8L281.9 530.8C276.4 538.4 267.9 543.1 258.5 543.9C249.1 544.7 240 541.2 233.4 534.6L105.4 406.6C92.9 394.1 92.9 373.8 105.4 361.3C117.9 348.8 138.2 348.8 150.7 361.3L252.2 462.8L486.2 141.1C496.6 126.8 516.6 123.6 530.9 134z"/></svg>30 Tage Preisgarantie</span>
           <span class="pro-benefit"><svg viewBox="0 0 640 640" aria-hidden="true"><path d="M530.8 134.1C545.1 144.5 548.3 164.5 537.9 178.8L281.9 530.8C276.4 538.4 267.9 543.1 258.5 543.9C249.1 544.7 240 541.2 233.4 534.6L105.4 406.6C92.9 394.1 92.9 373.8 105.4 361.3C117.9 348.8 138.2 348.8 150.7 361.3L252.2 462.8L486.2 141.1C496.6 126.8 516.6 123.6 530.9 134z"/></svg>30 Tage Zahlungsrahmen</span>
-          <a class="pro-upsell-all" href="https://www.conrad.de/de/service/conrad-pro.html" target="_blank" rel="noopener noreferrer">Alle Vorteile ansehen</a>
+          <a class="pro-upsell-all" href="https://www.conrad.de/de/service/conrad-pro.html" target="_blank" rel="noopener noreferrer">Alle Vorteile</a>
         </div>
-        <label class="pro-upsell-optin">
-          <input type="checkbox" data-pro-checkbox>
-          <span><strong>30 Tage kostenlos testen</strong> – danach 59 €/Jahr zzgl. MwSt. Ich akzeptiere die <a href="#">AGB</a> und <a href="#">Kündigungsbedingungen</a>.</span>
-        </label>
+        <hr class="pro-upsell-divider">
+        <p class="pro-upsell-legal"><a href="#">Vertragsbedingungen</a> · <a href="#">Kündigungsbedingungen</a></p>
       </div>
       <hr class="cart-section-divider" data-pro-qa-divider>
       <div class="quickadd" data-quickadd>
@@ -3949,9 +3974,11 @@ button { font: inherit; cursor: pointer; }
     // Shipping is free from 100 EUR net anyway - pitch the warranty
     // benefit instead. Unchanged when PRO is ticked: the summary box
     // already confirms what the tick did.
+    // Ab 100 EUR netto ist der Versand ohnehin frei - dann zieht das
+    // Garantieversprechen statt der Versandersparnis.
     saving.textContent = net < 100
-      ? 'Mit PRO sparen Sie heute ' + fmt(SHIPPING) + ' Versand.'
-      : 'Mit PRO 12 Monate länger Garantie auf diese Bestellung.';
+      ? 'und heute ' + fmt(SHIPPING) + ' Versand sparen'
+      : 'und 12 Monate länger Garantie erhalten';
     document.querySelector('[data-pro-checkbox]').checked = pro;
 
     document.querySelector('[data-cart-count]').textContent = items.length + ' Artikel';
