@@ -2562,17 +2562,18 @@ button { font: inherit; cursor: pointer; }
 }
 
 /* ===== NEWSLETTER =====
-   Band ueber dem Fussbereich. Nutzen links, Eingabe rechts, darunter
-   Einwilligung und Gutscheinbedingungen als Pflichtangaben. */
+   Band ueber dem Fussbereich. Der Farbstreifen laeuft ueber die volle
+   Breite, der Inhalt bleibt eine schmale zentrierte Gruppe - sonst
+   reissen Text und Eingabe auf breiten Bildschirmen auseinander. */
 .newsletter { margin-top: 60px; background: var(--c-blue-tint); border-top: 1px solid var(--c-border); }
 .newsletter-inner {
-  max-width: 1680px;
+  max-width: 1100px;
   margin: 0 auto;
   padding: 28px 24px;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 480px);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 420px);
   align-items: center;
-  gap: 20px 48px;
+  gap: 20px 40px;
 }
 .newsletter-eyebrow {
   margin: 0 0 4px;
@@ -2588,14 +2589,12 @@ button { font: inherit; cursor: pointer; }
   font-size: 14px;
   line-height: 1.5;
   color: var(--c-text-secondary);
-  max-width: 62ch;
 }
 .newsletter-terms {
   margin: 8px 0 0;
   font-size: 12px;
   line-height: 1.5;
   color: var(--c-text-tertiary);
-  max-width: 62ch;
 }
 .newsletter-form { margin: 0; }
 .newsletter-field { display: flex; gap: 8px; }
