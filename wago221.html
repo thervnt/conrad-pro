@@ -1877,20 +1877,24 @@ button { font: inherit; cursor: pointer; }
 /* ===== PRODUKTDATEN MELDEN =====
    Zurueckhaltender Einstieg in der Chip-Zeile, Dialog nach dem Muster
    der Kauf-Bestaetigung (Backdrop, ESC, Fokusfalle). */
+/* Gleiche Knopfform wie das Datenblatt daneben. */
 .report-trigger {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 6px 0;
-  background: none;
-  border: none;
+  gap: 8px;
+  padding: 6px 14px;
+  background: var(--c-bg-white);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-pill);
   font: inherit;
   font-size: 13px;
-  color: var(--c-text-secondary);
+  font-weight: 600;
+  color: var(--c-text);
+  white-space: nowrap;
   cursor: pointer;
 }
-.report-trigger svg { width: 14px; height: 14px; }
-.report-trigger:hover { color: var(--c-blue); text-decoration: underline; }
+.report-trigger svg { width: 16px; height: 16px; color: var(--c-text-secondary); flex-shrink: 0; }
+.report-trigger:hover { background: var(--c-bg-tint); }
 .report-backdrop {
   position: fixed;
   inset: 0;
@@ -3303,8 +3307,8 @@ button { font: inherit; cursor: pointer; }
       <span class="id-chip">EAN <button class="id-chip-value" data-copy data-ean title="In Zwischenablage kopieren"><span class="id-chip-num">4050821808442</span><svg class="id-chip-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button></span>
       <span class="id-chip">Hst.-Teile-Nr. <button class="id-chip-value" data-copy data-hst title="In Zwischenablage kopieren"><span class="id-chip-num">221-413-50</span><svg class="id-chip-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button></span>
       <span class="id-chip">Bestell-Nr. <button class="id-chip-value" data-copy data-bestell title="In Zwischenablage kopieren"><span class="id-chip-num">1188440</span><svg class="id-chip-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button></span>
-      <button type="button" class="report-trigger" data-report-open><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>Fehler melden</button>
       <div class="id-chip-actions">
+        <button type="button" class="report-trigger" data-report-open><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>Fehler melden</button>
         <div class="datenblatt-group" data-datenblatt>
           <details class="datenblatt-dropdown">
             <summary class="datenblatt-trigger" aria-label="Sprache des Datenblatts ändern">
