@@ -1321,12 +1321,12 @@ button { font: inherit; cursor: pointer; }
   margin: 12px 0;
 }
 .cart-card > .cart-card-price { margin-top: 6px; }
-.icon-btn.icon-btn-danger:hover { border-color: #d9234c; color: #d9234c; }
-.icon-btn.icon-btn-danger:hover svg { stroke: #d9234c; }
+.icon-btn.icon-btn-danger:hover { border-color: var(--c-danger); color: var(--c-danger); }
+.icon-btn.icon-btn-danger:hover svg { stroke: var(--c-danger); }
 /* Heart buttons behave like the PDP wishlist button. */
 .wishlist-btn:hover { border-color: var(--c-blue); }
 .icon-btn.bounce svg { animation: wishlist-bounce 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); }
-.icon-btn[data-act="wishlist"].active { color: var(--c-blue); border-color: var(--c-blue); background: #eaf0fe; }
+.icon-btn[data-act="wishlist"].active { color: var(--c-blue); border-color: var(--c-blue); background: var(--c-blue-tint); }
 .icon-btn[data-act="wishlist"].active svg path { fill: var(--c-blue); stroke: var(--c-blue); }
 .cart-card-img {
   width: 110px;
@@ -1507,7 +1507,7 @@ button { font: inherit; cursor: pointer; }
 .quickadd-add {
   height: 48px;
   padding: 0 20px;
-  background: #E2E5FA;
+  background: var(--c-blue-soft);
   color: var(--c-navy);
   border: none;
   border-radius: var(--radius-sm);
@@ -1517,11 +1517,11 @@ button { font: inherit; cursor: pointer; }
   cursor: pointer;
   flex-shrink: 0;
 }
-.quickadd-add:hover { background: #d6dcf8; }
+.quickadd-add:hover { background: var(--c-blue-soft-hover); }
 .quickadd-hint { font-size: 12px; color: var(--c-text-tertiary); margin: 8px 0 0; }
 .quickadd-msg { font-size: 13px; margin: 8px 0 0; }
-.quickadd-msg.ok { color: #218972; font-weight: 500; }
-.quickadd-msg.err { color: #d9234c; font-weight: 500; }
+.quickadd-msg.ok { color: var(--c-success); font-weight: 500; }
+.quickadd-msg.err { color: var(--c-danger); font-weight: 500; }
 .quickadd-hint a { color: var(--c-blue); }
 
 /* ===== EMPTY CART STATE ===== */
@@ -1563,11 +1563,11 @@ button { font: inherit; cursor: pointer; }
 .cart-empty-btn.primary:hover { background: var(--c-blue-hover); text-decoration: none; }
 /* Gleicher Sekundaerbutton wie in Summenbox und Schnellerfassung. */
 .cart-empty-btn.secondary {
-  background: #E2E5FA;
+  background: var(--c-blue-soft);
   color: var(--c-navy);
   border-color: transparent;
 }
-.cart-empty-btn.secondary:hover { background: #d6dcf8; text-decoration: none; }
+.cart-empty-btn.secondary:hover { background: var(--c-blue-soft-hover); text-decoration: none; }
 .cart-empty-divider {
   border: none;
   border-top: 1px solid var(--c-border);
@@ -1703,14 +1703,14 @@ button { font: inherit; cursor: pointer; }
   flex-shrink: 0;
   padding: 4px 10px;
   border-radius: var(--radius-sm);
-  background: #E0F4EE;
-  color: #0F3D2E;
+  background: var(--c-success-bg);
+  color: var(--c-success-text);
   font-size: 13px;
   font-weight: 600;
   white-space: nowrap;
 }
 .pro-savings-check { width: 14px; height: 14px; display: none; flex-shrink: 0; }
-.pro-savings.is-active { background: #218972; color: var(--c-text-on-dark); }
+.pro-savings.is-active { background: var(--c-success); color: var(--c-text-on-dark); }
 .pro-savings.is-active .pro-savings-check { display: block; }
 .pro-upsell-claim strong { font-weight: 700; }
 .pro-upsell-terms {
@@ -1730,7 +1730,7 @@ button { font: inherit; cursor: pointer; }
   color: var(--c-text);
 }
 .pro-benefit { display: inline-flex; align-items: center; gap: 7px; }
-.pro-benefit svg { width: 16px; height: 16px; fill: #218972; flex-shrink: 0; }
+.pro-benefit svg { width: 16px; height: 16px; fill: var(--c-success); flex-shrink: 0; }
 .pro-upsell-all { font-size: 14px; color: var(--c-blue); }
 .pro-upsell-divider {
   border: none;
@@ -1798,7 +1798,7 @@ button { font: inherit; cursor: pointer; }
 .summary-pro-usp[hidden] { display: none; }
 /* Brief highlight when the PRO tick changes shipping/total. */
 @keyframes sum-pulse {
-  0% { background: #eaf0fe; }
+  0% { background: var(--c-blue-tint); }
   100% { background: transparent; }
 }
 .summary-row.pulse, .summary-total-row.pulse { animation: sum-pulse 0.9s ease; }
@@ -1862,7 +1862,7 @@ button { font: inherit; cursor: pointer; }
   justify-content: center;
   width: 100%;
   height: 48px;
-  background: #E2E5FA;
+  background: var(--c-blue-soft);
   color: var(--c-navy);
   border: none;
   padding: 0 18px;
@@ -1874,7 +1874,7 @@ button { font: inherit; cursor: pointer; }
   cursor: pointer;
   margin-top: 8px;
 }
-.summary-cta-secondary:hover { background: #d6dcf8; }
+.summary-cta-secondary:hover { background: var(--c-blue-soft-hover); }
 .summary-cta:disabled, .summary-cta-secondary:disabled { opacity: 0.45; cursor: default; }
 
 /* Ein Einloese-Element, in der Summenbox statt als eigene Karten. */
@@ -1914,7 +1914,7 @@ button { font: inherit; cursor: pointer; }
   flex-shrink: 0;
   height: 40px;
   padding: 0 16px;
-  background: #E2E5FA;
+  background: var(--c-blue-soft);
   color: var(--c-navy);
   border: none;
   border-radius: var(--radius-sm);
@@ -1923,7 +1923,7 @@ button { font: inherit; cursor: pointer; }
   font-weight: 600;
   cursor: pointer;
 }
-.summary-acc-apply:hover { background: #d6dcf8; }
+.summary-acc-apply:hover { background: var(--c-blue-soft-hover); }
 .cart-acc-input { width: 100%; }
 @media (max-width: 640px) {
   .recent-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
