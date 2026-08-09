@@ -26,16 +26,6 @@
   --c-bg-white: #ffffff;
   --c-bg-tint: #f8f9fb;
 
-  --c-green: #0e8c42;
-  --c-green-bg: #e3f3ea;
-  --c-yellow: #FFD117;
-  --c-yellow-dark: #b88b00;
-  --c-pink-bg: #fde9ee;
-  --c-pink-text: #b9134e;
-  --c-purple-bg: #ecebfb;
-  --c-purple-border: #c9c5f0;
-  --c-purple-icon: #5d52c2;
-
   /* Semantische Farben - waren als rohe Hexwerte ueber beide Dateien
      verstreut und drohten auseinanderzulaufen. */
   --c-success: #218972;
@@ -53,6 +43,7 @@
   --radius: 8px;
   --radius-sm: 6px;
   --radius-pill: 999px;
+  --radius-lg: 12px;   /* Overlays, Dialoge, Suchfeld */
 }
 
 * { box-sizing: border-box; }
@@ -171,7 +162,7 @@ button { font: inherit; cursor: pointer; }
   width: 56px;
   height: 27px;
   padding: 0;
-  border-radius: 3px;
+  border-radius: 4px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -212,7 +203,7 @@ button { font: inherit; cursor: pointer; }
 /* ===== SEARCH BAR (white card on navy bg) ===== */
 .search-card {
   background: var(--c-bg-white);
-  border-radius: 12px;
+  border-radius: var(--radius-lg);
   height: 72px;
   padding: 0 12px 0 20px;
   display: flex;
@@ -1039,7 +1030,7 @@ button { font: inherit; cursor: pointer; }
   gap: 12px;
   padding: 14px 12px;
   border-radius: 4px;
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 600;
   color: var(--c-text);
   text-decoration: none;
@@ -1078,7 +1069,7 @@ button { font: inherit; cursor: pointer; }
   left: 0;
   width: var(--fly-w, 330px);
   background: var(--c-bg-white);
-  border-radius: 12px;
+  border-radius: var(--radius-lg);
   box-shadow: 0 14px 32px rgba(15, 23, 42, 0.18);
   z-index: 940;
   display: none;
@@ -1273,7 +1264,7 @@ button { font: inherit; cursor: pointer; }
   justify-content: space-between;
   gap: 16px;
 }
-.cart-title { font-size: 22px; font-weight: 700; margin: 0; }
+.cart-title { font-size: 20px; font-weight: 700; margin: 0; }
 .cart-title .cart-count { font-size: 14px; font-weight: 500; color: var(--c-text-secondary); margin-left: 8px; }
 .cart-layout {
   display: grid;
@@ -1687,7 +1678,7 @@ button { font: inherit; cursor: pointer; }
   width: 56px;
   height: 27px;
   flex-shrink: 0;
-  border-radius: 3px;
+  border-radius: 4px;
   background: var(--c-blue);
 }
 .pro-upsell-badge svg { display: block; }
