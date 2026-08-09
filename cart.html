@@ -3158,6 +3158,14 @@ button { font: inherit; cursor: pointer; }
 .summary-total-label { font-size: 18px; font-weight: 700; }
 .summary-total-value { font-size: 20px; font-weight: 700; font-variant-numeric: tabular-nums; }
 .summary-total-sub { font-size: 12px; color: var(--c-text-secondary); margin: 0 0 14px; }
+/* Erklaert, was die Express-Bestellung ueberspringt. */
+.summary-cta-note {
+  margin: 6px 0 0;
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--c-text-secondary);
+  text-align: center;
+}
 .summary-cta {
   display: flex;
   align-items: center;
@@ -3473,9 +3481,10 @@ button { font: inherit; cursor: pointer; }
           <span class="summary-total-label">Gesamtpreis</span>
           <span class="summary-total-value" data-sum-total>71,35 €</span>
         </div>
-        <p class="summary-total-sub">inkl. MwSt. und Versand</p>
+        <p class="summary-total-sub">inkl. MwSt.</p>
         <button type="button" class="summary-cta" data-cta-checkout>Weiter zur Kasse</button>
-        <button type="button" class="summary-cta-secondary" data-cta-express>Sofort bestellen</button>
+        <button type="button" class="summary-cta-secondary" data-cta-express>Express-Bestellung</button>
+        <p class="summary-cta-note">Mit gespeicherter Adresse und Zahlungsart</p>
 
         <details class="summary-acc">
           <summary>
