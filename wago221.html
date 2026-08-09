@@ -1730,12 +1730,16 @@ button { font: inherit; cursor: pointer; }
    Bildflaeche in der Breite der Karte darunter, darauf eine weisse
    Karte, die hoechstens die halbe Breite einnimmt und auf allen
    Seiten Bild stehen laesst. */
+/* Werbeflaeche und Serienkarte teilen sich einen Umschlag, damit der
+   Abstand darueber und darunter gleich gross bleibt (24 px wie das
+   Raster der Seite). */
+.probanner-wrap { padding-top: 0; }
 .probanner {
   position: relative;
   display: flex;
   align-items: center;
   min-height: 200px;
-  margin-bottom: 16px;
+  margin-bottom: 24px;
   padding: 22px;
   border-radius: var(--radius);
   overflow: hidden;
@@ -3745,8 +3749,8 @@ button { font: inherit; cursor: pointer; }
     </div>
   </aside>
 
-  <!-- WERBEFLAECHE CONRAD PRO -->
-<div class="tab-content-wrap">
+  <!-- WERBEFLAECHE CONRAD PRO UND ALTERNATIVE SERIEN -->
+<div class="tab-content-wrap probanner-wrap">
   <aside class="probanner" aria-labelledby="probanner-title">
     <div class="probanner-card">
       <span class="probanner-badge">Conrad
@@ -3757,10 +3761,8 @@ button { font: inherit; cursor: pointer; }
       <a class="probanner-cta" href="#">Vorteile entdecken</a>
     </div>
   </aside>
-</div>
 
   <!-- ALTERNATIVE SERIEN & ZUBEHÖR (above the section nav) -->
-<div class="tab-content-wrap">
   <section class="tab-content">
     <h2>Alternative Serien</h2>
     <div class="serie-block">
