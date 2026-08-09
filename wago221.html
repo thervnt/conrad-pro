@@ -2567,36 +2567,40 @@ button { font: inherit; cursor: pointer; }
    reissen Text und Eingabe auf breiten Bildschirmen auseinander. */
 .newsletter { margin-top: 60px; background: var(--c-blue-tint); border-top: 1px solid var(--c-border); }
 .newsletter-inner {
-  max-width: 1100px;
+  max-width: 780px;
   margin: 0 auto;
-  padding: 28px 24px;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 420px);
-  align-items: center;
-  gap: 20px 40px;
+  padding: 34px 24px 36px;
+  text-align: center;
 }
 .newsletter-eyebrow {
-  margin: 0 0 4px;
+  margin: 0 0 6px;
   font-size: 12px;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.06em;
   color: var(--c-blue);
 }
-.newsletter-title { margin: 0; font-size: 20px; font-weight: 700; color: var(--c-text); }
-.newsletter-sub {
-  margin: 6px 0 0;
-  font-size: 14px;
-  line-height: 1.5;
-  color: var(--c-text-secondary);
+.newsletter-title { margin: 0; font-size: 28px; font-weight: 700; line-height: 1.25; color: var(--c-text); }
+/* Vorteile linksbuendig, der Block als Ganzes mittig - eine zentrierte
+   Aufzaehlung waere ohne feste Lesekante schwer zu erfassen. */
+.newsletter-benefits {
+  display: inline-block;
+  margin: 16px 0 22px;
+  padding: 0;
+  list-style: none;
+  text-align: left;
 }
-.newsletter-terms {
-  margin: 8px 0 0;
-  font-size: 12px;
-  line-height: 1.5;
-  color: var(--c-text-tertiary);
+.newsletter-benefit {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  font-size: 15px;
+  line-height: 1.45;
+  color: var(--c-text);
 }
-.newsletter-form { margin: 0; }
+.newsletter-benefit + .newsletter-benefit { margin-top: 8px; }
+.newsletter-benefit svg { width: 17px; height: 17px; flex-shrink: 0; margin-top: 2px; color: var(--c-success); }
+.newsletter-form { max-width: 700px; margin: 0 auto; }
 .newsletter-field { display: flex; gap: 8px; }
 .newsletter-input {
   flex: 1;
@@ -2634,16 +2638,53 @@ button { font: inherit; cursor: pointer; }
 .newsletter-btn:hover { background: var(--c-blue-hover); }
 .newsletter-error { margin: 8px 0 0; font-size: 13px; font-weight: 500; color: var(--c-danger); }
 .newsletter-error[hidden] { display: none; }
-.newsletter-consent { margin: 10px 0 0; font-size: 12px; line-height: 1.5; color: var(--c-text-tertiary); }
+.newsletter-consent {
+  max-width: 680px;
+  margin: 12px auto 0;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--c-text-tertiary);
+}
 .newsletter-consent a { color: var(--c-text-secondary); text-decoration: underline; }
 .newsletter-consent a:hover { color: var(--c-blue); }
+/* Teilnahmebedingungen eingeklappt - vollstaendig verfuegbar, aber ohne
+   den Aufruf zu erschlagen. */
+.newsletter-terms { max-width: 680px; margin: 12px auto 0; }
+.newsletter-terms summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  color: var(--c-text-secondary);
+  cursor: pointer;
+  list-style: none;
+}
+.newsletter-terms summary::-webkit-details-marker { display: none; }
+.newsletter-terms summary::after { content: '+'; font-size: 14px; line-height: 1; }
+.newsletter-terms[open] summary::after { content: '−'; }
+.newsletter-terms summary:hover { color: var(--c-blue); }
+.newsletter-terms p {
+  margin: 8px 0 0;
+  text-align: left;
+  font-size: 11px;
+  line-height: 1.55;
+  color: var(--c-text-tertiary);
+}
 /* Bestaetigung nach dem Absenden - Double-Opt-in, daher noch kein Abschluss. */
-.newsletter-done { display: flex; align-items: flex-start; gap: 10px; }
+.newsletter-done {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  max-width: 700px;
+  margin: 0 auto;
+  text-align: left;
+}
 .newsletter-done[hidden] { display: none; }
 .newsletter-done svg { width: 20px; height: 20px; flex-shrink: 0; color: var(--c-success); margin-top: 1px; }
 .newsletter-done-text { margin: 0; font-size: 14px; line-height: 1.5; color: var(--c-text); }
-@media (max-width: 900px) {
-  .newsletter-inner { grid-template-columns: 1fr; gap: 16px; }
+@media (max-width: 640px) {
+  .newsletter-inner { padding: 28px 20px 30px; }
+  .newsletter-title { font-size: 20px; }
 }
 @media (max-width: 520px) {
   .newsletter-field { flex-direction: column; }
@@ -3806,29 +3847,46 @@ button { font: inherit; cursor: pointer; }
 
 <section class="newsletter" aria-labelledby="newsletter-title">
   <div class="newsletter-inner">
-    <div class="newsletter-text">
-      <p class="newsletter-eyebrow">Newsletter</p>
-      <h2 class="newsletter-title" id="newsletter-title">10 € Gutschein für Ihre nächste Bestellung</h2>
-      <p class="newsletter-sub">Einmal pro Woche: neue Produkte, Preisaktionen und technische Hinweise aus Ihrem Sortiment. Jederzeit mit einem Klick abbestellbar.</p>
-      <p class="newsletter-terms">Gutschein ab 50 € Bestellwert (netto), einmalig einlösbar, gültig 3 Monate, nicht mit anderen Aktionen kombinierbar.</p>
-    </div>
+    <p class="newsletter-eyebrow">Newsletter für Geschäftskunden</p>
+    <h2 class="newsletter-title" id="newsletter-title">10 € Gutschein sichern – ab 100 € Einkaufswert</h2>
+
+    <ul class="newsletter-benefits">
+      <li class="newsletter-benefit">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+        Gutscheincode direkt mit dem ersten Newsletter
+      </li>
+      <li class="newsletter-benefit">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+        Rabattaktionen und Vorteilscodes dauerhaft zuerst erhalten
+      </li>
+      <li class="newsletter-benefit">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+        Messetermine und Services für Geschäftskunden
+      </li>
+    </ul>
 
     <form class="newsletter-form" data-newsletter-form novalidate>
       <div class="newsletter-field">
         <label class="visually-hidden" for="newsletter-mail">E-Mail-Adresse</label>
         <input type="email" id="newsletter-mail" name="email" class="newsletter-input"
                placeholder="E-Mail-Adresse" autocomplete="email" inputmode="email"
-               aria-describedby="newsletter-consent" data-newsletter-input>
-        <button type="submit" class="newsletter-btn">Newsletter abonnieren</button>
+               list="newsletter-mails" aria-describedby="newsletter-consent" data-newsletter-input>
+        <datalist id="newsletter-mails" data-newsletter-list></datalist>
+        <button type="submit" class="newsletter-btn">Anmelden und Gutschein sichern</button>
       </div>
       <p class="newsletter-error" role="alert" data-newsletter-error hidden></p>
-      <p class="newsletter-consent" id="newsletter-consent">Mit der Anmeldung willigen Sie in den Erhalt des Newsletters ein. Sie können die Einwilligung jederzeit widerrufen. <a href="#">Datenschutzhinweise</a></p>
+      <p class="newsletter-consent" id="newsletter-consent">Mit Ihrem Klick stimmen Sie dem Empfang des Newsletters zu und sind damit einverstanden, dass Öffnungs- und Klickraten in einem Empfängerprofil gemessen und ausgewertet werden, um künftige Newsletter zu gestalten. Sie können die Einwilligung jederzeit widerrufen, etwa über den Abmeldebutton in jedem Newsletter. <a href="#">Datenschutzerklärung</a></p>
     </form>
 
     <div class="newsletter-done" data-newsletter-done hidden>
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
       <p class="newsletter-done-text">Fast geschafft: Wir haben Ihnen eine E-Mail an <strong data-newsletter-mail></strong> geschickt. Bestätigen Sie darin die Anmeldung, dann erhalten Sie den Gutscheincode.</p>
     </div>
+
+    <details class="newsletter-terms">
+      <summary>Teilnahmebedingungen</summary>
+      <p>Nicht mit anderen Vorteilscodes kombinierbar. 1× pro Person. Keine Barauszahlung. Nach Erhalt dieses Newsletters ist der Gutschein 4 Wochen gültig auf conrad.de oder in Ihrer Filiale. Mindesteinkaufswert: 100 € zzgl. MwSt. Von Rabatten ausgenommen sind Artikel der Marken Apple, Samsung, BambuLab und Raspberry Pi sowie Marketplace-Bestellungen (Drittanbieter), Prepaid- und Geschenkkarten, Bücher und die Conrad PRO Mitgliedsgebühr. Beim Filialkauf den Vorteilscode an der Kasse vorlegen. Fällt durch Rücksendung im Rahmen des Rückgaberechts der Rechnungsbetrag unter den Mindesteinkaufswert, verliert der Gutschein seine Gültigkeit und es wird der reguläre Preis für die verbleibende Ware berechnet.</p>
+    </details>
   </div>
 </section>
 
@@ -3842,6 +3900,26 @@ button { font: inherit; cursor: pointer; }
   var error = form.querySelector('[data-newsletter-error]');
   var done = document.querySelector('[data-newsletter-done]');
   var mailOut = done.querySelector('[data-newsletter-mail]');
+  var liste = form.querySelector('[data-newsletter-list]');
+  var SPEICHER = 'conradNewsletterMails';
+
+  /* Bereits eingegebene Adressen als Vorschlaege anbieten. Der Browser
+     merkt sich nichts, weil das Formular nie wirklich abgeschickt wird. */
+  function lade() {
+    try { return JSON.parse(localStorage.getItem(SPEICHER)) || []; } catch (e) { return []; }
+  }
+  function zeigeVorschlaege() {
+    liste.innerHTML = lade().map(function (m) {
+      return '<option value="' + m.replace(/"/g, '&quot;') + '">';
+    }).join('');
+  }
+  function merke(mail) {
+    var alle = lade().filter(function (m) { return m !== mail; });
+    alle.unshift(mail);
+    try { localStorage.setItem(SPEICHER, JSON.stringify(alle.slice(0, 5))); } catch (e) {}
+    zeigeVorschlaege();
+  }
+  zeigeVorschlaege();
 
   function zeigeFehler(text) {
     error.textContent = text;
@@ -3864,6 +3942,7 @@ button { font: inherit; cursor: pointer; }
     if (!/^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i.test(wert)) {
       return zeigeFehler('Diese E-Mail-Adresse ist unvollständig. Beispiel: name@firma.de');
     }
+    merke(wert);
     mailOut.textContent = wert;
     form.hidden = true;
     done.hidden = false;
