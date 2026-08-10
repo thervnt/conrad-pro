@@ -264,7 +264,8 @@ button { font: inherit; cursor: pointer; }
   gap: 8px;
 }
 .search-btn:hover { background: var(--c-blue-hover); }
-.search-btn svg { width: 16px; height: 16px; }
+.search-btn-icon { width: 16px; height: 16px; display: none; }
+.search-btn-text { display: inline; }
 
 /* ===== BREADCRUMB ===== */
 .breadcrumb {
@@ -364,9 +365,11 @@ button { font: inherit; cursor: pointer; }
   .search-card { height: 48px; padding: 0 6px 0 12px; gap: 8px; }
   .search-card .search-input { font-size: 14px; }
   .search-input::placeholder { font-size: 13px; }
-  .search-btn { padding: 0 12px; font-size: 0; }
-  .search-btn::before { content: ""; }              /* keep button alive */
-  .search-btn svg { width: 16px; height: 16px; }
+  /* Schmal: nur die Lupe im Knopf, dafuer entfaellt die zweite im Feld. */
+  .search-card .search-icon { display: none; }
+  .search-btn { padding: 0 14px; }
+  .search-btn-text { display: none; }
+  .search-btn-icon { width: 18px; height: 18px; display: block; }
 
   /* --- Breadcrumb ------------------------------------------- */
   .breadcrumb {
@@ -2369,8 +2372,9 @@ button { font: inherit; cursor: pointer; }
     <div class="search-card">
       <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
       <input type="text" class="search-input" placeholder="Stellen Sie eine Frage, zum Beispiel: Welche Spannung benötige ich für ein Labornetzgerät?">
-      <button class="search-btn">
-        Suchen
+      <button class="search-btn" aria-label="Suchen">
+        <svg class="search-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <span class="search-btn-text">Suchen</span>
       </button>
     </div>
   </div>
