@@ -777,9 +777,12 @@ button { font: inherit; cursor: pointer; }
 }
 /* Alle fünf Werte in eine Zeile - vier Spalten erzwangen einen
    Umbruch auf zwei Reihen. */
+/* Feste fuenf Spalten ergaben bei schmaler Infospalte 65 px pro Feld -
+   zu wenig fuer "Bemessungsspannung", die Beschriftungen liefen
+   ineinander. Die Spaltenzahl richtet sich jetzt nach dem Platz. */
 .keyspecs-grid {
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
   gap: 12px 16px;
 }
 @media (max-width: 1023px) {
@@ -794,6 +797,8 @@ button { font: inherit; cursor: pointer; }
 .keyspec-label {
   font-size: 11px;
   color: var(--c-text-secondary);
+  overflow-wrap: break-word;
+  hyphens: auto;
 }
 .keyspec-value {
   font-size: 14px;
