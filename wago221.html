@@ -2818,29 +2818,29 @@ button { font: inherit; cursor: pointer; }
 .doc-item {
   display: flex;
   align-items: center;
-  gap: 14px;
-  padding: 14px 0;
+  gap: 12px;
+  padding: 9px 0;
   border-bottom: 1px solid var(--c-border);
 }
 .doc-item:last-child { border-bottom: none; }
 .doc-icon { flex-shrink: 0; display: inline-flex; }
 /* Groesser als am Knopf oben, sonst gleiche Zeichnung und Farbe. */
-.doc-icon .datenblatt-pdf-icon { width: 26px; height: 26px; display: block; }
-.doc-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
-.doc-title { font-size: 15px; font-weight: 600; color: var(--c-text); }
+.doc-icon .datenblatt-pdf-icon { width: 22px; height: 22px; display: block; }
+.doc-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
+.doc-title { font-size: 14px; font-weight: 600; line-height: 1.35; color: var(--c-text); }
 .doc-file {
-  font-size: 13px;
+  font-size: 12px;
+  line-height: 1.35;
   color: var(--c-text-secondary);
   overflow-wrap: anywhere;
 }
-.doc-meta { font-size: 12px; color: var(--c-text-tertiary); }
 .doc-fallback { margin-left: 8px; color: var(--c-warning); }
 .doc-open {
   flex-shrink: 0;
   display: inline-flex;
   align-items: center;
-  height: 36px;
-  padding: 0 18px;
+  height: 32px;
+  padding: 0 16px;
   background: var(--c-blue-soft);
   border-radius: var(--radius-sm);
   font-size: 14px;
@@ -2850,8 +2850,10 @@ button { font: inherit; cursor: pointer; }
 }
 .doc-open:hover { background: var(--c-blue-soft-hover); }
 @media (max-width: 560px) {
-  .doc-item { flex-wrap: wrap; }
-  .doc-open { width: 100%; justify-content: center; margin-left: 40px; }
+  /* Der Knopf rueckt unter den Text, eingerueckt auf Hoehe des Titels.
+     Die Breite muss den Einzug abziehen, sonst laeuft die Zeile ueber. */
+  .doc-item { flex-wrap: wrap; row-gap: 8px; }
+  .doc-open { width: calc(100% - 34px); justify-content: center; margin-left: 34px; }
 }
 
 /* ===== FOOTER ===== */
@@ -6247,8 +6249,7 @@ document.addEventListener('click', e => {
         '<span class="doc-icon" aria-hidden="true">' + SVG_PDF + '</span>' +
         '<span class="doc-body">' +
           '<span class="doc-title">' + d.titel + '</span>' +
-          '<span class="doc-file">' + name + '</span>' +
-          '<span class="doc-meta">PDF · ' + groesse(pfad) + ' · ' + sprachHinweis + '</span>' +
+                    '<span class="doc-file">' + name + ' · ' + groesse(pfad) + ' · ' + sprachHinweis + '</span>' +
         '</span>' +
         '<a class="doc-open" href="' + pfad + '" target="_blank" rel="noopener noreferrer" ' +
           'hreflang="' + genutzt + '" aria-label="' + d.titel + ' öffnen">Öffnen</a>' +
