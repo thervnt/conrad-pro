@@ -2760,6 +2760,99 @@ button { font: inherit; cursor: pointer; }
   .newsletter-btn { width: 100%; }
 }
 
+/* ===== DOKUMENTE =====
+   Eine Sprachwahl fuer die ganze Karte, darunter je Dokument eine Zeile
+   mit Titel, Dateiname und Oeffnen-Knopf. */
+.doc-lang { position: relative; }
+.doc-lang > summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 34px;
+  padding: 0 12px;
+  background: var(--c-bg-white);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-xs);
+  font-size: 13px;
+  color: var(--c-text);
+  cursor: pointer;
+  list-style: none;
+}
+.doc-lang > summary::-webkit-details-marker { display: none; }
+.doc-lang > summary:hover { border-color: var(--c-border-strong); }
+.doc-lang > summary svg { width: 14px; height: 14px; color: var(--c-text-secondary); }
+.doc-lang-label { color: var(--c-text-secondary); }
+.doc-lang-current { font-weight: 600; }
+.doc-lang-menu {
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  z-index: 20;
+  min-width: 170px;
+  background: var(--c-bg-white);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-sm);
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.12);
+  overflow: hidden;
+}
+.doc-lang-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 9px 12px;
+  background: none;
+  border: none;
+  border-bottom: 1px solid var(--c-border);
+  font: inherit;
+  font-size: 13px;
+  color: var(--c-text);
+  text-align: left;
+  cursor: pointer;
+}
+.doc-lang-item:last-child { border-bottom: none; }
+.doc-lang-item:hover { background: var(--c-bg-tint); }
+.doc-lang-item.selected { background: var(--c-bg-tint); font-weight: 600; }
+
+.doc-list { list-style: none; margin: 0; padding: 0; }
+.doc-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--c-border);
+}
+.doc-item:last-child { border-bottom: none; }
+.doc-icon { flex-shrink: 0; display: inline-flex; }
+.doc-icon svg { width: 26px; height: 26px; display: block; }
+.doc-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.doc-title { font-size: 15px; font-weight: 600; color: var(--c-text); }
+.doc-file {
+  font-size: 13px;
+  color: var(--c-text-secondary);
+  overflow-wrap: anywhere;
+}
+.doc-meta { font-size: 12px; color: var(--c-text-tertiary); }
+.doc-fallback { margin-left: 8px; color: var(--c-warning); }
+.doc-open {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  height: 36px;
+  padding: 0 18px;
+  background: var(--c-blue-soft);
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--c-navy);
+  text-decoration: none;
+}
+.doc-open:hover { background: var(--c-blue-soft-hover); }
+@media (max-width: 560px) {
+  .doc-item { flex-wrap: wrap; }
+  .doc-open { width: 100%; justify-content: center; margin-left: 40px; }
+}
+
 /* ===== FOOTER ===== */
 /* ===== VOLLSTAENDIGER FUSSBEREICH (PDP) =====
    Heller Block mit Zahlarten, Rubriken und Siegeln, darunter die
@@ -3827,6 +3920,7 @@ button { font: inherit; cursor: pointer; }
     <button class="tab" data-tab-link="tech">Technische Daten</button>
     <button class="tab" data-tab-link="zusammen">Oft zusammen gekauft</button>
     <button class="tab" data-tab-link="zubehoer">Zubehör</button>
+    <button class="tab" data-tab-link="dokumente">Dokumente</button>
     <button class="tab" data-tab-link="faq">Häufige Fragen</button>
     <button class="tab" data-tab-link="recht">Produktsicherheit</button>
   </div>
@@ -3871,6 +3965,27 @@ button { font: inherit; cursor: pointer; }
     <h2>Zubehör &amp; verwandte Produkte</h2>
     <div class="serie-block">
       <div class="serie-grid" data-series-grid></div>
+    </div>
+  </section>
+  <section class="tab-content" id="section-dokumente" data-section="dokumente">
+    <div class="section-head">
+      <h2>Dokumente</h2>
+      <details class="doc-lang" data-doc-lang>
+        <summary class="doc-lang-trigger" aria-label="Sprache der Dokumente wählen">
+          <span class="doc-lang-label">Sprache</span>
+          <span class="doc-lang-current" data-doc-lang-current>DE</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+        </summary>
+        <div class="doc-lang-menu" role="menu">
+          <button type="button" class="doc-lang-item" role="menuitem" data-doc-lang-set="de"><span class="datenblatt-lang">DE</span> Deutsch</button>
+          <button type="button" class="doc-lang-item" role="menuitem" data-doc-lang-set="en"><span class="datenblatt-lang">EN</span> English</button>
+          <button type="button" class="doc-lang-item" role="menuitem" data-doc-lang-set="fr"><span class="datenblatt-lang">FR</span> Français</button>
+          <button type="button" class="doc-lang-item" role="menuitem" data-doc-lang-set="it"><span class="datenblatt-lang">IT</span> Italiano</button>
+        </div>
+      </details>
+    </div>
+    <div class="tab-content-body">
+      <ul class="doc-list" data-doc-list></ul>
     </div>
   </section>
   <section class="tab-content" id="section-faq" data-section="faq">
@@ -5266,6 +5381,7 @@ function render() {
   renderProductSide();
   if (typeof renderBundle === 'function') renderBundle();
   if (typeof window.syncDatenblatt === 'function') window.syncDatenblatt();
+  if (typeof window.syncDokumente === 'function') window.syncDokumente();
   if (typeof window.syncWishlistButton === 'function') window.syncWishlistButton();
 }
 
@@ -6037,6 +6153,126 @@ document.addEventListener('click', e => {
 })();
 
 // Datenblatt: one-click open in the language derived from the shop
+// ===== DOKUMENTE =====
+// Eine Sprachwahl fuer die ganze Karte statt einer je Zeile: die Sprache
+// ist eine Entscheidung, nicht sechs. Liegt ein Dokument in der gewaehlten
+// Sprache nicht vor, verschwindet es nicht - es oeffnet auf Deutsch und
+// die Zeile sagt das. Ausblenden wuerde den Eindruck erwecken, es gebe
+// das Dokument nicht.
+(function () {
+  const liste = document.querySelector('[data-doc-list]');
+  if (!liste) return;
+  const dd = document.querySelector('[data-doc-lang]');
+  const currentEl = document.querySelector('[data-doc-lang-current]');
+
+  const SPRACHNAME = { de: 'Deutsch', en: 'English', fr: 'Français', it: 'Italiano' };
+
+  // Groessen der hinterlegten Datenblaetter, damit die Zeile sie nennen
+  // kann, ohne die Datei vorher zu laden.
+  const BLATT_KB = {
+    'datenblatt/wago-221-412.pdf': 1968, 'datenblatt/wago-221-413.pdf': 313,
+    'datenblatt/wago-221-415.pdf': 364,  'datenblatt/wago-221-420.pdf': 1912,
+    'datenblatt/wago-221-612.pdf': 425,  'datenblatt/wago-221-613.pdf': 424,
+    'datenblatt/wago-221-615.pdf': 403
+  };
+
+  const DOKUMENTE = [
+    {
+      titel: 'Datenblatt',
+      hinweis: 'Technische Daten, Masse und Zulassungen der gewählten Ausführung',
+      // Folgt dem Konfigurator - deshalb keine feste Datei.
+      datei: function () {
+        const pfad = (typeof window.aktuellesDatenblatt === 'function')
+          ? window.aktuellesDatenblatt() : null;
+        return pfad ? { de: pfad } : {};
+      }
+    },
+    {
+      titel: 'Bedienungs- und Sicherheitshinweise',
+      hinweis: 'Montage, Anschluss und Sicherheitshinweise',
+      datei: {
+        de: 'dokumente/bedienungs-sicherheitshinweise-de.pdf',
+        en: 'dokumente/bedienungs-sicherheitshinweise-en.pdf'
+      }
+    },
+    {
+      titel: 'Produktinformation',
+      hinweis: 'Übersicht zur Serie 221',
+      datei: { de: 'dokumente/produktinformation-de.pdf' }
+    },
+    {
+      titel: 'EU-Konformitätserklärung',
+      hinweis: 'Erklärung nach den geltenden EU-Richtlinien',
+      datei: {
+        de: 'dokumente/konformitaetserklaerung-de.pdf',
+        en: 'dokumente/konformitaetserklaerung-en.pdf'
+      }
+    },
+    {
+      titel: 'Garantiebedingungen',
+      hinweis: 'Bedingungen der gewerblichen Haltbarkeitsgarantie',
+      datei: { de: 'dokumente/garantiebedingungen-de.pdf' }
+    }
+  ];
+
+  const unterstuetzt = ['de', 'en', 'fr', 'it'];
+  const tld = location.hostname.split('.').pop();
+  let sprache = unterstuetzt.indexOf(tld) !== -1 ? tld : 'de';
+
+  function groesse(pfad) {
+    const kb = BLATT_KB[pfad];
+    if (kb) return kb >= 1024 ? (kb / 1024).toFixed(1).replace('.', ',') + ' MB' : kb + ' KB';
+    return '1 KB';
+  }
+
+  function zeichne() {
+    currentEl.textContent = sprache.toUpperCase();
+    document.querySelectorAll('[data-doc-lang-set]').forEach(function (b) {
+      b.classList.toggle('selected', b.dataset.docLangSet === sprache);
+    });
+
+    liste.innerHTML = DOKUMENTE.map(function (d) {
+      const dateien = typeof d.datei === 'function' ? d.datei() : d.datei;
+      const verfuegbar = Object.keys(dateien);
+      if (!verfuegbar.length) return '';
+      const genutzt = dateien[sprache] ? sprache : 'de';
+      const pfad = dateien[genutzt];
+      const name = pfad.split('/').pop();
+      // Bei Rueckfall auf Deutsch die Sprache nicht doppelt nennen.
+      const sprachHinweis = genutzt === sprache
+        ? SPRACHNAME[genutzt]
+        : '<span class="doc-fallback">nur auf ' + SPRACHNAME[genutzt] + ' verfügbar</span>';
+      return '<li class="doc-item">' +
+        '<span class="doc-icon" aria-hidden="true">' + SVG_PDF + '</span>' +
+        '<span class="doc-body">' +
+          '<span class="doc-title">' + d.titel + '</span>' +
+          '<span class="doc-file">' + name + '</span>' +
+          '<span class="doc-meta">PDF · ' + groesse(pfad) + ' · ' + sprachHinweis + '</span>' +
+        '</span>' +
+        '<a class="doc-open" href="' + pfad + '" target="_blank" rel="noopener noreferrer" ' +
+          'hreflang="' + genutzt + '" aria-label="' + d.titel + ' öffnen">Öffnen</a>' +
+      '</li>';
+    }).join('');
+  }
+
+  const SVG_PDF = '<svg viewBox="0 0 640 640" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' +
+    '<path d="M128 64C92.7 64 64 92.7 64 128L64 512C64 547.3 92.7 576 128 576L208 576L208 512L128 512L128 128L352 128L352 224L448 224L448 288L512 288L512 197.5C512 180.5 505.3 164.2 493.3 152.2L423.8 82.7C411.8 70.7 395.5 64 378.5 64L128 64zM256 352C238.3 352 224 366.3 224 384L224 544C224 561.7 238.3 576 256 576L288 576C332.2 576 368 540.2 368 496C368 451.8 332.2 416 288 416L288 384C288 366.3 273.7 352 256 352zM288 464C305.7 464 320 478.3 320 496C320 513.7 305.7 528 288 528L288 464zM400 384L400 544C400 561.7 414.3 576 432 576L464 576C508.2 576 544 540.2 544 496L544 464C544 419.8 508.2 384 464 384L432 384C414.3 384 400 398.3 400 384z" fill="#D9234C"/></svg>';
+
+  document.querySelectorAll('[data-doc-lang-set]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      sprache = btn.dataset.docLangSet;
+      zeichne();
+      dd.open = false;
+    });
+  });
+  document.addEventListener('click', function (e) {
+    if (dd.open && !dd.contains(e.target)) dd.open = false;
+  });
+
+  window.syncDokumente = zeichne;
+  zeichne();
+})();
+
 // domain (conrad.de -> DE; ~80% of the business is Germany, so the
 // TLD default is right most of the time). The dropdown next to the
 // button covers the remaining cases.
@@ -6114,6 +6350,7 @@ document.addEventListener('click', e => {
 
   // Die Auswahl im Konfigurator bestimmt die Datei - render() ruft das
   // nach jeder Aenderung erneut auf.
+  window.aktuellesDatenblatt = currentSheet;
   window.syncDatenblatt = apply;
   apply();
 })();
