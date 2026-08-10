@@ -2666,18 +2666,21 @@ button { font: inherit; cursor: pointer; }
   color: var(--c-blue);
 }
 .newsletter-title { margin: 0; font-size: 24px; font-weight: 700; line-height: 1.25; color: var(--c-text); }
-/* Vorteile linksbuendig, der Block als Ganzes mittig - eine zentrierte
-   Aufzaehlung waere ohne feste Lesekante schwer zu erfassen. */
+/* Jede Zeile fuer sich mittig: Als linksbuendiger Block haengt die
+   kuerzere Zeile links und wirkt gegen die zentrierte Ueberschrift
+   verschoben. Die Zeilen sind kurz genug, dass die fehlende feste
+   Lesekante nicht stoert. */
 .newsletter-benefits {
-  display: inline-block;
+  display: block;
   margin: 12px 0 16px;
   padding: 0;
   list-style: none;
-  text-align: left;
+  text-align: center;
 }
 .newsletter-benefit {
-  display: flex;
+  display: inline-flex;
   align-items: flex-start;
+  text-align: left;
   gap: 9px;
   font-size: 14px;
   line-height: 1.4;
