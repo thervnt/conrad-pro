@@ -2465,7 +2465,7 @@ button { font: inherit; cursor: pointer; }
       <div class="bom-total">
         <span class="bom-total-label">Summe der zugeordneten Positionen</span>
         <span class="bom-total-value" data-bom-total>0,00 €</span>
-        <span class="bom-total-note">zzgl. MwSt. · Verpackungseinheiten aufgerundet</span>
+        <span class="bom-total-note">zzgl. MwSt. &amp; Versand</span>
       </div>
       <div class="bom-actions">
         <button type="button" class="bom-btn-ghost" data-bom-back="2">Zurück</button>
@@ -2865,9 +2865,83 @@ button { font: inherit; cursor: pointer; }
     return FOTO_SERIEN.indexOf(basis) === -1 ? '' : 'bilder/wago-' + basis + '-01.png';
   }
 
+  /* Einzelstueckpreise wie auf der Produktseite. Sie liegen je Stueck
+     ueber jeder Verpackungseinheit - deshalb greift die Rechnung unten
+     nur so weit darauf zurueck, wie es fuer die genaue Menge noetig ist. */
+  var EINZELPREIS = {
+    '221-412': 0.20, '221-413': 0.40, '221-415': 0.70, '221-420': 3.20,
+    '221-2413': 0.43, '221-430': 3.46, '2273-203': 0.13
+  };
+
+  /* Alle Verpackungseinheiten einer Serie, dazu das Einzelstueck.
+     Guenstigste zuerst gerechnet wird daraus die Mengenstaffel. */
+  function varianten(artikel) {
+    var basis = artikel.mpnBasis;
+    var liste = KATALOG.filter(function (a) {
+      return a.mpnBasis === basis && !a.abgekuendigt && a.bestand > 0;
+    }).map(function (a) {
+      return { packSize: a.packSize, preis: a.preis, artikel: a };
+    });
+    var einzel = EINZELPREIS[basis];
+    if (einzel != null && !liste.some(function (v) { return v.packSize === 1; })) {
+      liste.push({ packSize: 1, preis: einzel, artikel: artikel, einzeln: true });
+    }
+    return liste.sort(function (a, b) { return b.packSize - a.packSize; });
+  }
+
+  /* Genau die angeforderte Menge, so guenstig wie moeglich: Ueber die
+     Verpackungseinheiten wird eine Staffel gerechnet, der Rest mit
+     Einzelstuecken aufgefuellt. Klassische vollstaendige Suche ueber
+     alle Stueckzahlen - das liefert das Optimum, nicht nur eine gute
+     Naeherung wie das reine Auffuellen von gross nach klein. */
+  var MAX_DP = 20000;
   function bestellmenge(artikel, bedarf) {
-    var sets = Math.ceil(bedarf / artikel.packSize);
-    return { sets: sets, stueck: sets * artikel.packSize, preis: sets * artikel.preis };
+    var opt = varianten(artikel);
+    if (!opt.length) return { teile: [], stueck: 0, preis: 0 };
+
+    // Ohne Einzelstueck ist die genaue Menge nicht immer erreichbar -
+    // dann bleibt es beim Aufrunden auf volle Verpackungen.
+    var kleinste = opt[opt.length - 1];
+    if (kleinste.packSize > 1 || bedarf > MAX_DP) {
+      var sets = Math.ceil(bedarf / artikel.packSize);
+      return { teile: [{ packSize: artikel.packSize, anzahl: sets, artikel: artikel,
+                         preis: sets * artikel.preis }],
+               stueck: sets * artikel.packSize, preis: sets * artikel.preis };
+    }
+
+    var kosten = new Array(bedarf + 1).fill(Infinity);
+    var wahl = new Array(bedarf + 1).fill(null);
+    kosten[0] = 0;
+    for (var n = 1; n <= bedarf; n++) {
+      for (var i = 0; i < opt.length; i++) {
+        var v = opt[i];
+        if (v.packSize > n) continue;
+        var k = kosten[n - v.packSize] + v.preis;
+        if (k < kosten[n] - 1e-9) { kosten[n] = k; wahl[n] = v; }
+      }
+    }
+
+    var zaehler = [], rest = bedarf;
+    while (rest > 0) {
+      var g = wahl[rest];
+      var eintrag = zaehler.filter(function (t) { return t.packSize === g.packSize; })[0];
+      if (eintrag) { eintrag.anzahl++; eintrag.preis += g.preis; }
+      else zaehler.push({ packSize: g.packSize, anzahl: 1, artikel: g.artikel,
+                          einzeln: !!g.einzeln, preis: g.preis });
+      rest -= g.packSize;
+    }
+    zaehler.sort(function (a, b) { return b.packSize - a.packSize; });
+    return { teile: zaehler, stueck: bedarf, preis: kosten[bedarf] };
+  }
+
+  function mengeText(b) {
+    // Artikel, die es nur einzeln gibt, brauchen kein "x Einzelstueck".
+    if (b.teile.length === 1 && b.teile[0].packSize === 1) return b.stueck + ' St\u00fcck';
+    return b.teile.map(function (t) {
+      return t.packSize === 1
+        ? t.anzahl + ' \u00d7 Einzelst\u00fcck'
+        : t.anzahl + ' \u00d7 ' + t.packSize + 'er-Set';
+    }).join(' + ');
   }
 
   $('[data-bom-match]').addEventListener('click', function () {
@@ -2893,7 +2967,7 @@ button { font: inherit; cursor: pointer; }
         bezeichnung: w.bezeichnung || '',
         bedarf: isNaN(bedarf) || bedarf < 1 ? 1 : bedarf,
         kandidaten: t.treffer,
-        artikel: t.treffer.length === 1 ? t.treffer[0] : null,
+        artikel: aufloesen(t.treffer),
         entfernt: false
       };
       p.status = bewerte(p);
@@ -2902,6 +2976,18 @@ button { font: inherit; cursor: pointer; }
     zeichneErgebnis();
     zeigeSchritt(3);
   });
+
+  /* Mehrere Treffer sind nur dann eine offene Frage, wenn sie
+     verschiedene Produkte meinen. Verpackungsgroessen derselben Serie
+     werden nicht mehr gegeneinander abgewogen - die Bestellmenge nutzt
+     sie ohnehin gemeinsam. */
+  function aufloesen(treffer) {
+    if (!treffer.length) return null;
+    var basis = treffer[0].mpnBasis;
+    if (!treffer.every(function (a) { return a.mpnBasis === basis; })) return null;
+    var lieferbar = treffer.filter(function (a) { return !a.abgekuendigt && a.bestand > 0; });
+    return (lieferbar.length ? lieferbar : treffer)[0];
+  }
 
   function bewerte(p) {
     if (!p.kandidaten.length) return 'fehlt';
@@ -2947,12 +3033,17 @@ button { font: inherit; cursor: pointer; }
       if (p.artikel && p.status !== 'ohne-bestand' && p.status !== 'abgekuendigt') {
         var b = bestellmenge(p.artikel, p.bedarf);
         summe += b.preis;
-        menge = p.artikel.packSize === 1
-          ? b.stueck + ' Stück'
-          : b.sets + ' × ' + p.artikel.packSize + 'er-Set'
-            + '<span class="bom-order-note">= ' + b.stueck + ' Stück'
-            + (b.stueck > p.bedarf ? ' (' + (b.stueck - p.bedarf) + ' mehr als benötigt)' : '') + '</span>';
-        preis = fmt(b.preis);
+        // Die Stueckzahl nur nennen, wenn sie nicht schon in der Zeile
+        // darueber steht.
+        var nurEinzeln = b.teile.length === 1 && b.teile[0].packSize === 1;
+        menge = mengeText(b) + (nurEinzeln ? '' :
+          '<span class="bom-order-note">= ' + b.stueck + ' Stück'
+          + (b.stueck > p.bedarf ? ' (' + (b.stueck - p.bedarf) + ' mehr als benötigt)' : '') + '</span>');
+        // Stueckpreis sichtbar machen - daran zeigt sich, dass die
+        // Mengenstaffel gezogen wurde.
+        preis = fmt(b.preis)
+          + '<span class="bom-order-note">' + (b.preis / b.stueck).toFixed(2).replace('.', ',')
+          + ' € / Stück</span>';
       }
       var auswahl = '';
       if (p.status === 'mehrdeutig') {
@@ -3033,27 +3124,33 @@ button { font: inherit; cursor: pointer; }
       if (Array.isArray(v)) wagen = v;
     } catch (err) { /* beschaedigt */ }
 
+    // Eine Position kann aus mehreren Verpackungsgroessen bestehen -
+    // jede wird zu einer eigenen Zeile im Warenkorb.
     positionen.filter(function (p) { return !p.entfernt && p.status === 'ok'; }).forEach(function (p) {
       var b = bestellmenge(p.artikel, p.bedarf);
-      var vorhanden = wagen.filter(function (it) {
-        return it.sku === p.artikel.mpn && it.packSize === p.artikel.packSize;
-      })[0];
-      if (vorhanden) { vorhanden.qty += b.sets; return; }
-      var preise = {}; preise[p.artikel.packSize] = p.artikel.preis;
-      wagen.push({
-        sku: p.artikel.mpn,
-        bestellNr: p.artikel.bestellNr,
-        title: p.artikel.name,
-        config: p.artikel.packSize === 1 ? 'Einzelstück' : p.artikel.packSize + 'er-Set',
-        stock: p.artikel.bestand.toLocaleString('de-DE') + ' Stück auf Lager',
-        packSize: p.artikel.packSize,
-        qty: b.sets,
-        packSizes: [p.artikel.packSize],
-        packPrices: preise,
-        minPieces: 1,
-        img: bildFuer(p.artikel),
-        href: null,
-        note: 'Aus Stückliste'
+      b.teile.forEach(function (t) {
+        var art = t.artikel || p.artikel;
+        var sku = t.packSize === 1 ? art.mpnBasis : art.mpn;
+        var vorhanden = wagen.filter(function (it) {
+          return it.sku === sku && it.packSize === t.packSize;
+        })[0];
+        if (vorhanden) { vorhanden.qty += t.anzahl; return; }
+        var preise = {}; preise[t.packSize] = Math.round(t.preis / t.anzahl * 100) / 100;
+        wagen.push({
+          sku: sku,
+          bestellNr: art.bestellNr,
+          title: art.name,
+          config: t.packSize === 1 ? 'Einzelstück' : t.packSize + 'er-Set',
+          stock: art.bestand.toLocaleString('de-DE') + ' Stück auf Lager',
+          packSize: t.packSize,
+          qty: t.anzahl,
+          packSizes: [t.packSize],
+          packPrices: preise,
+          minPieces: 1,
+          img: bildFuer(art),
+          href: null,
+          note: 'Aus Stückliste'
+        });
       });
     });
     try { localStorage.setItem(CART_KEY, JSON.stringify(wagen)); } catch (err) { /* voll */ }
