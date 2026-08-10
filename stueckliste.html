@@ -73,6 +73,12 @@ body {
    margin-top: auto hier ueberstimmen wuerde. Stattdessen waechst der
    Inhaltsbereich in den freien Platz - der Fuss rutscht mit nach unten. */
 body > main { flex: 1 0 auto; }
+/* Als Flex-Kind schluckt margin: 0 auto den freien Platz seitlich: Leiste und
+   Inhalt schrumpfen dann auf ihren Text, statt sich bis max-width zu strecken.
+   width stellt her, was sie als Bloecke hatten - volle Breite, gedeckelt auf
+   1680 px, mittig. Muss zur Produktseite passen, die kein Flex braucht. */
+body > .breadcrumb,
+body > main { width: 100%; }
 
 
 a { color: var(--c-blue); text-decoration: none; }
