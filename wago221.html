@@ -3343,7 +3343,9 @@ button { font: inherit; cursor: pointer; }
   color: var(--c-text-tertiary);
 }
 /* --- Einkaufswagen --- */
-.fly-list { max-height: 340px; overflow-y: auto; }
+/* Hoch genug fuer die fuenf Zeilen, die render() hoechstens ausgibt (5 x 82 px).
+   Das overflow bleibt als Reserve, falls ein langer Titel eine Zeile umbricht. */
+.fly-list { max-height: 410px; overflow-y: auto; }
 .fly-item {
   display: grid;
   grid-template-columns: 44px 1fr auto;
@@ -3352,6 +3354,16 @@ button { font: inherit; cursor: pointer; }
   padding: 12px 16px;
 }
 .fly-item + .fly-item { border-top: 1px solid var(--c-border); }
+.fly-more {
+  display: block;
+  padding: 12px 16px;
+  border-top: 1px solid var(--c-border);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--c-blue);
+  text-align: center;
+}
+.fly-more:hover { background: var(--c-bg-tint); text-decoration: underline; }
 .fly-item-img {
   width: 44px; height: 44px;
   border: 1px solid var(--c-border);
@@ -5399,7 +5411,12 @@ if (countdownEl) {
       if (Array.isArray(v)) return v;
     } catch (e) { /* corrupted -> fall through to seed */ }
     // First visit: seed with the demo item the cart page has always shown.
-    return [buildCartItem(3, '4', 'standard', 50, 4)];
+    // Persist it immediately. The header flyout and cart.html read this key
+    // straight from storage, so a seed that stayed in memory left the badge
+    // counting an item the flyout could not see.
+    const seed = [buildCartItem(3, '4', 'standard', 50, 4)];
+    try { localStorage.setItem(CART_KEY, JSON.stringify(seed)); } catch (e) { /* quota */ }
+    return seed;
   }
 
   function setBadge(count, bump) {
@@ -6533,25 +6550,42 @@ render();
   }
   function preis(it) { return ((it.packPrices && it.packPrices[it.packSize]) || 0) * it.qty; }
 
+  // Das Menue zeigt hoechstens fuenf Zeilen, die zuletzt gelegten zuerst.
+  // Der Rest steht hinter dem Verweis auf den Warenkorb. Anzahl und
+  // Zwischensumme oben zaehlen weiter den ganzen Korb, nicht die Auswahl.
+  var FLY_MAX = 5;
+
   function render() {
     if (!listEl) return;
     var items = read();
     var summe = items.reduce(function (s, it) { return s + preis(it); }, 0);
-    if (countEl) countEl.textContent = items.length + (items.length === 1 ? ' Artikel' : ' Artikel');
+    if (countEl) countEl.textContent = items.length + ' Artikel';
     if (sumEl) sumEl.textContent = items.length ? 'Zwischensumme: ' + fmt(summe) : '';
+    // Der eigene Index wandert mit: der Loeschknopf zeigt auf die echte
+    // Zeile im Speicher, nicht auf die Position in der gekuerzten Liste.
+    var zeilen = items.map(function (it, i) { return { it: it, i: i }; })
+      .reverse()
+      .slice(0, FLY_MAX);
+    var rest = items.length - zeilen.length;
     listEl.innerHTML = items.length
-      ? '<div class="fly-list">' + items.map(function (it, i) {
+      ? '<div class="fly-list">' + zeilen.map(function (z) {
+          var it = z.it;
           return '<div class="fly-item">' +
             bildZelle(it) +
             '<span>' + nameZelle(it) +
               '<span class="fly-item-qty">' + it.qty + (it.packSize === 1 ? ' St\u00fcck' : ' Sets') + '</span></span>' +
             '<span class="fly-item-right">' +
-              '<button type="button" class="fly-item-del" data-fly-del="' + i + '" ' +
+              '<button type="button" class="fly-item-del" data-fly-del="' + z.i + '" ' +
                 'aria-label="Artikel entfernen">' + TRASH + '</button>' +
               '<span class="fly-item-price">' + fmt(preis(it)) + '</span>' +
             '</span>' +
           '</div>';
-        }).join('') + '</div>'
+        }).join('') + '</div>' +
+        (rest > 0
+          ? '<a class="fly-more" href="cart.html">' +
+              (rest === 1 ? 'Noch 1 weiterer Artikel' : 'Noch ' + rest + ' weitere Artikel') +
+              ' im Einkaufswagen</a>'
+          : '')
       : '<p class="fly-empty">Ihr Einkaufswagen ist leer</p>';
   }
 
