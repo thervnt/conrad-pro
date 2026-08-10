@@ -4457,6 +4457,19 @@ const altImagesByPolzahl = {
   ]
 };
 
+// Every alt image above is a Standard shot, so the studio product photos
+// contradict a Green Range selection outright (orange levers next to a green
+// main image). These indices are the studio shots per polzahl; they are
+// dropped when Green Range is active, leaving only the in-situ application
+// photos, which read as series imagery. 5- and 10-pole have nothing but
+// studio shots, so Green Range there falls back to the main image alone.
+const altStudioShotIdx = {
+  2:  [0],
+  3:  [2, 4],
+  5:  [0],
+  10: [0, 1, 2, 3, 4]
+};
+
 // Module-scoped state shared with the overlay arrow-key handler.
 window.__imageList = [];
 window.__imageActiveIdx = 0;
@@ -4892,7 +4905,8 @@ function renderProductSide() {
     const mainEl = document.querySelector('[data-main-img]');
     if (!wrap || !mainEl) return;
     const list = [mainEl.src];
-    const alts = altImagesByPolzahl[p] || [];
+    const drop = h === 'green-range' ? (altStudioShotIdx[p] || []) : [];
+    const alts = (altImagesByPolzahl[p] || []).filter((_, i) => drop.indexOf(i) === -1);
     alts.forEach(a => { if (a && list.indexOf(a) === -1) list.push(a); });
     if (list.length <= 1) {
       wrap.innerHTML = '';
