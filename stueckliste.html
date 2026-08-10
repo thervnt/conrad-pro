@@ -1183,6 +1183,7 @@ button { font: inherit; cursor: pointer; }
   overflow: hidden;
 }
 .fly-item-img img { max-width: 90%; max-height: 90%; object-fit: contain; }
+.fly-item-img-leer { width: 22px; height: 22px; color: var(--c-text-tertiary); }
 .fly-item-name {
   font-size: 13px;
   line-height: 1.35;
@@ -2847,6 +2848,23 @@ button { font: inherit; cursor: pointer; }
     return { art: null, treffer: [] };
   }
 
+  /* Produktfoto zur Serie. Vorhanden sind nur die 4-mm²-Reihen und die
+     Green Range; die 6-mm²-Ausfuehrungen greifen wie auf der Produkt-
+     seite auf das gleichpolige 4-mm²-Bild zurueck. Wofuer es kein Foto
+     gibt (Zubehoer, andere Serien), bleibt leer - der Warenkorb zeigt
+     dann einen Platzhalter statt eines kaputten Bildes. */
+  var FOTO_SERIEN = ['221-412', '221-413', '221-415', '221-420',
+                     '221-2412', '221-2413', '221-2415', '221-430'];
+  function bildFuer(artikel) {
+    var basis = artikel.mpnBasis || '';
+    if (FOTO_SERIEN.indexOf(basis) === -1) {
+      // 221-6xx (6 mm²) auf die gleichpolige 4-mm²-Variante abbilden
+      var sechs = basis.match(/^221-6(\d\d)$/);
+      basis = sechs ? '221-4' + sechs[1] : '';
+    }
+    return FOTO_SERIEN.indexOf(basis) === -1 ? '' : 'bilder/wago-' + basis + '-01.png';
+  }
+
   function bestellmenge(artikel, bedarf) {
     var sets = Math.ceil(bedarf / artikel.packSize);
     return { sets: sets, stueck: sets * artikel.packSize, preis: sets * artikel.preis };
@@ -3033,7 +3051,7 @@ button { font: inherit; cursor: pointer; }
         packSizes: [p.artikel.packSize],
         packPrices: preise,
         minPieces: 1,
-        img: '',
+        img: bildFuer(p.artikel),
         href: null,
         note: 'Aus Stückliste'
       });

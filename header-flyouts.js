@@ -46,8 +46,15 @@
     return 'wago221.html?polzahl=' + it.polzahl + '&stil=' + stil +
       '&hebel=' + hebel + '&pack=' + it.packSize;
   }
+  // Neutraler Platzhalter, wenn zu einer Position kein Foto vorliegt -
+  // sonst zeigt der Browser das Symbol fuer ein kaputtes Bild.
+  var BILD_LEER = '<svg class="fly-item-img-leer" viewBox="0 0 24 24" fill="none" ' +
+    'stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" ' +
+    'aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/>' +
+    '<circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>';
+
   function bildZelle(it) {
-    var img = '<img src="' + it.img + '" alt="">';
+    var img = it.img ? '<img src="' + esc(it.img) + '" alt="">' : BILD_LEER;
     var url = ziel(it);
     return url
       ? '<a class="fly-item-img" href="' + url + '">' + img + '</a>'
