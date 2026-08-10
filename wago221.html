@@ -2848,7 +2848,8 @@ button { font: inherit; cursor: pointer; }
   color: var(--c-navy);
   text-decoration: none;
 }
-.doc-open:hover { background: var(--c-blue-soft-hover); }
+/* Knopf, kein Verweis - die allgemeine Unterstreichung gilt hier nicht. */
+.doc-open:hover { background: var(--c-blue-soft-hover); text-decoration: none; }
 @media (max-width: 560px) {
   /* Der Knopf rueckt unter den Text, eingerueckt auf Hoehe des Titels.
      Die Breite muss den Einzug abziehen, sonst laeuft die Zeile ueber. */
