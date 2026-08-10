@@ -1551,10 +1551,26 @@ button { font: inherit; cursor: pointer; }
   padding-top: 16px;
   border-top: 1px solid var(--c-border);
 }
-.bom-total { display: flex; flex-direction: column; }
-.bom-total-label { font-size: 13px; color: var(--c-text-secondary); }
-.bom-total-value { font-size: 24px; font-weight: 700; color: var(--c-text); }
-.bom-total-note { font-size: 12px; color: var(--c-text-tertiary); }
+/* Angaben zur Position - dieselben, die Produktseite und Warenkorb je
+   Artikel fuehren. */
+.bom-facts { display: grid; grid-template-columns: auto 1fr; gap: 2px 10px; margin: 6px 0 0; }
+.bom-fact { display: contents; }
+.bom-facts dt { font-size: 12px; color: var(--c-text-tertiary); white-space: nowrap; }
+.bom-facts dd { margin: 0; font-size: 12px; color: var(--c-text-secondary); }
+
+/* Die Summe steht unter der letzten Preiszeile, nicht daneben. */
+.bom-sum-row td { padding: 14px 12px 0; border-top: 1px solid var(--c-border); }
+.bom-sum-label { text-align: right; font-size: 13px; color: var(--c-text-secondary); }
+.bom-sum-value { white-space: nowrap; }
+.bom-sum-value [data-bom-total] {
+  display: block;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--c-text);
+  font-variant-numeric: tabular-nums;
+}
+.bom-total-note { display: block; font-size: 12px; color: var(--c-text-tertiary); }
+.bom-foot { justify-content: flex-end; }
 .bom-foot .bom-actions { margin-top: 0; }
 @media (max-width: 640px) {
   .bom { padding: 8px 16px 32px; }
@@ -2459,14 +2475,19 @@ button { font: inherit; cursor: pointer; }
           </tr>
         </thead>
         <tbody data-bom-rows></tbody>
+        <tfoot>
+          <tr class="bom-sum-row">
+            <td colspan="5" class="bom-sum-label">Summe der zugeordneten Positionen</td>
+            <td class="bom-sum-value">
+              <span data-bom-total>0,00 €</span>
+              <span class="bom-total-note">zzgl. MwSt. &amp; Versand</span>
+            </td>
+            <td></td>
+          </tr>
+        </tfoot>
       </table>
     </div>
     <div class="bom-foot">
-      <div class="bom-total">
-        <span class="bom-total-label">Summe der zugeordneten Positionen</span>
-        <span class="bom-total-value" data-bom-total>0,00 €</span>
-        <span class="bom-total-note">zzgl. MwSt. &amp; Versand</span>
-      </div>
       <div class="bom-actions">
         <button type="button" class="bom-btn-ghost" data-bom-back="2">Zurück</button>
         <button type="button" class="bom-btn" data-bom-tocart>In den Einkaufswagen</button>
@@ -2647,14 +2668,16 @@ button { font: inherit; cursor: pointer; }
     { bestellNr:'2462942', mpn:'221-2413-50', mpnBasis:'221-2413', ean:'4066966345391',
       name:'WAGO 221-2413 Green Range Verbindungsklemme 3-Leiter', packSize:50, preis:16.19, bestand:42700 },
     { bestellNr:'1489577', mpn:'221-500',     mpnBasis:'221-500', ean:'4050821861195',
-      name:'WAGO 221-500 Befestigungsadapter für Serie 221', packSize:1, preis:0.87, bestand:12500 },
+      name:'WAGO 221-500 Befestigungsadapter für Serie 221', packSize:1, preis:0.87, bestand:12500,
+      lieferTage:2 },
     { bestellNr:'1188461', mpn:'221-613',     mpnBasis:'221-613', ean:'4050821808510',
       name:'WAGO 221-613 Verbindungsklemme 3-Leiter, 0,5–6 mm²', packSize:1, preis:0.95, bestand:0 },
     { bestellNr:'2462950', mpn:'221-430',     mpnBasis:'221-430', ean:'4066966345414',
       name:'WAGO 221-430 Green Range Verbindungsklemme 10-Leiter', packSize:25, preis:71.50, bestand:0,
       abgekuendigt:true, nachfolgerMpn:'221-420-25' },
     { bestellNr:'1567002', mpn:'2273-203',    mpnBasis:'2273-203', ean:'4050821712893',
-      name:'WAGO 2273-203 Steckklemme 3-Leiter, 0,5–2,5 mm²', packSize:100, preis:9.49, bestand:210000 }
+      name:'WAGO 2273-203 Steckklemme 3-Leiter, 0,5–2,5 mm²', packSize:100, preis:9.49, bestand:210000,
+      verkaeufer:'Elektro Nord GmbH', versender:'Elektro Nord GmbH', lieferTage:3 }
   ];
 
   var BEISPIEL =
@@ -2934,6 +2957,35 @@ button { font: inherit; cursor: pointer; }
     return { teile: zaehler, stueck: bedarf, preis: kosten[bedarf] };
   }
 
+  /* Angaben, die auch Produktseite und Warenkorb je Position zeigen.
+     Verkaeufer und Versender koennen Dritte sein, die Rechnung stellt
+     immer Conrad - so steht es auch im Hinweis auf der Produktseite. */
+  var HAUS = 'Conrad Electronic';
+  var WOCHENTAG = ['So.', 'Mo.', 'Di.', 'Mi.', 'Do.', 'Fr.', 'Sa.'];
+  var MONAT = ['Jan.', 'Feb.', 'März', 'Apr.', 'Mai', 'Juni',
+               'Juli', 'Aug.', 'Sep.', 'Okt.', 'Nov.', 'Dez.'];
+  function liefertermin(artikel) {
+    var d = new Date();
+    var offen = artikel.lieferTage || 1;
+    while (offen > 0) {
+      d.setDate(d.getDate() + 1);
+      if (d.getDay() !== 0 && d.getDay() !== 6) offen--;   // Zustellung werktags
+    }
+    return WOCHENTAG[d.getDay()] + ', ' + d.getDate() + '. ' + MONAT[d.getMonth()];
+  }
+  function angaben(artikel) {
+    return [
+      ['Liefertermin', liefertermin(artikel)],
+      ['Verkäufer', artikel.verkaeufer || HAUS],
+      ['Versand durch', artikel.versender || HAUS],
+      ['Rechnung durch', HAUS],
+      ['Bestell-Nr.', artikel.bestellNr],
+      ['EAN', artikel.ean]
+    ].map(function (z) {
+      return '<div class="bom-fact"><dt>' + z[0] + '</dt><dd>' + esc(z[1]) + '</dd></div>';
+    }).join('');
+  }
+
   function mengeText(b) {
     // Artikel, die es nur einzeln gibt, brauchen kein "x Einzelstueck".
     if (b.teile.length === 1 && b.teile[0].packSize === 1) return b.stueck + ' St\u00fcck';
@@ -3027,8 +3079,8 @@ button { font: inherit; cursor: pointer; }
       var st = STATUS_TEXT[p.status];
       var name = p.artikel ? p.artikel.name : (p.bezeichnung || 'Unbekannte Position');
       var idZeile = p.artikel
-        ? 'Bestell-Nr. ' + p.artikel.bestellNr + ' · ' + p.artikel.mpn
-        : 'aus der Liste: ' + esc(p.roh);
+        ? '<dl class="bom-facts">' + angaben(p.artikel) + '</dl>'
+        : '<span class="bom-row-id">aus der Liste: ' + esc(p.roh) + '</span>';
       var menge = '—', preis = '—';
       if (p.artikel && p.status !== 'ohne-bestand' && p.status !== 'abgekuendigt') {
         var b = bestellmenge(p.artikel, p.bedarf);
@@ -3065,7 +3117,7 @@ button { font: inherit; cursor: pointer; }
       return '<tr data-bom-row="' + i + '" data-gruppe="' + gruppe + '"' + (sichtbar ? '' : ' hidden') + '>' +
         '<td class="bom-row-nr">' + esc(p.nr) + '</td>' +
         '<td><span class="bom-row-name">' + esc(name) + '</span>' +
-          '<span class="bom-row-id">' + idZeile + '</span>' + auswahl + '</td>' +
+          idZeile + auswahl + '</td>' +
         '<td><span class="bom-status ' + st[0] + '">' + st[1] + '</span></td>' +
         '<td class="bom-need">' + p.bedarf + ' Stück</td>' +
         '<td class="bom-order">' + menge + '</td>' +
