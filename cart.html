@@ -288,6 +288,10 @@ button { font: inherit; cursor: pointer; }
   box-sizing: border-box;
   border-radius: var(--radius-xs);
   color: var(--c-text-on-dark);
+  /* Der Innenabstand des Behaelters wuerde sich zum Abstand des Knopfes
+     addieren. Der negative Aussenabstand zieht ihn wieder heraus, damit
+     zwischen Zeichen und Text dieselben 8 px stehen wie im Kaufknopf. */
+  margin-right: -5px;
 }
 .search-btn-icon { width: 100%; height: 100%; display: block; }
 .search-btn-text { display: inline; }
@@ -394,7 +398,7 @@ button { font: inherit; cursor: pointer; }
   .search-card .search-icon { display: none; }
   .search-btn { padding: 0 10px; }
   .search-btn-text { display: none; }
-  .search-btn-icon-box { width: 26px; height: 26px; padding: 4px; }
+  .search-btn-icon-box { width: 26px; height: 26px; padding: 4px; margin-right: -4px; }
 
   /* --- Breadcrumb ------------------------------------------- */
   .breadcrumb {
