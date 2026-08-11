@@ -967,6 +967,47 @@ button { font: inherit; cursor: pointer; }
   .bundle-card { flex-basis: 100%; max-width: 100%; }
 }
 
+
+/* ===== NACH OBEN =====
+   Ruhige Aktion in der Bauform der Symbolknoepfe: weisse Flaeche,
+   Umrandung, 6 px Radius. Kein runder Knopf und kein Blau - beides
+   wuerde mit dem Kaufknopf konkurrieren, der auf jeder Seite die
+   Hauptaktion ist. Erscheint erst unterhalb der ersten Bildschirmhoehe. */
+.to-top {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 90;
+  width: 44px;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  background: var(--c-bg-white);
+  border: 1px solid var(--c-border-control);
+  border-radius: var(--radius-sm);
+  color: var(--c-text-secondary);
+  cursor: pointer;
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.14);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(8px);
+  transition: opacity 0.18s ease, transform 0.18s ease, visibility 0.18s;
+}
+.to-top.is-visible { opacity: 1; visibility: visible; transform: none; }
+.to-top:hover { border-color: var(--c-border-strong); color: var(--c-text); }
+.to-top:focus-visible { outline: 2px solid var(--c-blue); outline-offset: 2px; }
+.to-top svg { width: 20px; height: 20px; display: block; }
+@media (max-width: 767px) {
+  /* Ueber der Kaufleiste bleiben, wo es sie gibt. */
+  .to-top { right: 16px; bottom: 16px; }
+  body.has-mobile-buy-bar .to-top { bottom: 88px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .to-top { transition: none; }
+}
+
 /* ===== FOOTER ===== */
 /* --- Rechtsleiste --- */
 .footer-legalbar { background: var(--c-navy); }
@@ -3276,6 +3317,32 @@ button { font: inherit; cursor: pointer; }
     try { localStorage.setItem(CART_KEY, JSON.stringify(wagen)); } catch (err) { /* voll */ }
     location.href = 'cart.html';
   });
+})();
+</script>
+
+<button type="button" class="to-top" data-to-top aria-label="Zum Seitenanfang">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>
+</button>
+
+<script>
+/* Erscheint, sobald eine Bildschirmhoehe gescrollt ist. Der Sprung nach
+   oben folgt der Systemeinstellung zu Bewegung. */
+(function () {
+  var knopf = document.querySelector('[data-to-top]');
+  if (!knopf) return;
+  var wartet = false;
+  function pruefe() {
+    knopf.classList.toggle('is-visible', window.scrollY > window.innerHeight);
+    wartet = false;
+  }
+  window.addEventListener('scroll', function () {
+    if (!wartet) { wartet = true; requestAnimationFrame(pruefe); }
+  }, { passive: true });
+  knopf.addEventListener('click', function () {
+    var sanft = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    window.scrollTo({ top: 0, behavior: sanft ? 'smooth' : 'auto' });
+  });
+  pruefe();
 })();
 </script>
 
