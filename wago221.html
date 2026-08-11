@@ -21,8 +21,9 @@
   /* 4.5:1 auf Weiss und auf dem blauen Kachel-Tint - #8b909c lag mit
      3.2:1 darunter und war in 11px kaum lesbar. */
   --c-text-tertiary: #666c7a;
-  --c-border: #e3e5ea;
-  --c-border-strong: #c8ccd4;
+  --c-border: #cfd4dd;          /* Trennlinien und Kartenkanten */
+  --c-border-control: #8a92a2;  /* Umrandung bedienbarer Flaechen - 3,1:1 auf Weiss */
+  --c-border-strong: #6f7787;   /* Verstaerkung beim Ueberfahren */
   --c-bg-white: #ffffff;
   --c-bg-tint: #f8f9fb;
 
@@ -621,7 +622,7 @@ button { font: inherit; cursor: pointer; }
 
 .vtile {
   background: var(--c-bg-white);
-  border: 1px solid var(--c-border);
+  border: 1px solid var(--c-border-control);
   border-radius: var(--radius-sm);
   padding: 10px 14px;
   min-width: 64px;
@@ -641,10 +642,12 @@ button { font: inherit; cursor: pointer; }
   padding: 9px 13px;
   background: var(--c-blue-tint);
 }
+/* Nicht bestellbare Kombination. Strichlaenge und Luecke wachsen mit der
+   Linienstaerke - 3 statt 2 px machen die Strichelung eindeutig. */
 .vtile.dashed {
   border-color: transparent;
-  outline: 2px dashed var(--c-border-strong);
-  outline-offset: -3px;
+  outline: 3px dashed var(--c-border-control);
+  outline-offset: -4px;
   color: var(--c-text-tertiary);
 }
 .vtile.disabled.placeholder { display: none; }
@@ -1334,7 +1337,7 @@ button { font: inherit; cursor: pointer; }
 .pack-pill {
   width: 100%;
   background: var(--c-bg-white);
-  border: 1px solid var(--c-border);
+  border: 1px solid var(--c-border-control);
   border-radius: var(--radius-sm);
   padding: 8px 10px;
   font-family: inherit;
@@ -1390,7 +1393,7 @@ button { font: inherit; cursor: pointer; }
    Tastaturmarkierung. */
 .qty-input-wrap input {
   background: var(--c-bg-white);
-  border: 1px solid var(--c-border);
+  border: 1px solid var(--c-border-control);
   border-radius: var(--radius-sm);
   text-align: center;
   padding: 5px 6px;
@@ -1787,16 +1790,18 @@ button { font: inherit; cursor: pointer; }
 }
 .probanner-badge .pro-logo { display: block; }
 .probanner-text { min-width: 0; }
+/* Kleiner als die Abschnittsueberschriften und deutlich kleiner als der
+   Produkttitel - Werbung soll die Seitenhierarchie nicht anfuehren. */
 .probanner-title {
   margin: 0;
-  font-size: 20px;
+  font-size: 16px;
   font-weight: 700;
   line-height: 1.25;
   color: var(--c-text);
 }
 .probanner-sub {
-  margin: 6px 0 0;
-  font-size: 14px;
+  margin: 4px 0 0;
+  font-size: 13px;
   line-height: 1.45;
   color: var(--c-text-secondary);
 }
@@ -2606,8 +2611,8 @@ button { font: inherit; cursor: pointer; }
 .bundle-cart-btn:hover { background: var(--c-blue-hover); }
 .bundle-cart-btn svg { width: 18px; height: 18px; }
 .bundle-card-current-tag {
-  padding: 12px 16px;
-  border: 1px dashed var(--c-border);
+  padding: 11px 15px;
+  border: 2px dashed var(--c-border-control);
   border-radius: var(--radius-sm);
   font-size: 13px;
   color: var(--c-text-secondary);

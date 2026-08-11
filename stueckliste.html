@@ -21,8 +21,9 @@
   /* 4.5:1 auf Weiss und auf dem blauen Kachel-Tint - #8b909c lag mit
      3.2:1 darunter und war in 11px kaum lesbar. */
   --c-text-tertiary: #666c7a;
-  --c-border: #e3e5ea;
-  --c-border-strong: #c8ccd4;
+  --c-border: #cfd4dd;          /* Trennlinien und Kartenkanten */
+  --c-border-control: #8a92a2;  /* Umrandung bedienbarer Flaechen - 3,1:1 auf Weiss */
+  --c-border-strong: #6f7787;   /* Verstaerkung beim Ueberfahren */
   --c-bg-white: #ffffff;
   --c-bg-tint: #f8f9fb;
 
@@ -619,7 +620,7 @@ button { font: inherit; cursor: pointer; }
 .pack-pill {
   width: 100%;
   background: var(--c-bg-white);
-  border: 1px solid var(--c-border);
+  border: 1px solid var(--c-border-control);
   border-radius: var(--radius-sm);
   padding: 8px 10px;
   font-family: inherit;
@@ -675,7 +676,7 @@ button { font: inherit; cursor: pointer; }
    Tastaturmarkierung. */
 .qty-input-wrap input {
   background: var(--c-bg-white);
-  border: 1px solid var(--c-border);
+  border: 1px solid var(--c-border-control);
   border-radius: var(--radius-sm);
   text-align: center;
   padding: 5px 6px;
@@ -1344,7 +1345,7 @@ button { font: inherit; cursor: pointer; }
 
 /* Schritt 1 */
 .bom-drop {
-  border: 1px dashed var(--c-border-strong);
+  border: 2px dashed var(--c-border-control);
   border-radius: var(--radius);
   background: var(--c-bg-tint);
   padding: 24px 20px;
