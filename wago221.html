@@ -622,6 +622,7 @@ button { font: inherit; cursor: pointer; }
 }
 
 .vtile {
+  position: relative;
   background: var(--c-bg-white);
   border: 1px solid var(--c-border-control);
   border-radius: var(--radius-sm);
@@ -651,11 +652,9 @@ button { font: inherit; cursor: pointer; }
    vorgibt und die Flaeche darunter faerbt. */
 .vtile.dashed {
   border-color: transparent;
-  position: relative;
   color: var(--c-text-tertiary);
 }
-.vtile.dashed::after {
-  content: "";
+.vtile-dash {
   position: absolute;
   inset: 2px;
   border-radius: 5px;
@@ -5125,7 +5124,12 @@ function renderTile(value, label, secondary, isSelected, state, attrName, attrVa
   else if (state === 'hidden') return '';
 
   const ttAttr = tooltip ? ' data-tooltip="' + tooltip.replace(/"/g, '&quot;') + '"' : '';
+  // Die Strichelung braucht ein eigenes Element: ::before und ::after
+  // gehoeren dem Hinweisfenster und seinem Zeiger.
+  const strichel = state === 'dashed' && !isSelected
+    ? '<span class="vtile-dash" aria-hidden="true"></span>' : '';
   return '<button' + ttAttr + ' class="' + classes.join(' ') + '" data-' + attrName + '="' + attrValue + '" ' + attrs + '>' +
+    strichel +
     '<span class="vtile-value">' + label + '</span>' +
     (secondary ? secondary : '') +
     '</button>';
