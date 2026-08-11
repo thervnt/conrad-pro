@@ -22,8 +22,9 @@
      3.2:1 darunter und war in 11px kaum lesbar. */
   --c-text-tertiary: #666c7a;
   --c-border: #cfd4dd;          /* Trennlinien und Kartenkanten */
-  --c-border-control: #8a92a2;  /* Umrandung bedienbarer Flaechen - 3,1:1 auf Weiss */
+  --c-border-control: #9aa2b1;  /* Umrandung bedienbarer Flaechen - 2,6:1 auf Weiss */
   --c-border-strong: #6f7787;   /* Verstaerkung beim Ueberfahren */
+  --strichel-maske: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25'%3E%3Crect width='100%25' height='100%25' rx='5' ry='5' fill='none' stroke='black' stroke-width='4' stroke-dasharray='4 5'/%3E%3C/svg%3E");
   --c-bg-white: #ffffff;
   --c-bg-tint: #f8f9fb;
 
@@ -642,13 +643,26 @@ button { font: inherit; cursor: pointer; }
   padding: 9px 13px;
   background: var(--c-blue-tint);
 }
-/* Nicht bestellbare Kombination. Strichlaenge und Luecke wachsen mit der
-   Linienstaerke - 3 statt 2 px machen die Strichelung eindeutig. */
+/* Nicht bestellbare Kombination. Eine gestrichelte Umrandung laesst in
+   CSS keine eigene Lueckenlaenge zu - der Browser leitet sie aus der
+   Linienstaerke ab. Deshalb hier eine Maske: Linie bleibt 2 px, die
+   Luecke ist um 1 px groesser als die Voreinstellung (4/5 statt 4/4).
+   Die Farbe kommt weiter aus dem Token, weil die Maske nur die Form
+   vorgibt und die Flaeche darunter faerbt. */
 .vtile.dashed {
   border-color: transparent;
-  outline: 3px dashed var(--c-border-control);
-  outline-offset: -4px;
+  position: relative;
   color: var(--c-text-tertiary);
+}
+.vtile.dashed::after {
+  content: "";
+  position: absolute;
+  inset: 2px;
+  border-radius: 5px;
+  background: var(--c-border-control);
+  -webkit-mask: var(--strichel-maske) center / 100% 100% no-repeat;
+  mask: var(--strichel-maske) center / 100% 100% no-repeat;
+  pointer-events: none;
 }
 .vtile.disabled.placeholder { display: none; }
 .vtile-value {
@@ -2611,8 +2625,8 @@ button { font: inherit; cursor: pointer; }
 .bundle-cart-btn:hover { background: var(--c-blue-hover); }
 .bundle-cart-btn svg { width: 18px; height: 18px; }
 .bundle-card-current-tag {
-  padding: 11px 15px;
-  border: 2px dashed var(--c-border-control);
+  padding: 12px 16px;
+  border: 1px dashed var(--c-border-control);
   border-radius: var(--radius-sm);
   font-size: 13px;
   color: var(--c-text-secondary);
