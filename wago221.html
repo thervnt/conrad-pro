@@ -1680,10 +1680,13 @@ button { font: inherit; cursor: pointer; }
   display: flex;
   justify-content: space-between;
   align-items: center;
+  /* Ein Nebenweg unter dem Kaufabschluss - er soll auffindbar sein,
+     aber nicht mit den Angaben zum Artikel konkurrieren. */
+  font-size: 13px;
   font-weight: 500;
   cursor: pointer;
 }
-.other-sellers svg { width: 16px; height: 16px; color: var(--c-text-tertiary); }
+.other-sellers svg { width: 14px; height: 14px; color: var(--c-text-tertiary); }
 
 /* Compact buy box on short viewports: tighten spacing so the whole
    box stays visible without scrolling. */
