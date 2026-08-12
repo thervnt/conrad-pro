@@ -1905,11 +1905,22 @@ button { font: inherit; cursor: pointer; }
 .summary-ship { margin: 2px 0 12px; }
 .summary-ship[hidden] { display: none; }
 .summary-ship-group + .summary-ship-group { margin-top: 10px; }
+/* Versender und sein Anteil - eine Zeile, Betrag rechts auf der Achse
+   der Betraege darueber. */
 .summary-ship-who {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
   margin: 0 0 2px;
   font-size: 12px;
   color: var(--c-text-secondary);
 }
+.summary-ship-cost {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.summary-ship-group.is-free .summary-ship-cost { color: var(--c-success); }
 .summary-ship-text { margin: 0; font-size: 13px; line-height: 1.4; color: var(--c-text); }
 .summary-ship-text strong { font-weight: 600; }
 .summary-ship-group.is-free .summary-ship-text { color: var(--c-success); font-weight: 600; }
@@ -2752,11 +2763,11 @@ button { font: inherit; cursor: pointer; }
     } else {
       shipEl.textContent = shipping > 0 ? fmt(shipping) : 'Kostenfrei';
     }
-    // SVG has no `hidden` IDL property - toggle the attribute directly.
-    // Fortschritt zum kostenfreien Versand. Mit PRO ist der Versand
-    // ohnehin frei - dann waere die Strecke sinnlos.
-    // Je Sendung eine eigene Strecke. Sendungen, die PRO ohnehin
-    // freistellt, brauchen keine - dort gibt es nichts zu erreichen.
+    // Aufschluesselung unter der Versandzeile: je Sendung der Versender
+    // mit seinem Anteil, darunter der Weg zu seiner Freigrenze. Bei nur
+    // einer Sendung waere die Aufschluesselung eine Wiederholung der
+    // Zeile darueber - dann bleibt es bei der Strecke. Mit PRO ist alles
+    // frei; weder Betraege noch Strecken haetten dann etwas zu sagen.
     var shipEl2 = document.querySelector('[data-summary-ship]');
     if (shipEl2) {
       var offen = pro ? [] : gruppen;
@@ -2766,7 +2777,13 @@ button { font: inherit; cursor: pointer; }
         shipEl2.innerHTML = offen.map(function (g) {
           var anteil = Math.max(0, Math.min(100, g.netto / FREI_AB * 100));
           return '<div class="summary-ship-group' + (g.fehlt <= 0 ? ' is-free' : '') + '">' +
-            (mehrere ? '<p class="summary-ship-who">Sendung von ' + esc(g.name) + '</p>' : '') +
+            (mehrere
+              ? '<p class="summary-ship-who">' +
+                  '<span>Versand von ' + esc(g.name) + '</span>' +
+                  '<span class="summary-ship-cost">' +
+                    (g.versand > 0 ? fmt(g.versand) : 'Kostenfrei') + '</span>' +
+                '</p>'
+              : '') +
             '<p class="summary-ship-text">' + (g.fehlt <= 0
               ? 'Versandkostenfrei – diese Sendung liegt über ' + FREI_AB + ' €.'
               : 'Noch <strong>' + fmt(g.fehlt) + '</strong> bis zum kostenfreien Versand.') +
