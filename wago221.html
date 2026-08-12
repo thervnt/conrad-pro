@@ -56,15 +56,6 @@
 
 * { box-sizing: border-box; }
 
-/* Beim Ueberdehnen am Seitenrand zeigt der Browser den Hintergrund des
-   Wurzelelements. Weiss passte weder oben zur blauen Leiste noch unten
-   zur dunklen Rechtsleiste. Der feste Verlauf haelt beide Enden in
-   ihrer Farbe; der Inhaltsbereich liegt mit eigenem Hintergrund darauf,
-   sichtbar wird der Verlauf also nur beim Ueberdehnen. */
-html {
-  background: linear-gradient(to bottom,
-              var(--c-blue) 0 50%, var(--c-navy) 50% 100%) fixed;
-}
 html, body {
   margin: 0;
   padding: 0;
@@ -74,6 +65,27 @@ html, body {
   font-size: 14px;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
+}
+
+/* Beim Ueberdehnen am Seitenrand zeigt der Browser den Hintergrund des
+   Wurzelelements. Weiss passt weder oben zur blauen Leiste noch unten zur
+   dunklen Rechtsleiste.
+
+   Der Verlauf haengt bewusst NICHT am Sichtfenster: mit
+   background-attachment: fixed liegt der ueberdehnte Bereich ausserhalb der
+   Flaeche, auf der gemalt wird - dort blieb es hell. Mitscrollend ist die
+   Flaeche das Dokument, und der Verlauf kachelt darueber hinaus. Deshalb ist
+   er umgedreht: die Kachel oberhalb des Dokuments endet in Blau, die
+   unterhalb beginnt in Navy - oben also blau, unten navy.
+
+   Steht bewusst nach "html, body": dessen background-color trifft html mit
+   gleicher Spezifitaet und wuerde eine vorher notierte Farbe ueberschreiben.
+   Der Inhaltsbereich liegt mit eigenem Hintergrund darueber, sichtbar wird
+   das Ganze also nur beim Ueberdehnen. */
+html {
+  background-color: var(--c-blue);
+  background-image: linear-gradient(to bottom,
+                    var(--c-navy) 0 50%, var(--c-blue) 50% 100%);
 }
 
 a { color: var(--c-blue); text-decoration: none; }
