@@ -2406,8 +2406,8 @@ button { font: inherit; cursor: pointer; }
   // Der Wagen zerfaellt in so viele Sendungen, wie es Versender gibt.
   // Conrad steht vorn, danach die Teilnehmer in der Reihenfolge ihres
   // ersten Auftretens - so springt die Liste nicht, wenn sich Mengen
-  // aendern. PRO deckt nur die Sendung von Conrad ab; fremde Sendungen
-  // bleiben an der Freigrenze haengen.
+  // aendern. PRO stellt jede Sendung frei, auch die von
+  // Marktplatzteilnehmern.
   function versandgruppen(items, pro) {
     var nach = {}, folge = [];
     items.forEach(function (it) {
@@ -2419,7 +2419,7 @@ button { font: inherit; cursor: pointer; }
     return folge.map(function (k) {
       var g = nach[k];
       g.regulaer = g.netto < FREI_AB ? SHIPPING : 0;   // ohne PRO
-      g.kostenfrei = (pro && g.haus) || g.netto >= FREI_AB;
+      g.kostenfrei = pro || g.netto >= FREI_AB;
       g.versand = g.kostenfrei ? 0 : g.regulaer;
       g.fehlt = Math.max(0, FREI_AB - g.netto);
       return g;
@@ -2723,11 +2723,9 @@ button { font: inherit; cursor: pointer; }
     var gruppen = empty ? [] : versandgruppen(items, pro);
     var wouldShip = gruppen.reduce(function (n, g) { return n + g.regulaer; }, 0);
     var shipping = gruppen.reduce(function (n, g) { return n + g.versand; }, 0);
-    // Was der PRO-Haken an genau dieser Bestellung aendert. Bei
-    // Fremdsendungen ist das weniger als der volle Versandpreis.
-    var proErsparnis = pro
-      ? wouldShip - shipping
-      : gruppen.reduce(function (n, g) { return n + (g.haus ? g.regulaer : 0); }, 0);
+    // Was der PRO-Haken an genau dieser Bestellung aendert - bei
+    // mehreren Sendungen entsprechend mehr als ein Versandpreis.
+    var proErsparnis = wouldShip;
     // Mindermengenzuschlag unter 15 EUR netto. Anders als der Versand
     // entfaellt er auch mit PRO nicht.
     var minOrderFee = (!empty && net < MIN_ORDER_NET) ? MIN_ORDER_FEE : 0;
@@ -2754,7 +2752,7 @@ button { font: inherit; cursor: pointer; }
     // freistellt, brauchen keine - dort gibt es nichts zu erreichen.
     var shipEl2 = document.querySelector('[data-summary-ship]');
     if (shipEl2) {
-      var offen = gruppen.filter(function (g) { return !(pro && g.haus); });
+      var offen = pro ? [] : gruppen;
       shipEl2.hidden = empty || !offen.length;
       if (!shipEl2.hidden) {
         var mehrere = gruppen.length > 1;
