@@ -81,6 +81,14 @@ html {
 }
 .promo-strip { box-shadow: 0 -400px 0 var(--c-blue); }
 .footer-legalbar { box-shadow: 0 400px 0 var(--c-navy); }
+/* Firefox malt in den ueberdehnten Bereich nichts aus der Seite - dort
+   bleibt es weiss, egal was am Wurzelelement steht. Weil sich die Farbe
+   nicht setzen laesst, faellt dort der Gummiband-Effekt weg; die Seite
+   endet dann hart an der Kante. Die Abfrage trifft nur Firefox,
+   -moz-appearance gibt es in keiner anderen Maschine. */
+@supports (-moz-appearance: none) {
+  html { overscroll-behavior-y: none; }
+}
 
 a { color: var(--c-blue); text-decoration: none; }
 a:hover { text-decoration: underline; }
