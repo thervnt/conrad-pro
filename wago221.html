@@ -4927,8 +4927,10 @@ const state = {
   qty: 1,
   packSize: 50,  // current selected pack size in Stück
   qtyChosen: false,  // user actively picked a pack/qty; carry it across config changes
-  qtyUserSet: false, // Menge wurde unten selbst eingestellt - dann keine
-                     // Ruecksetzung durch Klicks auf die Verpackung
+  // Selbst eingestellte Mengen, je Verpackungseinheit. Eine Eingabe im
+  // Feld gilt fuer die Verpackung, die gerade aktiv ist - beim Wechsel
+  // wandert sie nicht mit, sondern bleibt bei ihrer eigenen.
+  qtyProPack: {},
   interacted: false,
   showAll: false
 };
@@ -5077,9 +5079,7 @@ function renderProductSide() {
       // Untergrenze der Verpackung (bei Einzelstuecken die
       // Mindestbestellmenge). Nicht die umgerechnete Stueckzahl - die
       // legt der Wechsel gar nicht an.
-      const menge = vpe === state.packSize
-        ? (state.qty || 1)
-        : (state.qtyUserSet ? Math.max(minQtyFor(vpe), state.qty) : minQtyFor(vpe));
+      const menge = vpe === state.packSize ? (state.qty || 1) : mengeFuerPack(vpe);
       // Hoechste erreichte Stufe - sie traegt die Markierung.
       let aktiv = STAFFEL[0].ab;
       STAFFEL.forEach(function (st) { if (st.ab <= menge) aktiv = st.ab; });
@@ -5153,12 +5153,11 @@ function renderProductSide() {
         // Erneuter Klick auf die aktive Verpackung aendert nichts.
         if (next === state.packSize) return;
         state.packSize = next;
-        // Ohne eigene Eingabe startet jede Verpackung bei ihrer
-        // Untergrenze (1 Set, 3 Stueck). Hat der Nutzer die Menge
-        // unten selbst gesetzt, bleibt sie stehen.
-        state.qty = state.qtyUserSet
-          ? Math.max(minQtyFor(next), state.qty)
-          : minQtyFor(next);
+        // Jede Verpackung bringt ihre eigene Menge mit: die dort zuletzt
+        // eingestellte, sonst ihre Untergrenze (1 Set, 3 Stueck). Die
+        // Zahl aus dem Feld wandert nicht mit - sie galt der Verpackung,
+        // die gerade aktiv war.
+        state.qty = mengeFuerPack(next);
         state.qtyChosen = true;
         // Picking a pack is a configurator interaction - unlock the
         // discount-badge / 'Zuletzt gekauft' label story the same
@@ -5616,6 +5615,9 @@ function applyQtyCarryOver(targetPieces) {
   if (best) {
     state.packSize = best.sz;
     state.qty = best.q;
+    // Die uebernommene Stueckzahl gehoert jetzt dieser Verpackung.
+    state.qtyProPack = {};
+    merkeMenge();
   } else {
     // Unreachable while the 1-Stück pack is always offered; round up
     // on the smallest pack as a safety net.
@@ -5640,10 +5642,21 @@ const MIN_PIECES = 3;
 function minQtyFor(packSize) {
   return Math.max(1, Math.ceil(MIN_PIECES / (packSize || 1)));
 }
+// Die Menge, mit der eine Verpackung startet: die zuletzt selbst
+// eingestellte, sonst ihre Untergrenze. Nie die Menge einer anderen
+// Verpackung - die zaehlt dort und nur dort.
+function mengeFuerPack(packSize) {
+  const eigen = state.qtyProPack[packSize];
+  return eigen != null ? Math.max(minQtyFor(packSize), eigen) : minQtyFor(packSize);
+}
+// Eine Eingabe im Feld gehoert der gerade aktiven Verpackung.
+function merkeMenge() {
+  state.qtyProPack[state.packSize] = state.qty;
+}
 document.querySelector('[data-qty-plus]').addEventListener('click', () => {
   state.qty += 1;
   state.qtyChosen = true;
-  state.qtyUserSet = true;
+  merkeMenge();
   document.querySelector('[data-qty]').value = state.qty;
   renderProductSide();
 });
@@ -5651,7 +5664,7 @@ document.querySelector('[data-qty-minus]').addEventListener('click', () => {
   const floor = minQtyFor(state.packSize);
   if (state.qty > floor) state.qty -= 1;
   state.qtyChosen = true;
-  state.qtyUserSet = true;
+  merkeMenge();
   document.querySelector('[data-qty]').value = state.qty;
   renderProductSide();
 });
@@ -5661,7 +5674,7 @@ document.querySelector('[data-qty]').addEventListener('change', e => {
   if (!isNaN(v) && v >= floor) state.qty = v;
   else state.qty = floor;
   state.qtyChosen = true;
-  state.qtyUserSet = true;
+  merkeMenge();
   e.target.value = state.qty;
   renderProductSide();
 });
