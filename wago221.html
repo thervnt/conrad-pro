@@ -1352,7 +1352,6 @@ button { font: inherit; cursor: pointer; }
   flex-direction: column;
   gap: 2px;
 }
-.shipper-invoice { color: var(--c-text-secondary); }
 .shipper-line strong {
   font-weight: 600;
 }
@@ -4845,12 +4844,12 @@ function getSpecs(p, s, h) {
 // Nur Werte, die der Konfigurator nicht ohnehin zeigt. Polzahl und
 // Nennquerschnitt sind dort auswaehlbar - hier waeren sie eine
 // Wiederholung derselben Angabe zwei Zeilen weiter unten.
-// Marktplatzware. Verkauf und Versand liegen beim Teilnehmer, nur die
-// Rechnung stellt Conrad. Mehrere Teilnehmer, weil der
-// Versandkostenfrei-Schwellenwert je Teilnehmer gilt - nicht einmal fuer
+// Marktplatzware. Verkaeufer ist immer Conrad Electronic, der Versand
+// kommt vom Teilnehmer. Mehrere Teilnehmer, weil der
+// Versandkostenfrei-Schwellenwert je Versender gilt - nicht einmal fuer
 // "Conrad" und einmal fuer "alle anderen".
 const MARKTPLATZ = { 2: 'Elektro4000', 5: 'Voltus Elektro', 10: 'Elektro4000' };
-function verkaeuferFuer(p) { return MARKTPLATZ[p] || 'Conrad Electronic'; }
+function versenderFuer(p) { return MARKTPLATZ[p] || 'Conrad Electronic'; }
 function istMarktplatz(p) { return !!MARKTPLATZ[p]; }
 
 function getKeySpecs(p, s, h) {
@@ -5163,11 +5162,9 @@ function renderProductSide() {
   // Key-specs strip below configurator (read-only)
   const shipperEl = document.querySelector('[data-shipper]');
   if (shipperEl) {
-    const verkaeufer = verkaeuferFuer(p);
     shipperEl.innerHTML = istMarktplatz(p)
-      ? '<div>Verkauft von <strong>' + verkaeufer + '</strong></div>' +
-        '<div>Versand von <strong>' + verkaeufer + '</strong></div>' +
-        '<div class="shipper-invoice">Rechnung von <strong>Conrad Electronic</strong></div>'
+      ? '<div>Verkauft von <strong>Conrad Electronic</strong></div>' +
+        '<div>Versand von <strong>' + versenderFuer(p) + '</strong></div>'
       : '<div>Verkauft und versendet von <strong>Conrad Electronic</strong></div>';
   }
 

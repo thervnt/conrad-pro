@@ -1433,6 +1433,8 @@ button { font: inherit; cursor: pointer; }
 .cart-card-top { display: flex; gap: 16px; }
 /* Wie .shipper-line auf der PDP. */
 .cart-card-seller { font-size: 13px; font-weight: 400; color: var(--c-text); }
+/* Marktplatzware traegt Verkauf und Versand untereinander. */
+.cart-card-seller span { display: block; }
 .cart-card-seller strong { font-weight: 600; }
 .cart-card-actions { display: flex; gap: 8px; align-self: flex-start; flex-shrink: 0; }
 .cart-card-actions .icon-btn-danger { margin-left: 16px; }
@@ -1902,9 +1904,15 @@ button { font: inherit; cursor: pointer; }
    Gleiche Darstellung wie in der Kauf-Bestaetigung auf der PDP. */
 .summary-ship { margin: 2px 0 12px; }
 .summary-ship[hidden] { display: none; }
+.summary-ship-group + .summary-ship-group { margin-top: 10px; }
+.summary-ship-who {
+  margin: 0 0 2px;
+  font-size: 12px;
+  color: var(--c-text-secondary);
+}
 .summary-ship-text { margin: 0; font-size: 13px; line-height: 1.4; color: var(--c-text); }
 .summary-ship-text strong { font-weight: 600; }
-.summary-ship.is-free .summary-ship-text { color: var(--c-success); font-weight: 600; }
+.summary-ship-group.is-free .summary-ship-text { color: var(--c-success); font-weight: 600; }
 .summary-ship-bar {
   height: 6px;
   margin-top: 8px;
@@ -2302,10 +2310,7 @@ button { font: inherit; cursor: pointer; }
         <div class="summary-row"><span class="summary-label">Nettopreis</span><span class="summary-value" data-sum-net>59,96 €</span></div>
         <div class="summary-row" data-minorder-row hidden><span class="summary-label">Mindermengenzuschlag <button type="button" class="summary-info" data-tooltip="Bei einem Nettowarenwert unter 15 € berechnen wir 2,95 € Mindermengenzuschlag. Ab 15 € Nettowarenwert entfällt er." aria-label="Erklärung zum Mindermengenzuschlag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></button></span><span class="summary-value" data-sum-minorder>2,95 €</span></div>
         <div class="summary-row"><span class="summary-label">Versand <svg class="pro-logo" data-versand-pro hidden width="44" height="10" viewBox="0 0 38 9" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M22.5387 8.85372L20.3429 6.05665C22.3755 5.61932 23.4462 4.47042 23.4462 2.69746C23.4462 0.774114 22.3266 0 19.5155 0H13.6735L11.6777 8.85372H15.1095L16.5947 2.2729H18.7727C19.7467 2.2729 20.2576 2.57252 20.2576 3.13458C20.2576 3.93394 19.7952 4.33317 18.8462 4.33317H16.4482L18.0915 7.16776C19.0528 8.80413 19.138 8.85372 21.0612 8.85372H22.5387Z" fill="#376EEF"/><path fill-rule="evenodd" clip-rule="evenodd" d="M7.09494 2.2729C8.06898 2.2729 8.57991 2.57252 8.57991 3.13458C8.57991 3.93394 8.11744 4.33316 7.1685 4.33316H4.77051L5.82403 6.15128H7.2955C8.31421 6.15128 8.66512 6.05665 8.66512 6.05665C10.6978 5.61933 11.7685 4.47042 11.7685 2.69745C11.7685 0.774122 10.6489 0 7.83776 0H1.99574L0 8.85372H3.43179L4.91696 2.2729H7.09494Z" fill="#376EEF"/><path fill-rule="evenodd" clip-rule="evenodd" d="M7.09494 2.2729C8.06898 2.2729 8.57991 2.57252 8.57991 3.13458C8.57991 3.93394 8.11744 4.33316 7.1685 4.33316H4.452L4.04168 6.15128H7.2955C8.31421 6.15128 8.66512 6.05665 8.66512 6.05665C10.6978 5.61933 11.7685 4.47042 11.7685 2.69745C11.7685 0.774122 10.6489 0 7.83776 0H1.99574L0 8.85372H3.43179L4.91696 2.2729H7.09494Z" fill="#376EEF"/><path d="M34.2872 0H29.1727C25.9115 0 24.1348 2.0724 24.1348 5.89341C24.1348 8.09139 25.0718 8.85305 27.7977 8.85305L32.8025 8.85259C36.1126 8.85259 37.9986 6.83001 37.9986 3.27142C37.9986 0.874272 37.0132 0 34.2872 0ZM31.7927 6.71809L29.574 6.71786C28.0535 6.71786 27.5744 6.39289 27.5744 5.30668C27.5744 3.3961 28.5886 2.34712 30.3531 2.34712L32.5961 2.34735C33.9954 2.34735 34.3604 2.62187 34.3604 3.67108C34.3604 5.65612 33.4596 6.71809 31.7927 6.71809Z" fill="#376EEF"/></svg></span><span class="summary-value" data-sum-shipping>Kostenfrei</span></div>
-        <div class="summary-ship" data-summary-ship hidden>
-          <p class="summary-ship-text" data-summary-ship-text></p>
-          <div class="summary-ship-bar"><span data-summary-ship-fill></span></div>
-        </div>
+        <div class="summary-ship" data-summary-ship hidden></div>
         <div class="pro-usp summary-pro-usp" data-summary-pro-usp>
           <div class="pro-usp-main"><span data-pro-usp-text>Kostenfreier Versand mit</span>
           <svg class="pro-logo" width="48" height="11" viewBox="0 0 38 9" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M22.5387 8.85372L20.3429 6.05665C22.3755 5.61932 23.4462 4.47042 23.4462 2.69746C23.4462 0.774114 22.3266 0 19.5155 0H13.6735L11.6777 8.85372H15.1095L16.5947 2.2729H18.7727C19.7467 2.2729 20.2576 2.57252 20.2576 3.13458C20.2576 3.93394 19.7952 4.33317 18.8462 4.33317H16.4482L18.0915 7.16776C19.0528 8.80413 19.138 8.85372 21.0612 8.85372H22.5387Z" fill="#376EEF"/><path fill-rule="evenodd" clip-rule="evenodd" d="M7.09494 2.2729C8.06898 2.2729 8.57991 2.57252 8.57991 3.13458C8.57991 3.93394 8.11744 4.33316 7.1685 4.33316H4.77051L5.82403 6.15128H7.2955C8.31421 6.15128 8.66512 6.05665 8.66512 6.05665C10.6978 5.61933 11.7685 4.47042 11.7685 2.69745C11.7685 0.774122 10.6489 0 7.83776 0H1.99574L0 8.85372H3.43179L4.91696 2.2729H7.09494Z" fill="#376EEF"/><path fill-rule="evenodd" clip-rule="evenodd" d="M7.09494 2.2729C8.06898 2.2729 8.57991 2.57252 8.57991 3.13458C8.57991 3.93394 8.11744 4.33316 7.1685 4.33316H4.452L4.04168 6.15128H7.2955C8.31421 6.15128 8.66512 6.05665 8.66512 6.05665C10.6978 5.61933 11.7685 4.47042 11.7685 2.69745C11.7685 0.774122 10.6489 0 7.83776 0H1.99574L0 8.85372H3.43179L4.91696 2.2729H7.09494Z" fill="#376EEF"/><path d="M34.2872 0H29.1727C25.9115 0 24.1348 2.0724 24.1348 5.89341C24.1348 8.09139 25.0718 8.85305 27.7977 8.85305L32.8025 8.85259C36.1126 8.85259 37.9986 6.83001 37.9986 3.27142C37.9986 0.874272 37.0132 0 34.2872 0ZM31.7927 6.71809L29.574 6.71786C28.0535 6.71786 27.5744 6.39289 27.5744 5.30668C27.5744 3.3961 28.5886 2.34712 30.3531 2.34712L32.5961 2.34735C33.9954 2.34735 34.3604 2.62187 34.3604 3.67108C34.3604 5.65612 33.4596 6.71809 31.7927 6.71809Z" fill="#376EEF"/></svg></div>
@@ -2367,7 +2372,17 @@ button { font: inherit; cursor: pointer; }
   var CART_KEY = 'conradCart';
   var VAT_RATE = 0.19;
   var MIN_PIECES = 3;   // seller minimum for the single-piece pack
-  var SHIPPING = 5.95;  // below 100 EUR Nettopreis; free from 100 EUR on
+  var SHIPPING = 5.95;  // je Sendung, unterhalb der Freigrenze
+  var FREI_AB = 100;    // Nettowert je Versender
+  // Verkaeufer ist immer Conrad, versendet wird teils von
+  // Marktplatzteilnehmern. Jeder Versender packt sein eigenes Paket -
+  // deshalb zaehlt die Freigrenze je Versender, nicht ueber den ganzen
+  // Wagen. Dieselbe Zuordnung wie auf der Produktseite.
+  var HAUS = 'Conrad Electronic';
+  var MARKTPLATZ = { 2: 'Elektro4000', 5: 'Voltus Elektro', 10: 'Elektro4000' };
+  function versenderFuer(it) {
+    return it.versender || MARKTPLATZ[it.polzahl] || HAUS;
+  }
   var MIN_ORDER_NET = 15;    // Mindestbestellwert (netto)
   var MIN_ORDER_FEE = 2.95;  // Zuschlag darunter - auch fuer PRO-Kunden
   // Startzustand kommt aus cart-seed.js. Vorher baute diese Seite ihre eigene
@@ -2376,6 +2391,39 @@ button { font: inherit; cursor: pointer; }
   // allein, ob man zuerst hier oder auf der Produktseite war.
   function loadCart() {
     return window.conradCartLoad();
+  }
+
+  // Verkauft wird immer von Conrad. Steht der Versand daneben, sind es
+  // zwei Zeilen - sonst bleibt es die eine gewohnte.
+  function versandZeile(it) {
+    var v = versenderFuer(it);
+    return v === HAUS
+      ? '<div class="cart-card-seller">Verkauft und versendet von <strong>' + HAUS + '</strong></div>'
+      : '<div class="cart-card-seller">Verkauft von <strong>' + HAUS + '</strong>' +
+        '<span>Versand von <strong>' + esc(v) + '</strong></span></div>';
+  }
+
+  // Der Wagen zerfaellt in so viele Sendungen, wie es Versender gibt.
+  // Conrad steht vorn, danach die Teilnehmer in der Reihenfolge ihres
+  // ersten Auftretens - so springt die Liste nicht, wenn sich Mengen
+  // aendern. PRO deckt nur die Sendung von Conrad ab; fremde Sendungen
+  // bleiben an der Freigrenze haengen.
+  function versandgruppen(items, pro) {
+    var nach = {}, folge = [];
+    items.forEach(function (it) {
+      var v = versenderFuer(it);
+      if (!nach[v]) { nach[v] = { name: v, netto: 0, haus: v === HAUS }; folge.push(v); }
+      nach[v].netto += priceOf(it) * it.qty;
+    });
+    folge.sort(function (a, b) { return (a === HAUS ? 0 : 1) - (b === HAUS ? 0 : 1); });
+    return folge.map(function (k) {
+      var g = nach[k];
+      g.regulaer = g.netto < FREI_AB ? SHIPPING : 0;   // ohne PRO
+      g.kostenfrei = (pro && g.haus) || g.netto >= FREI_AB;
+      g.versand = g.kostenfrei ? 0 : g.regulaer;
+      g.fehlt = Math.max(0, FREI_AB - g.netto);
+      return g;
+    });
   }
 
   var items = loadCart();
@@ -2488,7 +2536,7 @@ button { font: inherit; cursor: pointer; }
             '</div>' +
             '<div class="stock-text">' + esc(item.stock || '264.150 Stück auf Lager') + '</div>' +
             '<div class="delivery-pill"><span class="delivery-pill-icon">' + SVG_BOLT + '</span>Sofort-Lieferung&nbsp; Mo., 10. Aug.</div>' +
-            '<div class="cart-card-seller">Verkauft und versendet von <strong>Conrad Electronic</strong></div>' +
+            versandZeile(item) +
             '<div class="cart-card-note"' + (item.noteOpen ? '' : ' hidden') + '><input class="cart-acc-input" data-note-input type="text" placeholder="Notiz zu diesem Artikel (z. B. Kostenstelle, Projekt)" value="' + esc(item.note || '') + '"></div>' +
           '</div>' +
           '<div class="cart-card-actions">' +
@@ -2672,8 +2720,14 @@ button { font: inherit; cursor: pointer; }
     var vat = net * VAT_RATE;
     // Below 100 EUR Nettopreis shipping costs 5,95 EUR; free from
     // 100 EUR on - and always free once PRO is in the order.
-    var wouldShip = (!empty && net < 100) ? SHIPPING : 0;
-    var shipping = pro ? 0 : wouldShip;
+    var gruppen = empty ? [] : versandgruppen(items, pro);
+    var wouldShip = gruppen.reduce(function (n, g) { return n + g.regulaer; }, 0);
+    var shipping = gruppen.reduce(function (n, g) { return n + g.versand; }, 0);
+    // Was der PRO-Haken an genau dieser Bestellung aendert. Bei
+    // Fremdsendungen ist das weniger als der volle Versandpreis.
+    var proErsparnis = pro
+      ? wouldShip - shipping
+      : gruppen.reduce(function (n, g) { return n + (g.haus ? g.regulaer : 0); }, 0);
     // Mindermengenzuschlag unter 15 EUR netto. Anders als der Versand
     // entfaellt er auch mit PRO nicht.
     var minOrderFee = (!empty && net < MIN_ORDER_NET) ? MIN_ORDER_FEE : 0;
@@ -2688,24 +2742,33 @@ button { font: inherit; cursor: pointer; }
     } else if (pro) {
       // Streichpreis statt Minusbetrag: eindeutig als entfallener
       // Versandpreis lesbar, ohne als Abzug missverstanden zu werden.
-      shipEl.innerHTML = (wouldShip > 0 ? '<s class="shipping-was">' + fmt(wouldShip) + '</s> ' : '') + 'Kostenfrei';
+      shipEl.innerHTML = (proErsparnis > 0 ? '<s class="shipping-was">' + fmt(wouldShip) + '</s> ' : '') +
+        (shipping > 0 ? fmt(shipping) : 'Kostenfrei');
     } else {
       shipEl.textContent = shipping > 0 ? fmt(shipping) : 'Kostenfrei';
     }
     // SVG has no `hidden` IDL property - toggle the attribute directly.
     // Fortschritt zum kostenfreien Versand. Mit PRO ist der Versand
     // ohnehin frei - dann waere die Strecke sinnlos.
+    // Je Sendung eine eigene Strecke. Sendungen, die PRO ohnehin
+    // freistellt, brauchen keine - dort gibt es nichts zu erreichen.
     var shipEl2 = document.querySelector('[data-summary-ship]');
     if (shipEl2) {
-      shipEl2.hidden = empty || pro;
+      var offen = gruppen.filter(function (g) { return !(pro && g.haus); });
+      shipEl2.hidden = empty || !offen.length;
       if (!shipEl2.hidden) {
-        var fehlt = 100 - net;
-        var anteil = Math.max(0, Math.min(100, net));
-        shipEl2.classList.toggle('is-free', fehlt <= 0);
-        document.querySelector('[data-summary-ship-text]').innerHTML = fehlt <= 0
-          ? 'Versandkostenfrei – Ihre Bestellung liegt über 100 €.'
-          : 'Noch <strong>' + fmt(fehlt) + '</strong> bis zum kostenfreien Versand.';
-        document.querySelector('[data-summary-ship-fill]').style.width = anteil + '%';
+        var mehrere = gruppen.length > 1;
+        shipEl2.innerHTML = offen.map(function (g) {
+          var anteil = Math.max(0, Math.min(100, g.netto / FREI_AB * 100));
+          return '<div class="summary-ship-group' + (g.fehlt <= 0 ? ' is-free' : '') + '">' +
+            (mehrere ? '<p class="summary-ship-who">Sendung von ' + esc(g.name) + '</p>' : '') +
+            '<p class="summary-ship-text">' + (g.fehlt <= 0
+              ? 'Versandkostenfrei – diese Sendung liegt über ' + fmt(FREI_AB) + '.'
+              : 'Noch <strong>' + fmt(g.fehlt) + '</strong> bis zum kostenfreien Versand.') +
+            '</p>' +
+            '<div class="summary-ship-bar"><span style="width:' + anteil + '%"></span></div>' +
+          '</div>';
+        }).join('');
       }
     }
     var versandLogo = document.querySelector('[data-versand-pro]');
@@ -2727,16 +2790,16 @@ button { font: inherit; cursor: pointer; }
     document.querySelector('[data-summary-pro-usp]').hidden = pro || empty;
     // Shipping is free from 100 EUR net anyway - pitch the next-best
     // PRO benefit there instead of free shipping.
-    document.querySelector('[data-pro-usp-text]').textContent = net >= 100
-      ? '36 Monate Langzeitgarantie mit'
-      : 'Kostenfreier Versand mit';
+    document.querySelector('[data-pro-usp-text]').textContent = proErsparnis > 0
+      ? 'Kostenfreier Versand mit'
+      : '36 Monate Langzeitgarantie mit';
     // Shipping is free from 100 EUR net anyway - pitch the warranty
     // benefit instead. Unchanged when PRO is ticked: the summary box
     // already confirms what the tick did.
     // Ab 100 EUR netto ist der Versand ohnehin frei - dann zieht das
     // Garantieversprechen statt der Versandersparnis.
-    saving.textContent = net < 100
-      ? 'und heute ' + fmt(SHIPPING) + ' Versand sparen'
+    saving.textContent = proErsparnis > 0
+      ? 'und heute ' + fmt(proErsparnis) + ' Versand sparen'
       : 'und 12 Monate länger Garantie erhalten';
     // Rechte Auszeichnung: offen das Versprechen, angehakt die
     // Bestaetigung - beides fuer genau diese Bestellung.
@@ -2744,8 +2807,8 @@ button { font: inherit; cursor: pointer; }
     var pillText = document.querySelector('[data-pro-savings-text]');
     if (pill && pillText) {
       pill.classList.toggle('is-active', pro);
-      pillText.textContent = net < 100
-        ? (pro ? fmt(SHIPPING) + ' Versand gespart' : fmt(SHIPPING) + ' Versand sparen')
+      pillText.textContent = proErsparnis > 0
+        ? (pro ? fmt(proErsparnis) + ' Versand gespart' : fmt(proErsparnis) + ' Versand sparen')
         : (pro ? '12 Monate mehr Garantie gesichert' : '12 Monate mehr Garantie');
     }
     document.querySelector('[data-pro-checkbox]').checked = pro;
