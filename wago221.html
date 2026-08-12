@@ -5219,7 +5219,7 @@ function renderProductSide() {
   if (shipperEl) {
     shipperEl.innerHTML = istMarktplatz(p)
       ? '<div>Verkauft von <strong>Conrad Electronic</strong></div>' +
-        '<div>Versand von <strong>' + versenderFuer(p) + '</strong></div>'
+        '<div>Versand durch <strong>' + versenderFuer(p) + '</strong></div>'
       : '<div>Verkauft und versendet von <strong>Conrad Electronic</strong></div>';
   }
 
@@ -5895,7 +5895,7 @@ if (countdownEl) {
   // uebrige, jeder mit eigener Freigrenze und eigenem Versand. Die
   // Schublade darf nichts anderes versprechen als die Seite danach.
   const VERSANDPREIS = 5.95;
-  const FREMD_VERSAND = 'anderen Versendern';
+  const FREMD_VERSAND = 'andere Versender';
   function versandtoepfe(list) {
     const toepfe = [
       { name: 'Conrad Electronic', netto: 0, hat: false },
@@ -5964,7 +5964,7 @@ if (countdownEl) {
         toepfe.map(function (g) {
           return '<div class="minicart-ship-group' + (g.fehlt <= 0 ? ' free' : '') + '">' +
             (mehrere
-              ? '<p class="minicart-ship-who"><span>Versand von ' + g.name + '</span>' +
+              ? '<p class="minicart-ship-who"><span>Versand durch ' + g.name + '</span>' +
                 '<span>' + (g.versand > 0 ? euro(g.versand) : 'Kostenfrei') + '</span></p>'
               : '') +
             '<p class="minicart-ship-text">' + (g.fehlt <= 0

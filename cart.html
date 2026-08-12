@@ -2411,7 +2411,7 @@ button { font: inherit; cursor: pointer; }
     return v === HAUS
       ? '<div class="cart-card-seller">Verkauft und versendet von <strong>' + HAUS + '</strong></div>'
       : '<div class="cart-card-seller">Verkauft von <strong>' + HAUS + '</strong>' +
-        '<span>Versand von <strong>' + esc(v) + '</strong></span></div>';
+        '<span>Versand durch <strong>' + esc(v) + '</strong></span></div>';
   }
 
   // Zwei Toepfe: was Conrad selbst versendet, und alles uebrige
@@ -2420,7 +2420,7 @@ button { font: inherit; cursor: pointer; }
   // Grenze, und der Kunde muesste mehrere Schwellen im Kopf behalten.
   // Jeder Topf hat seine eigene Freigrenze und seinen eigenen Versand.
   // PRO stellt beide frei.
-  var FREMD = 'anderen Versendern';
+  var FREMD = 'andere Versender';
   function versandgruppen(items, pro) {
     var toepfe = [
       { name: HAUS,  haus: true,  netto: 0, hat: false },
@@ -2782,7 +2782,7 @@ button { font: inherit; cursor: pointer; }
           return '<div class="summary-ship-group' + (g.fehlt <= 0 ? ' is-free' : '') + '">' +
             (mehrere
               ? '<p class="summary-ship-who">' +
-                  '<span>Versand von ' + esc(g.name) + '</span>' +
+                  '<span>Versand durch ' + esc(g.name) + '</span>' +
                   '<span class="summary-ship-cost">' +
                     (g.versand > 0 ? fmt(g.versand) : 'Kostenfrei') + '</span>' +
                 '</p>'
