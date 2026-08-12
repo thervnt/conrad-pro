@@ -3275,7 +3275,24 @@ button { font: inherit; cursor: pointer; }
   color: var(--c-text);
 }
 .minicart-ship strong { font-weight: 600; }
-.minicart-ship.free { color: var(--c-success); font-weight: 600; }
+.minicart-ship-group + .minicart-ship-group { margin-top: 12px; }
+.minicart-ship-text { margin: 0; }
+/* Versender und sein Anteil - Betrag rechts. */
+.minicart-ship-who {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  margin: 0 0 2px;
+  font-size: 12px;
+  color: var(--c-text-secondary);
+}
+.minicart-ship-who span:last-child { font-variant-numeric: tabular-nums; white-space: nowrap; }
+.minicart-ship-group.free .minicart-ship-text,
+.minicart-ship-group.free .minicart-ship-who span:last-child {
+  color: var(--c-success);
+  font-weight: 600;
+}
 .minicart-bar {
   height: 6px;
   border-radius: var(--radius-pill);
@@ -5862,6 +5879,29 @@ if (countdownEl) {
     }, 0);
   }
 
+  // Dieselbe Rechnung wie im Warenkorb: zwei Toepfe, Conrad und alles
+  // uebrige, jeder mit eigener Freigrenze und eigenem Versand. Die
+  // Schublade darf nichts anderes versprechen als die Seite danach.
+  const VERSANDPREIS = 5.95;
+  const FREMD_VERSAND = 'anderen Versendern';
+  function versandtoepfe(list) {
+    const toepfe = [
+      { name: 'Conrad Electronic', netto: 0, hat: false },
+      { name: FREMD_VERSAND,       netto: 0, hat: false }
+    ];
+    list.forEach(function (it) {
+      const t = istMarktplatz(it.polzahl) ? toepfe[1] : toepfe[0];
+      t.hat = true;
+      t.netto += ((it.packPrices && it.packPrices[it.packSize]) || 0) * it.qty;
+    });
+    return toepfe.filter(function (t) { return t.hat; }).map(function (g) {
+      g.fehlt = Math.max(0, FREE_SHIPPING_NET - g.netto);
+      g.versand = g.fehlt > 0 ? VERSANDPREIS : 0;
+      g.anteil = Math.max(0, Math.min(100, g.netto / FREE_SHIPPING_NET * 100));
+      return g;
+    });
+  }
+
   // Platzhalter fuer Positionen ohne Produktfoto, etwa Zubehoer aus der
   // Stueckliste - sonst steht dort das kaputte Bildsymbol.
   const MINICART_BILD_LEER = '<svg class="minicart-img-leer" viewBox="0 0 24 24" fill="none" ' +
@@ -5875,8 +5915,8 @@ if (countdownEl) {
     if (!list.length) { closeMiniCart(); return; }
 
     const net = cartNet(list);
-    const missing = FREE_SHIPPING_NET - net;
-    const pct = Math.max(0, Math.min(100, (net / FREE_SHIPPING_NET) * 100));
+    const toepfe = versandtoepfe(list);
+    const mehrere = toepfe.length > 1;
 
     const rows = list.map(function (line, i) {
       const price = (line.packPrices && line.packPrices[line.packSize]) || 0;
@@ -5908,11 +5948,19 @@ if (countdownEl) {
     }).join('');
 
     mcBody.innerHTML =
-      '<div class="minicart-ship' + (missing <= 0 ? ' free' : '') + '">' +
-        (missing <= 0
-          ? 'Versandkostenfrei – Ihre Bestellung liegt über 100 €.'
-          : 'Noch <strong>' + euro(missing) + '</strong> bis zum kostenfreien Versand.') +
-        '<div class="minicart-bar"><span style="width:' + pct + '%"></span></div>' +
+      '<div class="minicart-ship">' +
+        toepfe.map(function (g) {
+          return '<div class="minicart-ship-group' + (g.fehlt <= 0 ? ' free' : '') + '">' +
+            (mehrere
+              ? '<p class="minicart-ship-who"><span>Versand von ' + g.name + '</span>' +
+                '<span>' + (g.versand > 0 ? euro(g.versand) : 'Kostenfrei') + '</span></p>'
+              : '') +
+            '<p class="minicart-ship-text">' + (g.fehlt <= 0
+              ? 'Versandkostenfrei – diese Sendung liegt über ' + FREE_SHIPPING_NET + ' €.'
+              : 'Noch <strong>' + euro(g.fehlt) + '</strong> bis zum kostenfreien Versand.') + '</p>' +
+            '<div class="minicart-bar"><span style="width:' + g.anteil + '%"></span></div>' +
+          '</div>';
+        }).join('') +
       '</div>' +
       '<ul class="minicart-list">' + rows + '</ul>';
 

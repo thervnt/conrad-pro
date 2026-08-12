@@ -2414,21 +2414,24 @@ button { font: inherit; cursor: pointer; }
         '<span>Versand von <strong>' + esc(v) + '</strong></span></div>';
   }
 
-  // Der Wagen zerfaellt in so viele Sendungen, wie es Versender gibt.
-  // Conrad steht vorn, danach die Teilnehmer in der Reihenfolge ihres
-  // ersten Auftretens - so springt die Liste nicht, wenn sich Mengen
-  // aendern. PRO stellt jede Sendung frei, auch die von
-  // Marktplatzteilnehmern.
+  // Zwei Toepfe: was Conrad selbst versendet, und alles uebrige
+  // zusammen. Wer im Marktplatz genau versendet, steht auf der Kachel -
+  // in der Summenbox waere jeder Name eine eigene Zeile mit eigener
+  // Grenze, und der Kunde muesste mehrere Schwellen im Kopf behalten.
+  // Jeder Topf hat seine eigene Freigrenze und seinen eigenen Versand.
+  // PRO stellt beide frei.
+  var FREMD = 'anderen Versendern';
   function versandgruppen(items, pro) {
-    var nach = {}, folge = [];
+    var toepfe = [
+      { name: HAUS,  haus: true,  netto: 0, hat: false },
+      { name: FREMD, haus: false, netto: 0, hat: false }
+    ];
     items.forEach(function (it) {
-      var v = versenderFuer(it);
-      if (!nach[v]) { nach[v] = { name: v, netto: 0, haus: v === HAUS }; folge.push(v); }
-      nach[v].netto += priceOf(it) * it.qty;
+      var t = versenderFuer(it) === HAUS ? toepfe[0] : toepfe[1];
+      t.hat = true;
+      t.netto += priceOf(it) * it.qty;
     });
-    folge.sort(function (a, b) { return (a === HAUS ? 0 : 1) - (b === HAUS ? 0 : 1); });
-    return folge.map(function (k) {
-      var g = nach[k];
+    return toepfe.filter(function (t) { return t.hat; }).map(function (g) {
       g.regulaer = g.netto < FREI_AB ? SHIPPING : 0;   // ohne PRO
       g.kostenfrei = pro || g.netto >= FREI_AB;
       g.versand = g.kostenfrei ? 0 : g.regulaer;
