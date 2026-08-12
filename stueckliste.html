@@ -61,48 +61,19 @@ html, body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* Beim Ueberdehnen am Seitenrand zeigt der Browser den Hintergrund des
-   Wurzelelements. Weiss passt weder oben zur blauen Leiste noch unten zur
-   dunklen Rechtsleiste.
-
-   Der Verlauf haengt bewusst NICHT am Sichtfenster: mit
-   background-attachment: fixed liegt der ueberdehnte Bereich ausserhalb der
-   Flaeche, auf der gemalt wird - dort blieb es hell. Mitscrollend ist die
-   Flaeche das Dokument, und der Verlauf kachelt darueber hinaus. Deshalb ist
-   er umgedreht: die Kachel oberhalb des Dokuments endet in Blau, die
-   unterhalb beginnt in Navy - oben also blau, unten navy.
-
-   Steht bewusst nach "html, body": dessen background-color trifft html mit
-   gleicher Spezifitaet und wuerde eine vorher notierte Farbe ueberschreiben.
-   Der Inhaltsbereich liegt mit eigenem Hintergrund darueber, sichtbar wird
-   das Ganze also nur beim Ueberdehnen. */
-html {
-  background-color: var(--c-blue);
-  background-image: linear-gradient(to bottom,
-                    var(--c-navy) 0 50%, var(--c-blue) 50% 100%);
-}
-
-/* Kurze Seiten fuellen das Fenster nicht aus. Ohne das endet der Fuss dort,
-   wo der Inhalt aufhoert, und darunter steht der Seitenhintergrund bis zum
-   Fensterrand - auf hohen Bildschirmen mehrere hundert Pixel. dvh fuer
-   Mobilgeraete, deren Adressleiste die vh-Hoehe verfaelscht. */
-body {
-  min-height: 100vh;
-  min-height: 100dvh;
-  display: flex;
-  flex-direction: column;
-}
-/* Der Fuss traegt eine eigene margin-top-Regel (Klassenselektor), die ein
-   margin-top: auto hier ueberstimmen wuerde. Stattdessen waechst der
-   Inhaltsbereich in den freien Platz - der Fuss rutscht mit nach unten. */
-body > main { flex: 1 0 auto; }
-/* Als Flex-Kind schluckt margin: 0 auto den freien Platz seitlich: Leiste und
-   Inhalt schrumpfen dann auf ihren Text, statt sich bis max-width zu strecken.
-   width stellt her, was sie als Bloecke hatten - volle Breite, gedeckelt auf
-   1680 px, mittig. Muss zur Produktseite passen, die kein Flex braucht. */
-body > .breadcrumb,
-body > main { width: 100%; }
-
+/* Ueberdehnen am Seitenrand ("Gummiband").
+   Der freigelegte Streifen zeigt den Hintergrund des Wurzelelements.
+   Verlaesslich ist dort in jedem Browser nur die FARBE - ein
+   Hintergrundbild kacheln Chrome und Safari darueber hinaus, Firefox
+   malt es nicht. Deshalb traegt die Wurzel die Farbe der oberen Leiste;
+   dort faellt ein heller Streifen am staerksten auf.
+   Die Leisten malen zusaetzlich ueber ihre Kante hinaus. Ein
+   Schlagschatten ohne Weichzeichnung gehoert zur Seite und vergroessert
+   nur die Malflaeche, nicht den Scrollbereich. Wo der Browser ihn beim
+   Ueberdehnen mitzeichnet, stimmt auch die Farbe am Fussende. */
+html { background-color: var(--c-blue); }
+.promo-strip { box-shadow: 0 -400px 0 var(--c-blue); }
+.footer-legalbar { box-shadow: 0 400px 0 var(--c-navy); }
 
 a { color: var(--c-blue); text-decoration: none; }
 a:hover { text-decoration: underline; }
