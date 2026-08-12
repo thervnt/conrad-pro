@@ -619,7 +619,7 @@ button { font: inherit; cursor: pointer; }
   color: var(--c-text-secondary);
   cursor: pointer;
 }
-.share-btn:hover { border-color: var(--c-blue); color: var(--c-text); }
+.share-btn:hover { border-color: var(--c-border-strong); color: var(--c-text); }
 .share-btn svg { width: 18px; height: 18px; }
 
 .product-title {
@@ -962,7 +962,7 @@ button { font: inherit; cursor: pointer; }
   color: var(--c-text-tertiary);
   flex-shrink: 0;
 }
-.id-chip-value:hover { background: var(--c-bg-tint); }
+.id-chip-value:hover { background: var(--c-bg-tint); border-color: var(--c-border-strong); }
 .id-chip-value:hover .id-chip-copy { color: var(--c-text-secondary); }
 .id-chip-value.copied {
   border-color: #4a4f5a;
@@ -1003,7 +1003,7 @@ button { font: inherit; cursor: pointer; }
   align-items: center;
   gap: 6px;
 }
-.id-chip-actions button:hover { border-color: var(--c-blue); }
+.id-chip-actions button:hover { background: var(--c-bg-tint); border-color: var(--c-border-strong); }
 .id-chip-actions svg { width: 18px; height: 18px; }
 /* One split-button component: [ DE v | (pdf) Datenblatt öffnen ] */
 .datenblatt-group {
@@ -1027,7 +1027,7 @@ button { font: inherit; cursor: pointer; }
   color: var(--c-text);
 }
 .datenblatt-open:hover { background: var(--c-bg-tint); text-decoration: none; }
-.datenblatt-group:hover { border-color: var(--c-border-control); }
+.datenblatt-group:hover { border-color: var(--c-border-strong); }
 .datenblatt-pdf-icon { width: 16px; height: 16px; fill: var(--c-danger); flex-shrink: 0; }
 .datenblatt-dropdown {
   position: relative;
@@ -1297,7 +1297,7 @@ button { font: inherit; cursor: pointer; }
   cursor: pointer;
   width: 100%;
 }
-.notify-link:hover { background: var(--c-bg-tint); border-color: var(--c-text-secondary); }
+.notify-link:hover { background: var(--c-bg-tint); border-color: var(--c-border-strong); }
 .notify-link svg { width: 16px; height: 16px; flex-shrink: 0; }
 
 .stock-text {
@@ -1519,8 +1519,9 @@ button { font: inherit; cursor: pointer; }
   line-height: 1;
   transition: background 0.15s, color 0.15s;
 }
-/* Hover = blue border, matching the configurator tiles and pack pills. */
-.qty-btn:hover .qty-btn-puck { border-color: var(--c-blue); }
+/* Das Mengenfeld waehlt nichts aus, es stellt ein - also die neutrale
+   Verstaerkung, wie am Steppfeld in der Schublade. */
+.qty-btn:hover .qty-btn-puck { border-color: var(--c-border-strong); }
 .qty-btn:active .qty-btn-puck { background: var(--c-blue-tint); }
 .qty-min-note {
   margin: 6px 0 0;
@@ -1923,11 +1924,11 @@ button { font: inherit; cursor: pointer; }
   display: flex;
   flex-direction: column;
   gap: 10px;
-  transition: border-color 0.15s, box-shadow 0.15s;
+  transition: border-color 0.15s, background 0.15s;
   color: var(--c-text);
   text-decoration: none;
 }
-.serie-card:hover { border-color: var(--c-blue); box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06); }
+.serie-card:hover { background: var(--c-bg-tint); border-color: var(--c-border-strong); }
 .serie-card-icon {
   width: 56px; height: 56px;
   background: var(--c-bg-tint);
@@ -2708,10 +2709,13 @@ button { font: inherit; cursor: pointer; }
   color: var(--c-text);
   font-size: 14px;
 }
-/* Nur die Flaeche wechselt. Blauer Text signalisiert auf dieser Seite
-   einen Verweis, ein dunkler Rahmen sonst nirgends etwas - beides war
-   hier eine eigene Sprache. */
+/* Aufklappzeile: Flaeche toenen und Rahmen verstaerken, wie bei jeder
+   anderen Flaeche, die einen Weg oeffnet. Der Rahmen sitzt am Element,
+   nicht am summary - deshalb ueber :has, sonst leuchtete er auch beim
+   Ueberfahren der geoeffneten Antwort. */
 .faq-item summary:hover { background: var(--c-bg-tint); }
+.faq-item { transition: border-color 0.15s; }
+.faq-item:has(summary:hover) { border-color: var(--c-border-strong); }
 .faq-item summary { transition: background 0.15s, color 0.15s; }
 .faq-item summary::-webkit-details-marker { display: none; }
 .faq-item summary::after {
@@ -3265,7 +3269,7 @@ button { font: inherit; cursor: pointer; }
   align-items: center;
   justify-content: center;
 }
-.minicart-qty button:hover { border-color: var(--c-blue); }
+.minicart-qty button:hover { border-color: var(--c-border-strong); }
 .minicart-qty-val { font-size: 14px; font-weight: 600; min-width: 2ch; text-align: center; font-variant-numeric: tabular-nums; }
 .minicart-qty-unit { font-size: 12px; color: var(--c-text-secondary); }
 .minicart-price { font-size: 15px; font-weight: 700; white-space: nowrap; }
@@ -3684,7 +3688,7 @@ button { font: inherit; cursor: pointer; }
   text-align: center;
   transition: border-color 0.15s, background 0.15s;
 }
-.fly-tile:hover { border-color: var(--c-blue); background: var(--c-bg-tint); text-decoration: none; }
+.fly-tile:hover { border-color: var(--c-border-strong); background: var(--c-bg-tint); text-decoration: none; }
 .fly-tile svg { width: 18px; height: 18px; color: var(--c-text-secondary); }
 .fly-foot {
   padding: 12px 16px;

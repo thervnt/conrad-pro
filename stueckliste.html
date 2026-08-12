@@ -763,8 +763,9 @@ button { font: inherit; cursor: pointer; }
   line-height: 1;
   transition: background 0.15s, color 0.15s;
 }
-/* Hover = blue border, matching the configurator tiles and pack pills. */
-.qty-btn:hover .qty-btn-puck { border-color: var(--c-blue); }
+/* Das Mengenfeld waehlt nichts aus, es stellt ein - also die neutrale
+   Verstaerkung, wie am Steppfeld in der Schublade. */
+.qty-btn:hover .qty-btn-puck { border-color: var(--c-border-strong); }
 .qty-btn:active .qty-btn-puck { background: var(--c-blue-tint); }
 
 .pro-usp {
@@ -1302,7 +1303,7 @@ button { font: inherit; cursor: pointer; }
   text-align: center;
   transition: border-color 0.15s, background 0.15s;
 }
-.fly-tile:hover { border-color: var(--c-blue); background: var(--c-bg-tint); text-decoration: none; }
+.fly-tile:hover { border-color: var(--c-border-strong); background: var(--c-bg-tint); text-decoration: none; }
 .fly-tile svg { width: 18px; height: 18px; color: var(--c-text-secondary); }
 .fly-foot {
   padding: 12px 16px;
@@ -1791,7 +1792,7 @@ button { font: inherit; cursor: pointer; }
   cursor: pointer;
   padding: 0;
 }
-.icon-btn:hover { border-color: var(--c-blue); }
+.icon-btn:hover { border-color: var(--c-border-strong); }
 .icon-btn svg { width: 18px; height: 18px; }
 .icon-btn[data-tooltip]:hover::after,
 .icon-btn[data-tooltip]:focus-visible::after {
@@ -1864,6 +1865,7 @@ button { font: inherit; cursor: pointer; }
 }
 .quickadd-head[aria-expanded="true"] .quickadd-chevron { transform: rotate(180deg); }
 .quickadd-head:hover .quickadd-chevron { color: var(--c-text); }
+.quickadd-head:hover .quickadd-title { text-decoration: underline; }
 .quickadd-body { margin-top: 12px; }
 .quickadd-body[hidden] { display: none; }
 @media (prefers-reduced-motion: reduce) {
