@@ -30,8 +30,10 @@
       return Array.isArray(v) ? v : [];
     } catch (e) { return []; }
   }
+  // Aeltere Staende tragen die Stueckzahl fest im Titel - siehe
+  // cart.html. Dieselbe Bereinigung, damit beide dasselbe zeigen.
   function titel(it) {
-    if (it.title) return it.title;
+    if (it.title) return it.title.replace(/ \d+ St\.(?= Transparent)/, '');
     return 'WAGO ' + it.sku + (it.packSize === 1 ? '' : '-' + it.packSize) +
       ' 221' + (it.variantTag || '') + ' Verbindungsklemme Polzahl: ' + it.polzahl;
   }

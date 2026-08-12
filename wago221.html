@@ -4870,8 +4870,7 @@ function buildVariantTitle(p, s, h, packSize) {
   // the polzahl's default for places that don't track packSize yet.
   const setSize = (packSize != null) ? packSize : (opt ? opt.setSize : 50);
   // For the single-piece pack the SKU has no -N suffix on the
-  // catalogue side (it's the base SKU), but we still want
-  // "1 St." in the title so the user sees what they're buying.
+  // catalogue side - it's the base SKU.
   const skuSuffix = setSize === 1 ? '' : ('-' + setSize);
   const isSix = s === '6';
   const range = isSix

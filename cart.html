@@ -2457,11 +2457,18 @@ button { font: inherit; cursor: pointer; }
 
   // Zubehoer bringt seinen Titel mit; die 221er-Zeilen leiten ihn aus
   // der gewaehlten Konfiguration ab.
+  // Warenkorbstaende von vor der Umstellung tragen die Stueckzahl fest
+  // im Titel. Sie hier zu entfernen erspart dem Nutzer, den Wagen zu
+  // leeren. Greift nur bei den 221er-Titeln, sonst waere "50 St." Teil
+  // eines fremden Produktnamens.
+  function ohneStueckzahl(t) { return t.replace(/ \d+ St\.(?= Transparent)/, ''); }
   function titleFor(item) {
-    if (item.title) return item.title;
+    if (item.title) return ohneStueckzahl(item.title);
+    // Die Stueckzahl steht schon in der Verpackungseinheit darunter -
+    // im Titel waere sie eine zweite Angabe. Wie auf der Produktseite.
     return 'WAGO ' + item.sku + (item.packSize === 1 ? '' : '-' + item.packSize) +
       ' 221' + item.variantTag + ' Verbindungsklemme ' + item.range +
-      ' Polzahl: ' + item.polzahl + ' ' + item.packSize + ' St. Transparent, Orange';
+      ' Polzahl: ' + item.polzahl + ' Transparent, Orange';
   }
 
   // Aeltere Warenkorbstaende kennen kein href - die sind immer die 221.
