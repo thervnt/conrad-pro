@@ -1157,6 +1157,11 @@ button { font: inherit; cursor: pointer; }
 .pack-hover-wrap .discount-popover { left: 0; right: auto; top: auto; bottom: calc(100% + 8px); }
 .pack-hover-wrap:hover .discount-popover,
 .pack-hover-wrap:focus-within .discount-popover { display: block; }
+.discount-popover-sub {
+  margin: 2px 0 10px;
+  font-size: 12px;
+  color: var(--c-text-tertiary);
+}
 .discount-popover-title {
   font-weight: 600;
   margin-bottom: 8px;
@@ -3935,9 +3940,7 @@ button { font: inherit; cursor: pointer; }
       <span class="invoice-note-text">Alle Rechnungen von Drittanbietern kommen nun direkt von Conrad.</span>
     </div>
 
-    <div class="shipper-line">
-      <div>Verkauft und versendet von <strong>Conrad Electronic</strong></div>
-    </div>
+    <div class="shipper-line" data-shipper></div>
 
     <p class="pack-label">Verpackungseinheit</p>
     <div class="pack-hover-wrap" data-pack-hover-wrap>
@@ -4826,6 +4829,13 @@ function getSpecs(p, s, h) {
 // Nur Werte, die der Konfigurator nicht ohnehin zeigt. Polzahl und
 // Nennquerschnitt sind dort auswaehlbar - hier waeren sie eine
 // Wiederholung derselben Angabe zwei Zeilen weiter unten.
+// Beispielhafte Marktplatzware: diese Polzahlen versendet ein Partner,
+// verkauft und abgerechnet wird weiter ueber Conrad. Fuer den
+// Versandkostenfrei-Schwellenwert zaehlt der Versender - siehe die
+// Erlaeuterung im Warenkorb.
+const PARTNER_VERSAND = { 2: 'Elektro4000', 5: 'Elektro4000', 10: 'Elektro4000' };
+function versenderFuer(p) { return PARTNER_VERSAND[p] || 'Conrad Electronic'; }
+
 function getKeySpecs(p, s, h) {
   const isSix = s === '6';
   return [
@@ -5007,41 +5017,48 @@ function renderProductSide() {
       if (savingsContainer) savingsContainer.style.display = 'none';
     }
 
-    // Popover content: full Mengenrabatte table for the current variant.
+    // Mengenstaffel der GEWAEHLTEN Verpackungseinheit. Frueher stand hier
+    // die Preisliste der Verpackungsgroessen - das ist keine Staffel,
+    // sondern ein Vergleich anderer Artikel. Wer 50er-Sets kauft, will
+    // wissen, was das zweite und das zehnte Set kosten.
     const popEl = document.querySelector('[data-discount-popover]');
     if (popEl) {
-      const sizes = packSizesByPolzahl[p] || [];
-      // Die Staffel richtet sich nach der Gesamtmenge in Stueck, nicht
-      // nach der gewaehlten Verpackung: 16 Einzelstuecke erreichen die
-      // 15er-Stufe. Markiert wird die hoechste erreichte Stufe.
-      const totalPieces = (state.qty || 0) * sz;
-      const reached = sizes.filter(function (packSz) { return packSz <= totalPieces; });
-      const activeTier = reached.length
-        ? Math.max.apply(null, reached)
-        : Math.min.apply(null, sizes);
-      const rows = sizes.map(function (packSz) {
-        const price = (pricing.packs && pricing.packs[packSz] != null) ? pricing.packs[packSz] : null;
-        if (price == null) return '';
-        const listSz = pricing.baselineUnit * packSz;
-        const sav = listSz - price;
-        const pct = (sav > 0.01 && listSz > 0) ? Math.round(sav / listSz * 100) : 0;
-        const cur = packSz === activeTier;
-        const savCell = pct > 0
-          ? ('\u2212' + pct + '% = ' + sav.toFixed(2).replace('.', ',') + ' \u20ac')
-          : '\u2014';
+      // Stufen und Nachlaesse haengen an der Verpackungseinheit: bei
+      // Einzelstuecken greift die Staffel spaeter als bei Sets.
+      const STAFFEL = sz === 1
+        ? [{ ab: 1, pct: 0 }, { ab: 25, pct: 3 }, { ab: 50, pct: 6 },
+           { ab: 100, pct: 9 }, { ab: 250, pct: 12 }]
+        : [{ ab: 1, pct: 0 }, { ab: 2, pct: 3 }, { ab: 5, pct: 6 },
+           { ab: 10, pct: 9 }, { ab: 25, pct: 12 }];
+      const einheit = sz === 1 ? 'Stück' : 'Sets';
+      const grundpreis = (pricing.packs && pricing.packs[sz] != null)
+        ? pricing.packs[sz] : pricing.price;
+      const menge = state.qty || 1;
+      // Hoechste erreichte Stufe - sie traegt die Markierung.
+      let aktiv = STAFFEL[0].ab;
+      STAFFEL.forEach(function (st) { if (st.ab <= menge) aktiv = st.ab; });
+
+      const rows = STAFFEL.map(function (st) {
+        const preis = grundpreis * (1 - st.pct / 100);
+        const stueck = preis / sz;
+        const cur = st.ab === aktiv;
         return '<tr' + (cur ? ' class="current"' : '') + '>' +
-          '<td>' + packSz + ' Stück</td>' +
-          '<td>' + savCell + '</td>' +
-          '<td>' + price.toFixed(2).replace('.', ',') + ' €</td>' +
+          '<td>ab ' + st.ab + ' ' + (st.ab === 1 ? einheit.replace(/s$/, '') : einheit) + '</td>' +
+          '<td>' + (st.pct ? '\u2212' + st.pct + ' %' : '\u2014') + '</td>' +
+          '<td>' + stueck.toFixed(2).replace('.', ',') + ' €</td>' +
           '</tr>';
       }).join('');
+
       popEl.innerHTML =
         '<div class="discount-popover-title">Mengenrabatte</div>' +
+        '<p class="discount-popover-sub">Gilt für ' +
+          (sz === 1 ? 'Einzelstücke' : sz + 'er-Sets') + '. Andere Verpackungseinheiten haben eine eigene Staffel.</p>' +
         '<table class="discount-table">' +
-          '<thead><tr><th>Menge (Stück)</th><th>Ersparnis</th><th>Verpackungspreis</th></tr></thead>' +
+          '<thead><tr><th>Menge</th><th>Nachlass</th><th>Preis / Stück</th></tr></thead>' +
           '<tbody>' + rows + '</tbody>' +
         '</table>' +
-        '<div class="discount-footnote">Vergleich zum Einzelstückpreis. Preise zzgl. MwSt.</div>';
+        '<div class="discount-footnote">Preise zzgl. MwSt. Nachlass bezogen auf den Preis ab 1 ' +
+          (sz === 1 ? 'Stück' : 'Set') + '.</div>';
     }
   }
 
@@ -5127,6 +5144,15 @@ function renderProductSide() {
   }
 
   // Key-specs strip below configurator (read-only)
+  const shipperEl = document.querySelector('[data-shipper]');
+  if (shipperEl) {
+    const versender = versenderFuer(p);
+    shipperEl.innerHTML = versender === 'Conrad Electronic'
+      ? '<div>Verkauft und versendet von <strong>Conrad Electronic</strong></div>'
+      : '<div>Verkauft von <strong>Conrad Electronic</strong></div>' +
+        '<div>Versand von <strong>' + versender + '</strong></div>';
+  }
+
   const keySpecsEl = document.querySelector('[data-key-specs]');
   if (keySpecsEl && avail) {
     keySpecsEl.innerHTML = getKeySpecs(p, s, h).map(row =>
