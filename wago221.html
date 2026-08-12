@@ -5051,7 +5051,6 @@ function renderProductSide() {
            { ab: 100, pct: 9 }, { ab: 250, pct: 12 }]
         : [{ ab: 1, pct: 0 }, { ab: 2, pct: 3 }, { ab: 5, pct: 6 },
            { ab: 10, pct: 9 }, { ab: 25, pct: 12 }];
-      const einheit = vpe === 1 ? 'Stück' : 'Sets';
       const grundpreis = (pricing.packs && pricing.packs[vpe] != null)
         ? pricing.packs[vpe] : pricing.price;
       // Die Markierung sagt "hier stehen Sie gerade". Das laesst sich
@@ -5076,8 +5075,12 @@ function renderProductSide() {
         const preis = grundpreis * (1 - st.pct / 100);
         const stueck = preis / vpe;
         const cur = st.ab === aktiv;
+        // Die Stufen zaehlen in Verpackungseinheiten, angeschrieben wird
+        // aber in Stueck: das ist die Groesse, die der Nutzer im Kopf
+        // hat, und sie laesst sich ueber alle Verpackungen vergleichen.
+        const abStueck = (st.ab * vpe).toLocaleString('de-DE');
         return '<tr' + (cur ? ' class="current"' : '') + '>' +
-          '<td>ab ' + st.ab + ' ' + (st.ab === 1 ? einheit.replace(/s$/, '') : einheit) + '</td>' +
+          '<td>ab ' + abStueck + ' Stück</td>' +
           '<td>' + (st.pct ? '\u2212' + st.pct + ' %' : '\u2014') + '</td>' +
           '<td>' + stueck.toFixed(2).replace('.', ',') + ' €</td>' +
           '</tr>';
@@ -5091,8 +5094,8 @@ function renderProductSide() {
           '<thead><tr><th>Menge</th><th>Nachlass</th><th>Preis / Stück</th></tr></thead>' +
           '<tbody>' + rows + '</tbody>' +
         '</table>' +
-        '<div class="discount-footnote">Preise zzgl. MwSt. Nachlass bezogen auf den Preis ab 1 ' +
-          (vpe === 1 ? 'Stück' : 'Set') + '.</div>';
+        '<div class="discount-footnote">Preise zzgl. MwSt. Nachlass bezogen auf den Preis ab ' +
+          vpe.toLocaleString('de-DE') + ' Stück.</div>';
     }
     zeichneStaffel(sz);
     // Der Rahmen ueberlebt jeden Neuaufbau, die Funktion nicht - deshalb
