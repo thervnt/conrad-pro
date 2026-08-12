@@ -2251,14 +2251,6 @@ button { font: inherit; cursor: pointer; }
 .summary-total-label { font-size: 18px; font-weight: 700; }
 .summary-total-value { font-size: 20px; font-weight: 700; font-variant-numeric: tabular-nums; }
 .summary-total-sub { font-size: 12px; color: var(--c-text-secondary); margin: 0 0 14px; }
-/* Erklaert, was die Express-Bestellung ueberspringt. */
-.summary-cta-note {
-  margin: 6px 0 0;
-  font-size: 12px;
-  line-height: 1.4;
-  color: var(--c-text-secondary);
-  text-align: center;
-}
 .summary-cta {
   display: flex;
   align-items: center;
@@ -2277,26 +2269,7 @@ button { font: inherit; cursor: pointer; }
   cursor: pointer;
 }
 .summary-cta:hover { background: var(--c-blue-hover); }
-.summary-cta-secondary {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 48px;
-  background: var(--c-blue-soft);
-  color: var(--c-navy);
-  border: none;
-  padding: 0 18px;
-  border-radius: var(--radius-sm);
-  font: inherit;
-  font-size: 15px;
-  font-weight: 600;
-  text-align: center;
-  cursor: pointer;
-  margin-top: 8px;
-}
-.summary-cta-secondary:hover { background: var(--c-blue-soft-hover); }
-.summary-cta:disabled, .summary-cta-secondary:disabled { opacity: 0.45; cursor: default; }
+.summary-cta:disabled { opacity: 0.45; cursor: default; }
 
 /* Ein Einloese-Element, in der Summenbox statt als eigene Karten. */
 .summary-acc {
