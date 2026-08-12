@@ -61,17 +61,24 @@ html, body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* Ueberdehnen am Seitenrand ("Gummiband").
-   Der freigelegte Streifen zeigt den Hintergrund des Wurzelelements -
-   und dort ist in jedem Browser nur EINE Farbe verlaesslich. Ein
-   Hintergrundbild kacheln Chrome und Safari darueber hinaus, Firefox
-   malt es nicht; ein Verlauf faellt dort also aus.
-   Gewaehlt ist deshalb die Farbe des Fussendes. Oben liegt darueber der
-   Schlagschatten der blauen Leiste: er gehoert zur Seite, wird mit ihr
-   verschoben und deckt den Streifen ab, wo der Browser ihn mitzeichnet.
-   Beide Schatten vergroessern nur die Malflaeche, nicht den
-   Scrollbereich - es entsteht keine zusaetzliche Scrollhoehe. */
-html { background-color: var(--c-navy); }
+/* Ueberdehnen am Seitenrand ("Gummiband") - zwei Farben, drei Ebenen.
+   Der freigelegte Streifen zeigt den Hintergrund des Wurzelelements.
+
+   1. Das gekachelte Bild traegt beide Farben. Die Kachel ist so hoch wie
+      das Dokument und bewusst umgedreht: oben navy, unten blau. Damit
+      endet die Kachel OBERHALB des Dokuments in Blau und die Kachel
+      UNTERHALB beginnt in Navy - also oben blau, unten navy.
+   2. Die Grundfarbe ist Navy. Firefox malt im ueberdehnten Bereich kein
+      Bild, nur die Farbe; dort stimmt damit wenigstens das Fussende.
+   3. Zusaetzlich malen beide Leisten per Schlagschatten ueber ihre
+      Kante hinaus. Das ist Teil der Seite und greift dort, wo der
+      Browser die Seitenflaeche mitverschiebt. Schatten vergroessern nur
+      die Malflaeche, nicht den Scrollbereich. */
+html {
+  background-color: var(--c-navy);
+  background-image: linear-gradient(to bottom,
+                    var(--c-navy) 0 50%, var(--c-blue) 50% 100%);
+}
 .promo-strip { box-shadow: 0 -400px 0 var(--c-blue); }
 .footer-legalbar { box-shadow: 0 400px 0 var(--c-navy); }
 
