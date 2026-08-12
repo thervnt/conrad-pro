@@ -22,7 +22,7 @@
      3.2:1 darunter und war in 11px kaum lesbar. */
   --c-text-tertiary: #666c7a;
   --c-border: #cfd4dd;          /* Trennlinien und Kartenkanten */
-  --c-border-control: #9aa2b1;  /* Umrandung bedienbarer Flaechen - 2,6:1 auf Weiss */
+  --c-border-control: #b6bcc7;  /* Umrandung bedienbarer Flaechen - 1,9:1 auf Weiss */
   --c-border-strong: #6f7787;   /* Verstaerkung beim Ueberfahren */
   --strichel-maske: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25'%3E%3Crect width='100%25' height='100%25' rx='5' ry='5' fill='none' stroke='black' stroke-width='4' stroke-dasharray='4 5'/%3E%3C/svg%3E");
   --c-bg-white: #ffffff;
@@ -380,7 +380,6 @@ button { font: inherit; cursor: pointer; }
   /* Compact the "Zuletzt gekauft" pill so it doesn't push the
      tile past its share of the row. */
   .vtile-history { font-size: 9px; padding: 1px 5px; margin-top: 4px; gap: 3px; line-height: 1.25; white-space: normal; }
-  .vtile-history svg { width: 9px; height: 9px; }
 }
 @media (max-width: 900px) {
   .product-main {
@@ -710,13 +709,12 @@ button { font: inherit; cursor: pointer; }
   margin-top: 4px;
 }
 .vtile-unit {
-  font-size: 11px;
-  color: var(--c-text-tertiary);
+  font-size: 13px;
+  color: var(--c-text);
 }
 .vtile-history {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
   margin-top: 6px;
   padding: 2px 7px;
   border-radius: var(--radius-pill);
@@ -734,7 +732,6 @@ button { font: inherit; cursor: pointer; }
   color: var(--c-blue);
   box-shadow: inset 0 0 0 1px rgba(55, 110, 239, 0.35);
 }
-.vtile-history svg { width: 10px; height: 10px; flex-shrink: 0; }
 .vtile-divider {
   display: block;
   height: 1px;
@@ -924,10 +921,14 @@ button { font: inherit; cursor: pointer; }
   font-size: 12px;
   color: var(--c-text-secondary);
 }
+/* Gleiche Bauform wie die uebrigen Knoepfe der Reihe: eckig, weisse
+   Flaeche, Umrandung aus dem Bedienelement-Token. Beim Ueberfahren
+   wechselt die Flaeche, nicht die Rahmenfarbe - so wie bei "Fehler
+   melden" und "Datenblatt oeffnen". */
 .id-chip-value {
-  background: var(--c-bg-tint);
-  border: 1px solid var(--c-border);
-  border-radius: var(--radius-pill);
+  background: var(--c-bg-white);
+  border: 1px solid var(--c-border-control);
+  border-radius: var(--radius-xs);
   padding: 3px 10px;
   font-weight: 500;
   color: var(--c-text);
@@ -946,11 +947,8 @@ button { font: inherit; cursor: pointer; }
   color: var(--c-text-tertiary);
   flex-shrink: 0;
 }
-.id-chip-value:hover .id-chip-copy { color: var(--c-blue); }
-.id-chip-value:hover {
-  border-color: var(--c-blue);
-  background: var(--c-bg-white);
-}
+.id-chip-value:hover { background: var(--c-bg-tint); }
+.id-chip-value:hover .id-chip-copy { color: var(--c-text-secondary); }
 .id-chip-value.copied {
   border-color: #4a4f5a;
   background: #e8e9ec;
@@ -1014,6 +1012,7 @@ button { font: inherit; cursor: pointer; }
   color: var(--c-text);
 }
 .datenblatt-open:hover { background: var(--c-bg-tint); text-decoration: none; }
+.datenblatt-group:hover { border-color: var(--c-border-control); }
 .datenblatt-pdf-icon { width: 16px; height: 16px; fill: var(--c-danger); flex-shrink: 0; }
 .datenblatt-dropdown {
   position: relative;
@@ -2686,9 +2685,10 @@ button { font: inherit; cursor: pointer; }
   color: var(--c-text);
   font-size: 14px;
 }
-.faq-item summary:hover { background: var(--c-bg-tint); color: var(--c-blue); }
-.faq-item summary:hover::after { color: var(--c-blue); }
-.faq-item:hover { border-color: var(--c-border-strong); }
+/* Nur die Flaeche wechselt. Blauer Text signalisiert auf dieser Seite
+   einen Verweis, ein dunkler Rahmen sonst nirgends etwas - beides war
+   hier eine eigene Sprache. */
+.faq-item summary:hover { background: var(--c-bg-tint); }
 .faq-item summary { transition: background 0.15s, color 0.15s; }
 .faq-item summary::-webkit-details-marker { display: none; }
 .faq-item summary::after {
@@ -3879,9 +3879,9 @@ button { font: inherit; cursor: pointer; }
 
     <!-- ID CHIPS (spans full card width) -->
     <div class="id-chips">
-      <span class="id-chip">EAN <button class="id-chip-value" data-copy data-ean title="In Zwischenablage kopieren"><span class="id-chip-num">4050821808442</span><svg class="id-chip-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button></span>
-      <span class="id-chip">Hst.-Teile-Nr. <button class="id-chip-value" data-copy data-hst title="In Zwischenablage kopieren"><span class="id-chip-num">221-413-50</span><svg class="id-chip-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button></span>
-      <span class="id-chip">Bestell-Nr. <button class="id-chip-value" data-copy data-bestell title="In Zwischenablage kopieren"><span class="id-chip-num">1188440</span><svg class="id-chip-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button></span>
+      <span class="id-chip">EAN <button class="id-chip-value" data-copy data-ean title="In Zwischenablage kopieren"><svg class="id-chip-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span class="id-chip-num">4050821808442</span></button></span>
+      <span class="id-chip">Hst.-Teile-Nr. <button class="id-chip-value" data-copy data-hst title="In Zwischenablage kopieren"><svg class="id-chip-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span class="id-chip-num">221-413-50</span></button></span>
+      <span class="id-chip">Bestell-Nr. <button class="id-chip-value" data-copy data-bestell title="In Zwischenablage kopieren"><svg class="id-chip-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span class="id-chip-num">1188440</span></button></span>
       <div class="id-chip-actions">
         <button type="button" class="report-trigger" data-report-open><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>Fehler melden</button>
         <div class="datenblatt-group" data-datenblatt>
@@ -4542,6 +4542,14 @@ button { font: inherit; cursor: pointer; }
 const DEFAULT_NAME = 'WAGO 221 Verbindungsklemme';
 const APPROACH = 'A';
 
+// Verpackungsformen, die es fuer Reihenklemmen gibt. Rolle, Gurt,
+// Stange und Tablett sind Bauformen fuer SMD- und THT-Bauteile und
+// kommen fuer die 221 nicht vor.
+const verpackungOptions = [
+  { id: 'box',    label: 'Box',            sub: 'Faltschachtel' },
+  { id: 'beutel', label: 'Lose im Beutel', sub: 'Polybeutel' }
+];
+
 const polzahlOptions = [
   { id: 2,  label: '2',  poles: 2,  setSize: 100 },
   { id: 3,  label: '3',  poles: 3,  setSize: 50  },
@@ -4815,14 +4823,17 @@ function getSpecs(p, s, h) {
 }
 
 // The 5 most important specs surfaced *below the configurator* as read-only chips
+// Nur Werte, die der Konfigurator nicht ohnehin zeigt. Polzahl und
+// Nennquerschnitt sind dort auswaehlbar - hier waeren sie eine
+// Wiederholung derselben Angabe zwei Zeilen weiter unten.
 function getKeySpecs(p, s, h) {
   const isSix = s === '6';
   return [
     ['Bemessungsspannung', '450 V'],
     ['Bemessungsstrom',    isSix ? '41 A' : '32 A'],
-    ['Nennquerschnitt',    isSix ? '6 mm²' : '4 mm²'],
-    ['Polzahl',            String(p)],
-    ['Anschlusstechnik',   'CAGE CLAMP®']
+    ['Anschlusstechnik',   'CAGE CLAMP®'],
+    ['Brennbarkeitsklasse', 'UL 94 V2'],
+    ['Zulassungen',        'ENEC, UL, EAC, KEMA-KEUR']
   ];
 }
 
@@ -4841,8 +4852,10 @@ function buildVariantTitle(p, s, h, packSize) {
     ? 'flexibel: 0.5-6 mm² starr: 0.5-6 mm²'
     : 'flexibel: 0.14-4 mm² starr: 0.2-4 mm²';
   const variantTag = h === 'green-range' ? ' Green Range' : '';
+  // Die Stueckzahl steht schon in der Verpackungseinheit - im Titel
+  // waere sie eine zweite, leicht widersprechende Angabe.
   return 'WAGO ' + sku + skuSuffix + ' 221' + variantTag + ' Verbindungsklemme ' +
-         range + ' Polzahl: ' + p + ' ' + setSize + ' St. Transparent, Orange';
+         range + ' Polzahl: ' + p + ' Transparent, Orange';
 }
 
 // Adaptive bullet list shown in the AI callout
@@ -4868,6 +4881,7 @@ const state = {
   polzahl: 3,
   stil: '4',
   hebel: 'standard',
+  verpackung: 'box',
   qty: 1,
   packSize: 50,  // current selected pack size in Stück
   qtyChosen: false,  // user actively picked a pack/qty; carry it across config changes
@@ -5315,12 +5329,15 @@ function renderPrototype() {
       ? safePricing.packs[_tilePack]
       : safePricing.price;
     const _tileUnit = _tilePack > 0 ? _tilePackPrice / _tilePack : safePricing.unitPrice;
+    // 10) Ohne Zeichen - der Text traegt die Aussage bereits.
     const _lastBoughtBadge = _isLastBoughtTile
-      ? '<span class="vtile-history"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Zuletzt gekauft</span>'
+      ? '<span class="vtile-history">Zuletzt gekauft</span>'
       : '';
+    // 3) Nur der Stueckpreis. Der Verpackungspreis haengt an der
+    // Verpackungseinheit und stand hier fuer eine Einheit, die der Nutzer
+    // noch gar nicht gewaehlt hat.
     const secondary =
       '<span class="vtile-divider"></span>' +
-      '<span class="vtile-price">' + fmtEur(_tilePackPrice) + '</span>' +
       '<span class="vtile-unit">' + _tileUnit.toFixed(2).replace('.', ',') + ' € / Stück</span>' +
       _lastBoughtBadge;
     return renderTile(opt.id, opt.label, secondary, isSel, tState, 'polzahl', opt.id, tileTooltip(p, s, h, 'polzahl', opt.id, tState));
@@ -5340,6 +5357,13 @@ function renderPrototype() {
     const isCompat = APPROACH === 'C' ? true : isAvailable(p, opt.id, h);
     const tState = tileStateFor(isCompat, isSel);
     return renderTile(opt.id, opt.label, '', isSel, tState, 'stil', opt.id, tileTooltip(p, s, h, 'stil', opt.id, tState));
+  }).join('');
+
+  const verpackungTiles = verpackungOptions.map(opt => {
+    const isSel = opt.id === state.verpackung;
+    const secondary = '<span class="vtile-unit">' + opt.sub + '</span>';
+    return renderTile(opt.id, opt.label, secondary, isSel, isSel ? 'selected' : 'normal',
+                      'verpackung', opt.id, '');
   }).join('');
 
   const hebelTiles = visibleHebel.map(opt => {
@@ -5377,11 +5401,22 @@ function renderPrototype() {
       '<p class="variant-label">Hebel-Variante</p>' +
       '<div class="tile-row">' + hebelTiles + '</div>' +
     '</div>' +
+    '<div class="variant-group">' +
+      '<p class="variant-label">Verpackung</p>' +
+      '<div class="tile-row">' + verpackungTiles + '</div>' +
+    '</div>' +
     (hintText ? '<p class="hint">' + hintText + '</p>' : '')
   );
 }
 
 function attachInteractions() {
+  document.querySelectorAll('[data-verpackung]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      state.verpackung = btn.dataset.verpackung;
+      state.interacted = true;
+      render();
+    });
+  });
   document.querySelectorAll('[data-polzahl]:not([aria-disabled="true"])').forEach(btn => {
     btn.addEventListener('click', () => {
       const newP = Number(btn.dataset.polzahl);
