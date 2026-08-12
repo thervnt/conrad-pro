@@ -62,16 +62,16 @@ html, body {
 }
 
 /* Ueberdehnen am Seitenrand ("Gummiband").
-   Der freigelegte Streifen zeigt den Hintergrund des Wurzelelements.
-   Verlaesslich ist dort in jedem Browser nur die FARBE - ein
+   Der freigelegte Streifen zeigt den Hintergrund des Wurzelelements -
+   und dort ist in jedem Browser nur EINE Farbe verlaesslich. Ein
    Hintergrundbild kacheln Chrome und Safari darueber hinaus, Firefox
-   malt es nicht. Deshalb traegt die Wurzel die Farbe der oberen Leiste;
-   dort faellt ein heller Streifen am staerksten auf.
-   Die Leisten malen zusaetzlich ueber ihre Kante hinaus. Ein
-   Schlagschatten ohne Weichzeichnung gehoert zur Seite und vergroessert
-   nur die Malflaeche, nicht den Scrollbereich. Wo der Browser ihn beim
-   Ueberdehnen mitzeichnet, stimmt auch die Farbe am Fussende. */
-html { background-color: var(--c-blue); }
+   malt es nicht; ein Verlauf faellt dort also aus.
+   Gewaehlt ist deshalb die Farbe des Fussendes. Oben liegt darueber der
+   Schlagschatten der blauen Leiste: er gehoert zur Seite, wird mit ihr
+   verschoben und deckt den Streifen ab, wo der Browser ihn mitzeichnet.
+   Beide Schatten vergroessern nur die Malflaeche, nicht den
+   Scrollbereich - es entsteht keine zusaetzliche Scrollhoehe. */
+html { background-color: var(--c-navy); }
 .promo-strip { box-shadow: 0 -400px 0 var(--c-blue); }
 .footer-legalbar { box-shadow: 0 400px 0 var(--c-navy); }
 

@@ -68,16 +68,16 @@ html, body {
 }
 
 /* Ueberdehnen am Seitenrand ("Gummiband").
-   Der freigelegte Streifen zeigt den Hintergrund des Wurzelelements.
-   Verlaesslich ist dort in jedem Browser nur die FARBE - ein
+   Der freigelegte Streifen zeigt den Hintergrund des Wurzelelements -
+   und dort ist in jedem Browser nur EINE Farbe verlaesslich. Ein
    Hintergrundbild kacheln Chrome und Safari darueber hinaus, Firefox
-   malt es nicht. Deshalb traegt die Wurzel die Farbe der oberen Leiste;
-   dort faellt ein heller Streifen am staerksten auf.
-   Die Leisten malen zusaetzlich ueber ihre Kante hinaus. Ein
-   Schlagschatten ohne Weichzeichnung gehoert zur Seite und vergroessert
-   nur die Malflaeche, nicht den Scrollbereich. Wo der Browser ihn beim
-   Ueberdehnen mitzeichnet, stimmt auch die Farbe am Fussende. */
-html { background-color: var(--c-blue); }
+   malt es nicht; ein Verlauf faellt dort also aus.
+   Gewaehlt ist deshalb die Farbe des Fussendes. Oben liegt darueber der
+   Schlagschatten der blauen Leiste: er gehoert zur Seite, wird mit ihr
+   verschoben und deckt den Streifen ab, wo der Browser ihn mitzeichnet.
+   Beide Schatten vergroessern nur die Malflaeche, nicht den
+   Scrollbereich - es entsteht keine zusaetzliche Scrollhoehe. */
+html { background-color: var(--c-navy); }
 .promo-strip { box-shadow: 0 -400px 0 var(--c-blue); }
 .footer-legalbar { box-shadow: 0 400px 0 var(--c-navy); }
 
@@ -1337,6 +1337,7 @@ button { font: inherit; cursor: pointer; }
   flex-direction: column;
   gap: 2px;
 }
+.shipper-invoice { color: var(--c-text-secondary); }
 .shipper-line strong {
   font-weight: 600;
 }
@@ -4829,12 +4830,13 @@ function getSpecs(p, s, h) {
 // Nur Werte, die der Konfigurator nicht ohnehin zeigt. Polzahl und
 // Nennquerschnitt sind dort auswaehlbar - hier waeren sie eine
 // Wiederholung derselben Angabe zwei Zeilen weiter unten.
-// Beispielhafte Marktplatzware: diese Polzahlen versendet ein Partner,
-// verkauft und abgerechnet wird weiter ueber Conrad. Fuer den
-// Versandkostenfrei-Schwellenwert zaehlt der Versender - siehe die
-// Erlaeuterung im Warenkorb.
-const PARTNER_VERSAND = { 2: 'Elektro4000', 5: 'Elektro4000', 10: 'Elektro4000' };
-function versenderFuer(p) { return PARTNER_VERSAND[p] || 'Conrad Electronic'; }
+// Marktplatzware. Verkauf und Versand liegen beim Teilnehmer, nur die
+// Rechnung stellt Conrad. Mehrere Teilnehmer, weil der
+// Versandkostenfrei-Schwellenwert je Teilnehmer gilt - nicht einmal fuer
+// "Conrad" und einmal fuer "alle anderen".
+const MARKTPLATZ = { 2: 'Elektro4000', 5: 'Voltus Elektro', 10: 'Elektro4000' };
+function verkaeuferFuer(p) { return MARKTPLATZ[p] || 'Conrad Electronic'; }
+function istMarktplatz(p) { return !!MARKTPLATZ[p]; }
 
 function getKeySpecs(p, s, h) {
   const isSix = s === '6';
@@ -5146,11 +5148,12 @@ function renderProductSide() {
   // Key-specs strip below configurator (read-only)
   const shipperEl = document.querySelector('[data-shipper]');
   if (shipperEl) {
-    const versender = versenderFuer(p);
-    shipperEl.innerHTML = versender === 'Conrad Electronic'
-      ? '<div>Verkauft und versendet von <strong>Conrad Electronic</strong></div>'
-      : '<div>Verkauft von <strong>Conrad Electronic</strong></div>' +
-        '<div>Versand von <strong>' + versender + '</strong></div>';
+    const verkaeufer = verkaeuferFuer(p);
+    shipperEl.innerHTML = istMarktplatz(p)
+      ? '<div>Verkauft von <strong>' + verkaeufer + '</strong></div>' +
+        '<div>Versand von <strong>' + verkaeufer + '</strong></div>' +
+        '<div class="shipper-invoice">Rechnung von <strong>Conrad Electronic</strong></div>'
+      : '<div>Verkauft und versendet von <strong>Conrad Electronic</strong></div>';
   }
 
   const keySpecsEl = document.querySelector('[data-key-specs]');
