@@ -1904,12 +1904,6 @@ button { font: inherit; cursor: pointer; }
    Gleiche Darstellung wie in der Kauf-Bestaetigung auf der PDP. */
 .summary-ship { margin: 2px 0 12px; }
 .summary-ship[hidden] { display: none; }
-.summary-ship-group + .summary-ship-group { margin-top: 10px; }
-.summary-ship-who {
-  margin: 0 0 2px;
-  font-size: 12px;
-  color: var(--c-text-secondary);
-}
 .summary-ship-text { margin: 0; font-size: 13px; line-height: 1.4; color: var(--c-text); }
 .summary-ship-text strong { font-weight: 600; }
 .summary-ship-group.is-free .summary-ship-text { color: var(--c-success); font-weight: 600; }
@@ -2372,12 +2366,15 @@ button { font: inherit; cursor: pointer; }
   var CART_KEY = 'conradCart';
   var VAT_RATE = 0.19;
   var MIN_PIECES = 3;   // seller minimum for the single-piece pack
-  var SHIPPING = 5.95;  // je Sendung, unterhalb der Freigrenze
-  var FREI_AB = 100;    // Nettowert je Versender
+  // Ein fester Betrag je Bestellung, unabhaengig davon, ueber wie viele
+  // Versender sie laeuft. Frei ab 100 EUR netto - gerechnet auf den
+  // ganzen Wagen, nicht je Sendung.
+  var SHIPPING = 5.95;
+  var FREI_AB = 100;
   // Verkaeufer ist immer Conrad, versendet wird teils von
-  // Marktplatzteilnehmern. Jeder Versender packt sein eigenes Paket -
-  // deshalb zaehlt die Freigrenze je Versender, nicht ueber den ganzen
-  // Wagen. Dieselbe Zuordnung wie auf der Produktseite.
+  // Marktplatzteilnehmern. Das steht nur auf der Kachel; auf den
+  // Versandpreis hat es keinen Einfluss. Dieselbe Zuordnung wie auf der
+  // Produktseite.
   var HAUS = 'Conrad Electronic';
   var MARKTPLATZ = { 2: 'Elektro4000', 5: 'Voltus Elektro', 10: 'Elektro4000' };
   function versenderFuer(it) {
@@ -2401,29 +2398,6 @@ button { font: inherit; cursor: pointer; }
       ? '<div class="cart-card-seller">Verkauft und versendet von <strong>' + HAUS + '</strong></div>'
       : '<div class="cart-card-seller">Verkauft von <strong>' + HAUS + '</strong>' +
         '<span>Versand von <strong>' + esc(v) + '</strong></span></div>';
-  }
-
-  // Der Wagen zerfaellt in so viele Sendungen, wie es Versender gibt.
-  // Conrad steht vorn, danach die Teilnehmer in der Reihenfolge ihres
-  // ersten Auftretens - so springt die Liste nicht, wenn sich Mengen
-  // aendern. PRO stellt jede Sendung frei, auch die von
-  // Marktplatzteilnehmern.
-  function versandgruppen(items, pro) {
-    var nach = {}, folge = [];
-    items.forEach(function (it) {
-      var v = versenderFuer(it);
-      if (!nach[v]) { nach[v] = { name: v, netto: 0, haus: v === HAUS }; folge.push(v); }
-      nach[v].netto += priceOf(it) * it.qty;
-    });
-    folge.sort(function (a, b) { return (a === HAUS ? 0 : 1) - (b === HAUS ? 0 : 1); });
-    return folge.map(function (k) {
-      var g = nach[k];
-      g.regulaer = g.netto < FREI_AB ? SHIPPING : 0;   // ohne PRO
-      g.kostenfrei = pro || g.netto >= FREI_AB;
-      g.versand = g.kostenfrei ? 0 : g.regulaer;
-      g.fehlt = Math.max(0, FREI_AB - g.netto);
-      return g;
-    });
   }
 
   var items = loadCart();
@@ -2720,11 +2694,8 @@ button { font: inherit; cursor: pointer; }
     var vat = net * VAT_RATE;
     // Below 100 EUR Nettopreis shipping costs 5,95 EUR; free from
     // 100 EUR on - and always free once PRO is in the order.
-    var gruppen = empty ? [] : versandgruppen(items, pro);
-    var wouldShip = gruppen.reduce(function (n, g) { return n + g.regulaer; }, 0);
-    var shipping = gruppen.reduce(function (n, g) { return n + g.versand; }, 0);
-    // Was der PRO-Haken an genau dieser Bestellung aendert - bei
-    // mehreren Sendungen entsprechend mehr als ein Versandpreis.
+    var wouldShip = (!empty && net < FREI_AB) ? SHIPPING : 0;
+    var shipping = pro ? 0 : wouldShip;
     var proErsparnis = wouldShip;
     // Mindermengenzuschlag unter 15 EUR netto. Anders als der Versand
     // entfaellt er auch mit PRO nicht.
@@ -2748,25 +2719,21 @@ button { font: inherit; cursor: pointer; }
     // SVG has no `hidden` IDL property - toggle the attribute directly.
     // Fortschritt zum kostenfreien Versand. Mit PRO ist der Versand
     // ohnehin frei - dann waere die Strecke sinnlos.
-    // Je Sendung eine eigene Strecke. Sendungen, die PRO ohnehin
-    // freistellt, brauchen keine - dort gibt es nichts zu erreichen.
+    // Eine Strecke fuer die ganze Bestellung. Mit PRO ist der Versand
+    // ohnehin frei - dann gibt es nichts zu erreichen.
     var shipEl2 = document.querySelector('[data-summary-ship]');
     if (shipEl2) {
-      var offen = pro ? [] : gruppen;
-      shipEl2.hidden = empty || !offen.length;
+      shipEl2.hidden = empty || pro;
       if (!shipEl2.hidden) {
-        var mehrere = gruppen.length > 1;
-        shipEl2.innerHTML = offen.map(function (g) {
-          var anteil = Math.max(0, Math.min(100, g.netto / FREI_AB * 100));
-          return '<div class="summary-ship-group' + (g.fehlt <= 0 ? ' is-free' : '') + '">' +
-            (mehrere ? '<p class="summary-ship-who">Sendung von ' + esc(g.name) + '</p>' : '') +
-            '<p class="summary-ship-text">' + (g.fehlt <= 0
-              ? 'Versandkostenfrei – diese Sendung liegt über ' + fmt(FREI_AB) + '.'
-              : 'Noch <strong>' + fmt(g.fehlt) + '</strong> bis zum kostenfreien Versand.') +
-            '</p>' +
-            '<div class="summary-ship-bar"><span style="width:' + anteil + '%"></span></div>' +
-          '</div>';
-        }).join('');
+        var fehlt = Math.max(0, FREI_AB - net);
+        var anteil = Math.max(0, Math.min(100, net / FREI_AB * 100));
+        shipEl2.innerHTML = '<div class="summary-ship-group' + (fehlt <= 0 ? ' is-free' : '') + '">' +
+          '<p class="summary-ship-text">' + (fehlt <= 0
+            ? 'Versandkostenfrei – Ihre Bestellung liegt über ' + FREI_AB + ' €.'
+            : 'Noch <strong>' + fmt(fehlt) + '</strong> bis zum kostenfreien Versand.') +
+          '</p>' +
+          '<div class="summary-ship-bar"><span style="width:' + anteil + '%"></span></div>' +
+        '</div>';
       }
     }
     var versandLogo = document.querySelector('[data-versand-pro]');
