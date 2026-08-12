@@ -5178,11 +5178,19 @@ function renderProductSide() {
   const qtyUnitEl = document.querySelector('[data-qty-unit]');
   if (qtyUnitEl) qtyUnitEl.textContent = state.packSize === 1 ? 'Stk.' : 'Set';
 
-  // The min-order note only matters when the user is buying
-  // single pieces (where the 3-Stück seller minimum kicks in).
-  // For any Set pack a single Set already clears the minimum.
+  // Der Hinweis gilt nur bei Einzelstuecken und nur bei dem Versender,
+  // der eine Mindestabnahme verlangt - ein Set raeumt sie ohnehin aus
+  // dem Weg. Die Zahl kommt aus derselben Quelle wie die Rechnung.
   const qtyMinNoteEl = document.querySelector('[data-qty-min-note]');
-  if (qtyMinNoteEl) qtyMinNoteEl.style.display = state.packSize === 1 ? '' : 'none';
+  if (qtyMinNoteEl) {
+    const mindest = mindestStueck();
+    const zeigen = state.packSize === 1 && mindest > 1;
+    qtyMinNoteEl.style.display = zeigen ? '' : 'none';
+    if (zeigen) {
+      qtyMinNoteEl.textContent =
+        'Dieser Versender verlangt eine Mindestbestellmenge von ' + mindest + ' Stück.';
+    }
+  }
 
   // Size the qty input to its content so the unit label tracks
   // 4 px from the value across "1" → "99+". field-sizing: content
@@ -5193,10 +5201,10 @@ function renderProductSide() {
     qtyInput.style.width = (Math.max(3, String(qtyInput.value).length) + 0.5) + 'ch';
   }
 
-  // Enforce seller minimum: if the chosen pack size brings the
-  // total Stück below MIN_PIECES, bump qty up to the floor.
-  if (typeof MIN_PIECES !== 'undefined' && state.packSize > 0 && state.qty * state.packSize < MIN_PIECES) {
-    state.qty = Math.ceil(MIN_PIECES / state.packSize);
+  // Untergrenze des Versenders durchsetzen: bringt die gewaehlte
+  // Verpackung die Stueckzahl darunter, wird die Menge angehoben.
+  if (state.packSize > 0 && state.qty * state.packSize < mindestStueck()) {
+    state.qty = Math.ceil(mindestStueck() / state.packSize);
     const qi = document.querySelector('[data-qty]');
     if (qi) qi.value = state.qty;
   }
@@ -5640,10 +5648,17 @@ function render() {
   if (typeof window.syncWishlistButton === 'function') window.syncWishlistButton();
 }
 
-// Qty controls (with seller-enforced minimum of MIN_PIECES Stück)
-const MIN_PIECES = 3;
+// Die Mindestabnahme kommt vom Versender, nicht vom Artikel. Im
+// Prototyp verlangt sie genau einer - Conrad und die uebrigen
+// Teilnehmer verkaufen ab einem Stueck.
+const MINDEST_VERSENDER = 'Elektro4000';
+const MINDEST_STUECK = 3;
+function mindestStueckFuer(p) {
+  return versenderFuer(p) === MINDEST_VERSENDER ? MINDEST_STUECK : 1;
+}
+function mindestStueck() { return mindestStueckFuer(state.polzahl); }
 function minQtyFor(packSize) {
-  return Math.max(1, Math.ceil(MIN_PIECES / (packSize || 1)));
+  return Math.max(1, Math.ceil(mindestStueck() / (packSize || 1)));
 }
 // Die Menge, mit der eine Verpackung startet: die zuletzt selbst
 // eingestellte, sonst ihre Untergrenze. Nie die Menge einer anderen
@@ -5807,6 +5822,7 @@ if (countdownEl) {
       qty: qty,
       packSizes: (packSizesByPolzahl[p] || [1]).slice(),
       packPrices: getPricing(p, s, h).packs,
+      minPieces: mindestStueckFuer(p),
       img: imageBySku[resolveImageSku(p, s, h)] || '',
       href: 'wago221.html',
       note: ''
@@ -5862,9 +5878,7 @@ if (countdownEl) {
 
   // Die Mindestabnahme haengt am Artikel - Zubehoer hat keine.
   function floorForLine(line) {
-    const min = (line.minPieces == null)
-      ? (typeof MIN_PIECES !== 'undefined' ? MIN_PIECES : 1)
-      : line.minPieces;
+    const min = line.minPieces == null ? 1 : line.minPieces;
     return Math.max(1, Math.ceil(min / (line.packSize || 1)));
   }
 

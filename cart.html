@@ -2382,7 +2382,8 @@ button { font: inherit; cursor: pointer; }
 (function () {
   var CART_KEY = 'conradCart';
   var VAT_RATE = 0.19;
-  var MIN_PIECES = 3;   // seller minimum for the single-piece pack
+  var MINDEST_VERSENDER = 'Elektro4000';  // einziger mit Mindestabnahme
+  var MINDEST_STUECK = 3;
   var SHIPPING = 5.95;  // je Sendung, unterhalb der Freigrenze
   var FREI_AB = 100;    // Nettowert je Versender
   // Verkaeufer ist immer Conrad, versendet wird teils von
@@ -2461,10 +2462,12 @@ button { font: inherit; cursor: pointer; }
   }
 
   var fmt = function (n) { return n.toFixed(2).replace('.', ',') + ' €'; };
-  // Die Mindestabnahme haengt am Artikel: die 221er-Klemme hat eine,
-  // Zubehoer nicht.
+  // Die Mindestabnahme kommt vom Versender. Neue Zeilen bringen sie
+  // mit; aeltere ohne die Angabe werden nach ihrem Versender beurteilt.
   function floorFor(item) {
-    var min = (item.minPieces == null) ? MIN_PIECES : item.minPieces;
+    var min = item.minPieces != null
+      ? item.minPieces
+      : (versenderFuer(item) === MINDEST_VERSENDER ? MINDEST_STUECK : 1);
     return Math.max(1, Math.ceil(min / (item.packSize || 1)));
   }
   function priceOf(item) { return item.packPrices[item.packSize] || 0; }
