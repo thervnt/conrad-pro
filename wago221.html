@@ -5038,25 +5038,38 @@ function renderProductSide() {
     // sondern ein Vergleich anderer Artikel. Wer 50er-Sets kauft, will
     // wissen, was das zweite und das zehnte Set kosten.
     const popEl = document.querySelector('[data-discount-popover]');
-    if (popEl) {
+    const hoverWrap = document.querySelector('[data-pack-hover-wrap]');
+
+    // Die Staffel einer Verpackungseinheit. Faehrt man ueber eine
+    // Kachel, zeigt das Fenster deren Staffel - man kann vergleichen,
+    // ohne die Auswahl zu wechseln. Ohne Zeiger steht die gewaehlte da.
+    function zeichneStaffel(vpe) {
+      if (!popEl) return;
       // Stufen und Nachlaesse haengen an der Verpackungseinheit: bei
       // Einzelstuecken greift die Staffel spaeter als bei Sets.
-      const STAFFEL = sz === 1
+      const STAFFEL = vpe === 1
         ? [{ ab: 1, pct: 0 }, { ab: 25, pct: 3 }, { ab: 50, pct: 6 },
            { ab: 100, pct: 9 }, { ab: 250, pct: 12 }]
         : [{ ab: 1, pct: 0 }, { ab: 2, pct: 3 }, { ab: 5, pct: 6 },
            { ab: 10, pct: 9 }, { ab: 25, pct: 12 }];
-      const einheit = sz === 1 ? 'Stück' : 'Sets';
-      const grundpreis = (pricing.packs && pricing.packs[sz] != null)
-        ? pricing.packs[sz] : pricing.price;
-      const menge = state.qty || 1;
+      const einheit = vpe === 1 ? 'Stück' : 'Sets';
+      const grundpreis = (pricing.packs && pricing.packs[vpe] != null)
+        ? pricing.packs[vpe] : pricing.price;
+      // Die Markierung richtet sich nach der Menge aus dem Feld
+      // darunter - umgerechnet in die Einheit, deren Staffel hier
+      // steht. Beim Ueberfahren von "Stück" zaehlen also die
+      // Einzelstuecke, die im Feld stehen (Menge mal Verpackung),
+      // nicht die Zahl der Sets. Fuer die gewaehlte Verpackung kommt
+      // dabei genau die eingetippte Menge heraus.
+      const stueckGesamt = Math.max(1, (state.qty || 1) * state.packSize);
+      const menge = Math.max(1, Math.ceil(stueckGesamt / vpe));
       // Hoechste erreichte Stufe - sie traegt die Markierung.
       let aktiv = STAFFEL[0].ab;
       STAFFEL.forEach(function (st) { if (st.ab <= menge) aktiv = st.ab; });
 
       const rows = STAFFEL.map(function (st) {
         const preis = grundpreis * (1 - st.pct / 100);
-        const stueck = preis / sz;
+        const stueck = preis / vpe;
         const cur = st.ab === aktiv;
         return '<tr' + (cur ? ' class="current"' : '') + '>' +
           '<td>ab ' + st.ab + ' ' + (st.ab === 1 ? einheit.replace(/s$/, '') : einheit) + '</td>' +
@@ -5068,13 +5081,25 @@ function renderProductSide() {
       popEl.innerHTML =
         '<div class="discount-popover-title">Mengenrabatte</div>' +
         '<p class="discount-popover-sub">Gilt für ' +
-          (sz === 1 ? 'Einzelstücke' : sz + 'er-Sets') + '. Andere Verpackungseinheiten haben eine eigene Staffel.</p>' +
+          (vpe === 1 ? 'Einzelstücke' : vpe + 'er-Sets') + '. Andere Verpackungseinheiten haben eine eigene Staffel.</p>' +
         '<table class="discount-table">' +
           '<thead><tr><th>Menge</th><th>Nachlass</th><th>Preis / Stück</th></tr></thead>' +
           '<tbody>' + rows + '</tbody>' +
         '</table>' +
         '<div class="discount-footnote">Preise zzgl. MwSt. Nachlass bezogen auf den Preis ab 1 ' +
-          (sz === 1 ? 'Stück' : 'Set') + '.</div>';
+          (vpe === 1 ? 'Stück' : 'Set') + '.</div>';
+    }
+    zeichneStaffel(sz);
+    // Der Rahmen ueberlebt jeden Neuaufbau, die Funktion nicht - deshalb
+    // haengt sie am Element und der Zuhoerer wird nur einmal gesetzt.
+    if (hoverWrap) {
+      hoverWrap.zeichneStaffel = zeichneStaffel;
+      if (!hoverWrap.dataset.staffelGebunden) {
+        hoverWrap.dataset.staffelGebunden = '1';
+        hoverWrap.addEventListener('mouseleave', function () {
+          hoverWrap.zeichneStaffel(state.packSize);
+        });
+      }
     }
   }
 
@@ -5095,6 +5120,13 @@ function renderProductSide() {
       return '<button class="pack-pill' + sel + '" data-pack="' + sz + '">' + label + '</button>';
     }).join('');
     packRow.querySelectorAll('[data-pack]').forEach(btn => {
+      // Ueberfahren oder Antabben zeigt die Staffel dieser Einheit.
+      const zeigeStaffel = () => {
+        const wrap = document.querySelector('[data-pack-hover-wrap]');
+        if (wrap && wrap.zeichneStaffel) wrap.zeichneStaffel(Number(btn.dataset.pack));
+      };
+      btn.addEventListener('mouseenter', zeigeStaffel);
+      btn.addEventListener('focus', zeigeStaffel);
       btn.addEventListener('click', () => {
         const next = Number(btn.dataset.pack);
         // Erneuter Klick auf die aktive Verpackung aendert nichts.
