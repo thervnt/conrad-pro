@@ -5055,17 +5055,23 @@ function renderProductSide() {
       const einheit = vpe === 1 ? 'Stück' : 'Sets';
       const grundpreis = (pricing.packs && pricing.packs[vpe] != null)
         ? pricing.packs[vpe] : pricing.price;
-      // Die Markierung richtet sich nach der Menge aus dem Feld
-      // darunter - umgerechnet in die Einheit, deren Staffel hier
-      // steht. Beim Ueberfahren von "Stück" zaehlen also die
-      // Einzelstuecke, die im Feld stehen (Menge mal Verpackung),
-      // nicht die Zahl der Sets. Fuer die gewaehlte Verpackung kommt
-      // dabei genau die eingetippte Menge heraus.
-      const stueckGesamt = Math.max(1, (state.qty || 1) * state.packSize);
-      const menge = Math.max(1, Math.ceil(stueckGesamt / vpe));
+      // Die Markierung sagt "hier stehen Sie gerade". Das laesst sich
+      // nur fuer die gewaehlte Verpackung sagen und fuer Einzelstuecke:
+      // dort ist die Menge die Stueckzahl, die ohnehin unter dem Feld
+      // steht ("= 500 Stück"). Fuer ein fremdes Set waere sie geraten -
+      // 500 Stueck sind zwar rechnerisch 5 Hunderter-Sets, aber diese
+      // Menge hat niemand gewaehlt, und ein Klick auf die Kachel legt
+      // sie auch nicht an. Solche Tabellen bleiben eine reine
+      // Preisliste, ohne markierte Zeile.
+      let menge = null;
+      if (vpe === state.packSize) menge = state.qty || 1;
+      else if (vpe === 1) menge = Math.max(1, (state.qty || 1) * state.packSize);
       // Hoechste erreichte Stufe - sie traegt die Markierung.
-      let aktiv = STAFFEL[0].ab;
-      STAFFEL.forEach(function (st) { if (st.ab <= menge) aktiv = st.ab; });
+      let aktiv = null;
+      if (menge !== null) {
+        aktiv = STAFFEL[0].ab;
+        STAFFEL.forEach(function (st) { if (st.ab <= menge) aktiv = st.ab; });
+      }
 
       const rows = STAFFEL.map(function (st) {
         const preis = grundpreis * (1 - st.pct / 100);
