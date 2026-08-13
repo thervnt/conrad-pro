@@ -820,12 +820,14 @@ button { font: inherit; cursor: pointer; }
 .hint a { color: var(--c-blue); }
 
 /* ===== READ-ONLY KEY SPECS (below configurator) ===== */
+/* Kein Rahmen: die getoente Flaeche grenzt den Block schon ab, und
+   nichts darin laesst sich bedienen - ein Rahmen wuerde ihn wie eine
+   Bedienflaeche aussehen lassen. */
 .keyspecs {
   margin-top: -2px;
   padding: 14px 16px;
   background: var(--c-bg-tint);
   border-radius: var(--radius);
-  border: 1px solid var(--c-border);
 }
 .keyspecs-label {
   font-size: 11px;
