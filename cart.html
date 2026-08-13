@@ -2455,9 +2455,13 @@ button { font: inherit; cursor: pointer; }
     if (item.title) return ohneStueckzahl(item.title);
     // Die Stueckzahl steht schon in der Verpackungseinheit darunter -
     // im Titel waere sie eine zweite Angabe. Wie auf der Produktseite.
+    // Die Green Range hat gruene Hebel, die bekannte 221 orange. Das
+    // Gehaeuse ist bei beiden durchsichtig.
+    var farbe = /Green Range/.test(item.variantTag || '')
+      ? 'Transparent, Grün' : 'Transparent, Orange';
     return 'WAGO ' + item.sku + (item.packSize === 1 ? '' : '-' + item.packSize) +
       ' 221' + item.variantTag + ' Verbindungsklemme ' + item.range +
-      ' Polzahl: ' + item.polzahl + ' Transparent, Orange';
+      ' Polzahl: ' + item.polzahl + ' ' + farbe;
   }
 
   // Aeltere Warenkorbstaende kennen kein href - die sind immer die 221.

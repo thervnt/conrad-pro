@@ -4837,7 +4837,7 @@ function getSpecs(p, s, h) {
     ? 'PC (77 % biozirkulär) / PBT (27 % rezykliert)'
     : 'PA66 / PBT';
 
-  const farbe = h === 'green-range' ? 'Transparent, Orange (Green Range)' : 'Transparent, Orange';
+  const farbe = farbeFuerHebel(h);
 
   return [
     ['Bemessungsspannung',         '450 V'],
@@ -4887,6 +4887,14 @@ function getKeySpecs(p, s, h) {
   ];
 }
 
+// Der Hebel traegt die Farbe: die bekannte 221 hat orange Hebel, die
+// Green Range gruene. Beide sitzen im selben durchsichtigen Gehaeuse.
+// WAGO stellt genau so gegenueber - "unsere bekannte Verbindungsklemme
+// mit orangen Hebeln" gegen die Green Range.
+function farbeFuerHebel(h) {
+  return h === 'green-range' ? 'Transparent, Grün' : 'Transparent, Orange';
+}
+
 function buildVariantTitle(p, s, h, packSize) {
   const sku = skuByCombo[p + '|' + s + '|' + h] || '221';
   const opt = polzahlOptions.find(o => o.id === p);
@@ -4904,7 +4912,7 @@ function buildVariantTitle(p, s, h, packSize) {
   // Die Stueckzahl steht schon in der Verpackungseinheit - im Titel
   // waere sie eine zweite, leicht widersprechende Angabe.
   return 'WAGO ' + sku + skuSuffix + ' 221' + variantTag + ' Verbindungsklemme ' +
-         range + ' Polzahl: ' + p + ' Transparent, Orange';
+         range + ' Polzahl: ' + p + ' ' + farbeFuerHebel(h);
 }
 
 // Adaptive bullet list shown in the AI callout
@@ -5892,7 +5900,8 @@ if (countdownEl) {
     if (it.title) return it.title;
     return 'WAGO ' + it.sku + (it.packSize === 1 ? '' : '-' + it.packSize) +
       ' 221' + it.variantTag + ' Verbindungsklemme ' + it.range +
-      ' Polzahl: ' + it.polzahl + ' ' + it.packSize + ' St. Transparent, Orange';
+      ' Polzahl: ' + it.polzahl + ' ' +
+      farbeFuerHebel(/Green Range/.test(it.variantTag || '') ? 'green-range' : 'standard');
   }
 
   function lineConfig(it) {
