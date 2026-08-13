@@ -1023,13 +1023,16 @@ button { font: inherit; cursor: pointer; }
   align-items: center;
   gap: 8px;
   padding: 6px 14px 6px 12px;
-  border-radius: 0 var(--radius-pill) var(--radius-pill) 0;
+  border-radius: 0 var(--radius-xs) var(--radius-xs) 0;
   font-size: 13px;
   font-weight: 600;
   color: var(--c-text);
 }
+/* Zwei Bedienelemente in einem Rahmen: Sprachwahl und Oeffnen. Jede
+   Haelfte antwortet fuer sich, sonst laesst sich am Zeiger nicht
+   ablesen, was ein Klick ausloest. Der Rahmen der Gruppe bleibt
+   deshalb ruhig - er umfasst beide und koennte keine unterscheiden. */
 .datenblatt-open:hover { background: var(--c-bg-tint); text-decoration: none; }
-.datenblatt-group:hover { border-color: var(--c-border-strong); }
 .datenblatt-pdf-icon { width: 16px; height: 16px; fill: var(--c-danger); flex-shrink: 0; }
 .datenblatt-dropdown {
   position: relative;
