@@ -24,7 +24,8 @@
       qty: 4,
       packSizes: [1, 25, 50, 100],
       packPrices: { 1: 0.40, 25: 7.99, 50: 14.99, 100: 26.99 },
-      img: 'bilder/wago-221-413-01.png',
+      img: 'bilder/wago-221-413-01.webp',
+      verpackung: 'box',
       href: 'wago221.html',
       note: ''
     };

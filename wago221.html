@@ -4562,7 +4562,7 @@ button { font: inherit; cursor: pointer; }
     // 4 mm² Standard - orange levers
     '221-412', '221-413', '221-415', '221-420',
     // 4 mm² Green Range - green levers
-    '221-2412', '221-2413', '221-2415', '221-430'
+    '221-422', '221-423', '221-425', '221-430'
   ];
   // Grossbild 800 px, Vorschauleiste 160 px. Getrennte Dateien, damit die
   // sechs Vorschauen nicht sechsmal das Grossbild laden.
@@ -4591,6 +4591,10 @@ const verpackungOptions = [
   { id: 'box',    label: 'Box',            sub: 'Faltschachtel' },
   { id: 'beutel', label: 'Lose im Beutel', sub: 'Polybeutel' }
 ];
+// Im Katalog steht die Verpackungsart am Titelende - "... Transparent,
+// Orange Box". Beim Einzelstueck fehlt sie dort, es gibt nichts zu
+// verpacken.
+function verpackungKuerzel(id) { return id === 'beutel' ? 'Beutel' : 'Box'; }
 
 const polzahlOptions = [
   { id: 2,  label: '2',  poles: 2,  setSize: 100 },
@@ -4612,7 +4616,7 @@ const hebelOptions = [
 // Availability matrix. Keys: polzahl|stil|hebel
 // Real WAGO 221 catalogue:
 //   - Standard 4mm² exists for 2, 3, 5, 10 poles  (221-412, 221-413, 221-415, 221-420)
-//   - Green Range 4mm² exists for 2, 3, 5, 10 poles (221-2412, 221-2413, 221-2415, 221-430)
+//   - Green Range 4mm² exists for 2, 3, 5, 10 poles (221-422, 221-423, 221-425, 221-430)
 //   - Standard 6mm² exists for 2, 3, 5 poles (no 10-pole 6mm²)  (221-612, 221-613, 221-615)
 //   - Green Range 6mm² does not exist
 const matrix = {
@@ -4632,13 +4636,13 @@ const matrix = {
 // SKU lookup keyed on the same matrix slots
 const skuByCombo = {
   '2|4|standard':    '221-412',
-  '2|4|green-range': '221-2412',
+  '2|4|green-range': '221-422',
   '2|6|standard':    '221-612',
   '3|4|standard':    '221-413',
-  '3|4|green-range': '221-2413',
+  '3|4|green-range': '221-423',
   '3|6|standard':    '221-613',
   '5|4|standard':    '221-415',
-  '5|4|green-range': '221-2415',
+  '5|4|green-range': '221-425',
   '5|6|standard':    '221-615',
   '10|4|standard':    '221-420',
   '10|4|green-range': '221-430'
@@ -4681,13 +4685,13 @@ function isAvailable(p, s, h) { return !!matrix[p + '|' + s + '|' + h]; }
 // well-stocked default; the sold-out SKU intentionally has no entry.
 const stockBySku = {
   '221-412':  184500,
-  '221-2412':  28900,
+  '221-422':  28900,
   '221-612':   12480,
   '221-413': 264150,
-  '221-2413':  42700,
+  '221-423':  42700,
   '221-613':    9600,
   '221-415': 156300,
-  // '221-2415' is sold out; intentionally absent.
+  // '221-425' is sold out; intentionally absent.
   '221-615':       4,  // low-stock variant - highlight + restock note
   '221-420':   38400,
   '221-430':    5900
@@ -4698,7 +4702,7 @@ const STOCK_RESTOCK_NOTE = 'Weitere Mengen bestellbar – wir liefern schnellstm
 // Sold-out catalog: one or more SKUs that are temporarily unavailable.
 // The combo is still listed in the matrix (so users can navigate to it),
 // but the buy box flips to a sold-out state and the CTA is disabled.
-const SOLD_OUT_SKUS = { '221-2415': true };
+const SOLD_OUT_SKUS = { '221-425': true };
 
 function isSoldOut(p, s, h) {
   if (!isAvailable(p, s, h)) return false;
@@ -4895,24 +4899,26 @@ function farbeFuerHebel(h) {
   return h === 'green-range' ? 'Transparent, Grün' : 'Transparent, Orange';
 }
 
-function buildVariantTitle(p, s, h, packSize) {
+function buildVariantTitle(p, s, h, packSize, verpackung) {
   const sku = skuByCombo[p + '|' + s + '|' + h] || '221';
   const opt = polzahlOptions.find(o => o.id === p);
   // Use the explicitly-selected pack size when given; fall back to
   // the polzahl's default for places that don't track packSize yet.
   const setSize = (packSize != null) ? packSize : (opt ? opt.setSize : 50);
-  // For the single-piece pack the SKU has no -N suffix on the
-  // catalogue side - it's the base SKU.
-  const skuSuffix = setSize === 1 ? '' : ('-' + setSize);
+  // Auch das Einzelstueck traegt seinen Zusatz: im Katalog stehen
+  // 221-413-50 und 221-413-1 als zwei Artikel nebeneinander.
+  const skuSuffix = '-' + setSize;
   const isSix = s === '6';
   const range = isSix
     ? 'flexibel: 0.5-6 mm² starr: 0.5-6 mm²'
     : 'flexibel: 0.14-4 mm² starr: 0.2-4 mm²';
-  const variantTag = h === 'green-range' ? ' Green Range' : '';
+  // Kein "Green Range" im Namen: im Katalog unterscheidet die
+  // Artikelnummer die Ausfuehrung, und die Farbe am Ende sagt den Rest.
   // Die Stueckzahl steht schon in der Verpackungseinheit - im Titel
   // waere sie eine zweite, leicht widersprechende Angabe.
-  return 'WAGO ' + sku + skuSuffix + ' 221' + variantTag + ' Verbindungsklemme ' +
-         range + ' Polzahl: ' + p + ' ' + farbeFuerHebel(h);
+  return 'WAGO ' + sku + skuSuffix + ' 221 Verbindungsklemme ' +
+         range + ' Polzahl: ' + p + ' ' + farbeFuerHebel(h) +
+         (setSize === 1 ? '' : ' ' + verpackungKuerzel(verpackung));
 }
 
 // Adaptive bullet list shown in the AI callout
@@ -4990,7 +4996,7 @@ function renderProductSide() {
   } else if (!avail) {
     nameEl.textContent = 'Kombination nicht verfügbar';
   } else {
-    nameEl.textContent = buildVariantTitle(p, s, h, state.packSize);
+    nameEl.textContent = buildVariantTitle(p, s, h, state.packSize, state.verpackung);
   }
 
   // Image
@@ -5002,21 +5008,23 @@ function renderProductSide() {
   // IDs
   if (avail) {
     const skuExact = skuByCombo[p + '|' + s + '|' + h];
-    const opt = polzahlOptions.find(o => o.id === p);
-    const setSize = opt ? opt.setSize : 50;
-    (document.querySelector('[data-hst] .id-chip-num') || document.querySelector('[data-hst]')).textContent = skuExact + '-' + setSize;
+    // Die Hersteller-Nummer folgt der gewaehlten Verpackung, nicht der
+    // Standardgroesse der Polzahl - im Katalog sind 221-413-50 und
+    // 221-413-1 zwei Artikel. Gleiche Regel wie im Titel.
+    (document.querySelector('[data-hst] .id-chip-num') || document.querySelector('[data-hst]')).textContent =
+      skuExact + '-' + state.packSize;
     // Bestellnummer is a stable Conrad-internal id; map by SKU
     const bestellMap = {
       '221-412': '1188439', '221-413': '1188440', '221-415': '1188441', '221-420': '1188450',
-      '221-2412': '2462941', '221-2413': '2462942', '221-2415': '2462943', '221-430': '2462950',
+      '221-422': '2992018', '221-423': '2992019', '221-425': '2992020', '221-430': '934315382',
       '221-612': '1188460', '221-613': '1188461', '221-615': '1188462'
     };
     (document.querySelector('[data-bestell] .id-chip-num') || document.querySelector('[data-bestell]')).textContent = bestellMap[skuExact] || '1188440';
     // EAN (approximate, stable per SKU)
     const eanMap = {
       '221-412': '4050821808459',  '221-413': '4050821808442',  '221-415': '4050821808480',
-      '221-420': '4055143234658',  '221-2412': '4066966345384', '221-2413': '4066966345391',
-      '221-2415': '4066966345407', '221-430': '4066966345414', '221-612': '4050821808503',
+      '221-420': '4055143234658',  '221-422': '4066966345384', '221-423': '4066966345438',
+      '221-425': '4066966345285', '221-430': '4066966705416', '221-612': '4050821808503',
       '221-613': '4050821808510',  '221-615': '4050821808527'
     };
     (document.querySelector('[data-ean] .id-chip-num') || document.querySelector('[data-ean]')).textContent = eanMap[skuExact] || '4050821808442';
@@ -5819,7 +5827,7 @@ if (countdownEl) {
     const skuExact = skuByCombo[p + '|' + s + '|' + h] || '221-413';
     const bestellMap = {
       '221-412': '1188439', '221-413': '1188440', '221-415': '1188441', '221-420': '1188450',
-      '221-2412': '2462941', '221-2413': '2462942', '221-2415': '2462943', '221-430': '2462950',
+      '221-422': '2992018', '221-423': '2992019', '221-425': '2992020', '221-430': '934315382',
       '221-612': '1188460', '221-613': '1188461', '221-615': '1188462'
     };
     return {
@@ -5834,6 +5842,7 @@ if (countdownEl) {
       qty: qty,
       packSizes: (packSizesByPolzahl[p] || [1]).slice(),
       packPrices: getPricing(p, s, h).packs,
+      verpackung: state.verpackung,
       minPieces: mindestStueckFuer(p),
       img: imageBySku[resolveImageSku(p, s, h)] || '',
       href: 'wago221.html',
@@ -5898,10 +5907,11 @@ if (countdownEl) {
   // die 221er-Zeilen leiten beides aus ihrer Auswahl ab.
   function lineTitle(it) {
     if (it.title) return it.title;
-    return 'WAGO ' + it.sku + (it.packSize === 1 ? '' : '-' + it.packSize) +
-      ' 221' + it.variantTag + ' Verbindungsklemme ' + it.range +
+    return 'WAGO ' + it.sku + '-' + it.packSize +
+      ' 221 Verbindungsklemme ' + it.range +
       ' Polzahl: ' + it.polzahl + ' ' +
-      farbeFuerHebel(/Green Range/.test(it.variantTag || '') ? 'green-range' : 'standard');
+      farbeFuerHebel(/Green Range/.test(it.variantTag || '') ? 'green-range' : 'standard') +
+      (it.packSize === 1 ? '' : ' ' + verpackungKuerzel(it.verpackung));
   }
 
   function lineConfig(it) {
@@ -6698,7 +6708,7 @@ function renderBundle() {
   const mainImg = (typeof imageBySku !== 'undefined' && imageBySku[sku]) || '';
   const skuExact = (typeof skuByCombo !== 'undefined' && skuByCombo[p+'|'+s+'|'+h]) || sku;
   const variantTitle = (typeof buildVariantTitle === 'function')
-    ? buildVariantTitle(p, s, h, sz)
+    ? buildVariantTitle(p, s, h, sz, state.verpackung)
     : ('WAGO ' + skuExact);
   const pricing = getPricing(p, s, h);
   const packPrice = (pricing.packs && pricing.packs[sz] != null)
