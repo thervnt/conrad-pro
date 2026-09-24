@@ -2183,10 +2183,6 @@ button { font: inherit; cursor: pointer; }
   font-weight: 600;
 }
 .konto-nav svg { width: 16px; height: 16px; flex-shrink: 0; }
-/* Verweis, der den Kontobereich verlaesst. In der Produktion geschieht das
-   dreimal ohne jeden Hinweis (Befund D1). */
-.konto-nav-extern { margin-left: auto; opacity: 0.6; }
-.konto-nav a[aria-current="page"] .konto-nav-extern { opacity: 1; }
 /* Zaehler am Eintrag: man sieht ohne Klick, wo etwas liegt. */
 .konto-nav-count {
   margin-left: auto;

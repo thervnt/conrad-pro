@@ -600,3 +600,80 @@ documents are two mental models with two different actions.
 containers and the page would end with the work rather than with lookup data.
 Against it: before a large order, a glance at which address and which payment
 method are active is worth something. Recorded as an option, not built.
+
+---
+
+## 11. Stücklisten wird ein Ort, und zwei erfundene Felder verschwinden
+
+Review note: the navigation entry "Stücklisten" pointed straight at the existing
+tool page and carried an external link marker. Challenged as not best practice.
+Correct.
+
+### Why the marker was wrong
+
+The diagonal arrow conventionally means: this leaves the current context, to a
+foreign domain, another system or a new window. None of that applied.
+`stueckliste.html` is the same site, the same prototype, the same authenticated
+state, the same tab, and a Conrad tool.
+
+So the icon did not describe the user's world. It described **my
+implementation**: that one page lacks my sidebar. It marked finding A1 instead
+of fixing it. Honest, not good.
+
+### The deeper mistake
+
+The navigation is a list of **places**: Übersicht, Bestellungen, Merklisten,
+Rechnungen, Rücksendungen, Unternehmen, Profil, Adressen, Zahlungsart. Nouns,
+where something is kept.
+
+"Stücklisten" was the only **tool** among them, a verb dressed as a noun. The
+entry promised "here are my bills of material" and delivered "here you upload
+one". That breaks the pattern independently of the missing shell.
+
+And something a buyer needs was missing: whoever uploads and matches a bill of
+material wants to find it again, reorder it next quarter, hand it to a
+colleague, compare it with the previous version. Until now the list was gone
+after the cart.
+
+### What was built
+
+**`konto-stuecklisten.html`**, a list of saved bills of material, exactly as
+Merklisten lists wishlists and Bestellungen lists orders. Columns: Stückliste,
+Zuletzt geändert, Abgleich, Positionen, Summe netto, Zuletzt bestellt.
+
+"Abgleich" carries the match result as a status pill, "Vollständig" or "5 zu
+prüfen", because that is the reason someone reopens a list. A list with open
+positions cannot go into the cart as a whole, and the button says so.
+
+The tool becomes an **action on that page** ("Neue Stückliste hochladen"), not a
+navigation target. The arrow marker is gone because nothing is being left. The
+`.konto-nav-extern` rule was removed with it rather than left as dead code.
+
+The navigation is once again nouns only.
+
+### Two invented fields removed
+
+"Angelegt von" stood in the Merklisten table. That data does not exist:
+wishlists belong to the company account, not to a person. The column is gone and
+the field was deleted from the fixtures so nobody puts it back. The bill of
+material list was built without an owner column for the same reason.
+
+This is worth recording as a rule for the rest of the concept: a column only
+exists when the data behind it exists. Finding B1 is the production version of
+the same mistake, a "Zahlungsstatus" column with nothing in it.
+
+### Still open, needs approval
+
+**Give `stueckliste.html` the account shell.** Then the matching itself sits
+inside the area and the user does not lose the navigation while uploading. That
+means editing an existing page, so it is proposed, not done. Until then the list
+page links into the tool, which still opens without a sidebar. The gap is one
+page deep instead of sitting in the navigation.
+
+### Known limitation
+
+The disabled cart button explains itself through a `title` attribute, which
+screen readers do not announce reliably and which a disabled button cannot
+receive focus for. It is acceptable here only because the adjacent "Abgleich"
+column states the reason visibly. If the pattern spreads, the reason has to
+become visible text.

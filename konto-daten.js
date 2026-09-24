@@ -149,13 +149,27 @@
 
   // Merklisten tragen Namen, die der Einkauf selbst vergibt. Die Produktion
   // nennt sie "Merkliste vom 03.07.2026" (Befund E1).
+  // Merklisten haengen am Firmenkonto, nicht an einer Person. Ein Feld
+  // "angelegt von" gibt es in den Daten nicht, also steht es auch nicht in
+  // der Tabelle. Dasselbe gilt fuer Stuecklisten.
   var merklisten = [
     { id: 'm1', name: 'Halle 3 / Elektroinstallation', angelegt: '2026-07-03', geaendert: '2026-09-20',
-      besitzer: 'u1', artikel: 14, wert: 1842.60, bild: 'bilder/klein/wago-221-413-01.webp' },
+      artikel: 14, wert: 1842.60, bild: 'bilder/klein/wago-221-413-01.webp' },
     { id: 'm2', name: 'Standardlager Werkstatt', angelegt: '2026-03-18', geaendert: '2026-08-01',
-      besitzer: 'u2', artikel: 7, wert: 318.45, bild: 'bilder/klein/wago-221-415-01.webp' },
+      artikel: 7, wert: 318.45, bild: 'bilder/klein/wago-221-415-01.webp' },
     { id: 'm3', name: 'Angebot Stadtwerke (Entwurf)', angelegt: '2026-09-12', geaendert: '2026-09-12',
-      besitzer: 'u1', artikel: 3, wert: 96.30, bild: null }
+      artikel: 3, wert: 96.30, bild: null }
+  ];
+
+  // Gespeicherte Stuecklisten. "ohneTreffer" kommt aus dem Abgleich des
+  // Werkzeugs und ist damit echte Angabe, kein erfundenes Feld.
+  var stuecklisten = [
+    { id: 's1', name: 'Halle 3 / Schaltschrank A', angelegt: '2026-09-08', geaendert: '2026-09-19',
+      positionen: 24, ohneTreffer: 0, summe: 3184.20, zuletztBestellt: '2026-09-11' },
+    { id: 's2', name: 'Wartungspaket Umspannstation', angelegt: '2026-08-12', geaendert: '2026-08-14',
+      positionen: 11, ohneTreffer: 2, summe: 642.80, zuletztBestellt: '2026-08-14' },
+    { id: 's3', name: 'Ausschreibung Stadtwerke 2026', angelegt: '2026-09-21', geaendert: '2026-09-21',
+      positionen: 38, ohneTreffer: 5, summe: 4970.15, zuletztBestellt: null }
   ];
 
   var ruecksendungen = [
@@ -260,7 +274,7 @@
     MWST: MWST, HEUTE: HEUTE,
     firma: firma, benutzer: benutzer, kostenstellen: kostenstellen, lieferadressen: lieferadressen,
     bestellungen: bestellungen, rechnungen: rechnungen, ruecksendungen: ruecksendungen,
-    merklisten: merklisten,
+    merklisten: merklisten, stuecklisten: stuecklisten,
     euro: euro, datum: datum, tageBis: tageBis, esc: esc, netto: netto,
     person: person, adresse: adresse, pille: pille, STATUS: STATUS,
     nachbestellen: nachbestellen, melden: melden
