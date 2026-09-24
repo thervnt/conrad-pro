@@ -178,9 +178,7 @@
           <h1 class="konto-h1">Conrad PRO</h1>
           <p class="konto-head-sub" data-sub></p>
         </div>
-        <div class="konto-head-actions">
-          <button type="button" class="konto-btn ghost" data-kuendigen>Mitgliedschaft kündigen</button>
-        </div>
+
       </div>
 
       <div class="konto-attention" data-nutzen></div>
@@ -189,6 +187,12 @@
         <div class="konto-card">
           <div class="konto-card-head"><h2 class="konto-card-title">Mitgliedschaft</h2></div>
           <dl class="konto-dl" data-mitglied></dl>
+          <!-- Kuendigen steht am Ende der Karte, zu der es gehoert, nicht oben
+               rechts als erste Handlung der Seite. Und es traegt die
+               Warnfarbe, weil es etwas beendet. -->
+          <div class="konto-head-actions" style="margin-top:16px">
+            <button type="button" class="konto-btn danger" data-kuendigen>Mitgliedschaft kündigen</button>
+          </div>
         </div>
         <div class="konto-card">
           <div class="konto-card-head"><h2 class="konto-card-title">Ihre Vorteile</h2></div>

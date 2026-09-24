@@ -1049,3 +1049,107 @@ All thirteen account pages checked for the mixture: **none has both a heading in
 a card and a heading on the page**. Layout re-measured at 1680, 1280, 1024 and
 900 px, no table scrolls, no page shifts. The Lieferadressen block exists in
 exactly one place, and `konto-unternehmen.html` links to it.
+
+---
+
+## 17. Neun Punkte aus der zweiten Durchsicht
+
+### 17.1 "Alle" aus den Auswahlfeldern
+
+"Alle Status", "Alle Besteller", "Alle Kostenstellen" became "Status",
+"Besteller", "Kostenstelle". The first option of a filter is the unfiltered
+state, and naming it after the axis lets the field read as its own label. The
+word "Alle" added length and no information.
+
+### 17.2 Knöpfe ohne Fläche auf grauem Grund
+
+`.konto-btn.ghost` had `background: none`. On the page background (`#F4F5F7`)
+that reads as a frame around nothing. Now white, which also matches the search
+field and the select beside it in the toolbar.
+
+### 17.3 Stückliste hochladen wird der Hauptknopf
+
+The dashboard header carried a ghost "Stückliste hochladen" and a primary "Alle
+Bestellungen". The primary one was pure navigation, and the same route already
+exists twice on the page, in the sidebar and in the list card's footer. Removed.
+Uploading a bill of material is the action that starts something, so it takes
+the primary slot.
+
+### 17.4 Gespeicherte Stücklisten sind anklickbar
+
+New page `konto-stueckliste.html?id=...`. The list name and "Öffnen" now lead to
+the positions instead of to the matching tool.
+
+Each row shows what the upload contained (`221-413-50;Verbindungsklemme
+3-Leiter;20`), which article it was matched to, quantity, unit price and line
+total. **Unmatched rows come first**, because they are the reason someone
+reopens a saved list, and they keep the raw line so it can still be resolved.
+A list with open rows cannot be ordered as a whole and the button says so.
+
+The fixtures now carry the rows, and count, open rows and total are derived from
+them rather than maintained twice.
+
+### 17.5 Bankeinzug war nicht wählbar
+
+It was `disabled` with a link beside it. Disabled means "not possible" and makes
+the user guess why. It is possible, it just needs one thing first.
+
+Now it is selectable. Choosing it reveals the requirement directly under that
+option ("Dafür fehlt noch Ihre Bankverbindung") with the route to fix it, and
+saving stays blocked with a sentence that says why rather than with a silent
+lock. Choosing another option hides it again.
+
+### 17.6 Lieferadressen: eine Handlung sichtbar
+
+Each address carried Bearbeiten, Als Standard and Löschen as three identical
+ghost buttons, which says nothing about which one is the usual one and puts
+deleting on the same level as editing.
+
+Now: **"Bearbeiten" visible, the rest behind an overflow menu** with Als
+Standard festlegen, Adresse kopieren and Löschen, the last in the danger colour.
+`aria-expanded`, `aria-haspopup`, closes on outside click and on Escape.
+
+Considered and rejected: revealing the other actions inside the edit state.
+Setting a default and deleting are not part of editing an address, and burying
+them one interaction deeper than they belong would cost more than the three
+buttons did.
+
+### 17.7 Kündigen stand zu weit vorn
+
+"Mitgliedschaft kündigen" sat top right in the page header, the first action of
+the page. It moved to the end of the Mitgliedschaft card, where it belongs, and
+took the danger colour. Fill stays white: a red filled button is a primary
+action, and cancelling is not that.
+
+New variant `.konto-btn.danger`, white surface, `--c-danger` text, red tint on
+hover.
+
+### 17.8 Profil untereinander
+
+Three cards in a grid became one stacked column. At three columns the
+definition lists wrapped, and the page has only three blocks anyway.
+
+### 17.9 Newsletter: ein Abo, nicht vier Themen
+
+My version offered four topics with checkboxes. Conrad sends one newsletter.
+That is the same mistake as "angelegt von" on the wishlists: a control for data
+that does not exist.
+
+The page now shows what there is: one subscription with a switch, the address
+with a route to change it, the date of consent, and a second card listing what
+the newsletter contains, as information rather than as choices.
+
+**Recommendation, not built**: topics are worth having, but as a product
+decision rather than a UI invention. For a B2B account the useful split is by
+purchasing interest, for example "Neue Artikel in meinen Warengruppen",
+"Aktionen mit Nettopreisen", "Technik und Normen", "Beschaffung und Services".
+That needs editorial capacity for four streams instead of one, so it is a
+question for marketing, not for this concept. The page is built so that adding
+them later means adding rows, not rebuilding it.
+
+### Verified
+
+60 measurements across fifteen account pages at 1680, 1280, 1024 and 900 px: no
+table scrolls, no page shifts sideways, no page mixes heading constructions,
+every page has a heading. The nine items were each checked individually against
+the built pages.

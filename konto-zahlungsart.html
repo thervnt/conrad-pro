@@ -367,7 +367,8 @@
   var K = window.KONTO, E = K.esc;
   var OPTIONEN = [
     { id: 'rechnung', name: 'Rechnung', note: 'Zahlbar innerhalb von 16 Tagen nach Rechnungsstellung. Für Geschäftskunden freigeschaltet.' },
-    { id: 'bankeinzug', name: 'Bankeinzug', note: 'Einzug vom hinterlegten Konto. Setzt eine Bankverbindung im Profil voraus.', gesperrt: true },
+    { id: 'bankeinzug', name: 'Bankeinzug', note: 'Einzug vom hinterlegten Konto.',
+      braucht: 'Dafür fehlt noch Ihre Bankverbindung. Sie können sie jetzt eintragen, die Zahlungsart wird danach aktiv.' },
     { id: 'kreditkarte', name: 'Kreditkarte', note: 'Mastercard, Visa und American Express.' },
     { id: 'paypal', name: 'PayPal', note: 'Weiterleitung zu PayPal beim Abschluss der Bestellung.' },
     { id: 'vorkasse', name: 'Vorauskasse', note: 'Versand nach Zahlungseingang. Verlängert die Lieferzeit um ein bis zwei Werktage.' }
@@ -377,15 +378,21 @@
 
   /* Keine grauen Marken rechts, die links schon stehen (Befund F2).
      Stattdessen ein Satz, der sagt, was die Zahlart bedeutet. */
+  /* Eine Zahlungsart, die etwas voraussetzt, wird nicht gesperrt. Gesperrt
+     heisst "geht nicht" und laesst den Nutzer raten, warum. Waehlbar heisst
+     "geht, sobald du das erledigt hast" - und die Erledigung steht direkt
+     darunter, sobald er sie waehlt. */
   document.querySelector('[data-optionen]').innerHTML = OPTIONEN.map(function (o) {
     return '<label class="konto-option">' +
       '<input type="radio" name="zahlart" value="' + o.id + '"' +
-        (o.id === gewaehlt ? ' checked' : '') + (o.gesperrt ? ' disabled' : '') + '>' +
+        (o.id === gewaehlt ? ' checked' : '') + '>' +
       '<span class="konto-option-body">' +
         '<span class="konto-option-name">' + E(o.name) + '</span>' +
-        '<span class="konto-option-note">' + E(o.note) +
-          (o.gesperrt ? ' <a href="konto-profil.html#bankverbindung">Bankverbindung hinterlegen</a>' : '') +
-        '</span>' +
+        '<span class="konto-option-note">' + E(o.note) + '</span>' +
+        (o.braucht
+          ? '<span class="konto-option-bedarf" hidden>' + E(o.braucht) +
+            ' <a href="konto-profil.html#bankverbindung">Bankverbindung eintragen</a></span>'
+          : '') +
       '</span></label>';
   }).join('');
 
@@ -395,10 +402,19 @@
 
   function zeigeStand() {
     var o = OPTIONEN.filter(function (x) { return x.id === gespeichert; })[0];
+    var neu = OPTIONEN.filter(function (x) { return x.id === gewaehlt; })[0];
     stand.textContent = 'Gespeichert: ' + o.name;
     var geaendert = gewaehlt !== gespeichert;
-    btnSpeichern.disabled = !geaendert;
+    /* Der Bedarf erscheint nur an der gewaehlten Zeile. */
+    [].forEach.call(document.querySelectorAll('.konto-option-bedarf'), function (el) {
+      el.hidden = !(neu && neu.braucht && el.closest('.konto-option').querySelector('input').value === gewaehlt);
+    });
+    /* Speichern bleibt gesperrt, solange die Voraussetzung fehlt - mit einem
+       Satz, der sagt warum, statt mit einer stummen Sperre. */
+    var offen = !!(neu && neu.braucht);
+    btnSpeichern.disabled = !geaendert || offen;
     btnVerwerfen.disabled = !geaendert;
+    if (offen) stand.textContent = 'Gespeichert: ' + o.name + ' · Bankeinzug wird aktiv, sobald die Bankverbindung hinterlegt ist';
   }
 
   /* Die Produktion speichert ohne erkennbaren Knopf und ohne Rueckmeldung

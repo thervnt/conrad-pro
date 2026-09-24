@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
-<title>Profil · Conrad Electronic</title>
+<title>Stückliste · Conrad Electronic</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex,nofollow">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -138,7 +138,9 @@
   <span class="breadcrumb-sep" aria-hidden="true">›</span>
   <a href="konto.html">Mein Konto</a>
   <span class="breadcrumb-sep" aria-hidden="true">›</span>
-  <span class="breadcrumb-current" aria-current="page">Profil</span>
+  <a href="konto-stuecklisten.html">Stücklisten</a>
+  <span class="breadcrumb-sep" aria-hidden="true">›</span>
+  <span class="breadcrumb-current" aria-current="page">Stückliste</span>
 </nav>
 <main class="konto-main">
   <div class="konto-layout">
@@ -150,7 +152,7 @@
   <div class="konto-nav-group">
     <p class="konto-nav-title">Bestellen</p>
     <a href="konto-bestellungen.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg><span>Bestellungen</span><span class="konto-nav-count" data-nav-count="bestellungen"></span></a>
-    <a href="konto-stuecklisten.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg><span>Stücklisten</span></a>
+    <a href="konto-stuecklisten.html" aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg><span>Stücklisten</span></a>
     <a href="konto-merklisten.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg><span>Merklisten</span></a>
   </div>
   <div class="konto-nav-group">
@@ -167,40 +169,14 @@
   </div>
   <div class="konto-nav-group">
     <p class="konto-nav-title">Persönlich</p>
-    <a href="konto-profil.html" aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span>Profil</span></a>
+    <a href="konto-profil.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span>Profil</span></a>
     <a href="konto-newsletter.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"/><polyline points="22,6 12,13 2,6"/></svg><span>Newsletter</span></a>
   </div>
 </nav>
     </aside>
     <div class="konto-content" id="inhalt" tabindex="-1">
-      <div class="konto-head">
-        <div>
-          <h1 class="konto-h1">Profil</h1>
-          <p class="konto-head-sub">Ihre persönlichen Daten in diesem Firmenkonto</p>
-        </div>
-      </div>
-      <div data-hinweis></div>
-      <!-- Untereinander statt nebeneinander: drei schmale Spalten brechen die
-           Stammdatenzeilen um, und die Seite hat nur drei Bloecke. -->
-      <div class="konto-stapel">
-        <div class="konto-card">
-          <div class="konto-card-head"><h2 class="konto-card-title">Persönliche Daten</h2>
-            <a class="konto-card-link" href="#">Bearbeiten</a></div>
-          <dl class="konto-dl" data-person></dl>
-        </div>
-        <div class="konto-card">
-          <div class="konto-card-head"><h2 class="konto-card-title">Zugang</h2></div>
-          <dl class="konto-dl" data-zugang></dl>
-          <div class="konto-head-actions" style="margin-top:16px">
-            <button type="button" class="konto-btn" data-pw>Passwort ändern</button>
-            <button type="button" class="konto-btn ghost" data-abmelden>Abmelden</button>
-          </div>
-        </div>
-        <div class="konto-card" id="bankverbindung">
-          <div class="konto-card-head"><h2 class="konto-card-title">Bankverbindung</h2></div>
-          <div data-bank></div>
-        </div>
-      </div>
+      <div data-kopf></div>
+      <div data-inhalt></div>
     </div>
   </div>
 </main>
@@ -373,45 +349,111 @@
 <script src="konto-daten.js"></script>
 <script>
 (function () {
-  var K = window.KONTO, E = K.esc, D = K.datum;
-  var ich = K.benutzer[0];
+  var K = window.KONTO, E = K.esc, EU = K.euro, D = K.datum;
+  var id = new URLSearchParams(location.search).get('id') || K.stuecklisten[0].id;
+  var liste = K.stuecklisten.filter(function (x) { return x.id === id; })[0];
+  var elKopf = document.querySelector('[data-kopf]');
+  var elInhalt = document.querySelector('[data-inhalt]');
 
-  document.querySelector('[data-person]').innerHTML =
-    '<div><dt>Name</dt><dd>' + E(ich.name) + '</dd></div>' +
-    '<div><dt>Funktion</dt><dd>' + E(ich.funktion) + '</dd></div>' +
-    '<div><dt>Kostenstelle</dt><dd>' + E(ich.kostenstelle) + '</dd></div>' +
-    '<div><dt>Im Konto seit</dt><dd>' + D(ich.seit) + '</dd></div>';
+  if (!liste) {
+    elInhalt.innerHTML = '<div class="konto-empty">' +
+      '<p class="konto-empty-title">Diese Stückliste gibt es nicht</p>' +
+      '<p class="konto-empty-text">Vielleicht wurde sie gelöscht oder gehört zu einem anderen Konto.</p>' +
+      '<div class="konto-empty-actions"><a class="konto-btn primary" href="konto-stuecklisten.html">Zu allen Stücklisten</a></div></div>';
+    return;
+  }
 
-  /* Kundennummer als Kopier-Chip: sie wird am Telefon abgefragt (Befund F6).
-     Kein "Passwort: *****" - fuenf Sternchen sagen nichts (Befund A11). */
-  document.querySelector('[data-zugang]').innerHTML =
-    '<div><dt>E-Mail</dt><dd>' + E(ich.mail) + '</dd></div>' +
-    '<div><dt>Kundennummer</dt><dd><span class="id-chip"><button class="id-chip-value" data-copy="' + E(K.firma.kundennummer) + '" title="In Zwischenablage kopieren">' +
-      '<svg class="id-chip-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>' +
-      '<span class="id-chip-num">' + E(K.firma.kundennummer) + '</span></button></span></dd></div>' +
-    '<div><dt>Passwort</dt><dd>zuletzt geändert am ' + D('2026-02-14') + '</dd></div>';
+  document.title = liste.name + ' \u00b7 Conrad Electronic';
+  var kr = document.querySelector('.breadcrumb-current');
+  if (kr) kr.textContent = liste.name;
 
-  /* Der Hinweis steht dort, wo er gilt, und traegt seine Handlung
-     (Befund B12/F5). */
-  document.querySelector('[data-bank]').innerHTML =
-    '<p class="konto-empty-text" style="margin:0 0 16px;max-width:none">Noch keine Bankverbindung hinterlegt. ' +
-    'Gutschriften aus Rücksendungen können erst danach ausgezahlt werden.</p>' +
-    '<button type="button" class="konto-btn primary" data-iban>IBAN hinterlegen</button>';
+  var zugeordnet = liste.zeilen.filter(function (z) { return z.sku; });
+  var offen = liste.zeilen.filter(function (z) { return !z.sku; });
 
-  document.querySelector('[data-hinweis]').innerHTML =
-    '<div class="konto-note"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>' +
-    '<span>Firmendaten, Benutzer und Kostenstellen verwalten Sie unter Unternehmen.</span>' +
-    '<a href="konto-unternehmen.html">Zu den Unternehmensdaten</a></div>';
+  elKopf.innerHTML =
+    '<div class="konto-head">' +
+      '<div>' +
+        '<h1 class="konto-h1">' + E(liste.name) + '</h1>' +
+        '<p class="konto-head-sub">' + liste.positionen + ' Positionen \u00b7 zuletzt geändert am ' +
+          D(liste.geaendert) + ' \u00b7 Kostenstelle ' + E(liste.kostenstelle) + '</p>' +
+      '</div>' +
+      '<div class="konto-head-actions">' +
+        '<a class="konto-btn ghost" href="stueckliste.html">Im Abgleich öffnen</a>' +
+        '<button type="button" class="konto-btn primary" data-alle' +
+          (offen.length ? ' disabled' : '') + '>Alle Positionen in den Warenkorb</button>' +
+      '</div>' +
+    '</div>';
+
+  /* Offene Zeilen zuerst: sie sind der Grund, warum jemand die Liste wieder
+     aufmacht. Eine Liste mit offenen Zeilen laesst sich nicht als Ganzes
+     bestellen, und der Hinweis sagt, was zu tun ist. */
+  var hinweis = offen.length
+    ? '<div class="konto-note">' +
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>' +
+      '<span>' + offen.length + ' von ' + liste.positionen + ' Positionen konnten keinem Artikel zugeordnet werden. ' +
+      'Solange sie offen sind, lässt sich die Liste nicht vollständig bestellen.</span>' +
+      '<a href="stueckliste.html">Im Abgleich lösen</a></div>'
+    : '';
+
+  function zeileHtml(z) {
+    if (!z.sku) {
+      return '<div class="konto-pos">' +
+        '<span class="konto-pos-img">' +
+          '<svg viewBox="0 0 24 24" fill="none" stroke="#b6bcc7" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" width="28" height="28" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>' +
+        '</span>' +
+        '<div class="konto-pos-body">' +
+          '<p class="konto-pos-name">Kein Artikel zugeordnet</p>' +
+          '<div class="konto-pos-meta"><span>aus der Liste: ' + E(z.roh) + '</span></div>' +
+        '</div>' +
+        '<div class="konto-pos-right">' +
+          '<span class="bom-status warn">Zu prüfen</span>' +
+          '<a class="konto-btn ghost" href="stueckliste.html">Zuordnen</a>' +
+        '</div></div>';
+    }
+    return '<div class="konto-pos">' +
+      '<span class="konto-pos-img">' + (z.bild
+        ? '<img src="' + E(z.bild) + '" alt="" width="56" height="56" loading="lazy">'
+        : '<svg viewBox="0 0 24 24" fill="none" stroke="#b6bcc7" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" width="28" height="28" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>') +
+      '</span>' +
+      '<div class="konto-pos-body">' +
+        '<p class="konto-pos-name"><a href="wago221.html">' + E(z.titel) + '</a></p>' +
+        '<div class="konto-pos-meta">' +
+          '<span>' + z.menge + ' \u00d7 ' + (z.packSize === 1 ? 'Stück' : z.packSize + 'er-Set') + '</span>' +
+          '<span>Hst.-Nr. ' + E(z.sku) + '-' + z.packSize + '</span>' +
+          '<span>aus der Liste: ' + E(z.roh) + '</span>' +
+        '</div>' +
+      '</div>' +
+      '<div class="konto-pos-right">' +
+        '<span class="konto-pos-price">' + EU(z.menge * z.einzel) + '</span>' +
+        '<span class="konto-pos-unit">' + EU(z.einzel) + ' je Einheit, netto</span>' +
+        '<button type="button" class="konto-btn" data-zeile="' + E(z.roh) + '">Nur diese Position</button>' +
+      '</div></div>';
+  }
+
+  elInhalt.innerHTML = hinweis +
+    '<div class="konto-card">' +
+      '<div class="konto-card-head"><h2 class="konto-card-title">Positionen</h2></div>' +
+      offen.map(zeileHtml).join('') + zugeordnet.map(zeileHtml).join('') +
+      '<div class="konto-sum konto-section">' +
+        '<div class="konto-sum-row"><span>Zugeordnete Positionen</span><span>' + zugeordnet.length + ' von ' + liste.positionen + '</span></div>' +
+        '<div class="konto-sum-total"><span>Summe netto</span><span>' + EU(liste.summe) + '</span></div>' +
+        '<p class="konto-sum-note">zzgl. MwSt. und Versand</p>' +
+      '</div>' +
+    '</div>';
 
   document.addEventListener('click', function (e) {
-    if (e.target.closest('[data-pw]')) K.melden('Passwort ändern');
-    if (e.target.closest('[data-abmelden]')) K.melden('Abmelden');
-    if (e.target.closest('[data-iban]')) K.melden('IBAN hinterlegen');
-    var c = e.target.closest('[data-copy]');
-    if (c && navigator.clipboard) {
-      navigator.clipboard.writeText(c.dataset.copy);
-      c.classList.add('copied');
-      setTimeout(function () { c.classList.remove('copied'); }, 1400);
+    if (e.target.closest('[data-alle]')) {
+      K.nachbestellen(zugeordnet.map(function (z) {
+        return { sku: z.sku, packSize: z.packSize, titel: z.titel, menge: z.menge, einzel: z.einzel, bild: z.bild };
+      }));
+      K.melden(zugeordnet.length + ' Positionen in den Einkaufswagen gelegt');
+      return;
+    }
+    var eine = e.target.closest('[data-zeile]');
+    if (eine) {
+      var z = zugeordnet.filter(function (x) { return x.roh === eine.dataset.zeile; })[0];
+      K.nachbestellen([{ sku: z.sku, packSize: z.packSize, titel: z.titel, menge: z.menge, einzel: z.einzel, bild: z.bild }]);
+      K.melden('In den Einkaufswagen gelegt');
     }
   });
 })();

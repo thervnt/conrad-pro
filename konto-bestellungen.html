@@ -193,7 +193,7 @@
         </label>
         <label class="visually-hidden" for="f-status">Status</label>
         <select class="konto-select" id="f-status" data-f-status>
-          <option value="">Alle Status</option>
+          <option value="">Status</option>
           <option value="bearbeitung">In Bearbeitung</option>
           <option value="versendet">Versendet</option>
           <option value="teilversand">Teilweise versendet</option>
@@ -394,9 +394,9 @@
   var elPerson = document.querySelector('[data-f-person]');
   var elKst = document.querySelector('[data-f-kst]');
 
-  elPerson.innerHTML = '<option value="">Alle Besteller</option>' +
+  elPerson.innerHTML = '<option value="">Besteller</option>' +
     K.benutzer.map(function (u) { return '<option value="' + u.id + '">' + E(u.name) + '</option>'; }).join('');
-  elKst.innerHTML = '<option value="">Alle Kostenstellen</option>' +
+  elKst.innerHTML = '<option value="">Kostenstelle</option>' +
     K.kostenstellen.map(function (k) { return '<option value="' + k.nr + '">' + E(k.nr) + ' ' + E(k.name) + '</option>'; }).join('');
 
   if (param.get('status')) elStatus.value = param.get('status');

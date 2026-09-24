@@ -304,13 +304,26 @@
 .konto-btn:hover { background: var(--c-blue-soft-hover); text-decoration: none; }
 .konto-btn.primary { background: var(--c-blue); color: var(--c-text-on-dark); }
 .konto-btn.primary:hover { background: var(--c-blue-hover); }
+/* Weisse Flaeche, nicht durchsichtig: auf dem grauen Seitengrund sah ein
+   Knopf ohne Fuellung aus wie ein Rahmen ohne Inhalt. Auf weissen Karten
+   faellt der Unterschied nicht auf. */
 .konto-btn.ghost {
-  background: none;
+  background: var(--c-bg-white);
   border: 1px solid var(--c-border-control);
   color: var(--c-text);
   font-weight: 500;
 }
 .konto-btn.ghost:hover { background: var(--c-bg-tint); border-color: var(--c-border-strong); }
+/* Zerstoerende Handlungen tragen die Warnfarbe und stehen nie an erster
+   Stelle. Fuellung bleibt weiss - rot gefuellt waere ein Hauptknopf, und das
+   ist Kuendigen nicht. */
+.konto-btn.danger {
+  background: var(--c-bg-white);
+  border: 1px solid var(--c-border-control);
+  color: var(--c-danger);
+  font-weight: 500;
+}
+.konto-btn.danger:hover { background: #fdecef; border-color: var(--c-danger); }
 /* Steht nach den Spielarten, sonst gewinnt .primary bei gleicher Staerke. */
 .konto-btn:disabled,
 .konto-btn:disabled:hover {
@@ -655,3 +668,58 @@
   .konto-segment { width: 100%; }
   .konto-segment button { flex: 1; padding: 0 8px; }
 }
+
+/* Bloecke untereinander, volle Breite. Fuer Seiten, deren Inhalt in Zeilen
+   gelesen wird statt in Spalten verglichen. */
+.konto-stapel { display: flex; flex-direction: column; gap: 16px; }
+
+/* --- Weitere Handlungen hinter einem Menue ------------------------------- */
+/* Eine Zeile zeigt ihre uebliche Handlung und haelt den Rest dahinter.
+   Drei gleich aussehende Knoepfe nebeneinander sagen nicht, welcher der
+   uebliche ist, und stellen "Loeschen" gleichberechtigt daneben. */
+.konto-mehr { position: relative; display: inline-flex; gap: 8px; }
+.konto-mehr-knopf { padding: 8px; min-width: 40px; justify-content: center; }
+.konto-mehr-knopf svg { width: 16px; height: 16px; }
+.konto-mehr-menue {
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  z-index: 50;
+  min-width: 208px;
+  padding: 4px;
+  background: var(--c-bg-white);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius);
+  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.18), 0 2px 6px rgba(15, 23, 42, 0.08);
+}
+.konto-mehr-menue[hidden] { display: none; }
+.konto-mehr-menue button {
+  display: block;
+  width: 100%;
+  padding: 8px 12px;
+  border: 0;
+  border-radius: var(--radius-xs);
+  background: none;
+  font: inherit;
+  font-size: 14px;
+  text-align: left;
+  color: var(--c-text);
+  cursor: pointer;
+}
+.konto-mehr-menue button:hover { background: var(--c-bg-tint); }
+.konto-mehr-menue button.ist-loeschen { color: var(--c-danger); }
+.konto-mehr-menue button.ist-loeschen:hover { background: #fdecef; }
+
+/* Voraussetzung einer Zahlungsart, sichtbar erst wenn sie gewaehlt ist. */
+.konto-option-bedarf {
+  display: block;
+  margin-top: 8px;
+  padding: 8px 12px;
+  background: var(--c-bg-white);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-xs);
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--c-text);
+}
+.konto-option-bedarf[hidden] { display: none; }

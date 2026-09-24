@@ -392,21 +392,47 @@
           '<div><dt>Kostenstelle</dt><dd>' + (a.id === 'a2' ? 'KST-4200' : 'keine Vorbelegung') + '</dd></div>' +
         '</dl>' +
       '</div>' +
+      /* Eine sichtbare Handlung je Zeile, der Rest im Menue dahinter. Drei
+         gleich aussehende Knoepfe je Adresse liessen nicht erkennen, welcher
+         der uebliche ist, und "Loeschen" stand gleichberechtigt daneben. */
       '<div class="konto-pos-right">' +
-        '<button type="button" class="konto-btn ghost" data-bearbeiten="' + E(a.id) + '">Bearbeiten</button>' +
-        (a.standard
-          ? ''
-          : '<button type="button" class="konto-btn ghost" data-standard="' + E(a.id) + '">Als Standard</button>' +
-            '<button type="button" class="konto-btn ghost" data-loeschen="' + E(a.id) + '">Löschen</button>') +
+        '<span class="konto-mehr">' +
+          '<button type="button" class="konto-btn ghost" data-bearbeiten="' + E(a.id) + '">Bearbeiten</button>' +
+          '<button type="button" class="konto-btn ghost konto-mehr-knopf" data-mehr="' + E(a.id) + '" ' +
+            'aria-expanded="false" aria-haspopup="true" aria-label="Weitere Aktionen für ' + E(a.label) + '">' +
+            '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg>' +
+          '</button>' +
+          '<span class="konto-mehr-menue" hidden>' +
+            (a.standard ? '' : '<button type="button" data-standard="' + E(a.id) + '">Als Standard festlegen</button>') +
+            '<button type="button" data-kopieren="' + E(a.id) + '">Adresse kopieren</button>' +
+            (a.standard ? '' : '<button type="button" class="ist-loeschen" data-loeschen="' + E(a.id) + '">Löschen</button>') +
+          '</span>' +
+        '</span>' +
       '</div></div>';
   }).join('');
 
+  function menueSchliessen() {
+    [].forEach.call(document.querySelectorAll('.konto-mehr-menue'), function (m) { m.hidden = true; });
+    [].forEach.call(document.querySelectorAll('[data-mehr]'), function (b) { b.setAttribute('aria-expanded', 'false'); });
+  }
   document.addEventListener('click', function (e) {
+    var mehr = e.target.closest('[data-mehr]');
+    if (mehr) {
+      var menue = mehr.nextElementSibling;
+      var offen = !menue.hidden;
+      menueSchliessen();
+      menue.hidden = offen;
+      mehr.setAttribute('aria-expanded', offen ? 'false' : 'true');
+      return;
+    }
+    if (!e.target.closest('.konto-mehr-menue')) menueSchliessen();
     if (e.target.closest('[data-neu]')) K.melden('Neue Lieferadresse anlegen');
     if (e.target.closest('[data-bearbeiten]')) K.melden('Adresse bearbeiten');
-    if (e.target.closest('[data-standard]')) K.melden('Als Standard-Lieferadresse gesetzt');
-    if (e.target.closest('[data-loeschen]')) K.melden('Adresse löschen');
+    if (e.target.closest('[data-standard]')) { menueSchliessen(); K.melden('Als Standard-Lieferadresse gesetzt'); }
+    if (e.target.closest('[data-kopieren]')) { menueSchliessen(); K.melden('Adresse in die Zwischenablage kopiert'); }
+    if (e.target.closest('[data-loeschen]')) { menueSchliessen(); K.melden('Adresse löschen'); }
   });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') menueSchliessen(); });
 })();
 </script>
 </body>

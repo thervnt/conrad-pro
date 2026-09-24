@@ -176,20 +176,19 @@
       <div class="konto-head">
         <div>
           <h1 class="konto-h1">Newsletter</h1>
-          <p class="konto-head-sub">Was Sie an welche Adresse bekommen</p>
+          <p class="konto-head-sub">Der Conrad Newsletter für Geschäftskunden</p>
         </div>
       </div>
-      <div class="konto-card">
-        <form data-form>
+      <div class="konto-stapel">
+        <div class="konto-card">
           <div class="konto-card-head"><h2 class="konto-card-title">Empfang</h2></div>
-          <div data-themen></div>
-          <div class="konto-card-head" style="margin-top:24px"><h2 class="konto-card-title">Adresse</h2></div>
-          <p style="margin:0 0 8px;font-size:14px" data-adresse></p>
-          <div class="konto-head-actions" style="margin-top:24px">
-            <button type="submit" class="konto-btn primary" data-speichern disabled>Auswahl speichern</button>
-          </div>
-          <p class="konto-kpi-note" data-stand style="margin-top:8px" aria-live="polite"></p>
-        </form>
+          <div data-empfang></div>
+          <p class="konto-kpi-note" data-stand style="margin-top:16px" aria-live="polite"></p>
+        </div>
+        <div class="konto-card">
+          <div class="konto-card-head"><h2 class="konto-card-title">Was Sie bekommen</h2></div>
+          <div data-inhalt></div>
+        </div>
       </div>
       <p class="konto-kpi-note" style="margin-top:16px;max-width:760px">
         Die Einwilligung können Sie jederzeit mit Wirkung für die Zukunft widerrufen, etwa über den
@@ -370,48 +369,56 @@
 (function () {
   var K = window.KONTO, E = K.esc;
   var ich = K.benutzer[0];
-  /* Die Produktionsseite verlaesst den Kontobereich und bringt eine gelbe
-     Schaltflaeche mit, die es sonst nirgends gibt (Befund A1/A2). Hier steht
-     sie in der Huelle und benutzt dieselben Knoepfe wie alles andere. */
-  var THEMEN = [
-    { id: 't1', name: 'Technik und Neuheiten', note: 'Neue Artikel, Serien und Hersteller. Wöchentlich.', an: true },
-    { id: 't2', name: 'Angebote für Geschäftskunden', note: 'Aktionen mit Nettopreisen, keine Privatkundenangebote. Vierzehntägig.', an: true },
-    { id: 't3', name: 'Conrad PRO', note: 'Was Ihre Mitgliedschaft Neues kann. Monatlich.', an: false },
-    { id: 't4', name: 'Beschaffung und Services', note: 'Kalibrierung, Reparatur, Rahmenverträge. Quartalsweise.', an: false }
-  ];
-  var stand = JSON.stringify(THEMEN.map(function (t) { return t.an; }));
+  /* Conrad versendet heute einen Newsletter, nicht mehrere nach Themen. Eine
+     Themenauswahl waere erfunden - derselbe Fehler wie "angelegt von". Die
+     Seite bildet ab, was es gibt: ein Abo, eine Adresse, ein Schalter.
+     Der Vorschlag fuer Themen steht im Konzept, nicht im Prototyp. */
+  var an = true;
 
-  document.querySelector('[data-themen]').innerHTML = THEMEN.map(function (t) {
-    return '<label class="konto-option">' +
-      '<input type="checkbox" value="' + t.id + '"' + (t.an ? ' checked' : '') + '>' +
-      '<span class="konto-option-body">' +
-        '<span class="konto-option-name">' + E(t.name) + '</span>' +
-        '<span class="konto-option-note">' + E(t.note) + '</span>' +
-      '</span></label>';
+  var elEmpfang = document.querySelector('[data-empfang]');
+  var stand = document.querySelector('[data-stand]');
+
+  function zeichne() {
+    elEmpfang.innerHTML =
+      '<label class="konto-option">' +
+        '<input type="checkbox" data-an' + (an ? ' checked' : '') + '>' +
+        '<span class="konto-option-body">' +
+          '<span class="konto-option-name">Conrad Newsletter</span>' +
+          '<span class="konto-option-note">Etwa vierzehntägig, mit Nettopreisen für Geschäftskunden.</span>' +
+        '</span>' +
+      '</label>' +
+      '<dl class="konto-dl" style="margin-top:16px">' +
+        '<div><dt>Adresse</dt><dd>' + E(ich.mail) +
+          ' <a href="konto-profil.html" style="margin-left:8px">ändern</a></dd></div>' +
+        '<div><dt>Angemeldet seit</dt><dd>' + K.datum('2023-04-11') + '</dd></div>' +
+      '</dl>';
+    stand.textContent = an
+      ? 'Sie erhalten den Newsletter an ' + ich.mail
+      : 'Sie erhalten derzeit keinen Newsletter';
+  }
+
+  document.addEventListener('change', function (e) {
+    if (!e.target.closest('[data-an]')) return;
+    an = e.target.checked;
+    zeichne();
+    K.melden(an ? 'Newsletter abonniert' : 'Newsletter abbestellt');
+  });
+
+  var INHALT = [
+    ['Neue Artikel und Serien', 'Was neu im Sortiment ist, mit Schwerpunkt auf Ihren bisherigen Warengruppen.'],
+    ['Aktionen mit Nettopreisen', 'Angebote für Geschäftskunden, keine Privatkundenpreise.'],
+    ['Technik und Anwendung', 'Ratgeber, Normenänderungen, Hinweise aus dem Fachhandel.'],
+    ['Services', 'Kalibrierung, Reparatur, Rahmenverträge und Beschaffungsthemen.']
+  ];
+  document.querySelector('[data-inhalt]').innerHTML = INHALT.map(function (v) {
+    return '<div class="konto-pos" style="padding:8px 0">' +
+      '<span style="flex-shrink:0;color:var(--c-success);margin-top:2px">' +
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" width="16" height="16" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg></span>' +
+      '<div class="konto-pos-body"><p class="konto-pos-name">' + E(v[0]) + '</p>' +
+      '<div class="konto-pos-meta"><span>' + E(v[1]) + '</span></div></div></div>';
   }).join('');
 
-  document.querySelector('[data-adresse]').innerHTML =
-    E(ich.mail) + ' <a href="konto-profil.html" style="margin-left:8px">ändern</a>';
-
-  var btn = document.querySelector('[data-speichern]');
-  var meldung = document.querySelector('[data-stand]');
-  function pruefe() {
-    var jetzt = JSON.stringify([].map.call(document.querySelectorAll('[data-themen] input'),
-      function (i) { return i.checked; }));
-    btn.disabled = jetzt === stand;
-    var an = document.querySelectorAll('[data-themen] input:checked').length;
-    meldung.textContent = an ? 'Gespeichert: ' + an + ' von ' + THEMEN.length + ' Themen aktiv'
-                             : 'Gespeichert: kein Newsletter aktiv';
-  }
-  document.querySelector('[data-form]').addEventListener('change', pruefe);
-  document.querySelector('[data-form]').addEventListener('submit', function (e) {
-    e.preventDefault();
-    stand = JSON.stringify([].map.call(document.querySelectorAll('[data-themen] input'),
-      function (i) { return i.checked; }));
-    pruefe();
-    K.melden('Newsletter-Auswahl gespeichert');
-  });
-  pruefe();
+  zeichne();
 })();
 </script>
 </body>
