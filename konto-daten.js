@@ -63,9 +63,13 @@
   var bestellungen = [
     {
       nr: '2017621738', datum: '2026-09-22', besteller: 'u1', kostenstelle: 'KST-4200',
-      status: 'bearbeitung', lieferung: '2026-09-25', versender: 'Conrad Electronic',
+      status: 'bearbeitung', lieferung: '2026-09-25',
       versand: 0, referenz: 'Halle 3 / 2. Bauabschnitt',
       adresse: 'a2',
+      sendungen: [
+        { status: 'bearbeitung', versender: 'Conrad Electronic', termin: '2026-09-25',
+          adresse: 'a2', pos: [0, 1, 2] }
+      ],
       positionen: [
         pos('221-413', 50, 'WAGO 221-413-50 221 Verbindungsklemme flexibel: 0.14-4 mm² starr: 0.2-4 mm² Polzahl: 3 Transparent, Orange Box', 40, 14.99, 'bilder/klein/wago-221-413-01.webp'),
         pos('221-415', 25, 'WAGO 221-415-25 221 Verbindungsklemme flexibel: 0.14-4 mm² starr: 0.2-4 mm² Polzahl: 5 Transparent, Orange Box', 24, 13.79, 'bilder/klein/wago-221-415-01.webp'),
@@ -74,9 +78,12 @@
     },
     {
       nr: '2017619004', datum: '2026-09-18', besteller: 'u2', kostenstelle: 'KST-4100',
-      status: 'versendet', lieferung: '2026-09-25', versender: 'Voltus Elektro',
-      versand: 5.95, referenz: 'Wartung Umspannstation',
-      sendung: '00340161386265956229', frachtfuehrer: 'DHL', adresse: 'a1',
+      status: 'versendet', lieferung: '2026-09-25',
+      versand: 5.95, referenz: 'Wartung Umspannstation', adresse: 'a1',
+      sendungen: [
+        { status: 'versendet', versender: 'Voltus Elektro', termin: '2026-09-25',
+          sendung: '00340161386265956229', frachtfuehrer: 'DHL', adresse: 'a1', pos: [0, 1] }
+      ],
       positionen: [
         pos('221-423', 50, 'WAGO 221-423-50 221 Verbindungsklemme flexibel: 0.14-4 mm² starr: 0.2-4 mm² Polzahl: 3 Transparent, Grün Box', 20, 17.50, 'bilder/klein/wago-221-423-01.webp'),
         pos('221-412', 100, 'WAGO 221-412-100 221 Verbindungsklemme flexibel: 0.14-4 mm² starr: 0.2-4 mm² Polzahl: 2 Transparent, Orange Box', 2, 3.45, 'bilder/klein/wago-221-412-01.webp')
@@ -84,9 +91,12 @@
     },
     {
       nr: '2017604117', datum: '2026-09-11', besteller: 'u1', kostenstelle: 'KST-4200',
-      status: 'zugestellt', lieferung: '2026-09-15', versender: 'Conrad Electronic',
-      versand: 0, referenz: 'Halle 3 / Grundausstattung',
-      sendung: '00340161386265739983', frachtfuehrer: 'DHL', adresse: 'a2',
+      status: 'zugestellt', lieferung: '2026-09-15',
+      versand: 0, referenz: 'Halle 3 / Grundausstattung', adresse: 'a2',
+      sendungen: [
+        { status: 'zugestellt', versender: 'Conrad Electronic', termin: '2026-09-15',
+          sendung: '00340161386265739983', frachtfuehrer: 'DHL', adresse: 'a2', pos: [0, 1] }
+      ],
       positionen: [
         pos('221-420', 15, 'WAGO 221-420-15 221 Verbindungsklemme flexibel: 0.14-4 mm² starr: 0.2-4 mm² Polzahl: 10 Transparent, Orange Box', 60, 40.60, 'bilder/klein/wago-221-420-01.webp'),
         pos('221-613', 1, 'WAGO 221-613 221 Verbindungsklemme flexibel: 0.5-6 mm² starr: 0.5-6 mm² Polzahl: 3 Transparent, Orange', 500, 0.95, 'bilder/klein/wago-221-613-01.webp')
@@ -94,18 +104,26 @@
     },
     {
       nr: '2017588250', datum: '2026-08-28', besteller: 'u3', kostenstelle: 'KST-1000',
-      status: 'zugestellt', lieferung: '2026-09-01', versender: 'Conrad Electronic',
-      versand: 5.95, referenz: '',
-      sendung: '00340161386261190689', frachtfuehrer: 'DHL', adresse: 'a1',
+      status: 'zugestellt', lieferung: '2026-09-01',
+      versand: 5.95, referenz: '', adresse: 'a1',
+      sendungen: [
+        { status: 'zugestellt', versender: 'Conrad Electronic', termin: '2026-09-01',
+          sendung: '00340161386261190689', frachtfuehrer: 'DHL', adresse: 'a1', pos: [0] }
+      ],
       positionen: [
         pos('221-500', 1, 'WAGO 221-500 Serie 221 Befestigungsadapter', 100, 0.87, null)
       ]
     },
     {
       nr: '2017551903', datum: '2026-08-14', besteller: 'u2', kostenstelle: 'KST-4100',
-      status: 'teilversand', lieferung: '2026-09-29', versender: 'Conrad Electronic',
-      versand: 0, referenz: 'Nachbestellung Lager',
-      sendung: '00340161386259912044', frachtfuehrer: 'DHL', adresse: 'a1',
+      status: 'teilversand', lieferung: '2026-09-29',
+      versand: 0, referenz: 'Nachbestellung Lager', adresse: 'a1',
+      sendungen: [
+        { status: 'versendet', versender: 'Conrad Electronic', termin: '2026-08-18',
+          sendung: '00340161386259912044', frachtfuehrer: 'DHL', adresse: 'a1', pos: [0] },
+        { status: 'bearbeitung', versender: 'Conrad Electronic', termin: '2026-09-29',
+          adresse: 'a1', pos: [1], grund: 'Artikel wird nachproduziert' }
+      ],
       positionen: [
         pos('221-413', 100, 'WAGO 221-413-100 221 Verbindungsklemme flexibel: 0.14-4 mm² starr: 0.2-4 mm² Polzahl: 3 Transparent, Orange Box', 20, 26.99, 'bilder/klein/wago-221-413-01.webp'),
         pos('221-425', 25, 'WAGO 221-425-25 221 Verbindungsklemme flexibel: 0.14-4 mm² starr: 0.2-4 mm² Polzahl: 5 Transparent, Grün Box', 5, 14.50, 'bilder/klein/wago-221-425-01.webp')
@@ -114,9 +132,12 @@
     },
     {
       nr: '2017498612', datum: '2026-07-30', besteller: 'u1', kostenstelle: 'KST-4200',
-      status: 'zugestellt', lieferung: '2026-08-03', versender: 'Conrad Electronic',
-      versand: 0, referenz: 'Halle 3 / Erstbestellung',
-      sendung: '00340161386255401118', frachtfuehrer: 'DHL', adresse: 'a2',
+      status: 'zugestellt', lieferung: '2026-08-03',
+      versand: 0, referenz: 'Halle 3 / Erstbestellung', adresse: 'a2',
+      sendungen: [
+        { status: 'zugestellt', versender: 'Conrad Electronic', termin: '2026-08-03',
+          sendung: '00340161386255401118', frachtfuehrer: 'DHL', adresse: 'a2', pos: [0, 1] }
+      ],
       positionen: [
         pos('221-412', 50, 'WAGO 221-412-50 221 Verbindungsklemme flexibel: 0.14-4 mm² starr: 0.2-4 mm² Polzahl: 2 Transparent, Orange Box', 50, 12.49, 'bilder/klein/wago-221-412-01.webp'),
         pos('221-615', 1, 'WAGO 221-615 221 Verbindungsklemme flexibel: 0.5-6 mm² starr: 0.5-6 mm² Polzahl: 5 Transparent, Orange', 300, 1.60, 'bilder/klein/wago-221-615-01.webp')
@@ -124,8 +145,11 @@
     },
     {
       nr: '2017466085', datum: '2026-07-02', besteller: 'u1', kostenstelle: 'KST-1000',
-      status: 'storniert', lieferung: null, versender: 'Conrad Electronic',
+      status: 'storniert', lieferung: null,
       versand: 0, referenz: '', adresse: 'a1',
+      sendungen: [],
+      storniertAm: '2026-07-03', storniertVon: 'u1',
+      stornoGrund: 'Auf Wunsch des Bestellers vor dem Versand storniert.',
       positionen: [
         pos('221-500', 1, 'WAGO 221-500 Serie 221 Befestigungsadapter', 50, 0.87, null)
       ]

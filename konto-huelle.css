@@ -725,3 +725,19 @@
   border-top: 1px solid var(--c-border);
 }
 .konto-zeilenleiste-links, .konto-zeilenleiste-rechts { display: flex; gap: 8px; flex-wrap: wrap; }
+
+/* Zusatz am Kartentitel: nennt den Umfang, ohne wie eine zweite Ueberschrift
+   auszusehen. */
+.konto-card-zusatz { font-size: 13px; font-weight: 400; color: var(--c-text-secondary); margin-left: 8px; }
+
+/* --- Gewaehlte Einstellung in Ruhe --------------------------------------- */
+/* Was gilt, steht gross und allein. Die Liste darunter sagt, was sonst
+   moeglich waere, ohne dass fuenf Knoepfe so aussehen, als muesste man
+   jedes Mal waehlen. */
+.konto-gewaehlt { margin: 0; font-size: 20px; font-weight: 700; line-height: 1.25; }
+.konto-gewaehlt-note { margin: 4px 0 0; font-size: 14px; color: var(--c-text-secondary); line-height: 1.5; }
+.konto-annahme { display: flex; gap: 12px; padding: 8px 0; font-size: 14px; }
+.konto-annahme-haken { width: 16px; flex-shrink: 0; color: var(--c-success); margin-top: 2px; }
+.konto-annahme-name { display: block; font-weight: 600; }
+.konto-annahme.ist-aktiv .konto-annahme-name { color: var(--c-success); }
+.konto-annahme-note { display: block; font-size: 13px; color: var(--c-text-secondary); line-height: 1.45; }

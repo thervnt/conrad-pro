@@ -371,15 +371,18 @@
   var krumeAktiv = document.querySelector('.breadcrumb-current');
   if (krumeAktiv) krumeAktiv.textContent = 'Bestellung ' + b.nr;
 
+  var storniert = b.status === 'storniert';
   var netto = K.netto(b);
   var summe = netto + b.versand;
   var mwst = summe * K.MWST;
-  var adr = K.adresse(b.adresse);
+  var rechnung = K.rechnungen.filter(function (r) {
+    return r.bestellung === b.nr && r.art === 'rechnung';
+  })[0];
 
-  /* --- Kopf ------------------------------------------------------------- */
-  /* Ein Status je Ebene. Die Produktion nennt im selben Block
-     "Abgeschlossen", "Versendet" und einen kuenftigen Liefertermin
-     nebeneinander (Befund B11). */
+  /* --- Kopf: eine Handlung ------------------------------------------------ */
+  /* Nachbestellen ist die Handlung der Seite. Die Belege standen vorher als
+     zwei gleichrangige Knoepfe daneben - ein Download ist aber keine
+     Handlung desselben Ranges. Sie stehen jetzt im Belegblock. */
   elKopf.innerHTML =
     '<div class="konto-head">' +
       '<div>' +
@@ -387,118 +390,181 @@
         '<p class="konto-head-sub">Aufgegeben am ' + D(b.datum) + ' von ' + E(K.person(b.besteller)) +
         ' \u00b7 Kostenstelle ' + E(b.kostenstelle) + (b.referenz ? ' \u00b7 ' + E(b.referenz) : '') + '</p>' +
       '</div>' +
-      '<div class="konto-head-actions">' +
-        (b.status === 'storniert' ? '' :
-          '<button type="button" class="konto-btn primary" data-alle>Alle Positionen in den Warenkorb</button>') +
-        '<button type="button" class="konto-btn ghost" data-beleg="Rechnung">Rechnung (PDF)</button>' +
-        '<button type="button" class="konto-btn ghost" data-beleg="Lieferschein">Lieferschein (PDF)</button>' +
-      '</div>' +
+      (storniert ? '' :
+        '<div class="konto-head-actions">' +
+          '<button type="button" class="konto-btn primary" data-alle>Alle Positionen in den Warenkorb</button>' +
+        '</div>') +
     '</div>';
 
-  /* --- Sendung ----------------------------------------------------------- */
-  var schritte = ['Bestellt', 'In Bearbeitung', 'Versendet', 'Zugestellt'];
-  var standIdx = { bearbeitung: 1, teilversand: 2, versendet: 2, zugestellt: 3, storniert: 0 }[b.status];
-  var sendung = b.status === 'storniert' ? '' :
-    '<div class="konto-card konto-section">' +
-      '<div class="konto-card-head">' +
-        '<h2 class="konto-card-title">Sendung</h2>' +
-        '<span>' + K.pille(b.status) + '</span>' +
+  /* --- Position als Zeile ------------------------------------------------- */
+  function posZeile(p, i, offen) {
+    return '<div class="konto-pos">' +
+      '<span class="konto-pos-img">' + (p.bild
+        ? '<img src="' + E(p.bild) + '" alt="" width="56" height="56" loading="lazy">'
+        : '<svg viewBox="0 0 24 24" fill="none" stroke="#b6bcc7" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" width="28" height="28" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>') +
+      '</span>' +
+      '<div class="konto-pos-body">' +
+        '<p class="konto-pos-name">' + E(p.titel) + '</p>' +
+        '<div class="konto-pos-meta">' +
+          '<span>' + p.menge + ' \u00d7 ' + (p.packSize === 1 ? 'Stück' : p.packSize + 'er-Set') + '</span>' +
+          '<span>Hst.-Nr. ' + E(p.sku) + '-' + p.packSize + '</span>' +
+        '</div>' +
       '</div>' +
-      '<div class="konto-dl"><dl class="konto-dl">' +
-        '<div><dt>Versand durch</dt><dd>' + E(b.versender) + '</dd></div>' +
-        '<div><dt>' + (b.status === 'zugestellt' ? 'Zugestellt am' : 'Voraussichtlich am') + '</dt><dd>' + D(b.lieferung) + '</dd></div>' +
-        (b.sendung
+      '<div class="konto-pos-right">' +
+        '<span class="konto-pos-price">' + EU(p.menge * p.einzel) + '</span>' +
+        '<span class="konto-pos-unit">' + EU(p.einzel) + ' je Einheit, netto</span>' +
+        (storniert ? '' : '<button type="button" class="konto-btn" data-pos="' + i + '">Nochmal bestellen</button>') +
+      '</div></div>';
+  }
+
+  /* --- Sendungen ---------------------------------------------------------- */
+  /* Eine Bestellung kann mehrere Sendungen haben, und die Positionen haengen
+     an ihnen. Vorher trug die Seite genau eine Sendungskarte - bei
+     "Teilweise versendet" liess sich damit nicht sagen, was gekommen ist und
+     was fehlt. Genau das ist die erste Frage. */
+  var SCHRITTE = ['Bestellt', 'In Bearbeitung', 'Versendet', 'Zugestellt'];
+  var STAND = { bearbeitung: 1, versendet: 2, zugestellt: 3 };
+
+  function sendungKarte(s, i) {
+    var mehrere = b.sendungen.length > 1;
+    var adr = K.adresse(s.adresse);
+    var unterwegs = s.status === 'versendet' || s.status === 'zugestellt';
+    var stand = STAND[s.status];
+    return '<div class="konto-card konto-section">' +
+      '<div class="konto-card-head">' +
+        '<h2 class="konto-card-title">' +
+          (mehrere ? 'Sendung ' + (i + 1) + ' von ' + b.sendungen.length : 'Sendung') +
+          ' <span class="konto-card-zusatz">' + s.pos.length +
+          (s.pos.length === 1 ? ' Position' : ' Positionen') + '</span></h2>' +
+        '<span>' + K.pille(s.status) + '</span>' +
+      '</div>' +
+      '<dl class="konto-dl">' +
+        '<div><dt>Versand durch</dt><dd>' + E(s.versender) + '</dd></div>' +
+        '<div><dt>' + (s.status === 'zugestellt' ? 'Zugestellt am' : 'Voraussichtlich am') + '</dt>' +
+          '<dd>' + D(s.termin) + (s.grund ? ' <span style="color:var(--c-text-secondary)">\u00b7 ' + E(s.grund) + '</span>' : '') + '</dd></div>' +
+        (s.sendung
           ? '<div><dt>Sendungsnummer</dt><dd>' +
-            '<span class="id-chip"><button class="id-chip-value" data-copy="' + E(b.sendung) + '" title="In Zwischenablage kopieren">' +
+            '<span class="id-chip"><button class="id-chip-value" data-copy="' + E(s.sendung) + '" title="In Zwischenablage kopieren">' +
             '<svg class="id-chip-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>' +
-            '<span class="id-chip-num">' + E(b.sendung) + '</span></button></span> ' +
-            '<a href="#" style="margin-left:8px">Bei ' + E(b.frachtfuehrer) + ' verfolgen</a></dd></div>'
+            '<span class="id-chip-num">' + E(s.sendung) + '</span></button></span> ' +
+            '<a href="#" style="margin-left:8px">Bei ' + E(s.frachtfuehrer) + ' verfolgen</a></dd></div>'
           : '') +
         '<div><dt>Lieferadresse</dt><dd>' + E(adr.label) + ', ' + E(adr.zeile) + ', ' + E(adr.ort) + '</dd></div>' +
-      '</dl></div>' +
-      '<div class="konto-steps">' + schritte.map(function (s, i) {
-        var klasse = i < standIdx ? 'is-done' : (i === standIdx ? 'is-now' : '');
-        return '<div class="konto-step ' + klasse + '">' + s + '</div>';
+      '</dl>' +
+      '<div class="konto-steps">' + SCHRITTE.map(function (t, k) {
+        var klasse = k < stand ? 'is-done' : (k === stand ? 'is-now' : '');
+        return '<div class="konto-step ' + klasse + '">' + t + '</div>';
       }).join('') + '</div>' +
+      '<div class="konto-section" style="margin-top:16px">' +
+        s.pos.map(function (idx) { return posZeile(b.positionen[idx], idx, !unterwegs); }).join('') +
+      '</div>' +
     '</div>';
+  }
 
-  /* --- Positionen -------------------------------------------------------- */
-  var positionen = '<div class="konto-card konto-section">' +
-    '<div class="konto-card-head"><h2 class="konto-card-title">Positionen (' + b.positionen.length + ')</h2></div>' +
-    b.positionen.map(function (p, i) {
-      return '<div class="konto-pos">' +
-        '<span class="konto-pos-img">' + (p.bild
-          ? '<img src="' + E(p.bild) + '" alt="" width="56" height="56" loading="lazy">'
-          : '<svg viewBox="0 0 24 24" fill="none" stroke="#b6bcc7" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" width="28" height="28" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>') +
-        '</span>' +
-        '<div class="konto-pos-body">' +
-          '<p class="konto-pos-name">' + E(p.titel) + '</p>' +
-          '<div class="konto-pos-meta">' +
-            '<span>' + p.menge + ' \u00d7 ' + (p.packSize === 1 ? 'Stück' : p.packSize + 'er-Set') + '</span>' +
-            '<span>Hst.-Nr. ' + E(p.sku) + '-' + p.packSize + '</span>' +
-          '</div>' +
+  var sendungen = storniert
+    ? '<div class="konto-card konto-section">' +
+        '<div class="konto-card-head"><h2 class="konto-card-title">Storniert</h2>' +
+          '<span>' + K.pille('storniert') + '</span></div>' +
+        '<dl class="konto-dl">' +
+          '<div><dt>Storniert am</dt><dd>' + D(b.storniertAm) + '</dd></div>' +
+          '<div><dt>Durch</dt><dd>' + E(K.person(b.storniertVon)) + '</dd></div>' +
+          '<div><dt>Grund</dt><dd>' + E(b.stornoGrund) + '</dd></div>' +
+        '</dl>' +
+        '<p class="konto-empty-text" style="margin:16px 0 0;max-width:none">' +
+        'Es wurde nichts versendet und nichts berechnet. Eine Rechnung zu dieser ' +
+        'Bestellung gibt es deshalb nicht.</p>' +
+        '<div class="konto-section" style="margin-top:16px">' +
+          b.positionen.map(function (p, i) { return posZeile(p, i, true); }).join('') +
         '</div>' +
-        '<div class="konto-pos-right">' +
-          '<span class="konto-pos-price">' + EU(p.menge * p.einzel) + '</span>' +
-          '<span class="konto-pos-unit">' + EU(p.einzel) + ' je Einheit, netto</span>' +
-          (b.status === 'storniert' ? '' : '<button type="button" class="konto-btn" data-pos="' + i + '">Nochmal bestellen</button>') +
-        '</div></div>';
-    }).join('') +
-    '<div class="konto-sum konto-section">' +
+      '</div>'
+    : b.sendungen.map(sendungKarte).join('');
+
+  /* --- Summe und Zahlung --------------------------------------------------- */
+  /* Der Zahlungsstand gehoert zur Bestellung. Vorher gab es nur einen
+     Download "Rechnung (PDF)" - ob sie offen, ueberfaellig oder ausgeglichen
+     ist, stand nur auf der Belegseite (Befund C4). */
+  var zahlung = storniert
+    ? '<div class="konto-sum-row"><span>Berechnet</span><span>nichts</span></div>'
+    : (rechnung
+      ? '<div class="konto-sum-row"><span>Rechnung</span><span>' +
+          '<a href="konto-rechnungen.html?suche=' + E(rechnung.nr) + '">' + E(rechnung.nr) + '</a></span></div>' +
+        '<div class="konto-sum-row"><span>Zahlungsstand</span><span>' + K.pille(rechnung.status) + '</span></div>' +
+        (rechnung.faellig && rechnung.status !== 'ausgeglichen'
+          ? '<div class="konto-sum-row"><span>Fällig</span><span>' + D(rechnung.faellig) + '</span></div>'
+          : '')
+      : '<div class="konto-sum-row"><span>Rechnung</span><span>folgt mit dem Versand</span></div>');
+
+  var summeBlock = '<div class="konto-card konto-section">' +
+    '<div class="konto-card-head"><h2 class="konto-card-title">Summe und Zahlung</h2></div>' +
+    '<div class="konto-sum" style="max-width:none;margin:0">' +
       '<div class="konto-sum-row"><span>Nettopreis</span><span>' + EU(netto) + '</span></div>' +
       '<div class="konto-sum-row"><span>Versand</span><span>' + (b.versand ? EU(b.versand) : 'Kostenfrei') + '</span></div>' +
       '<div class="konto-sum-row"><span>MwSt. (19 %)</span><span>' + EU(mwst) + '</span></div>' +
-      '<div class="konto-sum-total"><span>Gesamtpreis</span><span>' + EU(summe + mwst) + '</span></div>' +
-      '<p class="konto-sum-note">Zahlung auf Rechnung, ' + E(K.firma.zahlungsziel) + '</p>' +
-    '</div></div>';
+      '<div class="konto-sum-total"><span>Gesamtpreis</span><span>' +
+        (storniert ? '\u2013' : EU(summe + mwst)) + '</span></div>' +
+      '<div class="konto-section" style="margin-top:16px;padding-top:16px;border-top:1px solid var(--c-border)">' +
+        zahlung +
+        '<div class="konto-sum-row"><span>Zahlungsart</span><span>' + E(K.firma.zahlart) + ', ' + E(K.firma.zahlungsziel) + '</span></div>' +
+      '</div>' +
+    '</div>' +
+    /* Nur Belege, die es gibt. Eine stornierte Bestellung hatte vorher
+       Knoepfe fuer Rechnung und Lieferschein, die beide nicht existieren. */
+    (storniert ? '' :
+      '<div class="konto-section" style="padding-top:16px;border-top:1px solid var(--c-border)">' +
+        '<p class="konto-nav-title" style="padding:0;margin-bottom:8px">Belege</p>' +
+        '<div class="konto-head-actions">' +
+          (rechnung ? '<button type="button" class="konto-btn ghost" data-beleg="Rechnung ' + E(rechnung.nr) + '">Rechnung (PDF)</button>' : '') +
+          (b.sendungen.some(function (s) { return s.sendung; })
+            ? '<button type="button" class="konto-btn ghost" data-beleg="Lieferschein">Lieferschein (PDF)</button>' : '') +
+        '</div>' +
+      '</div>') +
+  '</div>';
 
   /* --- Rueckgabe ---------------------------------------------------------- */
   var rma = K.ruecksendungen.filter(function (r) { return r.bestellung === b.nr; })[0];
-  var rueck = b.status !== 'zugestellt' && !rma ? '' :
+  var rueck = (b.status !== 'zugestellt' && !rma) ? '' :
     '<div class="konto-card konto-section">' +
       '<div class="konto-card-head"><h2 class="konto-card-title">Rücksendung</h2></div>' +
       (rma
-        ? '<p style="margin:0 0 10px;font-size:14px">' + K.pille(rma.status) +
+        ? '<p style="margin:0 0 16px;font-size:14px">' + K.pille(rma.status) +
           ' <strong style="margin-left:8px">' + E(rma.nr) + '</strong> vom ' + D(rma.datum) +
           ' \u00b7 ' + E(rma.artikel) + ' \u00b7 ' + EU(rma.betrag) + ' netto</p>' +
           '<a class="konto-btn ghost" href="konto-ruecksendungen.html">Rücksendungen anzeigen</a>'
-        : '<p class="konto-empty-text" style="margin:0 0 12px;max-width:none">' +
-          'Sie können Artikel aus dieser Bestellung noch bis zum ' +
-          D('2026-10-15') + ' zurücksenden. Die Gutschrift erstellt Conrad Electronic, ' +
-          'unabhängig davon, wer versendet hat.</p>' +
+        : '<p class="konto-empty-text" style="margin:0 0 16px;max-width:none">' +
+          'Sie können Artikel aus dieser Bestellung noch bis zum ' + D('2026-10-15') +
+          ' zurücksenden. Die Gutschrift erstellt Conrad Electronic, unabhängig davon, wer versendet hat.</p>' +
           '<button type="button" class="konto-btn" data-rma>Rücksendung starten</button>') +
     '</div>';
 
-  /* --- Stammdaten der Bestellung ------------------------------------------ */
-  var daten = '<div class="konto-section konto-grid">' +
-    '<div class="konto-card"><div class="konto-card-head"><h2 class="konto-card-title">Rechnungsadresse</h2></div>' +
-      '<p style="margin:0;font-size:14px;line-height:1.5">' + E(K.firma.name) + '<br>' +
-      E(K.firma.strasse) + '<br>' + E(K.firma.plz) + ' ' + E(K.firma.ort) + '<br>' + E(K.firma.land) + '</p></div>' +
-    '<div class="konto-card"><div class="konto-card-head"><h2 class="konto-card-title">Lieferadresse</h2></div>' +
-      '<p style="margin:0;font-size:14px;line-height:1.5"><strong>' + E(adr.label) + '</strong><br>' +
-      E(adr.name) + '<br>' + E(adr.zeile) + '<br>' + E(adr.ort) +
-      (adr.ansprech ? '<br>Ansprechpartner: ' + E(adr.ansprech) : '') + '</p></div>' +
-    '<div class="konto-card"><div class="konto-card-head"><h2 class="konto-card-title">Buchung</h2></div>' +
-      '<dl class="konto-dl">' +
-        '<div><dt>Besteller</dt><dd>' + E(K.person(b.besteller)) + '</dd></div>' +
-        '<div><dt>Kostenstelle</dt><dd>' + E(b.kostenstelle) + '</dd></div>' +
-        '<div><dt>Referenz</dt><dd>' + (b.referenz ? E(b.referenz) : '\u2014') + '</dd></div>' +
-        '<div><dt>Zahlungsart</dt><dd>' + E(K.firma.zahlart) + '</dd></div>' +
-      '</dl></div>' +
-    '</div>';
+  /* --- Streifen mit den Stammdaten ---------------------------------------- */
+  /* Vorher drei Karten fuer sechs Angaben, und die Lieferadresse stand
+     doppelt: in der Sendung und in einer eigenen Karte. */
+  var streifen = '<div class="konto-section konto-strip">' +
+    '<div class="konto-strip-col">' +
+      '<p class="konto-strip-label">Rechnungsadresse</p>' +
+      '<p class="konto-strip-value">' + E(K.firma.name) + '</p>' +
+      '<p class="konto-strip-note">' + E(K.firma.strasse) + '<br>' +
+        E(K.firma.plz) + ' ' + E(K.firma.ort) + '</p>' +
+    '</div>' +
+    '<div class="konto-strip-col">' +
+      '<p class="konto-strip-label">Buchung</p>' +
+      '<p class="konto-strip-value">' + E(b.kostenstelle) + '</p>' +
+      '<p class="konto-strip-note">Besteller: ' + E(K.person(b.besteller)) + '<br>' +
+        'Referenz: ' + (b.referenz ? E(b.referenz) : 'keine') + '</p>' +
+      '<a class="konto-strip-link" href="konto-bestellungen.html?kst=' + E(b.kostenstelle) + '">Weitere Bestellungen dieser Kostenstelle</a>' +
+    '</div>' +
+  '</div>';
 
-  elInhalt.innerHTML = sendung + positionen + rueck + daten;
+  elInhalt.innerHTML = sendungen + summeBlock + rueck + streifen;
 
   /* --- Handlungen ---------------------------------------------------------- */
   document.addEventListener('click', function (e) {
-    var alle = e.target.closest('[data-alle]');
-    if (alle) { K.nachbestellen(b.positionen); K.melden(b.positionen.length + ' Positionen in den Einkaufswagen gelegt'); return; }
+    if (e.target.closest('[data-alle]')) { K.nachbestellen(b.positionen); K.melden(b.positionen.length + ' Positionen in den Einkaufswagen gelegt'); return; }
     var p = e.target.closest('[data-pos]');
     if (p) { K.nachbestellen([b.positionen[Number(p.dataset.pos)]]); K.melden('In den Einkaufswagen gelegt'); return; }
     var beleg = e.target.closest('[data-beleg]');
     if (beleg) { K.melden(beleg.dataset.beleg + ' wird heruntergeladen'); return; }
-    var rmaBtn = e.target.closest('[data-rma]');
-    if (rmaBtn) { location.href = 'konto-ruecksendungen.html?neu=' + b.nr; return; }
+    if (e.target.closest('[data-rma]')) { location.href = 'konto-ruecksendungen.html?neu=' + b.nr; return; }
     var kopie = e.target.closest('[data-copy]');
     if (kopie && navigator.clipboard) {
       navigator.clipboard.writeText(kopie.dataset.copy);

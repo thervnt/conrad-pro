@@ -1189,3 +1189,98 @@ At rest: one button per row. Open on the non-default address: Speichern,
 Abbrechen, Als Standard festlegen, Adresse löschen, six labelled fields. Open on
 the default address: Speichern and Abbrechen only. No overflow menu anywhere on
 the page.
+
+---
+
+## 19. Bestelldetails neu gebaut
+
+The recommendation from the review, built.
+
+### Sendungen statt Sendung
+
+An order now has *n* shipments, each with carrier, status, date, tracking
+number, delivery address, its own four-step line, **and its own positions**.
+
+The partial shipment is the case this was built for. Order 2017551903 now reads:
+
+```
+Sendung 1 von 2 · 1 Position · Versendet · zugestellt am 18.08.
+Sendung 2 von 2 · 1 Position · In Bearbeitung · voraussichtlich 29.09.
+                               · Artikel wird nachproduziert
+```
+
+Before, the page showed one shipment card with one tracking number while the
+status pill claimed "Teilweise versendet". The first question of a buyer,
+"what came and what is missing", had no answer on the page.
+
+### Positionen hängen an ihrer Sendung
+
+Not one flat list any more. Each position sits under the shipment that carries
+it, so a position that has not shipped does not stand next to a delivery date
+it is not covered by. Every position keeps its own reorder button.
+
+### Zahlungsstand auf der Bestellung
+
+The summary now continues past the total: invoice number as a link into the
+document list, payment status as a pill, due date while it is open, and the
+payment terms. An order in preparation says "Rechnung folgt mit dem Versand"
+instead of offering a document that does not exist.
+
+That closes finding C4 on the second page it applies to: the order was the place
+where "is this paid?" was unanswerable.
+
+### Belege nur, wenn es sie gibt
+
+Invoice and delivery note moved out of the page header into a quiet block under
+the totals. A cancelled order shows neither, because neither exists. Before, it
+offered both as header buttons.
+
+### Storniert bekommt einen eigenen Block
+
+When, by whom, why, and the sentence that nothing was shipped and nothing was
+charged. The total shows a dash instead of an amount nobody will pay.
+
+### Kopf trägt eine Handlung
+
+"Alle Positionen in den Warenkorb". Two document downloads at the same rank as
+reordering was a hierarchy that did not match what the page is for.
+
+### Drei Karten wurden ein Streifen
+
+Rechnungsadresse and Buchung in one bordered strip, the same component as the
+dashboard. The separate Lieferadresse card is gone: the address belongs to a
+shipment and is stated there, and with several shipments it can differ per
+shipment, which a single card could not express.
+
+---
+
+## 20. Zahlungsart: erst der Zustand, dann die Wahl
+
+The page was permanently in selection mode: five radio rows, four of which do
+not apply, and the one that does was distinguishable only by its marking. A
+setting page should first say what is set.
+
+### As specified
+
+**At rest**: "Ihre Zahlungsart" with the current method set large and alone, its
+terms underneath, and one button, "Zahlungsart ändern". Below that, under the
+label "Von Conrad angenommen", the five accepted methods with their one-line
+terms, the active one ticked in green. Bankeinzug carries "Bankverbindung fehlt
+noch" right there, so the gap is visible without entering the selection.
+
+**After the click**: the same five become radio options with Speichern and
+Abbrechen. Escape leaves without changing anything.
+
+The requirement logic from 17.5 stays: choosing Bankeinzug reveals what is
+missing with the route to fix it, and saving stays blocked with a sentence that
+says why.
+
+### Verified
+
+At rest: no radio on the page, one button, five accepted methods, Rechnung
+ticked. In selection: five radios, saving blocked until something changes.
+Bankeinzug: requirement visible, saving blocked, reason stated. After saving:
+back to the resting state with the new method set.
+
+48 measurements across sixteen pages at 1680, 1280 and 1024 px: no table
+scrolls, no page shifts, no page mixes heading constructions.
