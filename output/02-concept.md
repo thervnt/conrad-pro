@@ -677,3 +677,65 @@ screen readers do not announce reliably and which a disabled button cannot
 receive focus for. It is acceptable here only because the adjacent "Abgleich"
 column states the reason visibly. If the pattern spreads, the reason has to
 become visible text.
+
+---
+
+## 12. Stückliste in der Kontohülle
+
+Approved and done. `stueckliste.html` now carries the account shell.
+
+### What changed on the existing page
+
+| | before | after |
+|---|---|---|
+| breadcrumb | Homepage > Konto (`#`) > Stückliste | Homepage > Mein Konto > Stücklisten > Neue Stückliste |
+| sidebar | none | account navigation, "Stücklisten" marked as current |
+| skip link | none | present |
+| `<main class="bom">` | direct child of body | inside the account content column |
+
+The page keeps its own inline stylesheet. It loads **`konto-huelle.css`** on top,
+which is why `konto.css` was split in two:
+
+- `konto.css`: the base, the roughly 2000 lines copied from `cart.html`, plus
+  the helpers that `cart.html` uses but does not define
+- `konto-huelle.css`: the account section, navigation, cards, lists, states
+
+The account pages load both. `stueckliste.html` loads only the shell, because it
+already carries the base inline. Without the split it would have received a
+second copy of rules it already has, and the later copy would have overridden
+its own adjustments to them.
+
+### Two defects found while doing it
+
+**Duplicated drawer backdrop.** My page template wrote `<div class="hdr-backdrop">`
+and the block extracted from `cart.html` already contained one. Every account
+page had two. Fixed in the template, all pages rebuilt.
+
+**Wide tables pushed the whole page sideways.** This was not caused by the
+Stückliste change. It affected the account pages from the start and I had missed
+it by only testing at 1440 px. At 1024 px the order list pushed the page 245 px
+to the side: the sidebar moved from 16 px to -224 px while scrolling.
+
+The cause is the nested scroll container. A table 1245 px wide sits in a
+wrapper with `overflow-x: auto` that is correctly 724 px wide and clips it, but
+its scrollable extent still reached the page. Measured, not guessed:
+
+| attempt | result |
+|---|---|
+| `min-width: 0` on the grid column | still 241 px |
+| `overflow: hidden` on the column | still 241 px |
+| `overflow: clip` on the column | still 241 px |
+| `overflow-x: hidden` on `body` | still 241 px |
+| `contain: layout` on the wrapper | **0** |
+
+`contain: layout` separates the inner layout from the outer without clipping
+anything, so the table keeps scrolling in its frame and the page stays put.
+
+Verified afterwards across **16 pages at 1024 and 1440 px**, including the three
+existing ones: no page shifts sideways any more.
+
+### Verified after the change
+
+The tool still works end to end: example list, column mapping, matching, eight
+rows, total 132,50 €, and the handover to the cart produces ten lines in
+`conradCart`. Navigation, counters, breadcrumb and skip link are in place.
