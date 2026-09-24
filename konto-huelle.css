@@ -38,10 +38,13 @@
   outline-offset: 2px;
 }
 
+/* Die Krume polstert seitlich 24px, die Produktseite setzt den Inhalt 24px
+   darunter an. Der Kontobereich stand bei 16px seitlich und ohne Abstand
+   nach oben, also weder in der Flucht noch im Rhythmus der anderen Seiten. */
 .konto-main {
   max-width: 1680px;
   margin: 0 auto;
-  padding: 0 16px 48px;
+  padding: 24px 24px 48px;
 }
 /* Zwei Spalten: Navigation und Inhalt. Die Navigation laeuft mit, damit man
    aus jeder Liste in jede andere springt, ohne zurueckzugehen. */
@@ -110,7 +113,6 @@
   font-variant-numeric: tabular-nums;
 }
 .konto-nav a[aria-current="page"] .konto-nav-count { background: var(--c-bg-white); color: var(--c-blue); }
-.konto-nav-count.is-warn { background: #fdf6ec; color: var(--c-warning); }
 
 /* --- Seitenkopf ---------------------------------------------------------- */
 .konto-head {
@@ -531,7 +533,7 @@
   .konto-grid { grid-template-columns: 1fr; }
 }
 @media (max-width: 640px) {
-  .konto-main { padding: 0 16px 32px; }
+  .konto-main { padding: 16px 16px 32px; }
   .konto-sum { max-width: none; }
   .konto-pos { flex-wrap: wrap; }
   .konto-pos-right { width: 100%; align-items: flex-start; text-align: left; }

@@ -282,7 +282,13 @@
 })();
 
 /* Zaehler in der Seitennavigation. Stehen im Markup als leere Platzhalter und
-   werden hier gefuellt, damit sie nicht in sechs Dateien auseinanderlaufen. */
+   werden hier gefuellt, damit sie nicht in sechs Dateien auseinanderlaufen.
+ *
+ * Eine Bauart, eine Bedeutung: der Zaehler sagt, wie viele Vorgaenge dort auf
+ * etwas warten - unterwegs, offen, in Pruefung. Er zaehlt nicht den Bestand.
+ * Deshalb tragen Merklisten, Stuecklisten und Unternehmen keinen: dort wartet
+ * nichts. Und deshalb gibt es keine Farbvarianten - dass eine Rechnung
+ * ueberfaellig ist, steht in der Liste, nicht in der Navigation. */
 (function () {
   function fuellen() {
     var K = window.KONTO;
@@ -290,7 +296,6 @@
     var offen = K.rechnungen.filter(function (r) {
       return r.status === 'offen' || r.status === 'ueberfaellig';
     });
-    var ueber = offen.filter(function (r) { return r.status === 'ueberfaellig'; }).length;
     var unterwegs = K.bestellungen.filter(function (b) {
       return b.status === 'versendet' || b.status === 'teilversand' || b.status === 'bearbeitung';
     }).length;
@@ -305,7 +310,6 @@
       if (!el) return;
       if (!werte[name]) { el.remove(); return; }
       el.textContent = werte[name];
-      if (name === 'rechnungen' && ueber) el.classList.add('is-warn');
     });
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', fuellen);

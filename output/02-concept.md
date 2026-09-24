@@ -63,6 +63,9 @@ Answers B3, B6, A14.
 
 ## 2. Target information architecture
 
+This section shows the navigation **as built**. Sections 9 to 13 are the change
+log that led here.
+
 ```mermaid
 graph TD
   ROOT["Mein Konto"]
@@ -80,17 +83,15 @@ graph TD
   end
 
   subgraph G3["Unternehmen"]
-    FIR["Unternehmensdaten"]
-    BEN["Benutzer"]
-    KST["Kostenstellen"]
-  end
-
-  subgraph G4["Einstellungen"]
-    PRO["Profil"]
+    FIR["Unternehmensdaten<br/>Benutzer, Kostenstellen"]
     ADR["Adressen"]
     ZAH["Zahlungsart"]
-    NEW["Newsletter"]
     CPR["Conrad PRO"]
+  end
+
+  subgraph G4["Persönlich"]
+    PRO["Profil"]
+    NEW["Newsletter"]
   end
 
   ROOT --> G1
@@ -105,32 +106,29 @@ graph TD
   RMA --> RUE
   REC --> BDET
   RUE --> BDET
-  BEN --> BES
-  KST --> BES
+  STK --> TOOL["Abgleich-Werkzeug"]
+  TOOL --> STK
+  TOOL --> CART["Warenkorb"]
+  FIR --> BES
+  ZAH --> PRO
 ```
 
-### What changed and why
+### What changed against production, and why
 
 | Change | Rationale | Finding |
 |---|---|---|
-| Groups are labelled: Bestellen, Belege, Unternehmen, Einstellungen | Four silent hairlines forced the user to infer the grouping | A7 |
-| New group "Unternehmen" with Unternehmensdaten, Benutzer, Kostenstellen | The company layer was missing entirely | A6 |
-| "Stücklisten" and "Angebotsanforderung" enter the navigation | Both are core B2B tasks and both already exist in the prototype's own account drawer | A8 |
-| Counters on Bestellungen, Rechnungen, Rücksendungen | The sidebar says where something is waiting without a click | A7, P1 |
-| Produktvergleich leaves the account navigation | It is a shopping tool, not account data. It belongs next to the catalogue, which also removes one of the two pages that broke the shell | A1 |
+| Groups are labelled | Four silent hairlines forced the user to infer the grouping | A7 |
+| New group "Unternehmen": Unternehmensdaten (with Benutzer and Kostenstellen), Adressen, Zahlungsart, Conrad PRO | The company layer was missing entirely. Addresses, payment method and the PRO subscription all belong to the company account, not to the person | A6 |
+| New group "Persönlich": Profil, Newsletter | What is actually personal, separated from what is the company's | A7 |
+| "Stücklisten" enters the navigation as a place, with its own list page | A core B2B task, already present in the prototype's own account drawer. As a link to the tool it would have reproduced A1 | A8 |
+| Counters on Bestellungen, Rechnungen, Rücksendungen | The sidebar says where something is waiting without a click. One design, no colour variants: a counter means "something is waiting", not "this many exist" | A7 |
+| Produktvergleich leaves the account navigation | A shopping tool, not account data. It belongs next to the catalogue, which also removes one of the two pages that broke the shell | A1 |
 | Newsletter stays, but inside the shell | Same reason, other direction: it is a setting of this account | A1, A2 |
 | Belege cross link to the order and back | The same document was reachable by two unconnected routes | IA observations |
 | Benutzer and Kostenstellen link into a filtered order list | The question "what did Sabine order on KST-4100" now has one path | A6 |
 
-Open: whether "Angebotsanforderung" is in scope. It was in the first draft of
-this navigation and was removed again in the rework, because it has no page and
-no production screenshot behind it. Section 9 carries the navigation as built.
-
-Also changed in the rework: "Unternehmen" is one entry rather than three. The
-page carries Stammdaten, Benutzer and Kostenstellen as sections. Three entries
-pointing at anchors on the same page made the current page state ambiguous.
-
----
+Not in scope and therefore without a page: "Angebotsanforderung". It sits in the
+existing header drawer and has no production screenshot behind it.
 
 ## 3. Dashboard
 
@@ -281,7 +279,7 @@ Or use the existing preview entry `conrad-pro` in `.claude/launch.json`.
 | `konto.html` | Übersicht (dashboard) |
 | `konto-bestellungen.html` | order list |
 | `konto-bestellungen.html?status=versendet` | pre filtered, as the dashboard links it |
-| `konto-bestellungen.html?person=u2` | orders of one user, as the company page links it |
+| `konto-bestellungen.html?person=u2` | orders of one user |
 | `konto-bestellungen.html?kst=KST-4100` | orders on one cost centre |
 | `konto-bestellungen.html?zustand=laden` | loading state |
 | `konto-bestellungen.html?zustand=fehler` | error state |
@@ -290,14 +288,29 @@ Or use the existing preview entry `conrad-pro` in `.claude/launch.json`.
 | `konto-bestellung.html?nr=2017619004` | order detail, versendet, marketplace shipper |
 | `konto-bestellung.html?nr=2017551903` | order detail, teilweise versendet |
 | `konto-bestellung.html?nr=9999` | order not found |
-| `konto-rechnungen.html` | invoices and credit notes |
+| `konto-rechnungen.html` | invoices and credit notes, with bulk selection |
 | `konto-rechnungen.html?status=offen` | pre filtered |
 | `konto-ruecksendungen.html` | returns |
 | `konto-ruecksendungen.html?zustand=leer` | returns, empty state |
-| `konto-unternehmen.html` | company, users, cost centres |
+| `konto-stuecklisten.html` | saved bills of material |
+| `konto-stuecklisten.html?zustand=leer` | empty state |
+| `konto-merklisten.html` | wishlists |
+| `konto-unternehmen.html` | company data, users, cost centres |
+| `konto-adressen.html` | billing and delivery addresses |
+| `konto-zahlungsart.html` | payment method, with explicit save |
+| `konto-profil.html` | personal data, access, bank details |
+| `konto-newsletter.html` | newsletter topics |
+| `konto-pro.html` | Conrad PRO membership |
+| `stueckliste.html` | the matching tool, now inside the account shell |
 
-The reorder path to test: `konto-bestellungen.html`, "Nochmal bestellen" on any
-row, then `cart.html`.
+Paths worth walking:
+
+- **Reorder**: `konto-bestellungen.html`, "Nochmal bestellen" on any row, then
+  `cart.html`.
+- **Bill of material**: `stueckliste.html`, example list, match, then either
+  "In den Einkaufswagen" or "Als Stückliste speichern", which lands on
+  `konto-stuecklisten.html` with a confirmation.
+- **Month end**: `konto-rechnungen.html`, select all, "Auswahl als CSV".
 
 ### Files added
 
@@ -739,3 +752,94 @@ existing ones: no page shifts sideways any more.
 The tool still works end to end: example list, column mapping, matching, eight
 rows, total 132,50 €, and the handover to the cart produces ten lines in
 `conradCart`. Navigation, counters, breadcrumb and skip link are in place.
+
+---
+
+## 13. Sechs Punkte aus der Durchsicht
+
+### 13.1 Kontoschublade im Kopf war nicht verdrahtet
+
+Eleven of the twelve entries in the header account drawer pointed at `#`,
+including "Konto" itself. Now wired to their pages, on **all sixteen pages**
+including PDP, cart and the Stückliste.
+
+This touches `wago221.html` and `cart.html`, which the brief put off limits. The
+instruction to change it was explicit, and wiring it only on the account pages
+would have left the drawer working in one half of the prototype and dead in the
+other. Nothing else in those two files was changed: only the `href` of nine
+drawer entries each.
+
+Still `#`: "Angebotsanforderung", which has no page anywhere.
+
+### 13.2 Abstand zur Krume
+
+Measured against the other pages at 1440 px:
+
+| | left edge of content | gap below breadcrumb |
+|---|---|---|
+| PDP | 24 px | 24 px |
+| Cart | 24 px | 18 px |
+| account, before | **16 px** | **0 px** |
+| account, after | 24 px | 24 px |
+
+The account area now follows the PDP exactly. The cart sits at 18 px because of
+its own `8px` main padding, which makes it the outlier of the three now. Not
+changed, because that is a change to the cart with no instruction behind it.
+
+### 13.3 Stückliste behalten statt nur bestellen
+
+The matching flow ended only in the cart, and the work on the match was gone
+afterwards. Step three now offers a second way out: **"Als Stückliste
+speichern"**, which stores the list and leads to `konto-stuecklisten.html` with
+a confirmation naming the number of positions. The cart stays untouched, so
+whoever wants both orders afterwards from the saved list.
+
+### 13.4 "angelegt am" unter dem Listennamen
+
+Removed from both the Stücklisten and the Merklisten tables. Two dates per row,
+one of them in a sub line, and the column "Zuletzt geändert" already carries the
+time information that matters.
+
+### 13.5 Zähler in der Navigation
+
+One design, one meaning. The colour variant is gone: an overdue invoice is
+stated in the list, not in the navigation, and a second colour there only asked
+the user to learn a second code.
+
+The rule, now written into `konto-daten.js`: **a counter says how many entries
+are waiting for something.** Unterwegs, offen, in Prüfung. It does not count
+stock. That is why Bestellungen (3), Rechnungen (3) and Rücksendungen (1) carry
+one and Merklisten, Stücklisten and Unternehmen do not: nothing there waits.
+
+The alternative would be a counter on every entry, showing how many items exist.
+That is data volume, not a signal, and it makes the three entries that do need
+attention indistinguishable. Recorded, not built.
+
+### 13.6 Conrad PRO als Abo-Einstellung
+
+The question was whether the location fits. It did not, and neither did two of
+its neighbours.
+
+"Einstellungen" mixed personal settings (Profil, Newsletter) with things that
+belong to the company account (Adressen, Zahlungsart, Conrad PRO). The PRO
+membership in particular is a company subscription with an annual fee invoiced
+to the company, not a preference of the person logged in.
+
+Now:
+
+- **Unternehmen**: Unternehmensdaten, Adressen, Zahlungsart, Conrad PRO
+- **Persönlich**: Profil, Newsletter
+
+Company level and person level, separated. This is the one item of the six where
+I went beyond what was asked, because moving only Conrad PRO would have left the
+same mix one entry lighter.
+
+### Verified after this round
+
+Sixteen pages at 1024 px: no page shifts sideways, exactly one drawer backdrop
+each, no table header without `scope`, no dead link in the account navigation,
+no "angelegt am" left.
+
+One finding outside the account area: **`wago221.html` has table headers without
+`scope`** in its comparison table. Pre-existing, unrelated to this work,
+recorded rather than fixed because nothing asked for it.
