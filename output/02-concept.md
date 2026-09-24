@@ -860,37 +860,77 @@ Three options, mutually exclusive, short labels, a view mode the user switches
 rather than a value entered once. That is the textbook case for a segmented
 control.
 
-### Built from a component that already exists
+### First attempt was wrong
 
-Not a new component. `.bom-chip` with `.is-active` has filtered by status on the
-Stückliste since before this concept. Its rules live inline in
-`stueckliste.html`, so they were copied into `konto-huelle.css`, the **fifth**
-component in that situation after `.visually-hidden`, `.toast`, `.bom-status`
-and `.id-chip`. That count is now an argument in itself, see the risks section.
+I built it from `.bom-chip`, the filter chip of the Stückliste: three separate
+buttons with 8 px gaps, the active one carrying a blue fill and a blue border.
+
+That is a chip row, not a segmented control. Three outlined buttons standing
+apart read as three separate actions, and the one with the blue fill and border
+reads as an error or a highlight rather than as one of three states. Rejected
+after review.
+
+### What a segmented control actually is
+
+One control, not three. A shared container with a single outer border, segments
+joined without gaps, thin dividers between them, and the active segment filled
+rather than outlined. The active segment must **not** have its own border,
+because the group already holds one, which is exactly what made the first
+attempt look like a fourth, wrongly styled button.
+
+### Built from the prototype's own joined-group pattern
+
+`.datenblatt-group` on the PDP is that construction already: one outer border,
+`--radius-xs`, two halves joined by a 1 px divider, and, since the fix earlier
+in this session, each half tints its own area on hover while the group border
+stays calm.
+
+The account segmented control is built the same way and behaves the same way:
+
+| | `.datenblatt-group` | `.konto-segment` |
+|---|---|---|
+| container | one border, `--radius-xs` | one border, `--radius-xs` |
+| divider | 1 px `--c-border` | 1 px `--c-border` |
+| gaps between segments | none | none |
+| hover | segment tints, group border calm | segment tints, group border calm |
+
+The outer border uses `--c-border-control`, matching the search field and the
+select beside it in the toolbar. The active segment uses the prototype's
+selection colour, `--c-blue-tint` with blue text, the same as
+`.pack-pill.selected` and `.vtile`, minus the border the group already carries.
+
+Height is 38 px plus the group's two 1 px borders, so the control lands on the
+toolbar's 40 px like everything else.
 
 Labels shortened to **Alle, Rechnungen, Gutschriften**. "Nur Rechnungen" was
 necessary in a dropdown, where the chosen entry has to stand on its own. In a
 group where all three are visible, exclusivity is expressed by the control.
 
-The group sits at the toolbar's 40 px height rather than the Stückliste's 30 px,
-so search, chips, select and button share one baseline.
+The `.bom-chip` copy was removed from `konto-huelle.css` again. Nothing in the
+account area uses it now, and leaving it would have competed with the copy that
+`stueckliste.html` carries inline.
 
 ### Why Status stays a select
 
 Five options, and two of them are long words ("Ausgeglichen", "Überfällig"). As
-a second chip row it would measure roughly 470 px, and two chip rows plus a
-search field plus an export button stop reading as a set of choices and start
+a second segmented control it would measure roughly 470 px, and two of them plus
+a search field plus an export button stop reading as a set of choices and start
 reading as a wall.
 
-The rule that makes the mix legible: **chips for an axis with few, short options
-that are all worth showing, a select for an axis with many.** The Stückliste
-follows the same rule, it just has only one axis.
+The rule that makes the mix legible: **a segmented control for an axis with few,
+short options that are all worth showing, a select for an axis with many.**
 
 ### Accessibility
 
-`role="group"` with `aria-label="Belegart"`, `aria-pressed` on each chip,
-visible focus ring. A true `radiogroup` would be more precise, but it requires
-arrow key handling between the options. Recorded, not built.
+`role="group"` with `aria-label="Belegart"`, `aria-pressed` on each segment,
+focus ring inset so it does not run over the group border. A true `radiogroup`
+would be more precise, but it requires arrow key handling between the options.
+Recorded, not built.
 
-Verified: filtering to Gutschriften leaves one row, back to Alle restores six,
-`aria-pressed` follows the selection, all toolbar controls are 40 px.
+### Verified
+
+Group 293 px wide and 40 px tall, gaps between segments 0 px, dividers 1 px,
+active segment `--c-blue-tint` with blue text and no border of its own. With a
+real pointer on the middle segment: that segment tints `--c-bg-tint`, the other
+two do not, the group border stays `--c-border-control`. Filtering to
+Gutschriften leaves one row, back to Alle restores six.

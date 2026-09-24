@@ -570,40 +570,51 @@
 .konto-content .bom-preview-wrap { contain: layout; }
 
 /* --- Auswahlgruppe (segmented control) ----------------------------------- */
-/* Drei sich ausschliessende Ansichten, alle sichtbar, ein Klick statt zwei.
-   Vorher ein Auswahlfeld, dessen Ruhebeschriftung "Rechnungen und
-   Gutschriften" mit 248px das breiteste Stueck der Leiste war und dabei nur
-   sagte, dass nicht gefiltert wird.
+/* Drei sich ausschliessende Ansichten als ein Bedienelement, nicht als drei
+   Knoepfe mit Luecken. Gebaut wie die Datenblatt-Gruppe auf der Produktseite:
+   ein Rahmen um das Ganze, duenne Trennlinien dazwischen, und die Haelften
+   toenen ihre eigene Flaeche. Dieselbe Bauart, dieselbe Hoverregel.
 
-   Die Kacheln sind .bom-chip aus der Stueckliste - dort filtern sie schon
-   nach Status. Die Regeln liegen dort inline, deshalb hier nachgetragen;
-   fuenfter Baustein in dieser Lage nach .visually-hidden, .toast,
-   .bom-status und .id-chip.
+   Der gewaehlte Abschnitt traegt die Auswahlfarbe des Prototyps
+   (--c-blue-tint mit blauer Schrift), so wie .pack-pill.selected und .vtile.
+   Einen eigenen Rahmen bekommt er nicht - den haelt die Gruppe, sonst sieht
+   der gewaehlte Abschnitt aus wie ein vierter, falsch gestylter Knopf.
 
-   Die Auswahl steckt in role="group" mit aria-pressed je Kachel. Eine echte
-   Radiogruppe waere genauer, verlangt aber Pfeiltastensteuerung; das ist
-   vermerkt, nicht gebaut. */
-.bom-chip {
-  height: 30px;
-  padding: 0 14px;
+   Aussenrahmen in --c-border-control wie Suchfeld und Auswahlfeld daneben,
+   Trennlinien in --c-border wie in der Datenblatt-Gruppe. */
+.konto-segment {
+  display: inline-flex;
+  align-items: stretch;
   background: var(--c-bg-white);
-  border: 1px solid var(--c-border);
+  border: 1px solid var(--c-border-control);
   border-radius: var(--radius-xs);
+  overflow: hidden;
+}
+.konto-segment button {
+  /* 38 plus zwei Rahmen der Gruppe ergibt die 40 der Werkzeugleiste. */
+  height: 38px;
+  padding: 0 16px;
+  border: 0;
+  background: none;
   font: inherit;
-  font-size: 13px;
+  font-size: 14px;
+  font-weight: 500;
   color: var(--c-text);
   cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s, color 0.15s;
 }
-.bom-chip:hover { border-color: var(--c-border-strong); }
-.bom-chip.is-active { background: var(--c-blue-tint); border-color: var(--c-blue); font-weight: 600; }
-
-.konto-segment { display: flex; gap: 8px; flex-wrap: wrap; }
-/* In der Werkzeugleiste stehen alle Bedienelemente auf 40. */
-.konto-toolbar .bom-chip {
-  height: 40px;
-  padding: 0 16px;
-  font-size: 14px;
-  border-color: var(--c-border-control);
-  transition: background 0.15s, border-color 0.15s;
+.konto-segment button + button { border-left: 1px solid var(--c-border); }
+.konto-segment button:hover { background: var(--c-bg-tint); }
+.konto-segment button[aria-pressed="true"] {
+  background: var(--c-blue-tint);
+  color: var(--c-blue);
+  font-weight: 600;
 }
-.konto-toolbar .bom-chip:focus-visible { outline: 2px solid var(--c-blue); outline-offset: 2px; }
+.konto-segment button[aria-pressed="true"]:hover { background: var(--c-blue-tint); }
+/* Nach innen, damit der Ring nicht ueber den Gruppenrahmen laeuft. */
+.konto-segment button:focus-visible { outline: 2px solid var(--c-blue); outline-offset: -2px; }
+@media (max-width: 480px) {
+  .konto-segment { width: 100%; }
+  .konto-segment button { flex: 1; padding: 0 8px; }
+}

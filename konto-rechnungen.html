@@ -197,9 +197,9 @@
           <option value="erstattet">Erstattet</option>
         </select>
         <div class="konto-segment" role="group" aria-label="Belegart" data-f-art>
-          <button type="button" class="bom-chip is-active" data-art="" aria-pressed="true">Alle</button>
-          <button type="button" class="bom-chip" data-art="rechnung" aria-pressed="false">Rechnungen</button>
-          <button type="button" class="bom-chip" data-art="gutschrift" aria-pressed="false">Gutschriften</button>
+          <button type="button" data-art="" aria-pressed="true">Alle</button>
+          <button type="button" data-art="rechnung" aria-pressed="false">Rechnungen</button>
+          <button type="button" data-art="gutschrift" aria-pressed="false">Gutschriften</button>
         </div>
         <div class="konto-toolbar-right">
           <button type="button" class="konto-btn ghost" data-export><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Export (CSV)</button>
@@ -531,9 +531,7 @@
   function setzeArt(wert) {
     art = wert;
     [].forEach.call(elArt.querySelectorAll('[data-art]'), function (b) {
-      var an = b.dataset.art === wert;
-      b.classList.toggle('is-active', an);
-      b.setAttribute('aria-pressed', an ? 'true' : 'false');
+      b.setAttribute('aria-pressed', b.dataset.art === wert ? 'true' : 'false');
     });
     zeichne();
   }
