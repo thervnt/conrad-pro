@@ -182,16 +182,17 @@
           <button type="button" class="konto-btn" data-neu>Lieferadresse hinzufügen</button>
         </div>
       </div>
-      <div class="konto-grid">
-        <div class="konto-card">
-          <div class="konto-card-head"><h2 class="konto-card-title">Rechnungsadresse</h2>
-            <a class="konto-card-link" href="konto-unternehmen.html">Bearbeiten</a></div>
-          <div data-rechnung></div>
-        </div>
+      <!-- Beide Abschnitte gleich gebaut: eine Karte, der Titel darin. Vorher
+           stand "Rechnungsadresse" in einer Karte und "Lieferadressen"
+           darueber auf der Seite - zwei Geschwister, zwei Bauarten. -->
+      <div class="konto-card">
+        <div class="konto-card-head"><h2 class="konto-card-title">Rechnungsadresse</h2>
+          <a class="konto-card-link" href="konto-unternehmen.html">In den Unternehmensdaten ändern</a></div>
+        <div data-rechnung></div>
       </div>
-      <div class="konto-section">
-        <h2 class="konto-section-title">Lieferadressen</h2>
-        <div class="konto-grid" data-liefer></div>
+      <div class="konto-card konto-section">
+        <div class="konto-card-head"><h2 class="konto-card-title">Lieferadressen</h2></div>
+        <div data-liefer></div>
       </div>
     </div>
   </div>
@@ -374,22 +375,24 @@
     '<p class="konto-kpi-note" style="margin-top:8px">Die Rechnungsadresse folgt den Unternehmensdaten ' +
     'und lässt sich nur dort ändern.</p>';
 
-  /* Jede Karte traegt dieselben Handlungen. In der Produktion hat die
-     Rechnungsadresse ein "bearbeiten", die Lieferadresse gar nichts
+  /* Die Adressen sind Zeilen in einer Karte, nicht je eine eigene Karte.
+     Dasselbe Muster wie sonst im Kontobereich, ein Rahmen statt drei.
+     Jede Zeile traegt dieselben Handlungen: in der Produktion hat die
+     Rechnungsadresse ein "bearbeiten" und die Lieferadresse gar nichts
      (Befund F4). Dazu die B2B-Felder, die dort fehlen (Befund F3). */
   document.querySelector('[data-liefer]').innerHTML = K.lieferadressen.map(function (a) {
-    return '<div class="konto-card">' +
-      '<div class="konto-card-head">' +
-        '<h3 class="konto-card-title">' + E(a.label) +
-          (a.standard ? ' <span class="bom-status ok" style="margin-left:8px">Standard</span>' : '') + '</h3>' +
+    return '<div class="konto-pos">' +
+      '<div class="konto-pos-body">' +
+        '<p class="konto-pos-name">' + E(a.label) +
+          (a.standard ? ' <span class="bom-status ok" style="margin-left:8px">Standard</span>' : '') + '</p>' +
+        '<dl class="konto-dl" style="margin-top:8px">' +
+          '<div><dt>Empfänger</dt><dd>' + E(a.name) + '</dd></div>' +
+          '<div><dt>Anschrift</dt><dd>' + E(a.zeile) + ', ' + E(a.ort) + '</dd></div>' +
+          '<div><dt>Ansprechpartner</dt><dd>' + (a.ansprech ? E(a.ansprech) : 'nicht hinterlegt') + '</dd></div>' +
+          '<div><dt>Kostenstelle</dt><dd>' + (a.id === 'a2' ? 'KST-4200' : 'keine Vorbelegung') + '</dd></div>' +
+        '</dl>' +
       '</div>' +
-      '<dl class="konto-dl">' +
-        '<div><dt>Empfänger</dt><dd>' + E(a.name) + '</dd></div>' +
-        '<div><dt>Anschrift</dt><dd>' + E(a.zeile) + '<br>' + E(a.ort) + '</dd></div>' +
-        '<div><dt>Ansprechpartner</dt><dd>' + (a.ansprech ? E(a.ansprech) : 'nicht hinterlegt') + '</dd></div>' +
-        '<div><dt>Kostenstelle</dt><dd>' + (a.id === 'a2' ? 'KST-4200' : 'keine Vorbelegung') + '</dd></div>' +
-      '</dl>' +
-      '<div class="konto-head-actions" style="margin-top:16px">' +
+      '<div class="konto-pos-right">' +
         '<button type="button" class="konto-btn ghost" data-bearbeiten="' + E(a.id) + '">Bearbeiten</button>' +
         (a.standard
           ? ''

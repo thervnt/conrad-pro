@@ -991,3 +991,61 @@ was a duplicate, and at 157 px it was the widest column in the table. Removed.
 
 `stueckliste.html` still scrolls horizontally, deliberately. Twelve columns of
 matched positions, numbers that must not break, and it was specified that way.
+
+---
+
+## 16. Karte oder Abschnitt: eine Regel statt zwei Bauarten
+
+On `konto-adressen.html`, "Rechnungsadresse" was an `<h2>` **inside** a card
+while "Lieferadressen" was an `<h2>` **on the page**. Two siblings, two
+constructions. The individual addresses were `<h3>` inside cards, so the heading
+levels claimed a hierarchy the layout did not show.
+
+### It was not a slip on one page
+
+`konto-unternehmen.html` had the same mixture: "Stammdaten" and "Lieferadressen"
+inside cards, "Benutzer" and "Kostenstellen" on the page. `konto.html` had it
+too: "Schnell nachbestellen" on the page, the two list card titles inside.
+
+Three pages, same mixture. That is a missing rule, not three mistakes.
+
+### The rule, and where it comes from
+
+**A section heading sits on the page. A card title sits in the card and names
+that one card, not the section.**
+
+Which of the two a page uses is decided by its content, and the deciding factor
+is structural rather than a preference: **`.konto-table-wrap` is already a
+bordered container.** A card around a table would nest two borders. So a section
+containing a table has to carry its heading on the page, and once that holds for
+one section it holds for all sections of that page.
+
+| page type | construction |
+|---|---|
+| pages with tables (Bestellungen, Rechnungen, Rücksendungen, Stücklisten, Merklisten, Unternehmen) | headings on the page |
+| pages without tables (Übersicht, Adressen, Profil, Conrad PRO, Bestellung, Zahlungsart, Newsletter) | titles in cards |
+
+Within a page, never both.
+
+### What changed
+
+**`konto-adressen.html`**: both sections are now cards with the title inside.
+The delivery addresses became rows in one card instead of one card each, using
+the `.konto-pos` row that the rest of the account area already uses. Three
+borders became two.
+
+**`konto-unternehmen.html`**: "Stammdaten" moved out of its card onto the page,
+so all three sections match. The Lieferadressen block was **removed entirely**:
+the same two addresses were rendered there as rows and on `konto-adressen.html`
+as cards. Same data, two renderings, two places, certain to drift. The section
+now links to the Adressen page instead.
+
+**`konto.html`**: "Schnell nachbestellen" moved into its card, matching the two
+list cards beside it.
+
+### Verified
+
+All thirteen account pages checked for the mixture: **none has both a heading in
+a card and a heading on the page**. Layout re-measured at 1680, 1280, 1024 and
+900 px, no table scrolls, no page shifts. The Lieferadressen block exists in
+exactly one place, and `konto-unternehmen.html` links to it.

@@ -185,20 +185,20 @@
         <span>Dieser Entwurf zeigt die einfache Stufe: wer bestellt und worauf gebucht wird. Rechte, Rollen und Freigaben sind bewusst nicht enthalten.</span>
       </div>
 
-      <div class="konto-grid">
+      <!-- Diese Seite traegt Tabellen, und .konto-table-wrap bringt seinen
+           Rahmen schon mit. Eine Karte darum waeren zwei Rahmen ineinander,
+           also stehen hier alle Abschnittsueberschriften auf der Seite - auch
+           die von "Stammdaten", die vorher als einzige in einer Karte sass.
+           Die Lieferadressen sind ganz entfallen: sie stehen auf der
+           Adressen-Seite, und zweimal dieselben Daten laufen auseinander. -->
+      <div class="konto-section" style="margin-top:0">
+        <h2 class="konto-section-title">Stammdaten</h2>
         <div class="konto-card">
-          <div class="konto-card-head">
-            <h2 class="konto-card-title">Stammdaten</h2>
-            <a class="konto-card-link" href="#">Bearbeiten</a>
-          </div>
           <dl class="konto-dl" data-stamm></dl>
-        </div>
-        <div class="konto-card">
-          <div class="konto-card-head">
-            <h2 class="konto-card-title">Lieferadressen</h2>
-            <a class="konto-card-link" href="#">Verwalten</a>
+          <div class="konto-head-actions" style="margin-top:16px">
+            <button type="button" class="konto-btn ghost" data-stamm-bearbeiten>Stammdaten bearbeiten</button>
+            <a class="konto-btn ghost" href="konto-adressen.html">Adressen verwalten</a>
           </div>
-          <div data-adressen></div>
         </div>
       </div>
 
@@ -417,18 +417,6 @@
     '<div><dt>Zahlungsart</dt><dd>' + E(f.zahlart) + ', ' + E(f.zahlungsziel) + '</dd></div>' +
     '<div><dt>Preise</dt><dd>Nettopreise (exkl. MwSt.)</dd></div>';
 
-  document.querySelector('[data-adressen]').innerHTML = K.lieferadressen.map(function (a) {
-    return '<div class="konto-pos" style="padding:10px 0">' +
-      '<div class="konto-pos-body">' +
-        '<p class="konto-pos-name">' + E(a.label) +
-          (a.standard ? ' <span class="bom-status ok" style="margin-left:6px">Standard</span>' : '') + '</p>' +
-        '<div class="konto-pos-meta"><span>' + E(a.zeile) + ', ' + E(a.ort) + '</span>' +
-        (a.ansprech ? '<span>Ansprechpartner: ' + E(a.ansprech) + '</span>' : '') + '</div>' +
-      '</div>' +
-      '<div class="konto-pos-right"><a class="konto-btn ghost" href="#">Bearbeiten</a></div>' +
-    '</div>';
-  }).join('');
-
   document.querySelector('[data-benutzer]').innerHTML =
     '<div class="konto-table-wrap"><table class="konto-table">' +
     '<thead><tr><th scope="col">Name</th><th scope="col">E-Mail</th><th scope="col">Funktion</th><th scope="col">Kostenstelle</th>' +
@@ -467,6 +455,7 @@
     }).join('') + '</tbody></table></div>';
 
   document.addEventListener('click', function (e) {
+    if (e.target.closest('[data-stamm-bearbeiten]')) K.melden('Stammdaten bearbeiten');
     if (e.target.closest('[data-einladen]')) K.melden('Einladung per E-Mail versenden');
     if (e.target.closest('[data-kst-neu]')) K.melden('Neue Kostenstelle anlegen');
     var kopie = e.target.closest('[data-copy]');
