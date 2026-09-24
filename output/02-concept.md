@@ -843,3 +843,54 @@ no "angelegt am" left.
 One finding outside the account area: **`wago221.html` has table headers without
 `scope`** in its comparison table. Pre-existing, unrelated to this work,
 recorded rather than fixed because nothing asked for it.
+
+---
+
+## 14. Belegart als Auswahlgruppe
+
+### Why the select had to go
+
+Measured in the toolbar at 1440 px: the Belegart select was **248 px**, the
+widest element in the row, wider than the search field's minimum and 107 px
+wider than the Status select next to it. All of that width carried the sentence
+"Rechnungen und Gutschriften", which is the most verbose possible way of saying
+"no filter applied".
+
+Three options, mutually exclusive, short labels, a view mode the user switches
+rather than a value entered once. That is the textbook case for a segmented
+control.
+
+### Built from a component that already exists
+
+Not a new component. `.bom-chip` with `.is-active` has filtered by status on the
+Stückliste since before this concept. Its rules live inline in
+`stueckliste.html`, so they were copied into `konto-huelle.css`, the **fifth**
+component in that situation after `.visually-hidden`, `.toast`, `.bom-status`
+and `.id-chip`. That count is now an argument in itself, see the risks section.
+
+Labels shortened to **Alle, Rechnungen, Gutschriften**. "Nur Rechnungen" was
+necessary in a dropdown, where the chosen entry has to stand on its own. In a
+group where all three are visible, exclusivity is expressed by the control.
+
+The group sits at the toolbar's 40 px height rather than the Stückliste's 30 px,
+so search, chips, select and button share one baseline.
+
+### Why Status stays a select
+
+Five options, and two of them are long words ("Ausgeglichen", "Überfällig"). As
+a second chip row it would measure roughly 470 px, and two chip rows plus a
+search field plus an export button stop reading as a set of choices and start
+reading as a wall.
+
+The rule that makes the mix legible: **chips for an axis with few, short options
+that are all worth showing, a select for an axis with many.** The Stückliste
+follows the same rule, it just has only one axis.
+
+### Accessibility
+
+`role="group"` with `aria-label="Belegart"`, `aria-pressed` on each chip,
+visible focus ring. A true `radiogroup` would be more precise, but it requires
+arrow key handling between the options. Recorded, not built.
+
+Verified: filtering to Gutschriften leaves one row, back to Alle restores six,
+`aria-pressed` follows the selection, all toolbar controls are 40 px.

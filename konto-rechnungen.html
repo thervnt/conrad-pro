@@ -196,12 +196,11 @@
           <option value="ausgeglichen">Ausgeglichen</option>
           <option value="erstattet">Erstattet</option>
         </select>
-        <label class="visually-hidden" for="f-art">Belegart</label>
-        <select class="konto-select" id="f-art" data-f-art>
-          <option value="">Rechnungen und Gutschriften</option>
-          <option value="rechnung">Nur Rechnungen</option>
-          <option value="gutschrift">Nur Gutschriften</option>
-        </select>
+        <div class="konto-segment" role="group" aria-label="Belegart" data-f-art>
+          <button type="button" class="bom-chip is-active" data-art="" aria-pressed="true">Alle</button>
+          <button type="button" class="bom-chip" data-art="rechnung" aria-pressed="false">Rechnungen</button>
+          <button type="button" class="bom-chip" data-art="gutschrift" aria-pressed="false">Gutschriften</button>
+        </div>
         <div class="konto-toolbar-right">
           <button type="button" class="konto-btn ghost" data-export><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Export (CSV)</button>
         </div>
@@ -400,6 +399,7 @@
   var elSuche = document.querySelector('[data-suche]');
   var elStatus = document.querySelector('[data-f-status]');
   var elArt = document.querySelector('[data-f-art]');
+  var art = '';   // '', 'rechnung' oder 'gutschrift'
   var elBulk = document.querySelector('[data-bulk]');
   var gewaehlt = {};
 
@@ -418,7 +418,7 @@
     var q = elSuche.value.trim().toLowerCase();
     return K.rechnungen.filter(function (r) {
       if (elStatus.value && r.status !== elStatus.value) return false;
-      if (elArt.value && r.art !== elArt.value) return false;
+      if (art && r.art !== art) return false;
       if (!q) return true;
       var heu = r.nr + ' ' + r.bestellung + ' ' + Math.abs(r.netto).toFixed(2).replace('.', ',');
       return heu.toLowerCase().indexOf(q) !== -1;
@@ -450,9 +450,9 @@
 
     elListe.innerHTML = '<div class="konto-table-wrap"><table class="konto-table">' +
       '<thead><tr>' +
-        '<th scope="col"><input type="checkbox" class="konto-check" data-alle aria-label="Alle Belege auswählen"></th>' +
-        '<th scope="col">Beleg</th><th scope="col">Datum</th><th scope="col">Fällig</th><th scope="col">Bestellung</th><th scope="col">Status</th>' +
-        '<th scope="col" class="konto-amount">Betrag netto</th><th scope="col"><span class="visually-hidden">Aktionen</span></th>' +
+        '<th><input type="checkbox" class="konto-check" data-alle aria-label="Alle Belege auswählen"></th>' +
+        '<th>Beleg</th><th>Datum</th><th>Fällig</th><th>Bestellung</th><th>Status</th>' +
+        '<th class="konto-amount">Betrag netto</th><th><span class="visually-hidden">Aktionen</span></th>' +
       '</tr></thead><tbody>' +
       liste.map(function (r) {
         var tage = r.faellig ? K.tageBis(r.faellig) : null;
@@ -505,7 +505,7 @@
   });
   elListe.addEventListener('click', function (e) {
     var r = e.target.closest('[data-reset]');
-    if (r) { elSuche.value = ''; elStatus.value = ''; elArt.value = ''; zeichne(); return; }
+    if (r) { elSuche.value = ''; elStatus.value = ''; setzeArt(''); return; }
     var pdf = e.target.closest('[data-pdf]');
     if (pdf) K.melden('Beleg ' + pdf.dataset.pdf + ' wird heruntergeladen');
   });
@@ -523,9 +523,23 @@
     K.melden(liste.length + ' Belege als CSV exportiert');
   });
 
-  [elSuche, elStatus, elArt].forEach(function (el) {
+  [elSuche, elStatus].forEach(function (el) {
     el.addEventListener('input', zeichne);
     el.addEventListener('change', zeichne);
+  });
+
+  function setzeArt(wert) {
+    art = wert;
+    [].forEach.call(elArt.querySelectorAll('[data-art]'), function (b) {
+      var an = b.dataset.art === wert;
+      b.classList.toggle('is-active', an);
+      b.setAttribute('aria-pressed', an ? 'true' : 'false');
+    });
+    zeichne();
+  }
+  elArt.addEventListener('click', function (e) {
+    var b = e.target.closest('[data-art]');
+    if (b) setzeArt(b.dataset.art);
   });
 
   zeichne();

@@ -568,3 +568,42 @@
 .konto-table-wrap,
 .konto-content .bom-table-wrap,
 .konto-content .bom-preview-wrap { contain: layout; }
+
+/* --- Auswahlgruppe (segmented control) ----------------------------------- */
+/* Drei sich ausschliessende Ansichten, alle sichtbar, ein Klick statt zwei.
+   Vorher ein Auswahlfeld, dessen Ruhebeschriftung "Rechnungen und
+   Gutschriften" mit 248px das breiteste Stueck der Leiste war und dabei nur
+   sagte, dass nicht gefiltert wird.
+
+   Die Kacheln sind .bom-chip aus der Stueckliste - dort filtern sie schon
+   nach Status. Die Regeln liegen dort inline, deshalb hier nachgetragen;
+   fuenfter Baustein in dieser Lage nach .visually-hidden, .toast,
+   .bom-status und .id-chip.
+
+   Die Auswahl steckt in role="group" mit aria-pressed je Kachel. Eine echte
+   Radiogruppe waere genauer, verlangt aber Pfeiltastensteuerung; das ist
+   vermerkt, nicht gebaut. */
+.bom-chip {
+  height: 30px;
+  padding: 0 14px;
+  background: var(--c-bg-white);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-xs);
+  font: inherit;
+  font-size: 13px;
+  color: var(--c-text);
+  cursor: pointer;
+}
+.bom-chip:hover { border-color: var(--c-border-strong); }
+.bom-chip.is-active { background: var(--c-blue-tint); border-color: var(--c-blue); font-weight: 600; }
+
+.konto-segment { display: flex; gap: 8px; flex-wrap: wrap; }
+/* In der Werkzeugleiste stehen alle Bedienelemente auf 40. */
+.konto-toolbar .bom-chip {
+  height: 40px;
+  padding: 0 16px;
+  font-size: 14px;
+  border-color: var(--c-border-control);
+  transition: background 0.15s, border-color 0.15s;
+}
+.konto-toolbar .bom-chip:focus-visible { outline: 2px solid var(--c-blue); outline-offset: 2px; }
