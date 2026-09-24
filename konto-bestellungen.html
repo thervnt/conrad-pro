@@ -477,9 +477,11 @@
             (b.status === 'teilversand' ? '<span class="konto-cell-sub">' + b.offenePositionen + ' Position offen</span>' : '') + '</td>' +
           '<td class="konto-num">' + b.positionen.length + '<span class="konto-cell-sub">' + stk + ' Stück</span></td>' +
           '<td class="konto-amount">' + EU(K.netto(b)) + '</td>' +
+          /* Kein zweiter Knopf fuer die Details: die Bestell-Nr. in der ersten
+             Spalte fuehrt schon dorthin. Der Knopf war eine Dopplung und die
+             breiteste Spalte der Liste. */
           '<td><span class="konto-row-actions">' +
             '<button type="button" class="konto-btn" data-nach="' + E(b.nr) + '">Nochmal bestellen</button>' +
-            '<a class="konto-btn ghost" href="konto-bestellung.html?nr=' + E(b.nr) + '">Details</a>' +
           '</span></td></tr>';
       }).join('') + '</tbody></table></div>';
   }

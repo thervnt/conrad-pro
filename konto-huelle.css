@@ -322,10 +322,13 @@
 .konto-btn svg { width: 16px; height: 16px; flex-shrink: 0; }
 
 /* --- Liste ---------------------------------------------------------------- */
-/* Basis ist .bom-table aus der Stueckliste, inklusive waagerechtem Rollen
-   auf schmalen Schirmen. Hier nur die Ergaenzungen. */
+/* Die Tabelle fuellt ihren Rahmen und bricht um, statt darueber
+   hinauszuwachsen. Die Stueckliste rollt waagerecht, weil sie zwoelf Spalten
+   mit Zahlen traegt, die nicht brechen duerfen. Die Kontolisten haben
+   Textspalten, und die brechen lieber, als den Nutzer schieben zu lassen.
+   Nicht brechen duerfen nur Zahlen, Daten und die Handlungsspalte. */
 .konto-table-wrap { overflow-x: auto; background: var(--c-bg-white); border: 1px solid var(--c-border); border-radius: var(--radius); }
-.konto-table { width: max-content; min-width: 100%; border-collapse: collapse; font-size: 14px; }
+.konto-table { width: 100%; border-collapse: collapse; font-size: 14px; }
 .konto-table th {
   text-align: left;
   font-size: 11px;
@@ -335,14 +338,20 @@
   color: var(--c-text-secondary);
   padding: 16px;
   border-bottom: 1px solid var(--c-border);
-  white-space: nowrap;
   background: var(--c-bg-tint);
+  vertical-align: bottom;
 }
 .konto-table td { padding: 16px; border-bottom: 1px solid var(--c-border); vertical-align: middle; }
 .konto-table tbody tr:last-child td { border-bottom: none; }
 .konto-table tbody tr:hover { background: var(--c-bg-tint); }
 .konto-table tr[hidden] { display: none; }
 .konto-num { font-variant-numeric: tabular-nums; white-space: nowrap; }
+/* Lange Bezeichnungen brechen, bevor sie die Spalte sprengen - aber nur
+   zwischen Woertern, und im Wort erst, wenn ein einzelnes Wort allein schon
+   zu breit waere. "anywhere" stand hier zuerst und zerlegte
+   "Verbindungsklemme" mitten im Wort. */
+.konto-table td { overflow-wrap: break-word; hyphens: auto; }
+.konto-table td.konto-num, .konto-table td.konto-amount { overflow-wrap: normal; hyphens: none; }
 .konto-amount { font-variant-numeric: tabular-nums; white-space: nowrap; text-align: right; font-weight: 600; }
 .konto-table th.konto-amount { text-align: right; }
 .konto-cell-sub { display: block; margin-top: 4px; font-size: 12px; color: var(--c-text-secondary); }
@@ -523,6 +532,34 @@
 /* --- Schmalere Schirme ---------------------------------------------------- */
 /* Der Schwerpunkt liegt auf dem Schreibtisch, siehe 02-concept.md. Hier nur
    so viel, dass nichts seitlich aus der Seite laeuft. */
+/* Statt zu rollen gibt die Tabelle zuerst Polsterung ab, dann Schriftgroesse,
+   dann stapelt sie die Knoepfe. Erst danach bliebe waagerechtes Rollen. */
+@media (max-width: 1279px) {
+  .konto-table th, .konto-table td { padding: 12px 8px; }
+  .konto-btn { padding: 8px 12px; }
+  /* Statuspille und Knopfbeschriftung duerfen brechen. Solange Platz ist,
+     aendert das nichts, und wenn es eng wird, spart es die Rollleiste. */
+  .konto-row-actions { white-space: normal; }
+  .konto-table .bom-status { white-space: normal; }
+}
+@media (max-width: 1100px) {
+  .konto-table { font-size: 13px; }
+  .konto-table th { font-size: 10px; letter-spacing: 0.02em; }
+  .konto-table th, .konto-table td { padding: 12px 6px; }
+  .konto-row-actions { flex-direction: column; align-items: stretch; gap: 4px; }
+  .konto-row-actions .konto-btn { min-height: 32px; font-size: 13px; padding: 4px 8px; }
+  .konto-cell-sub { font-size: 11px; }
+}
+/* Letzter Schritt vor dem Umbruch der Seitenleiste bei 900. Muss nach dem
+   1100er-Block stehen: beide treffen zu, und bei gleicher Staerke gewinnt der
+   spaetere. */
+@media (max-width: 1023px) {
+  .konto-table th, .konto-table td { padding: 10px 4px; }
+  /* Letzte Reserve: hier darf auch im Wort gebrochen werden, wo die
+     Silbentrennung nicht reicht. Oberhalb bleibt es bei sauberer Trennung. */
+  .konto-table td { overflow-wrap: anywhere; }
+  .konto-table td.konto-num, .konto-table td.konto-amount { overflow-wrap: normal; }
+}
 @media (max-width: 900px) {
   .konto-layout { grid-template-columns: 1fr; }
   .konto-aside { position: static; }

@@ -934,3 +934,60 @@ active segment `--c-blue-tint` with blue text and no border of its own. With a
 real pointer on the middle segment: that segment tints `--c-bg-tint`, the other
 two do not, the group border stays `--c-border-control`. Filtering to
 Gutschriften leaves one row, back to Alle restores six.
+
+---
+
+## 15. Keine Rollleiste in den Kontolisten
+
+The returns table scrolled horizontally, which cut off the first column header
+("ÜCKSENDUNG" instead of "RÜCKSENDUNG"). Horizontal scrolling inside a page is
+a last resort, not a layout.
+
+### Why it scrolled
+
+`.konto-table` was `width: max-content` with `min-width: 100%`, copied from the
+Stückliste. That is right there: twelve columns of numbers that must not break.
+It is wrong for the account lists, whose widest columns are prose (Artikel,
+Grund, Referenz), and prose would rather wrap than push the reader sideways.
+
+### What the tables do now
+
+`width: 100%`, and the content adapts in four steps before anything would
+scroll:
+
+| width | what gives way |
+|---|---|
+| all | table fills its frame, text wraps between words, German hyphenation on |
+| ≤ 1279 | cell padding 16 to 12/8, status pill and action label may wrap |
+| ≤ 1100 | font 14 to 13, headers 11 to 10, action buttons stack |
+| ≤ 1023 | padding to 10/4, and as a last resort breaking inside a word |
+| ≤ 900 | the sidebar becomes a chip row, the full width is free |
+
+Headers no longer carry `white-space: nowrap`, so "Gutschrift netto" and
+"Zuletzt bestellt" wrap onto two lines instead of setting a floor for the whole
+column. Only numbers, dates and amounts still refuse to break.
+
+### Hyphenation instead of chopping
+
+The first attempt used `overflow-wrap: anywhere`, which fits but cuts
+"Verbindungsklemme" in the middle of the word. `break-word` reads better but
+three tables then overflowed again below 1100 px.
+
+`hyphens: auto` on `<html lang="de">` resolves it: the browser breaks
+"Verbin-dungsklemme" and "Ver-packungs-einheit" at real syllable boundaries.
+That alone left a single table 17 px over at 960 px, so breaking inside a word
+survives as a last resort below 1024 px only.
+
+### One column removed on the way
+
+The order list carried both "Nochmal bestellen" and a "Details" button. The
+order number in the first column already links to the detail page, so the button
+was a duplicate, and at 157 px it was the widest column in the table. Removed.
+
+### Verified
+
+**104 measurements**: thirteen account pages at 1680, 1440, 1280, 1100, 1024,
+960, 900 and 768 px. No table scrolls, no page shifts sideways.
+
+`stueckliste.html` still scrolls horizontally, deliberately. Twelve columns of
+matched positions, numbers that must not break, and it was specified that way.
