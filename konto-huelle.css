@@ -741,3 +741,16 @@
 .konto-annahme-name { display: block; font-weight: 600; }
 .konto-annahme.ist-aktiv .konto-annahme-name { color: var(--c-success); }
 .konto-annahme-note { display: block; font-size: 13px; color: var(--c-text-secondary); line-height: 1.45; }
+
+/* Hilfetext und Fehlermeldung eines Formulars. */
+.konto-feld-hilfe { margin: 8px 0 0; font-size: 13px; color: var(--c-text-secondary); line-height: 1.45; }
+.konto-feld-fehler {
+  margin: 8px 0 0;
+  padding: 8px 12px;
+  background: #fdecef;
+  border: 1px solid var(--c-danger);
+  border-radius: var(--radius-xs);
+  font-size: 13px;
+  color: var(--c-text);
+  line-height: 1.45;
+}

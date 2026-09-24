@@ -392,11 +392,79 @@
     '<div><dt>Passwort</dt><dd>zuletzt geändert am ' + D('2026-02-14') + '</dd></div>';
 
   /* Der Hinweis steht dort, wo er gilt, und traegt seine Handlung
-     (Befund B12/F5). */
-  document.querySelector('[data-bank]').innerHTML =
-    '<p class="konto-empty-text" style="margin:0 0 16px;max-width:none">Noch keine Bankverbindung hinterlegt. ' +
-    'Gutschriften aus Rücksendungen können erst danach ausgezahlt werden.</p>' +
-    '<button type="button" class="konto-btn primary" data-iban>IBAN hinterlegen</button>';
+     (Befund B12/F5). Die Handlung fuehrt sie auch aus: der Knopf oeffnet das
+     Formular, statt nur eine Meldung abzusetzen. Gespeichert wird in den
+     gemeinsamen Speicher, weil Zahlungsart und Belegliste dieselbe Angabe
+     brauchen. */
+  var elBank = document.querySelector('[data-bank]');
+  var bankOffen = false;
+  var bankFehler = null;
+
+  function bankZeichnen() {
+    var b = K.bankLesen();
+    if (bankOffen) {
+      elBank.innerHTML =
+        '<div class="konto-felder" style="margin-top:0">' +
+          '<label class="konto-feld"><span class="konto-feld-label">Kontoinhaber</span>' +
+            '<input type="text" data-inhaber value="' + E(b ? b.inhaber : K.firma.name) + '" autocomplete="off"></label>' +
+          '<label class="konto-feld"><span class="konto-feld-label">IBAN</span>' +
+            '<input type="text" data-iban-feld value="' + E(b ? K.ibanGruppiert(b.iban) : '') + '" ' +
+            'placeholder="DE02 1203 0000 0000 2020 51" autocomplete="off" spellcheck="false" ' +
+            'aria-describedby="iban-hilfe"></label>' +
+        '</div>' +
+        '<p class="konto-feld-hilfe" id="iban-hilfe">Sie finden die IBAN auf Ihrem Kontoauszug. ' +
+          'Wir prüfen die Prüfziffer, bevor wir sie speichern.</p>' +
+        (bankFehler ? '<p class="konto-feld-fehler" role="alert">' + E(bankFehler) + '</p>' : '') +
+        '<div class="konto-zeilenleiste">' +
+          '<span class="konto-zeilenleiste-links">' +
+            '<button type="button" class="konto-btn primary" data-bank-speichern>Speichern</button>' +
+            '<button type="button" class="konto-btn ghost" data-bank-abbrechen>Abbrechen</button>' +
+          '</span>' +
+          (b ? '<span class="konto-zeilenleiste-rechts">' +
+            '<button type="button" class="konto-btn danger" data-bank-loeschen>Bankverbindung entfernen</button>' +
+          '</span>' : '') +
+        '</div>';
+      var eingabe = elBank.querySelector('[data-iban-feld]');
+      if (eingabe) eingabe.focus();
+      return;
+    }
+    elBank.innerHTML = b
+      ? '<dl class="konto-dl">' +
+          '<div><dt>Kontoinhaber</dt><dd>' + E(b.inhaber) + '</dd></div>' +
+          '<div><dt>IBAN</dt><dd><span class="konto-num">' + E(K.ibanVerdeckt(b.iban)) + '</span></dd></div>' +
+          '<div><dt>Hinterlegt am</dt><dd>' + K.datum(b.seit) + '</dd></div>' +
+        '</dl>' +
+        '<div class="konto-head-actions" style="margin-top:16px">' +
+          '<button type="button" class="konto-btn ghost" data-bank-oeffnen>Bankverbindung ändern</button>' +
+        '</div>'
+      : '<p class="konto-empty-text" style="margin:0 0 16px;max-width:none">Noch keine Bankverbindung hinterlegt. ' +
+        'Gutschriften aus Rücksendungen können erst danach ausgezahlt werden, und der Bankeinzug ' +
+        'steht als Zahlungsart erst danach zur Verfügung.</p>' +
+        '<button type="button" class="konto-btn primary" data-bank-oeffnen>IBAN hinterlegen</button>';
+  }
+  bankZeichnen();
+
+  elBank.addEventListener('click', function (e) {
+    if (e.target.closest('[data-bank-oeffnen]')) { bankOffen = true; bankFehler = null; bankZeichnen(); return; }
+    if (e.target.closest('[data-bank-abbrechen]')) { bankOffen = false; bankFehler = null; bankZeichnen(); return; }
+    if (e.target.closest('[data-bank-loeschen]')) {
+      K.bankSchreiben(null); bankOffen = false; bankFehler = null; bankZeichnen();
+      K.melden('Bankverbindung entfernt');
+      return;
+    }
+    if (e.target.closest('[data-bank-speichern]')) {
+      var inhaber = elBank.querySelector('[data-inhaber]').value.trim();
+      var iban = elBank.querySelector('[data-iban-feld]').value.toUpperCase().replace(/[\s-]/g, '');
+      if (!inhaber) { bankFehler = 'Bitte tragen Sie den Kontoinhaber ein.'; bankZeichnen(); return; }
+      bankFehler = K.ibanPruefen(iban);
+      if (bankFehler) { bankZeichnen(); return; }
+      K.bankSchreiben({ inhaber: inhaber, iban: iban, seit: '2026-09-24' });
+      bankOffen = false;
+      bankZeichnen();
+      K.melden('Bankverbindung gespeichert');
+    }
+  });
+  document.addEventListener('conrad:bank-changed', bankZeichnen);
 
   document.querySelector('[data-hinweis]').innerHTML =
     '<div class="konto-note"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>' +

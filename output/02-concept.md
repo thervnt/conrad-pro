@@ -1284,3 +1284,59 @@ back to the resting state with the new method set.
 
 48 measurements across sixteen pages at 1680, 1280 and 1024 px: no table
 scrolls, no page shifts, no page mixes heading constructions.
+
+---
+
+## 21. Die IBAN lässt sich jetzt wirklich hinterlegen
+
+"IBAN hinterlegen" set a toast and did nothing. Three places in the account area
+said the bank details were missing and none of them could take them.
+
+### Das Formular
+
+The button opens the card into an edit state, the same pattern as the addresses
+and the payment method: Kontoinhaber, IBAN, a help line ("Sie finden die IBAN
+auf Ihrem Kontoauszug"), Speichern and Abbrechen. Once stored, the card shows
+the holder, the IBAN **masked to country, check digits and the last four**, the
+date, and a button to change it. Removing it is a danger action inside the open
+state, not a button standing next to the primary one.
+
+### Geprüft wird wirklich
+
+Not a length check. The IBAN is validated the way the standard defines it: the
+first four characters move to the end, letters become numbers, and the whole
+thing modulo 97 has to equal 1. That catches transposed digits, which a length
+check waves through.
+
+The error messages name the actual problem rather than saying "invalid":
+
+| input | message |
+|---|---|
+| `DE02 1203 0000 0000 2020 52` | Die Prüfziffer stimmt nicht. Bitte vergleichen Sie die IBAN mit Ihrem Kontoauszug. |
+| `DE0212030000000020205` | Eine IBAN aus DE hat 22 Zeichen, diese hat 21. |
+| `XX1234567890` | Für das Länderkürzel XX können wir die IBAN nicht prüfen. |
+
+Ten country lengths are known (DE, AT, CH, NL, FR, IT, BE, LU, PL, ES). An
+unknown country is not rejected as wrong, it is declared as unverifiable, which
+is the honest distinction.
+
+### Drei Seiten hängen daran
+
+The bank details live in `localStorage` under `conradBankverbindung`, because
+three pages depend on the same fact:
+
+| page | before | after entry |
+|---|---|---|
+| Profil | "Noch keine Bankverbindung hinterlegt" | holder, masked IBAN, date |
+| Zahlungsart | Bankeinzug marked "Bankverbindung fehlt noch", saving blocked | Bankeinzug selectable and savable |
+| Rechnungen | hint above the list | hint gone |
+
+A `conrad:bank-changed` event keeps open pages in sync. A hint that stays up
+after the user has done the thing is worse than no hint.
+
+### Verified
+
+Entered a wrong check digit, got the right message. Entered a valid IBAN, saw it
+stored masked, then found the payment page offering Bankeinzug and saving it,
+and the invoice hint gone. Removed the details again: both hints came back and
+the profile offered "IBAN hinterlegen".

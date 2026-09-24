@@ -310,6 +310,55 @@
     return positionen.length;
   }
 
+  // --- Bankverbindung ------------------------------------------------------
+  // Liegt im Speicher, weil drei Seiten davon abhaengen: das Profil zeigt sie,
+  // die Zahlungsart braucht sie fuer den Bankeinzug, die Belegliste weist auf
+  // ihr Fehlen hin. Ohne gemeinsamen Zustand wuerde eine Seite behaupten, die
+  // Angabe fehle, waehrend sie auf der anderen schon steht.
+  var BANK_KEY = 'conradBankverbindung';
+  function bankLesen() {
+    try { return JSON.parse(localStorage.getItem(BANK_KEY)) || null; } catch (e) { return null; }
+  }
+  function bankSchreiben(daten) {
+    try {
+      if (daten) localStorage.setItem(BANK_KEY, JSON.stringify(daten));
+      else localStorage.removeItem(BANK_KEY);
+    } catch (e) { /* ohne Speicher */ }
+    document.dispatchEvent(new CustomEvent('conrad:bank-changed'));
+  }
+
+  // Pruefsumme nach ISO 13616: die ersten vier Zeichen ans Ende, Buchstaben in
+  // Zahlen, und der Rest modulo 97 muss 1 sein. Faengt Zahlendreher ab, die
+  // eine reine Laengenpruefung durchlaesst.
+  var IBAN_LAENGE = { DE: 22, AT: 20, CH: 21, NL: 18, FR: 27, IT: 27, BE: 16, LU: 20, PL: 28, ES: 24 };
+  function ibanPruefen(roh) {
+    var iban = String(roh || '').toUpperCase().replace(/[\s-]/g, '');
+    if (!/^[A-Z]{2}[0-9]{2}[A-Z0-9]+$/.test(iban)) return 'Bitte geben Sie eine IBAN ein, zum Beispiel DE02 1203 0000 0000 2020 51.';
+    var land = iban.slice(0, 2);
+    if (!IBAN_LAENGE[land]) return 'Für das Länderkürzel ' + land + ' können wir die IBAN nicht prüfen.';
+    if (iban.length !== IBAN_LAENGE[land]) {
+      return 'Eine IBAN aus ' + land + ' hat ' + IBAN_LAENGE[land] + ' Zeichen, diese hat ' + iban.length + '.';
+    }
+    var umgestellt = iban.slice(4) + iban.slice(0, 4);
+    var zahl = '';
+    for (var i = 0; i < umgestellt.length; i++) {
+      var z = umgestellt.charAt(i);
+      zahl += /[0-9]/.test(z) ? z : String(z.charCodeAt(0) - 55);
+    }
+    var rest = 0;
+    for (var j = 0; j < zahl.length; j++) rest = (rest * 10 + Number(zahl.charAt(j))) % 97;
+    if (rest !== 1) return 'Die Prüfziffer stimmt nicht. Bitte vergleichen Sie die IBAN mit Ihrem Kontoauszug.';
+    return null;
+  }
+  function ibanGruppiert(iban) {
+    return String(iban).replace(/(.{4})/g, '$1 ').trim();
+  }
+  // Anzeigen ohne die vollstaendige Nummer: Land, Pruefziffer, letzte vier.
+  function ibanVerdeckt(iban) {
+    var i = String(iban);
+    return i.slice(0, 4) + ' ' + '•••• '.repeat(Math.max(0, Math.ceil((i.length - 8) / 4))).trim() + ' ' + i.slice(-4);
+  }
+
   // --- Kurzmeldung ---------------------------------------------------------
   // Gleicher Baustein wie die Snackbar der Produktseite.
   function melden(text) {
@@ -333,7 +382,9 @@
     merklisten: merklisten, stuecklisten: stuecklisten,
     euro: euro, datum: datum, tageBis: tageBis, esc: esc, netto: netto,
     person: person, adresse: adresse, pille: pille, STATUS: STATUS,
-    nachbestellen: nachbestellen, melden: melden
+    nachbestellen: nachbestellen, melden: melden,
+    bankLesen: bankLesen, bankSchreiben: bankSchreiben,
+    ibanPruefen: ibanPruefen, ibanGruppiert: ibanGruppiert, ibanVerdeckt: ibanVerdeckt
   };
 })();
 

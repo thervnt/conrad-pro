@@ -364,6 +364,10 @@
   var gespeichert = 'rechnung';
   var gewaehlt = gespeichert;
   var aendern = false;
+  /* Ob der Bankeinzug bereitsteht, entscheidet die hinterlegte
+     Bankverbindung - dieselbe Angabe, die im Profil eingetragen wird. */
+  function bankFehlt() { return !K.bankLesen(); }
+  function braucht(o) { return o && o.braucht && bankFehlt() ? o.braucht : null; }
 
   var el = document.querySelector('[data-inhalt]');
   function finde(id) { return OPTIONEN.filter(function (o) { return o.id === id; })[0]; }
@@ -393,7 +397,8 @@
             '</span>' +
             '<span><span class="konto-annahme-name">' + E(x.name) + '</span>' +
             '<span class="konto-annahme-note">' + E(x.note) +
-              (x.braucht ? ' <strong>Bankverbindung fehlt noch.</strong>' : '') + '</span></span>' +
+              (braucht(x) ? ' <strong>Bankverbindung fehlt noch.</strong> ' +
+                '<a href="konto-profil.html#bankverbindung">Jetzt hinterlegen</a>' : '') + '</span></span>' +
           '</div>';
         }).join('') +
       '</div>' +
@@ -402,7 +407,7 @@
 
   function auswahl() {
     var neu = finde(gewaehlt);
-    var offen = !!(neu && neu.braucht);
+    var offen = !!braucht(neu);
     return '<div class="konto-card">' +
       '<div class="konto-card-head"><h2 class="konto-card-title">Zahlungsart wählen</h2></div>' +
       '<fieldset style="border:0;padding:0;margin:0">' +
@@ -413,7 +418,7 @@
             '<span class="konto-option-body">' +
               '<span class="konto-option-name">' + E(o.name) + '</span>' +
               '<span class="konto-option-note">' + E(o.note) + '</span>' +
-              (o.braucht && o.id === gewaehlt
+              (braucht(o) && o.id === gewaehlt
                 ? '<span class="konto-option-bedarf">' + E(o.braucht) +
                   ' <a href="konto-profil.html#bankverbindung">Bankverbindung eintragen</a></span>'
                 : '') +
@@ -453,6 +458,7 @@
   document.addEventListener('keydown', function (e) {
     if (e.key === 'Escape' && aendern) { aendern = false; gewaehlt = gespeichert; zeichne(); }
   });
+  document.addEventListener('conrad:bank-changed', zeichne);
 })();
 </script>
 </body>
