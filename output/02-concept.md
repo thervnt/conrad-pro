@@ -543,3 +543,60 @@ Five groups, twelve entries, every one with a target:
 Cross links that now exist in both directions: order and invoice, order and
 return, user and their orders, cost centre and its orders, payment option and
 the bank details it requires, profile and company data.
+
+---
+
+## 10. Übersicht entrümpelt
+
+Review note: the two list cards and the three reference cards had ragged
+bottoms. Measured at 1680 px: 377 against 301 px in the list row, 196 / 129 /
+129 in the row below.
+
+The heights were the symptom. The cause was that ten bordered containers on one
+page gave three different kinds of content the same weight. An overdue invoice
+and the company's own delivery address carried the same border, the same heading
+size and the same blue link in the top right corner.
+
+### What was built
+
+**Equal height with the spare space earning its keep.** The list row stretches,
+and each card gets a footer pinned to its bottom edge. The footer says something
+about the whole stock, not about the four rows above it:
+
+- Bestellungen: "7 Bestellungen in den letzten 12 Monaten"
+- Rechnungen: "3.360,85 € offen, davon 92,95 € überfällig"
+
+The "Alle anzeigen" link moves from the heading row into the footer, so the
+heading row carries nothing but the heading, and the link sits where the eye
+finishes reading.
+
+**Three reference cards become one strip.** Standard delivery address, payment
+method and company now sit in a single bordered block with three columns and
+hairline dividers. Labels drop from h2 in a box to a small uppercase label, and
+each column keeps its own link. Equal height by construction.
+
+**The reorder card shows three articles instead of four.** At 557 px it was the
+tallest element on the page and pushed both lists below the fold.
+
+### Result
+
+| | before | after |
+|---|---|---|
+| bordered containers | 10 | 8 |
+| list row | 377 / 301 px | 427 / 427 px |
+| reference row | 196 / 129 / 129 px | one strip, 149 px |
+| reorder card | 557 px | 426 px |
+| page height | 2043 px | 1726 px |
+
+### Rejected
+
+**Tabs over the two lists.** One container instead of two, but it hides the
+overdue invoice behind a click. That is the one thing the page exists to show.
+
+**Merging both lists into one "Letzte Vorgänge".** Fewer boxes, but orders and
+documents are two mental models with two different actions.
+
+**Dropping the reference data from the dashboard entirely.** That would be seven
+containers and the page would end with the work rather than with lookup data.
+Against it: before a large order, a glance at which address and which payment
+method are active is worth something. Recorded as an option, not built.

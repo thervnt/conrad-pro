@@ -2272,6 +2272,53 @@ button { font: inherit; cursor: pointer; }
   gap: 16px;
   align-items: start;
 }
+/* Zwei Listen nebeneinander schliessen buendig ab. Der freie Platz in der
+   kuerzeren Karte bleibt nicht leer, sondern traegt die Fusszeile - sonst
+   tauscht man ausgefranste Unterkanten gegen Leerraum. */
+.konto-grid.is-gleich { align-items: stretch; }
+.konto-grid.is-gleich .konto-card { display: flex; flex-direction: column; }
+.konto-card-foot {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-top: auto;
+  padding-top: 16px;
+  border-top: 1px solid var(--c-border);
+  font-size: 13px;
+  color: var(--c-text-secondary);
+}
+.konto-card-foot strong { color: var(--c-text); font-weight: 600; }
+.konto-card-foot a { font-weight: 600; white-space: nowrap; }
+
+/* --- Streifen fuer Nachschlagewerte -------------------------------------- */
+/* Adresse, Zahlungsart und Unternehmen sind keine Aufgaben. Als drei eigene
+   Karten trugen sie dasselbe Gewicht wie die Listen darueber und franste die
+   Reihe aus. Ein Rahmen, drei Spalten, kleinere Beschriftung. */
+.konto-strip {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  background: var(--c-bg-white);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius);
+}
+.konto-strip-col { padding: 16px; }
+.konto-strip-col + .konto-strip-col { border-left: 1px solid var(--c-border); }
+.konto-strip-label {
+  margin: 0 0 8px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--c-text-secondary);
+}
+.konto-strip-value { margin: 0; font-size: 14px; font-weight: 600; line-height: 1.4; }
+.konto-strip-note { margin: 4px 0 0; font-size: 13px; color: var(--c-text-secondary); line-height: 1.5; }
+.konto-strip-link { display: inline-block; margin-top: 8px; font-size: 13px; font-weight: 500; }
+@media (max-width: 767px) {
+  .konto-strip-col + .konto-strip-col { border-left: none; border-top: 1px solid var(--c-border); }
+}
 
 /* --- Werkzeugleiste ueber Listen ----------------------------------------- */
 .konto-toolbar {

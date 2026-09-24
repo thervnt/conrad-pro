@@ -190,46 +190,25 @@
         <div class="konto-card" data-schnell></div>
       </div>
 
-      <div class="konto-section konto-grid">
+      <div class="konto-section konto-grid is-gleich">
         <div class="konto-card">
           <div class="konto-card-head">
             <h2 class="konto-card-title">Letzte Bestellungen</h2>
-            <a class="konto-card-link" href="konto-bestellungen.html">Alle anzeigen</a>
           </div>
           <div data-letzte></div>
+          <p class="konto-card-foot" data-fuss-bestellungen></p>
         </div>
         <div class="konto-card">
           <div class="konto-card-head">
             <h2 class="konto-card-title">Offene Rechnungen</h2>
-            <a class="konto-card-link" href="konto-rechnungen.html">Alle anzeigen</a>
           </div>
           <div data-offene></div>
+          <p class="konto-card-foot" data-fuss-rechnungen></p>
         </div>
       </div>
 
-      <div class="konto-section konto-grid">
-        <div class="konto-card">
-          <div class="konto-card-head">
-            <h2 class="konto-card-title">Standard-Lieferadresse</h2>
-            <a class="konto-card-link" href="#">Bearbeiten</a>
-          </div>
-          <div data-adresse></div>
-        </div>
-        <div class="konto-card">
-          <div class="konto-card-head">
-            <h2 class="konto-card-title">Zahlungsart</h2>
-            <a class="konto-card-link" href="#">Bearbeiten</a>
-          </div>
-          <div data-zahlart></div>
-        </div>
-        <div class="konto-card">
-          <div class="konto-card-head">
-            <h2 class="konto-card-title">Unternehmen</h2>
-            <a class="konto-card-link" href="konto-unternehmen.html">Anzeigen</a>
-          </div>
-          <div data-unternehmen></div>
-        </div>
-      </div>
+      <!-- Nachschlagewerte, nicht Aufgaben: ein Rahmen statt drei. -->
+      <div class="konto-section konto-strip" data-stamm></div>
 
     </div>
   </div>
@@ -476,7 +455,7 @@
     if (b.status === 'storniert') return;
     b.positionen.forEach(function (p) {
       var schluessel = p.sku + '|' + p.packSize;
-      if (gesehen[schluessel] || schnell.length >= 4) return;
+      if (gesehen[schluessel] || schnell.length >= 3) return;
       gesehen[schluessel] = true;
       schnell.push({ p: p, datum: b.datum, nr: b.nr });
     });
@@ -536,23 +515,42 @@
       }).join('') + '</tbody></table></div>'
     : '<p class="konto-empty-text" style="margin:0">Alle Rechnungen sind ausgeglichen.</p>';
 
-  /* --- Stammdatenkarten -------------------------------------------------- */
+  /* --- Fusszeilen: sie richten die beiden Karten aus und sagen dabei etwas
+         ueber den ganzen Bestand, nicht nur ueber die vier Zeilen darueber. */
+  var jahr = K.bestellungen.length;
+  document.querySelector('[data-fuss-bestellungen]').innerHTML =
+    '<span>' + jahr + ' Bestellungen in den letzten 12 Monaten</span>' +
+    '<a href="konto-bestellungen.html">Alle anzeigen</a>';
+
+  var ueberSumme = ueber.reduce(function (s, r) { return s + r.netto; }, 0);
+  document.querySelector('[data-fuss-rechnungen]').innerHTML =
+    '<span><strong>' + EU(offenSumme) + '</strong> offen' +
+      (ueber.length ? ', davon <strong>' + EU(ueberSumme) + '</strong> überfällig' : '') + '</span>' +
+    '<a href="konto-rechnungen.html">Alle anzeigen</a>';
+
+  /* --- Streifen mit den Nachschlagewerten -------------------------------- */
   var a = K.lieferadressen[0];
-  document.querySelector('[data-adresse]').innerHTML =
-    '<p style="margin:0;font-size:14px;line-height:1.5">' +
-    '<strong>' + E(a.label) + '</strong><br>' + E(a.name) + '<br>' +
-    E(a.zeile) + '<br>' + E(a.ort) + '</p>' +
-    '<p class="konto-kpi-note" style="margin-top:8px">' +
-    (K.lieferadressen.length - 1) + ' weitere Lieferadresse hinterlegt</p>';
-
-  document.querySelector('[data-zahlart]').innerHTML =
-    '<p style="margin:0;font-size:14px"><strong>' + E(K.firma.zahlart) + '</strong></p>' +
-    '<p class="konto-kpi-note" style="margin-top:4px">Zahlungsziel ' + E(K.firma.zahlungsziel) + '</p>';
-
-  document.querySelector('[data-unternehmen]').innerHTML =
-    '<p style="margin:0;font-size:14px"><strong>' + E(K.firma.name) + '</strong></p>' +
-    '<p class="konto-kpi-note" style="margin-top:4px">' +
-    K.benutzer.length + ' Benutzer \u00b7 ' + K.kostenstellen.length + ' Kostenstellen</p>';
+  document.querySelector('[data-stamm]').innerHTML =
+    '<div class="konto-strip-col">' +
+      '<p class="konto-strip-label">Standard-Lieferadresse</p>' +
+      '<p class="konto-strip-value">' + E(a.label) + '</p>' +
+      '<p class="konto-strip-note">' + E(a.zeile) + ', ' + E(a.ort) + '<br>' +
+        (K.lieferadressen.length - 1) + ' weitere hinterlegt</p>' +
+      '<a class="konto-strip-link" href="konto-adressen.html">Adressen verwalten</a>' +
+    '</div>' +
+    '<div class="konto-strip-col">' +
+      '<p class="konto-strip-label">Zahlungsart</p>' +
+      '<p class="konto-strip-value">' + E(K.firma.zahlart) + '</p>' +
+      '<p class="konto-strip-note">Zahlungsziel ' + E(K.firma.zahlungsziel) + '<br>Nettopreise (exkl. MwSt.)</p>' +
+      '<a class="konto-strip-link" href="konto-zahlungsart.html">Zahlungsart ändern</a>' +
+    '</div>' +
+    '<div class="konto-strip-col">' +
+      '<p class="konto-strip-label">Unternehmen</p>' +
+      '<p class="konto-strip-value">' + E(K.firma.name) + '</p>' +
+      '<p class="konto-strip-note">' + K.benutzer.length + ' Benutzer, ' +
+        K.kostenstellen.length + ' Kostenstellen<br>Kundennummer ' + E(K.firma.kundennummer) + '</p>' +
+      '<a class="konto-strip-link" href="konto-unternehmen.html">Unternehmensdaten</a>' +
+    '</div>';
 })();
 </script>
 </body>
