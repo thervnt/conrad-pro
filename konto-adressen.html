@@ -375,14 +375,14 @@
     '<p class="konto-kpi-note" style="margin-top:8px">Die Rechnungsadresse folgt den Unternehmensdaten ' +
     'und lässt sich nur dort ändern.</p>';
 
-  /* Die Adressen sind Zeilen in einer Karte, nicht je eine eigene Karte.
-     Dasselbe Muster wie sonst im Kontobereich, ein Rahmen statt drei.
-     Jede Zeile traegt dieselben Handlungen: in der Produktion hat die
-     Rechnungsadresse ein "bearbeiten" und die Lieferadresse gar nichts
-     (Befund F4). Dazu die B2B-Felder, die dort fehlen (Befund F3). */
-  document.querySelector('[data-liefer]').innerHTML = K.lieferadressen.map(function (a) {
-    return '<div class="konto-pos">' +
-      '<div class="konto-pos-body">' +
+  /* Eine Handlung je Zeile: "Bearbeiten". Alles Weitere erscheint erst, wenn
+     die Zeile geoeffnet ist. Vorher stand daneben ein Punktemenue - zwei
+     Bedienelemente statt einem, und fuer die Standardadresse enthielt es nur
+     einen einzigen Eintrag. */
+  var offeneId = null;
+
+  function ansicht(a) {
+    return '<div class="konto-pos-body">' +
         '<p class="konto-pos-name">' + E(a.label) +
           (a.standard ? ' <span class="bom-status ok" style="margin-left:8px">Standard</span>' : '') + '</p>' +
         '<dl class="konto-dl" style="margin-top:8px">' +
@@ -392,47 +392,76 @@
           '<div><dt>Kostenstelle</dt><dd>' + (a.id === 'a2' ? 'KST-4200' : 'keine Vorbelegung') + '</dd></div>' +
         '</dl>' +
       '</div>' +
-      /* Eine sichtbare Handlung je Zeile, der Rest im Menue dahinter. Drei
-         gleich aussehende Knoepfe je Adresse liessen nicht erkennen, welcher
-         der uebliche ist, und "Loeschen" stand gleichberechtigt daneben. */
       '<div class="konto-pos-right">' +
-        '<span class="konto-mehr">' +
-          '<button type="button" class="konto-btn ghost" data-bearbeiten="' + E(a.id) + '">Bearbeiten</button>' +
-          '<button type="button" class="konto-btn ghost konto-mehr-knopf" data-mehr="' + E(a.id) + '" ' +
-            'aria-expanded="false" aria-haspopup="true" aria-label="Weitere Aktionen für ' + E(a.label) + '">' +
-            '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg>' +
-          '</button>' +
-          '<span class="konto-mehr-menue" hidden>' +
-            (a.standard ? '' : '<button type="button" data-standard="' + E(a.id) + '">Als Standard festlegen</button>') +
-            '<button type="button" data-kopieren="' + E(a.id) + '">Adresse kopieren</button>' +
-            (a.standard ? '' : '<button type="button" class="ist-loeschen" data-loeschen="' + E(a.id) + '">Löschen</button>') +
-          '</span>' +
-        '</span>' +
-      '</div></div>';
-  }).join('');
-
-  function menueSchliessen() {
-    [].forEach.call(document.querySelectorAll('.konto-mehr-menue'), function (m) { m.hidden = true; });
-    [].forEach.call(document.querySelectorAll('[data-mehr]'), function (b) { b.setAttribute('aria-expanded', 'false'); });
+        '<button type="button" class="konto-btn ghost" data-bearbeiten="' + E(a.id) + '">Bearbeiten</button>' +
+      '</div>';
   }
+
+  function feld(bez, wert, platzhalter) {
+    return '<label class="konto-feld">' +
+      '<span class="konto-feld-label">' + E(bez) + '</span>' +
+      '<input type="text" value="' + E(wert || '') + '"' +
+        (platzhalter ? ' placeholder="' + E(platzhalter) + '"' : '') + '>' +
+    '</label>';
+  }
+
+  /* Geoeffnet: die Felder zum Aendern, darunter eine Leiste. Links, was die
+     Aenderung abschliesst, rechts die selteneren Handlungen. Die
+     Standardadresse kann weder erneut Standard werden noch geloescht - sie
+     zeigt diese Handlungen deshalb gar nicht. */
+  function bearbeiten(a) {
+    return '<div class="konto-pos-body">' +
+        '<p class="konto-pos-name">' + E(a.label) +
+          (a.standard ? ' <span class="bom-status ok" style="margin-left:8px">Standard</span>' : '') + '</p>' +
+        '<div class="konto-felder">' +
+          feld('Bezeichnung', a.label) +
+          feld('Empfänger', a.name) +
+          feld('Straße und Nummer', a.zeile) +
+          feld('PLZ und Ort', a.ort) +
+          feld('Ansprechpartner', a.ansprech, 'nicht hinterlegt') +
+          feld('Kostenstelle', a.id === 'a2' ? 'KST-4200' : '', 'keine Vorbelegung') +
+        '</div>' +
+        '<div class="konto-zeilenleiste">' +
+          '<span class="konto-zeilenleiste-links">' +
+            '<button type="button" class="konto-btn primary" data-speichern="' + E(a.id) + '">Speichern</button>' +
+            '<button type="button" class="konto-btn ghost" data-abbrechen>Abbrechen</button>' +
+          '</span>' +
+          (a.standard ? '' :
+            '<span class="konto-zeilenleiste-rechts">' +
+              '<button type="button" class="konto-btn ghost" data-standard="' + E(a.id) + '">Als Standard festlegen</button>' +
+              '<button type="button" class="konto-btn danger" data-loeschen="' + E(a.id) + '">Adresse löschen</button>' +
+            '</span>') +
+        '</div>' +
+      '</div>';
+  }
+
+  function zeichne() {
+    document.querySelector('[data-liefer]').innerHTML = K.lieferadressen.map(function (a) {
+      var auf = a.id === offeneId;
+      return '<div class="konto-pos' + (auf ? ' ist-offen' : '') + '">' +
+        (auf ? bearbeiten(a) : ansicht(a)) + '</div>';
+    }).join('');
+  }
+  zeichne();
+
   document.addEventListener('click', function (e) {
-    var mehr = e.target.closest('[data-mehr]');
-    if (mehr) {
-      var menue = mehr.nextElementSibling;
-      var offen = !menue.hidden;
-      menueSchliessen();
-      menue.hidden = offen;
-      mehr.setAttribute('aria-expanded', offen ? 'false' : 'true');
+    var b = e.target.closest('[data-bearbeiten]');
+    if (b) {
+      offeneId = b.dataset.bearbeiten;
+      zeichne();
+      var ersteEingabe = document.querySelector('.konto-pos.ist-offen input');
+      if (ersteEingabe) ersteEingabe.focus();
       return;
     }
-    if (!e.target.closest('.konto-mehr-menue')) menueSchliessen();
+    if (e.target.closest('[data-abbrechen]')) { offeneId = null; zeichne(); return; }
+    if (e.target.closest('[data-speichern]')) { offeneId = null; zeichne(); K.melden('Adresse gespeichert'); return; }
+    if (e.target.closest('[data-standard]')) { offeneId = null; zeichne(); K.melden('Als Standard-Lieferadresse gesetzt'); return; }
+    if (e.target.closest('[data-loeschen]')) { offeneId = null; zeichne(); K.melden('Adresse gelöscht'); return; }
     if (e.target.closest('[data-neu]')) K.melden('Neue Lieferadresse anlegen');
-    if (e.target.closest('[data-bearbeiten]')) K.melden('Adresse bearbeiten');
-    if (e.target.closest('[data-standard]')) { menueSchliessen(); K.melden('Als Standard-Lieferadresse gesetzt'); }
-    if (e.target.closest('[data-kopieren]')) { menueSchliessen(); K.melden('Adresse in die Zwischenablage kopiert'); }
-    if (e.target.closest('[data-loeschen]')) { menueSchliessen(); K.melden('Adresse löschen'); }
   });
-  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') menueSchliessen(); });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && offeneId) { offeneId = null; zeichne(); }
+  });
 })();
 </script>
 </body>

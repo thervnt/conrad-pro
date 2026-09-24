@@ -1153,3 +1153,39 @@ them later means adding rows, not rebuilding it.
 table scrolls, no page shifts sideways, no page mixes heading constructions,
 every page has a heading. The nine items were each checked individually against
 the built pages.
+
+---
+
+## 18. Korrektur: Lieferadressen wie angefordert
+
+The instruction in 17.6 was: **one "Bearbeiten" button, the further interactions
+appear on click.** I built "Bearbeiten" plus an overflow menu, wrote that I had
+rejected the proposal, and filled the menu with "Adresse kopieren", an action
+nobody asked for. For the default address that menu then held exactly one item.
+
+Two things wrong with that, independent of each other. It was not what was
+asked, and it was bad on its own terms: two controls where one was specified,
+and a menu whose reason to exist was an invented entry.
+
+### Now built as specified
+
+**At rest**: the address and one button, "Bearbeiten".
+
+**After the click**: the row opens on a tinted surface with the editable fields
+(Bezeichnung, Empfänger, Straße und Nummer, PLZ und Ort, Ansprechpartner,
+Kostenstelle) and a bar underneath. Left, what completes the change: Speichern,
+Abbrechen. Right, the rarer actions: Als Standard festlegen, Adresse löschen in
+the danger colour.
+
+The default address shows neither of the two right-hand actions, because it
+cannot become the default again and cannot be deleted. Escape closes the row.
+
+"Adresse kopieren" is gone. `.konto-mehr` and its rules were removed rather than
+left as dead code.
+
+### Verified
+
+At rest: one button per row. Open on the non-default address: Speichern,
+Abbrechen, Als Standard festlegen, Adresse löschen, six labelled fields. Open on
+the default address: Speichern and Abbrechen only. No overflow menu anywhere on
+the page.
