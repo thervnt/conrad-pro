@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Bestellungen · Conrad Electronic</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="konto.css">
+<script src="cart-seed.js"></script>
+</head>
+<body>
+<!-- TOP PROMO -->
+<div class="promo-strip">
+  <div class="promo-strip-inner">
+    <span><span class="check-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" aria-hidden="true"><path d="M530.8 134.1C545.1 144.5 548.3 164.5 537.9 178.8L281.9 530.8C276.4 538.4 267.9 543.1 258.5 543.9C249.1 544.7 240 541.2 233.4 534.6L105.4 406.6C92.9 394.1 92.9 373.8 105.4 361.3C117.9 348.8 138.2 348.8 150.7 361.3L252.2 462.8L486.2 141.1C496.6 126.8 516.6 123.6 530.9 134z"/></svg></span> Alles für Ihre Technik</span>
+    <span><span class="check-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" aria-hidden="true"><path d="M530.8 134.1C545.1 144.5 548.3 164.5 537.9 178.8L281.9 530.8C276.4 538.4 267.9 543.1 258.5 543.9C249.1 544.7 240 541.2 233.4 534.6L105.4 406.6C92.9 394.1 92.9 373.8 105.4 361.3C117.9 348.8 138.2 348.8 150.7 361.3L252.2 462.8L486.2 141.1C496.6 126.8 516.6 123.6 530.9 134z"/></svg></span> Lieferungen in 24h</span>
+    <span><span class="check-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" aria-hidden="true"><path d="M530.8 134.1C545.1 144.5 548.3 164.5 537.9 178.8L281.9 530.8C276.4 538.4 267.9 543.1 258.5 543.9C249.1 544.7 240 541.2 233.4 534.6L105.4 406.6C92.9 394.1 92.9 373.8 105.4 361.3C117.9 348.8 138.2 348.8 150.7 361.3L252.2 462.8L486.2 141.1C496.6 126.8 516.6 123.6 530.9 134z"/></svg></span> Garantiertes Rückgaberecht</span>
+    <span><span class="check-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" aria-hidden="true"><path d="M530.8 134.1C545.1 144.5 548.3 164.5 537.9 178.8L281.9 530.8C276.4 538.4 267.9 543.1 258.5 543.9C249.1 544.7 240 541.2 233.4 534.6L105.4 406.6C92.9 394.1 92.9 373.8 105.4 361.3C117.9 348.8 138.2 348.8 150.7 361.3L252.2 462.8L486.2 141.1C496.6 126.8 516.6 123.6 530.9 134z"/></svg></span> Fachhandel seit 1923</span>
+  </div>
+</div>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="header-inner">
+    <div class="header-row1">
+      <a href="#" class="logo" aria-label="Conrad">
+        <svg width="160" height="40" viewBox="0 0 160 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_5005_27010)">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M37.7528 0L36.1809 6.88901H26.1698C16.9036 6.88901 11.8011 12.8209 11.8011 23.592C11.8011 30.5305 14.7584 33.1104 22.7123 33.1104H30.26L28.7167 40H15.5869C3.94266 40 0 36.3155 0 25.4795C0 16.6882 2.78962 8.76173 7.33826 4.55168C10.7957 1.36311 15.7071 0 23.7738 0H37.7528ZM39.3954 9.77778C46.1119 9.77778 48.5393 11.7969 48.5393 17.3328C48.5393 25.5503 43.8927 30.2212 35.7373 30.2212L23.4066 30.2222C16.6906 30.2222 14.382 28.463 14.382 23.3874C14.382 14.5638 18.7593 9.77778 26.7948 9.77778H39.3954ZM62.4173 9.77778L68.2557 21.5714L71.087 9.77778H79.1011L74.2156 30.2222H65.8731L58.8715 16.67L55.654 30.2222H47.6404L52.4967 9.77778H62.4173ZM96.6532 9.77778C103.594 9.77778 106.358 11.565 106.358 16.0066C106.358 20.1002 103.714 22.7535 98.696 23.7633L101.955 27.6459L110.708 16.093C115.223 10.109 115.616 9.79206 122.183 9.77834L133.034 9.77778L128.107 30.2222H119.633L120.504 26.5608H111.581L108.935 30.2222H100.47C95.7216 30.2222 95.5112 30.1077 93.1378 26.329L89.081 19.7836H95.0009C97.3438 19.7836 98.4857 18.8619 98.4857 17.0158C98.4857 15.7181 97.2241 15.026 94.8195 15.026H89.4427L85.7759 30.2222H77.3034L82.2305 9.77778H96.6532ZM151.633 9.77778C157.499 9.77778 160 11.9983 160 17.2465C160 25.7239 155.772 30.2222 147.82 30.2222H130.337L135.193 9.77778H151.633ZM29.7026 15.1981C25.3553 15.1981 22.8566 17.6208 22.8566 22.0329C22.8566 24.541 24.0369 25.2914 27.7833 25.2914L33.2493 25.292C37.3567 25.292 39.5759 22.8396 39.5759 18.2556C39.5759 15.8329 38.6768 15.1986 35.2291 15.1986L29.7026 15.1981ZM147.104 15.026H142.341L139.957 24.9751H145.676C149.19 24.9751 151.393 22.3796 151.393 18.2557C151.393 15.7181 150.47 15.026 147.104 15.026ZM123.019 15.026H122.449C119.834 15.026 119.293 15.3431 117.49 17.9678L114.967 21.5714H121.457L123.019 15.026Z" fill="#FEFEFF"/>
+</g>
+<defs>
+<clipPath id="clip0_5005_27010">
+<rect width="160" height="40" fill="white"/>
+</clipPath>
+</defs>
+</svg>
+      </a>
+      <a href="#" class="header-btn" data-open-drawer="categories">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        <span class="header-btn-label">Kategorien</span>
+      </a>
+      <a href="https://www.conrad.de/de/service/conrad-pro.html" target="_blank" rel="noopener noreferrer" class="header-btn conrad-pro-link">
+        <span class="header-btn-label">Conrad</span> <span class="pro-badge"><svg width="38" height="9" viewBox="0 0 38 9" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M22.5387 8.85372L20.3429 6.05665C22.3755 5.61932 23.4462 4.47042 23.4462 2.69746C23.4462 0.774114 22.3266 0 19.5155 0H13.6735L11.6777 8.85372H15.1095L16.5947 2.2729H18.7727C19.7467 2.2729 20.2576 2.57252 20.2576 3.13458C20.2576 3.93394 19.7952 4.33317 18.8462 4.33317H16.4482L18.0915 7.16776C19.0528 8.80413 19.138 8.85372 21.0612 8.85372H22.5387Z" fill="#376EEF"/><path fill-rule="evenodd" clip-rule="evenodd" d="M7.09494 2.2729C8.06898 2.2729 8.57991 2.57252 8.57991 3.13458C8.57991 3.93394 8.11744 4.33316 7.1685 4.33316H4.77051L5.82403 6.15128H7.2955C8.31421 6.15128 8.66512 6.05665 8.66512 6.05665C10.6978 5.61933 11.7685 4.47042 11.7685 2.69745C11.7685 0.774122 10.6489 0 7.83776 0H1.99574L0 8.85372H3.43179L4.91696 2.2729H7.09494Z" fill="#376EEF"/><path fill-rule="evenodd" clip-rule="evenodd" d="M7.09494 2.2729C8.06898 2.2729 8.57991 2.57252 8.57991 3.13458C8.57991 3.93394 8.11744 4.33316 7.1685 4.33316H4.452L4.04168 6.15128H7.2955C8.31421 6.15128 8.66512 6.05665 8.66512 6.05665C10.6978 5.61933 11.7685 4.47042 11.7685 2.69745C11.7685 0.774122 10.6489 0 7.83776 0H1.99574L0 8.85372H3.43179L4.91696 2.2729H7.09494Z" fill="#376EEF"/><path d="M34.2872 0H29.1727C25.9115 0 24.1348 2.0724 24.1348 5.89341C24.1348 8.09139 25.0718 8.85305 27.7977 8.85305L32.8025 8.85259C36.1126 8.85259 37.9986 6.83001 37.9986 3.27142C37.9986 0.874272 37.0132 0 34.2872 0ZM31.7927 6.71809L29.574 6.71786C28.0535 6.71786 27.5744 6.39289 27.5744 5.30668C27.5744 3.3961 28.5886 2.34712 30.3531 2.34712L32.5961 2.34735C33.9954 2.34735 34.3604 2.62187 34.3604 3.67108C34.3604 5.65612 33.4596 6.71809 31.7927 6.71809Z" fill="#376EEF"/></svg></span>
+      </a>
+
+      <div class="header-right">
+        <div class="gk-wrap">
+          <a href="#" class="header-btn">
+            <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M16.3359 3.60156C15.9844 3.25 15.9844 2.625 16.3359 2.27344C16.6875 1.92188 17.3125 1.92188 17.6641 2.27344L21.7266 6.33594C22.0781 6.6875 22.0781 7.3125 21.7266 7.66406L17.6641 11.7266C17.3125 12.0781 16.6875 12.0781 16.3359 11.7266C15.9844 11.375 15.9844 10.75 16.3359 10.3984L18.7969 7.9375H2.9375C2.42969 7.9375 2 7.50781 2 7C2 6.49219 2.42969 6.0625 2.9375 6.0625H18.7969L16.3359 3.60156ZM7.66406 13.6016L5.20312 16.0625H21.0625C21.5703 16.0625 22 16.4922 22 17C22 17.5078 21.5703 17.9375 21.0625 17.9375H5.20312L7.66406 20.3984C8.01562 20.75 8.01562 21.375 7.66406 21.7266C7.3125 22.0781 6.6875 22.0781 6.33594 21.7266L2.27344 17.6641C1.92188 17.3125 1.92188 16.6875 2.27344 16.3359L6.33594 12.2734C6.6875 11.9219 7.3125 11.9219 7.66406 12.2734C8.01562 12.625 8.01562 13.25 7.66406 13.6016Z"/></svg>
+            <span class="header-btn-label" data-gk-label>Geschäftskunde</span>
+          </a>
+          <div class="gk-flyout" role="menu">
+          <div class="gk-flyout-title">Einkaufen als</div>
+          <button type="button" class="gk-option selected" data-gk-option="business" role="menuitemradio" aria-checked="true">
+            <span class="gk-radio"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg></span>
+            <span>
+              <span class="gk-option-name">Geschäftskunde</span>
+              <ul><li>10.000.000+ Produktvariationen</li><li>Nettopreise (exkl. MwSt.)</li></ul>
+            </span>
+          </button>
+          <button type="button" class="gk-option" data-gk-option="private" role="menuitemradio" aria-checked="false">
+            <span class="gk-radio"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg></span>
+            <span>
+              <span class="gk-option-name">Privatkunde</span>
+              <ul><li>1.000.000+ Produkte</li><li>Bruttopreise (inkl. MwSt.)</li></ul>
+            </span>
+          </button>
+        </div>
+        </div>
+        <div class="fly-wrap">
+        <a href="#" class="header-btn">
+          <svg viewBox="0 0 18 22" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M3.125 7.5C3.125 8.00781 2.69531 8.4375 2.1875 8.4375C1.67969 8.4375 1.25 8.00781 1.25 7.5C1.25 3.35938 4.60938 0 8.75 0C12.8906 0 16.25 3.35938 16.25 7.5V12.8125C16.25 13.3203 15.8203 13.75 15.3125 13.75H8.125C7.10938 13.75 6.25 12.9297 6.25 11.875C6.25 10.8594 7.10938 10 8.125 10H9.375C10.4297 10 11.25 10.8594 11.25 11.875H14.375V7.5C14.375 4.41406 11.875 1.875 8.75 1.875C5.66406 1.875 3.125 4.41406 3.125 7.5ZM11.25 7.5C11.25 6.13281 10.1172 5 8.75 5C7.38281 5 6.25 6.13281 6.25 7.5C6.25 7.96875 6.36719 8.39844 6.60156 8.78906C6.01562 9.0625 5.54688 9.53125 5.19531 10.0781C4.6875 9.33594 4.375 8.47656 4.375 7.5C4.375 5.07812 6.32812 3.125 8.75 3.125C11.1719 3.125 13.125 5.07812 13.125 7.5C13.125 8.47656 12.8125 9.33594 12.3047 10.0781C11.9531 9.53125 11.4844 9.0625 10.8984 8.78906C11.1328 8.39844 11.25 7.96875 11.25 7.5ZM1.875 20.3125C1.875 20.8203 1.44531 21.25 0.9375 21.25C0.429688 21.25 0 20.8203 0 20.3125C0 17.3828 2.38281 15 5.3125 15H12.1875C15.1172 15 17.5 17.3828 17.5 20.3125C17.5 20.8203 17.0703 21.25 16.5625 21.25C16.0547 21.25 15.625 20.8203 15.625 20.3125C15.625 18.3984 14.1016 16.875 12.1875 16.875H5.3125C3.39844 16.875 1.875 18.3984 1.875 20.3125Z"/></svg>
+          <span class="header-btn-label">Hilfe &amp; Support</span>
+        </a>
+          <div class="fly-panel" style="--fly-w: 400px">
+            <div class="fly-head"><span class="fly-title">Hilfe und Support</span><a class="fly-link" href="#">anzeigen</a></div>
+            <div class="fly-tiles">
+              <a class="fly-tile" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg><span>Bestellung</span></a>
+              <a class="fly-tile" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg><span>Versand</span></a>
+              <a class="fly-tile" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg><span>Bezahlung</span></a>
+              <a class="fly-tile" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 14 4 9 9 4"/><path d="M20 20v-7a4 4 0 0 0-4-4H4"/></svg><span>Rücksendung & Garantie</span></a>
+              <a class="fly-tile" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg><span>Virtueller Assistent</span></a>
+              <a class="fly-tile" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><span>Häufige Fragen</span></a>
+            </div>
+            <div class="fly-foot">
+              <span class="fly-foot-tel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>Tel.: 09604 / 40 87 87</span>
+              <p class="fly-foot-hours">Mo. – Fr. 08:00 – 17:00 Uhr (außer an gesetzlichen Feiertagen)</p>
+            </div>
+          </div>
+        </div>
+        <div class="fly-wrap">
+        <a href="#" class="header-btn icon-only" aria-label="Merkliste">
+          <span class="icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg><span class="icon-badge" data-wishlist-badge>1</span></span>
+        </a>
+          <div class="fly-panel" style="--fly-w: 320px">
+            <div class="fly-head"><span class="fly-title">Merkliste</span><a class="fly-link" href="#">anzeigen</a></div>
+            <div data-fly-wishlist></div>
+          </div>
+        </div>
+        <div class="fly-wrap">
+        <a href="cart.html" class="header-btn icon-only" aria-label="Einkaufswagen">
+          <span class="icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg><span class="icon-badge" data-cart-badge>1</span></span>
+        </a>
+          <div class="fly-panel" style="--fly-w: 400px">
+            <div class="fly-head">
+              <span><span class="fly-title">Einkaufswagen</span>
+                <span class="fly-sub"><span data-fly-count>0 Artikel</span><span data-fly-sum></span></span></span>
+              <a class="fly-link" href="cart.html">anzeigen</a>
+            </div>
+            <div data-fly-cart></div>
+          </div>
+        </div>
+        <a href="#" class="header-btn" data-open-drawer="account">
+          <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M8.875 7A3.134 3.134 0 0 0 12 10.125 3.134 3.134 0 0 0 15.125 7 3.134 3.134 0 0 0 12 3.875 3.134 3.134 0 0 0 8.875 7ZM17 7c0 2.773-2.227 5-5 5S7 9.773 7 7s2.227-5 5-5 5 2.227 5 5ZM5.125 20.75v.313a.95.95 0 0 1-.938.937.95.95 0 0 1-.937-.938v-.312c0-3.79 3.086-6.875 6.875-6.875h3.75c3.79 0 6.875 3.086 6.875 6.875v.313a.95.95 0 0 1-.938.937.95.95 0 0 1-.937-.938v-.312c0-2.773-2.227-5-5-5h-3.75c-2.773 0-5 2.227-5 5Z"/></svg>
+          <span class="header-btn-label">Konto</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- SEARCH CARD -->
+    <div class="search-card">
+      <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" class="search-input" placeholder="Stellen Sie eine Frage, zum Beispiel: Welche Spannung benötige ich für ein Labornetzgerät?">
+      <button class="search-btn" aria-label="Suchen">
+        <span class="search-btn-icon-box" aria-hidden="true"><svg class="search-btn-icon" viewBox="0 0 640 640" fill="currentColor"><path d="M480 272C480 317.9 465.1 360.3 440 394.7L566.6 521.4C579.1 533.9 579.1 554.2 566.6 566.7C554.1 579.2 533.8 579.2 521.3 566.7L394.7 440C360.3 465.1 317.9 480 272 480C157.1 480 64 386.9 64 272C64 157.1 157.1 64 272 64C386.9 64 480 157.1 480 272zM272 416C351.5 416 416 351.5 416 272C416 192.5 351.5 128 272 128C192.5 128 128 192.5 128 272C128 351.5 192.5 416 272 416z"/></svg></span>
+        <span class="search-btn-text">Suchen</span>
+      </button>
+    </div>
+  </div>
+</header>
+<nav class="breadcrumb" aria-label="Breadcrumb">
+  <a href="wago221.html">Homepage</a>
+  <span class="breadcrumb-sep" aria-hidden="true">›</span>
+  <a href="konto.html">Mein Konto</a>
+  <span class="breadcrumb-sep" aria-hidden="true">›</span>
+  <span class="breadcrumb-current" aria-current="page">Bestellungen</span>
+</nav>
+<main class="konto-main">
+  <div class="konto-layout">
+    <aside class="konto-aside">
+<nav class="konto-nav" aria-label="Mein Konto">
+  <div class="konto-nav-group">
+    <a href="konto.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg><span>Übersicht</span></a>
+  </div>
+  <div class="konto-nav-group">
+    <p class="konto-nav-title">Bestellen</p>
+    <a href="konto-bestellungen.html" aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg><span>Bestellungen</span><span class="konto-nav-count" data-nav-count="bestellungen"></span></a>
+    <a href="stueckliste.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg><span>Stücklisten</span></a>
+    <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg><span>Merklisten</span></a>
+  </div>
+  <div class="konto-nav-group">
+    <p class="konto-nav-title">Belege</p>
+    <a href="konto-rechnungen.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg><span>Rechnungen & Gutschriften</span><span class="konto-nav-count" data-nav-count="rechnungen"></span></a>
+    <a href="konto-ruecksendungen.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 14 4 9 9 4"/><path d="M20 20v-7a4 4 0 0 0-4-4H4"/></svg><span>Rücksendungen</span><span class="konto-nav-count" data-nav-count="ruecksendungen"></span></a>
+  </div>
+  <div class="konto-nav-group">
+    <p class="konto-nav-title">Unternehmen</p>
+    <a href="konto-unternehmen.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 21h18"/><path d="M5 21V5a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v16"/><path d="M15 21V11h4a2 2 0 0 1 2 2v8"/><line x1="9" y1="7" x2="11" y2="7"/><line x1="9" y1="11" x2="11" y2="11"/><line x1="9" y1="15" x2="11" y2="15"/></svg><span>Unternehmensdaten</span></a>
+    <a href="konto-unternehmen.html#benutzer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span>Benutzer</span></a>
+  </div>
+  <div class="konto-nav-group">
+    <p class="konto-nav-title">Einstellungen</p>
+    <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span>Profil</span></a>
+    <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg><span>Adressen</span></a>
+    <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg><span>Zahlungsart</span></a>
+    <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"/><polyline points="22,6 12,13 2,6"/></svg><span>Newsletter</span></a>
+    <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><span>Conrad PRO</span></a>
+  </div>
+</nav>
+    </aside>
+    <div class="konto-content">
+      <div class="konto-head">
+        <div>
+          <h1 class="konto-h1">Bestellungen</h1>
+          <p class="konto-head-sub" data-zahl></p>
+        </div>
+        <div class="konto-head-actions">
+          <a class="konto-btn ghost" href="stueckliste.html">Stückliste hochladen</a>
+        </div>
+      </div>
+
+      <!-- Suchen, filtern, mitnehmen. Die Produktionsliste kennt nur einen
+           Zeitraum und eine Freitextsuche (Befund B4). -->
+      <div class="konto-toolbar">
+        <label class="konto-search">
+          <span class="visually-hidden">Bestellungen durchsuchen</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="search" data-suche placeholder="Bestell-Nr., Artikel oder Referenz">
+        </label>
+        <label class="visually-hidden" for="f-status">Status</label>
+        <select class="konto-select" id="f-status" data-f-status>
+          <option value="">Alle Status</option>
+          <option value="bearbeitung">In Bearbeitung</option>
+          <option value="versendet">Versendet</option>
+          <option value="teilversand">Teilweise versendet</option>
+          <option value="zugestellt">Zugestellt</option>
+          <option value="storniert">Storniert</option>
+        </select>
+        <label class="visually-hidden" for="f-person">Besteller</label>
+        <select class="konto-select" id="f-person" data-f-person></select>
+        <label class="visually-hidden" for="f-kst">Kostenstelle</label>
+        <select class="konto-select" id="f-kst" data-f-kst></select>
+        <div class="konto-toolbar-right">
+          <button type="button" class="konto-btn ghost" data-export><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Export (CSV)</button>
+        </div>
+      </div>
+
+      <div data-liste></div>
+
+    </div>
+  </div>
+</main>
+
+<footer class="footer-legalbar-solo">
+<div class="footer-legalbar">
+  <div class="footer-legalbar-inner">
+    <a href="#">AGB</a><a href="#">Impressum</a><a href="#">Datenschutz</a><a href="#">Widerruf einreichen</a><a href="#">Verträge kündigen</a><a href="#">Nutzungsbedingungen</a><a href="#">Cookie-Einstellungen</a><a href="#">Barrierefreiheit</a>
+  </div>
+  <div class="footer-legalbar-meta">
+    <span>Alle Preise zzgl. MwSt. &amp; Versand</span>
+    <span>Conrad Electronic SE · Klaus-Conrad-Straße 1 · 92240 Hirschau · © 2026</span>
+  </div>
+</div>
+</footer>
+
+<!-- HEADER DRAWERS -->
+<div class="hdr-backdrop" data-hdr-backdrop hidden></div>
+<!-- HEADER DRAWERS -->
+<div class="hdr-backdrop" data-hdr-backdrop hidden></div>
+
+<aside class="hdr-drawer left" data-drawer="categories" role="dialog" aria-modal="true" aria-label="Kategorien" hidden>
+  <div class="hdr-drawer-head">
+    <p class="hdr-drawer-title">Kategorien</p>
+    <button type="button" class="hdr-drawer-close" data-hdr-close aria-label="Schließen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+  </div>
+  <div class="hdr-drawer-body">
+        <a class="hdr-item" href="#">Computer & Büro<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></a>
+        <a class="hdr-item" href="#">Multimedia<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></a>
+        <a class="hdr-item" href="#">Kfz, Hobby & Haushalt<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></a>
+        <a class="hdr-item" href="#">Werkzeug & Werkstatt<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></a>
+        <a class="hdr-item" href="#">Gebäudetechnik & Smart Living<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></a>
+        <a class="hdr-item" href="#">Steckverbinder & Kabel<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></a>
+        <a class="hdr-item" href="#">Messtechnik & Stromversorgung<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></a>
+        <a class="hdr-item" href="#">Education & Entwicklungskits<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></a>
+        <a class="hdr-item" href="#">Aktive Bauelemente<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></a>
+        <a class="hdr-item" href="#">Passive Bauelemente<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></a>
+        <a class="hdr-item" href="#">Elektromechanik<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></a>
+        <a class="hdr-item" href="#">Automation & Pneumatik<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></a>
+  </div>
+</aside>
+
+<aside class="hdr-drawer right" data-drawer="account" role="dialog" aria-modal="true" aria-label="Konto" hidden>
+  <div class="hdr-drawer-head">
+    <p class="hdr-drawer-title">Willkommen</p>
+    <button type="button" class="hdr-drawer-close" data-hdr-close aria-label="Schließen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+  </div>
+  <a class="hdr-login" href="#">Anmelden</a>
+  <div class="hdr-drawer-body">
+        <a class="hdr-item" href="#">Konto</a>
+        <a class="hdr-item" href="#"><span class="hdr-item-lead">Conrad <span class="pro-logo-inline"><svg width="38" height="9" viewBox="0 0 38 9" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="PRO"><path fill-rule="evenodd" clip-rule="evenodd" d="M22.5387 8.85372L20.3429 6.05665C22.3755 5.61932 23.4462 4.47042 23.4462 2.69746C23.4462 0.774114 22.3266 0 19.5155 0H13.6735L11.6777 8.85372H15.1095L16.5947 2.2729H18.7727C19.7467 2.2729 20.2576 2.57252 20.2576 3.13458C20.2576 3.93394 19.7952 4.33317 18.8462 4.33317H16.4482L18.0915 7.16776C19.0528 8.80413 19.138 8.85372 21.0612 8.85372H22.5387Z" fill="#376EEF"/><path fill-rule="evenodd" clip-rule="evenodd" d="M7.09494 2.2729C8.06898 2.2729 8.57991 2.57252 8.57991 3.13458C8.57991 3.93394 8.11744 4.33316 7.1685 4.33316H4.77051L5.82403 6.15128H7.2955C8.31421 6.15128 8.66512 6.05665 8.66512 6.05665C10.6978 5.61933 11.7685 4.47042 11.7685 2.69745C11.7685 0.774122 10.6489 0 7.83776 0H1.99574L0 8.85372H3.43179L4.91696 2.2729H7.09494Z" fill="#376EEF"/><path d="M34.2872 0H29.1727C25.9115 0 24.1348 2.0724 24.1348 5.89341C24.1348 8.09139 25.0718 8.85305 27.7977 8.85305L32.8025 8.85259C36.1126 8.85259 37.9986 6.83001 37.9986 3.27142C37.9986 0.874272 37.0132 0 34.2872 0ZM31.7927 6.71809L29.574 6.71786C28.0535 6.71786 27.5744 6.39289 27.5744 5.30668C27.5744 3.3961 28.5886 2.34712 30.3531 2.34712L32.5961 2.34735C33.9954 2.34735 34.3604 2.62187 34.3604 3.67108C34.3604 5.65612 33.4596 6.71809 31.7927 6.71809Z" fill="#376EEF"/></svg></span></span></a>
+        <a class="hdr-item" href="#">Bestellungen</a>
+        <a class="hdr-item" href="#">Merklisten</a>
+        <a class="hdr-item" href="stueckliste.html">Stücklisten</a>
+        <a class="hdr-item" href="#">Angebotsanforderung</a>
+        <a class="hdr-item" href="#">Rechnungen & Gutschriften</a>
+        <a class="hdr-item" href="#">Adressen</a>
+        <a class="hdr-item" href="#">Zahlungsart</a>
+        <a class="hdr-item" href="#">Rücksendungen</a>
+        <a class="hdr-item" href="#">Newsletter</a>
+    <hr class="hdr-sep">
+    <a class="hdr-item" href="#"><span class="hdr-item-lead"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.3359 3.60156C15.9844 3.25 15.9844 2.625 16.3359 2.27344C16.6875 1.92188 17.3125 1.92188 17.6641 2.27344L21.7266 6.33594C22.0781 6.6875 22.0781 7.3125 21.7266 7.66406L17.6641 11.7266C17.3125 12.0781 16.6875 12.0781 16.3359 11.7266C15.9844 11.375 15.9844 10.75 16.3359 10.3984L18.7969 7.9375H2.9375C2.42969 7.9375 2 7.50781 2 7C2 6.49219 2.42969 6.0625 2.9375 6.0625H18.7969L16.3359 3.60156ZM7.66406 13.6016L5.20312 16.0625H21.0625C21.5703 16.0625 22 16.4922 22 17C22 17.5078 21.5703 17.9375 21.0625 17.9375H5.20312L7.66406 20.3984C8.01562 20.75 8.01562 21.375 7.66406 21.7266C7.3125 22.0781 6.6875 22.0781 6.33594 21.7266L2.27344 17.6641C1.92188 17.3125 1.92188 16.6875 2.27344 16.3359L6.33594 12.2734C6.6875 11.9219 7.3125 11.9219 7.66406 12.2734C8.01562 12.625 8.01562 13.25 7.66406 13.6016Z"/></svg> Geschäftskunde</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></a>
+    <a class="hdr-item" href="#"><span class="hdr-item-lead"><svg viewBox="0 0 18 22" fill="currentColor" aria-hidden="true"><path d="M3.125 7.5C3.125 8.00781 2.69531 8.4375 2.1875 8.4375C1.67969 8.4375 1.25 8.00781 1.25 7.5C1.25 3.35938 4.60938 0 8.75 0C12.8906 0 16.25 3.35938 16.25 7.5V12.8125C16.25 13.3203 15.8203 13.75 15.3125 13.75H8.125C7.10938 13.75 6.25 12.9297 6.25 11.875C6.25 10.8594 7.10938 10 8.125 10H9.375C10.4297 10 11.25 10.8594 11.25 11.875H14.375V7.5C14.375 4.41406 11.875 1.875 8.75 1.875C5.66406 1.875 3.125 4.41406 3.125 7.5ZM11.25 7.5C11.25 6.13281 10.1172 5 8.75 5C7.38281 5 6.25 6.13281 6.25 7.5C6.25 7.96875 6.36719 8.39844 6.60156 8.78906C6.01562 9.0625 5.54688 9.53125 5.19531 10.0781C4.6875 9.33594 4.375 8.47656 4.375 7.5C4.375 5.07812 6.32812 3.125 8.75 3.125C11.1719 3.125 13.125 5.07812 13.125 7.5C13.125 8.47656 12.8125 9.33594 12.3047 10.0781C11.9531 9.53125 11.4844 9.0625 10.8984 8.78906C11.1328 8.39844 11.25 7.96875 11.25 7.5ZM1.875 20.3125C1.875 20.8203 1.44531 21.25 0.9375 21.25C0.429688 21.25 0 20.8203 0 20.3125C0 17.3828 2.38281 15 5.3125 15H12.1875C15.1172 15 17.5 17.3828 17.5 20.3125C17.5 20.8203 17.0703 21.25 16.5625 21.25C16.0547 21.25 15.625 20.8203 15.625 20.3125C15.625 18.3984 14.1016 16.875 12.1875 16.875H5.3125C3.39844 16.875 1.875 18.3984 1.875 20.3125Z"/></svg> Kundenservice</span></a>
+  </div>
+</aside>
+<script>
+(function () {
+  var backdrop = document.querySelector('[data-hdr-backdrop]');
+  var openEl = null;
+  var returnFocus = null;
+
+  function openDrawer(el) {
+    openEl = el;
+    returnFocus = document.activeElement;
+    el.hidden = false;
+    backdrop.hidden = false;
+    requestAnimationFrame(function () { el.classList.add('open'); backdrop.classList.add('open'); });
+    document.body.style.overflow = 'hidden';
+    document.addEventListener('keydown', onKey);
+    var close = el.querySelector('[data-hdr-close]');
+    if (close) close.focus();
+  }
+
+  function closeDrawer() {
+    if (!openEl) return;
+    var el = openEl;
+    openEl = null;
+    el.classList.remove('open');
+    backdrop.classList.remove('open');
+    document.body.style.overflow = '';
+    document.removeEventListener('keydown', onKey);
+    setTimeout(function () { el.hidden = true; backdrop.hidden = true; }, 260);
+    if (returnFocus && returnFocus.focus) returnFocus.focus();
+  }
+
+  function onKey(e) {
+    if (e.key === 'Escape') { closeDrawer(); return; }
+    if (e.key !== 'Tab' || !openEl) return;
+    var f = openEl.querySelectorAll('a[href], button:not([disabled])');
+    if (!f.length) return;
+    var first = f[0], last = f[f.length - 1];
+    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+  }
+
+  backdrop.addEventListener('click', closeDrawer);
+  document.querySelectorAll('[data-hdr-close]').forEach(function (b) {
+    b.addEventListener('click', closeDrawer);
+  });
+  document.querySelectorAll('[data-open-drawer]').forEach(function (btn) {
+    btn.addEventListener('click', function (e) {
+      e.preventDefault();
+      var target = document.querySelector('[data-drawer="' + btn.dataset.openDrawer + '"]');
+      if (target) openDrawer(target);
+    });
+  });
+
+  // ---- "Einkaufen als": Auswahl merken, Flyout nach Klick schliessen ----
+  var KEY = 'conradCustomerType';
+  var wrap = document.querySelector('.gk-wrap');
+  if (!wrap) return;
+  var label = wrap.querySelector('[data-gk-label]');
+
+  function apply(type) {
+    label.textContent = type === 'private' ? 'Privatkunde' : 'Geschäftskunde';
+    wrap.querySelectorAll('[data-gk-option]').forEach(function (o) {
+      o.classList.toggle('selected', o.dataset.gkOption === type);
+      o.setAttribute('aria-checked', o.dataset.gkOption === type ? 'true' : 'false');
+    });
+  }
+
+  apply(localStorage.getItem(KEY) === 'private' ? 'private' : 'business');
+
+  wrap.querySelectorAll('[data-gk-option]').forEach(function (o) {
+    o.addEventListener('click', function () {
+      var type = o.dataset.gkOption;
+      if (type === 'private') localStorage.setItem(KEY, 'private');
+      else localStorage.removeItem(KEY);
+      apply(type);
+      // Overlay sofort schliessen, bis der Zeiger die Flaeche verlaesst
+      wrap.classList.add('suppress');
+    });
+  });
+  wrap.addEventListener('mouseleave', function () { wrap.classList.remove('suppress'); });
+})();
+</script>
+<script src="header-flyouts.js"></script>
+<button type="button" class="to-top" data-to-top aria-label="Zum Seitenanfang">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>
+</button>
+<script>
+/* Erscheint, sobald eine Bildschirmhoehe gescrollt ist. Der Sprung nach
+   oben folgt der Systemeinstellung zu Bewegung. */
+(function () {
+  var knopf = document.querySelector('[data-to-top]');
+  if (!knopf) return;
+  var wartet = false;
+  function pruefe() {
+    knopf.classList.toggle('is-visible', window.scrollY > window.innerHeight);
+    wartet = false;
+  }
+  window.addEventListener('scroll', function () {
+    if (!wartet) { wartet = true; requestAnimationFrame(pruefe); }
+  }, { passive: true });
+  knopf.addEventListener('click', function () {
+    var sanft = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    window.scrollTo({ top: 0, behavior: sanft ? 'smooth' : 'auto' });
+  });
+  pruefe();
+})();
+</script>
+<script src="konto-daten.js"></script>
+<script>
+(function () {
+  var K = window.KONTO;
+  var E = K.esc, EU = K.euro, D = K.datum;
+  var param = new URLSearchParams(location.search);
+  var zustand = param.get('zustand');
+
+  var elListe = document.querySelector('[data-liste]');
+  var elSuche = document.querySelector('[data-suche]');
+  var elStatus = document.querySelector('[data-f-status]');
+  var elPerson = document.querySelector('[data-f-person]');
+  var elKst = document.querySelector('[data-f-kst]');
+
+  elPerson.innerHTML = '<option value="">Alle Besteller</option>' +
+    K.benutzer.map(function (u) { return '<option value="' + u.id + '">' + E(u.name) + '</option>'; }).join('');
+  elKst.innerHTML = '<option value="">Alle Kostenstellen</option>' +
+    K.kostenstellen.map(function (k) { return '<option value="' + k.nr + '">' + E(k.nr) + ' ' + E(k.name) + '</option>'; }).join('');
+
+  if (param.get('status')) elStatus.value = param.get('status');
+  if (param.get('suche')) elSuche.value = param.get('suche');
+  if (param.get('person')) elPerson.value = param.get('person');
+  if (param.get('kst')) elKst.value = param.get('kst');
+
+  function gefiltert() {
+    var q = elSuche.value.trim().toLowerCase();
+    return K.bestellungen.filter(function (b) {
+      if (elStatus.value && b.status !== elStatus.value) return false;
+      if (elPerson.value && b.besteller !== elPerson.value) return false;
+      if (elKst.value && b.kostenstelle !== elKst.value) return false;
+      if (!q) return true;
+      var heu = b.nr + ' ' + b.referenz + ' ' + b.positionen.map(function (p) { return p.titel; }).join(' ');
+      return heu.toLowerCase().indexOf(q) !== -1;
+    });
+  }
+
+  var KOPF = '<thead><tr>' +
+    '<th>Bestell-Nr.</th><th>Datum</th><th>Besteller</th><th>Kostenstelle</th>' +
+    '<th>Status</th><th>Positionen</th><th class="konto-amount">Summe netto</th>' +
+    '<th><span class="visually-hidden">Aktionen</span></th></tr></thead>';
+
+  function zeichne() {
+    /* Zustaende zum Vorfuehren: ?zustand=laden | fehler | leer */
+    if (zustand === 'fehler') {
+      elListe.innerHTML =
+        '<div class="konto-error" role="alert">' +
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>' +
+        '<div><strong>Die Bestellungen konnten nicht geladen werden.</strong><br>' +
+        'Bitte versuchen Sie es erneut. Bleibt der Fehler, hilft der Kundenservice unter 0180 6 312111 weiter.</div>' +
+        '<span class="konto-error-actions"><button type="button" class="konto-btn" onclick="location.reload()">Erneut laden</button></span></div>';
+      return;
+    }
+    if (zustand === 'laden') {
+      /* Eine Zeile sagt, dass geladen wird - auch fuer Vorlesewerkzeuge.
+         In der Produktion standen Ladezeilen wie fertige Bestellungen da
+         (Befund B2). */
+      var balken = '<td><span class="konto-skeleton-bar"></span></td>';
+      elListe.innerHTML = '<div class="konto-table-wrap"><table class="konto-table">' + KOPF +
+        '<tbody aria-busy="true"><tr class="visually-hidden"><td colspan="8">Bestellungen werden geladen</td></tr>' +
+        new Array(5).join('x').split('x').map(function () {
+          return '<tr class="konto-skeleton">' + new Array(9).join('x').split('x').map(function () { return balken; }).join('') + '</tr>';
+        }).join('') + '</tbody></table></div>';
+      return;
+    }
+
+    var liste = zustand === 'leer' ? [] : gefiltert();
+    document.querySelector('[data-zahl]').textContent =
+      liste.length + ' von ' + K.bestellungen.length + ' Bestellungen \u00b7 alle Beträge netto';
+
+    if (!liste.length) {
+      var gefilterte = elSuche.value || elStatus.value || elPerson.value || elKst.value;
+      elListe.innerHTML = '<div class="konto-empty">' +
+        '<p class="konto-empty-title">' + (gefilterte ? 'Keine Bestellung passt zu dieser Auswahl' : 'Noch keine Bestellungen') + '</p>' +
+        '<p class="konto-empty-text">' + (gefilterte
+          ? 'Setzen Sie die Filter zurück oder suchen Sie nach einer anderen Bestell-Nr.'
+          : 'Sobald Sie bestellt haben, finden Sie hier jede Bestellung mit Status, Beleg und der Möglichkeit, sie zu wiederholen.') + '</p>' +
+        '<div class="konto-empty-actions">' + (gefilterte
+          ? '<button type="button" class="konto-btn" data-reset>Filter zurücksetzen</button>'
+          : '<a class="konto-btn primary" href="wago221.html">Zum Sortiment</a>' +
+            '<a class="konto-btn" href="stueckliste.html">Stückliste hochladen</a>') +
+        '</div></div>';
+      return;
+    }
+
+    elListe.innerHTML = '<div class="konto-table-wrap"><table class="konto-table">' + KOPF + '<tbody>' +
+      liste.map(function (b) {
+        var stk = b.positionen.reduce(function (s, p) { return s + p.menge; }, 0);
+        return '<tr>' +
+          '<td class="konto-num"><a href="konto-bestellung.html?nr=' + E(b.nr) + '">' + E(b.nr) + '</a>' +
+            (b.referenz ? '<span class="konto-cell-sub">' + E(b.referenz) + '</span>' : '') + '</td>' +
+          '<td class="konto-num">' + D(b.datum) + '</td>' +
+          '<td>' + E(K.person(b.besteller)) + '</td>' +
+          '<td class="konto-num">' + E(b.kostenstelle) + '</td>' +
+          '<td>' + K.pille(b.status) +
+            (b.status === 'teilversand' ? '<span class="konto-cell-sub">' + b.offenePositionen + ' Position offen</span>' : '') + '</td>' +
+          '<td class="konto-num">' + b.positionen.length + '<span class="konto-cell-sub">' + stk + ' Stück</span></td>' +
+          '<td class="konto-amount">' + EU(K.netto(b)) + '</td>' +
+          '<td><span class="konto-row-actions">' +
+            '<button type="button" class="konto-btn" data-nach="' + E(b.nr) + '">Nochmal bestellen</button>' +
+            '<a class="konto-btn ghost" href="konto-bestellung.html?nr=' + E(b.nr) + '">Details</a>' +
+          '</span></td></tr>';
+      }).join('') + '</tbody></table></div>';
+  }
+
+  elListe.addEventListener('click', function (e) {
+    var r = e.target.closest('[data-reset]');
+    if (r) {
+      elSuche.value = ''; elStatus.value = ''; elPerson.value = ''; elKst.value = '';
+      zeichne();
+      return;
+    }
+    var n = e.target.closest('[data-nach]');
+    if (!n) return;
+    var b = K.bestellungen.filter(function (x) { return x.nr === n.dataset.nach; })[0];
+    if (!b) return;
+    K.nachbestellen(b.positionen);
+    K.melden(b.positionen.length + ' Positionen in den Einkaufswagen gelegt');
+  });
+
+  [elSuche, elStatus, elPerson, elKst].forEach(function (el) {
+    el.addEventListener('input', zeichne);
+    el.addEventListener('change', zeichne);
+  });
+
+  /* CSV fuer die Buchhaltung. Semikolon und Komma, damit Excel in
+     deutscher Einstellung die Spalten trifft. */
+  document.querySelector('[data-export]').addEventListener('click', function () {
+    var liste = gefiltert();
+    var zeilen = [['Bestell-Nr.', 'Datum', 'Besteller', 'Kostenstelle', 'Status', 'Positionen', 'Summe netto EUR'].join(';')];
+    liste.forEach(function (b) {
+      zeilen.push([b.nr, K.datum(b.datum), K.person(b.besteller), b.kostenstelle,
+        K.STATUS[b.status].text, b.positionen.length,
+        K.netto(b).toFixed(2).replace('.', ',')].join(';'));
+    });
+    var blob = new Blob(['\ufeff' + zeilen.join('\r\n')], { type: 'text/csv;charset=utf-8' });
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'bestellungen.csv';
+    a.click();
+    URL.revokeObjectURL(a.href);
+    K.melden(liste.length + ' Bestellungen als CSV exportiert');
+  });
+
+  zeichne();
+})();
+</script>
+</body>
+</html>

@@ -320,3 +320,45 @@ Evidence split: **39 observed, 17 heuristic, 3 open question only, 0 backed by
 research.** The heuristic share is concentrated in the B2B criteria (company
 layer, bulk export, reorder speed, address model), which is exactly where
 research would change the weighting most. See open question 10.
+
+---
+
+## 9. Addendum: Übersichtsseite (S12) and answers to the open questions
+
+Added after the screenshot of the Übersichtsseite was supplied and the open
+questions were answered.
+
+### S12 Übersichtsseite
+
+| # | Screen | Path | Purpose | Primary task | State |
+|---|---|---|---|---|---|
+| S12 | Übersichtsseite | Mein Konto | Entry point of the account area | unclear, see A9 | filled |
+
+Layout: greeting "Guten Tag Nico Santangelo" plus six equal cards in two
+columns: Profil, Bestellungen, Rechnungen & Gutschriften, Adressen,
+Zahlungsart, Merklisten.
+
+| ID | Element | Issue | Heuristic / criterion | Sev | Evidence | Recommendation |
+|---|---|---|---|---|---|---|
+| A9 | the six cards | The page mirrors the navigation instead of supporting a task. It repeats six of the eleven nav entries, states no status, offers no action, and never says what needs attention. Nothing here could not be read off the sidebar. | Flexibility and efficiency of use; speed for repeat tasks | 4 | observed | Replace with a task surface: what is open, what is in transit, what can be reordered. |
+| A10 | "Abmelden" | Logging out sits inside the Profil card, far from the account menu in the header where users look for it. | Match between system and the real world | 2 | observed | Move to the header account menu. |
+| A11 | "Passwort: *****" | Five asterisks carry no information and offer no change action. | Aesthetic and minimalist design | 1 | observed | Remove or make it "Passwort ändern". |
+| A12 | Rechnungen card | The two invoice rows carry a download glyph, the Gutschrift row does not, although S6 offers "Gutschrift herunterladen" for the same document. | Consistency and standards | 2 | observed | Same action on every document row. |
+| A13 | Zahlungsart card | "Gewählte Zahlart Rechnung" and below it "Hier können Sie Ihre gewählte Zahlungsart finden. Aktuell haben Sie die Zahlart Rechnung gewählt". The same fact twice, the second time as filler. | Aesthetic and minimalist design | 2 | observed | Keep the value, drop the sentence. |
+| A14 | Bestellungen card | Every row offers only "Sendung verfolgen", including an order from 16.10.2025 that was delivered long ago. No status, no invoice, no reorder. | Match between system and the real world | 3 | observed | Show status and offer the action that fits it. |
+| A15 | card heights | The cards in a row have different heights, so the grid has ragged bottoms. | Aesthetic and minimalist design | 1 | observed | Align rows. |
+
+This raises the counts to: 4 critical plus A9 (5), and 66 rows in total.
+
+### Answers received
+
+| Question | Answer | Effect on the concept |
+|---|---|---|
+| 1. Übersichtsseite | screenshot supplied | Confirms A9. The dashboard is rebuilt, not reworked. |
+| 2. Company layer elsewhere | no, the footer links can be ignored | A6 stays "build it", in a simple form. |
+| 3. Conrad PRO price | 19,95 € is the B2C price, ignore it | F7 resolved. The concept is B2B, the prototype keeps its own figure. |
+| B2 degraded rows | those rows were still loading | Confirms the loading reading. The concept keeps a proper loading state as the answer. |
+| B8 gross prices | the screens are B2C, switch the concept to net | Implemented throughout. |
+| C1 bulk and export | recommendation wanted | Section 4.3 of the concept, plus a working version in the prototype. |
+| 13. Fuse | ignore, build as before | Static HTML, no Vue, no Tailwind. |
+| 12. Mobile | later | Desktop first, no deep responsive work. |

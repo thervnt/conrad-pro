@@ -1,0 +1,2573 @@
+/* Gemeinsames Stilblatt des Kontobereichs.
+   Teil 1 und 2 sind woertlich aus cart.html uebernommen, damit Huelle,
+   Karten, Knoepfe, Statuspillen und Tabelle exakt so aussehen wie auf den
+   bestehenden Seiten. Neu ist nur der Abschnitt KONTO am Ende.
+   Abweichung zum Bestand: dort stehen die Regeln inline je Seite. Sechs
+   Kopien waeren nicht zu halten - siehe 00-prototype-baseline.md, 9.1. */
+
+:root {
+  --c-blue: #376EEF;
+  --c-blue-hover: #2856c9;
+  --c-navy: #001F42;
+  --c-page-bg: #F4F5F7;
+  --c-text: #272C35;
+  --c-text-on-dark: #FEFEFF;
+
+  --c-text-secondary: #5a6171;
+  /* 4.5:1 auf Weiss und auf dem blauen Kachel-Tint - #8b909c lag mit
+     3.2:1 darunter und war in 11px kaum lesbar. */
+  --c-text-tertiary: #666c7a;
+  --c-border: #cfd4dd;          /* Trennlinien und Kartenkanten */
+  --c-border-control: #b6bcc7;  /* Umrandung bedienbarer Flaechen - 1,9:1 auf Weiss */
+  --c-border-strong: #6f7787;   /* Verstaerkung beim Ueberfahren */
+  --c-bg-white: #ffffff;
+  --c-bg-tint: #f8f9fb;
+
+  /* Semantische Farben - waren als rohe Hexwerte ueber beide Dateien
+     verstreut und drohten auseinanderzulaufen. */
+  --c-success: #218972;
+  --c-success-bg: #E0F4EE;
+  --c-success-text: #0F3D2E;
+  --c-danger: #d9234c;
+  --c-warning: #b45309;
+  --c-blue-tint: #eaf0fe;
+  --c-blue-tint-soft: #F4F5FE;
+  --c-blue-soft: #E2E5FA;
+  --c-blue-soft-hover: #d6dcf8;
+  --c-disabled-bg: #d6d8de;
+  --c-disabled-text: #6e7588;
+
+  --radius: 8px;
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-pill: 999px;
+  --radius-lg: 12px;   /* Overlays, Dialoge, Suchfeld */
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background-color: var(--c-page-bg);
+  color: var(--c-text);
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Ueberdehnen am Seitenrand ("Gummiband") - zwei Farben, drei Ebenen.
+   Der freigelegte Streifen zeigt den Hintergrund des Wurzelelements.
+
+   1. Das gekachelte Bild traegt beide Farben. Die Kachel ist so hoch wie
+      das Dokument und bewusst umgedreht: oben navy, unten blau. Damit
+      endet die Kachel OBERHALB des Dokuments in Blau und die Kachel
+      UNTERHALB beginnt in Navy - also oben blau, unten navy.
+   2. Die Grundfarbe ist Navy. Firefox malt im ueberdehnten Bereich kein
+      Bild, nur die Farbe; dort stimmt damit wenigstens das Fussende.
+   3. Zusaetzlich malen beide Leisten per Schlagschatten ueber ihre
+      Kante hinaus. Das ist Teil der Seite und greift dort, wo der
+      Browser die Seitenflaeche mitverschiebt. Schatten vergroessern nur
+      die Malflaeche, nicht den Scrollbereich. */
+html {
+  background-color: var(--c-navy);
+  background-image: linear-gradient(to bottom,
+                    var(--c-navy) 0 50%, var(--c-blue) 50% 100%);
+}
+.promo-strip { box-shadow: 0 -400px 0 var(--c-blue); }
+.footer-legalbar { box-shadow: 0 400px 0 var(--c-navy); }
+/* Firefox malt in den ueberdehnten Bereich nichts aus der Seite - dort
+   bleibt es weiss, egal was am Wurzelelement steht. Weil sich die Farbe
+   nicht setzen laesst, faellt dort der Gummiband-Effekt weg; die Seite
+   endet dann hart an der Kante. Die Abfrage trifft nur Firefox,
+   -moz-appearance gibt es in keiner anderen Maschine. */
+@supports (-moz-appearance: none) {
+  html { overscroll-behavior-y: none; }
+}
+
+a { color: var(--c-blue); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+button { font: inherit; cursor: pointer; }
+
+/* ===== TOP PROMO STRIP (white text on brand blue) ===== */
+
+.promo-strip {
+  background: var(--c-blue);
+  color: var(--c-text-on-dark);
+  font-size: 14px;
+  padding: 7px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.promo-strip-inner {
+  max-width: 1680px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  gap: 48px;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+.promo-strip-inner span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 500;
+}
+.check-icon {
+  color: var(--c-text-on-dark);
+  display: inline-flex;
+  align-items: center;
+}
+.check-icon svg {
+  width: 15px;
+  height: 15px;
+  fill: currentColor;
+  display: block;
+}
+
+/* ===== HEADER ===== */
+.header {
+  background: var(--c-navy);
+  color: var(--c-text-on-dark);
+  padding: 16px 0 24px;
+}
+.header-inner {
+  max-width: 1680px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+.header-row1 {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+/* Jede Kopfzeilen-Interaktion ist eine eigene Klickflaeche mit
+   abgerundetem Hover-Hintergrund. */
+.header-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 4px;
+  color: var(--c-text-on-dark);
+  font-size: 15px;
+  font-weight: 500;
+  white-space: nowrap;
+  transition: background 0.15s ease;
+}
+.header-btn:hover { background: rgba(255, 255, 255, 0.05); text-decoration: none; }
+.header-btn:active { background: rgba(255, 255, 255, 0.09); }
+.header-btn svg { height: 22px; width: auto; display: block; flex-shrink: 0; }
+.header-btn.icon-only { padding: 8px; }
+/* Das PRO-Logo im Badge behaelt seine eigene Groesse. */
+.header-btn .pro-badge svg { width: 38px; height: 9px; }
+/* Schmale Viewports: nur Icons, Labels aus. */
+@media (max-width: 1279px) {
+  .header-btn .header-btn-label { display: none; }
+  .header-btn { padding: 8px; gap: 0; }
+  .conrad-pro-link .header-btn-label { display: inline; }
+  .conrad-pro-link { padding: 8px 12px; gap: 8px; }
+}
+.icon-wrap { position: relative; display: inline-flex; }
+.logo {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+.logo svg { width: 130px; height: auto; display: block; }
+
+.conrad-pro-link {
+  color: var(--c-text-on-dark);
+  font-weight: 600;
+  font-size: 14px;
+}
+.conrad-pro-link .pro-badge {
+  background: var(--c-bg-white);
+  width: 56px;
+  height: 27px;
+  padding: 0;
+  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.conrad-pro-link .pro-badge svg {
+  display: block;
+}
+
+.header-right {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.icon-badge.bump { animation: badge-bump 0.55s cubic-bezier(0.34, 1.56, 0.64, 1); }
+@keyframes badge-bump {
+  0%   { transform: scale(1);    box-shadow: 0 0 0 0 rgba(255, 255, 0, 0.85); }
+  40%  { transform: scale(1.45); box-shadow: 0 0 0 8px rgba(255, 255, 0, 0); }
+  70%  { transform: scale(0.92); box-shadow: 0 0 0 8px rgba(255, 255, 0, 0); }
+  100% { transform: scale(1);    box-shadow: 0 0 0 0 rgba(255, 255, 0, 0); }
+}
+.icon-badge {
+  position: absolute;
+  top: -6px;
+  left: 14px;
+  background: #FFFF00;
+  color: var(--c-navy);
+  border-radius: var(--radius-pill);
+  width: 18px;
+  height: 18px;
+  font-size: 11px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ===== SEARCH BAR (white card on navy bg) ===== */
+.search-card {
+  background: var(--c-bg-white);
+  border-radius: var(--radius-lg);
+  height: 72px;
+  padding: 0 12px 0 20px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+.search-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  font: inherit;
+  font-size: 15px;
+  color: var(--c-text);
+  min-width: 0;
+}
+.search-input::placeholder { color: var(--c-text-tertiary); }
+.search-icon {
+  width: 20px;
+  height: 20px;
+  color: var(--c-text-tertiary);
+  flex-shrink: 0;
+}
+
+.search-btn {
+  background: var(--c-blue);
+  color: var(--c-text-on-dark);
+  border: none;
+  height: 48px;
+  padding: 0 24px;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  font-size: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.search-btn:hover { background: var(--c-blue-hover); }
+/* Eigener Behaelter fuer das Zeichen links der Beschriftung -
+   quadratisch, Zeichen mittig, Farbe wie der Text des Knopfes. */
+.search-btn-icon-box {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  padding: 5px;
+  box-sizing: border-box;
+  border-radius: var(--radius-xs);
+  color: var(--c-text-on-dark);
+  /* Der Innenabstand des Behaelters wuerde sich zum Abstand des Knopfes
+     addieren. Der negative Aussenabstand zieht ihn wieder heraus, damit
+     zwischen Zeichen und Text dieselben 8 px stehen wie im Kaufknopf. */
+  margin-right: -5px;
+}
+.search-btn-icon { width: 100%; height: 100%; display: block; }
+.search-btn-text { display: inline; }
+
+/* ===== BREADCRUMB ===== */
+.breadcrumb {
+  max-width: 1680px;
+  margin: 0 auto;
+  padding: 16px 24px 0;
+  font-size: 13px;
+  color: var(--c-text-secondary);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  line-height: 1.5;
+}
+.breadcrumb a {
+  color: var(--c-text-secondary);
+  text-decoration: none;
+}
+.breadcrumb a:hover { color: var(--c-blue); text-decoration: underline; }
+.breadcrumb-sep {
+  color: var(--c-text-tertiary);
+  font-size: 12px;
+  user-select: none;
+}
+.breadcrumb-current {
+  color: var(--c-text);
+  font-weight: 500;
+}
+
+/* ===== MAIN PDP GRID ===== */
+
+@media (max-width: 980px) {
+  .pdp { grid-template-columns: 1fr; }
+  /* Reset buy-box grid pinning so it stacks normally in source
+     order (right under the product main) instead of jumping into
+     a phantom column 2. */
+  .pdp > .buy-box { grid-column: auto; grid-row: auto; position: static; }
+}
+
+/* ===== PRODUCT MAIN (left side) ===== */
+
+@media (max-width: 1366px) {
+  /* Laptop / notebook fit: shrink image column + compact tiles so
+     the 4 polzahl tiles always sit on one row in the info column. */
+  .product-main {
+    grid-template-columns: minmax(0, 360px) minmax(360px, 1fr);
+    gap: 24px;
+    padding: 20px;
+  }
+  .main-image {
+    width: 100%;
+    max-width: 360px;
+    height: auto;
+    aspect-ratio: 1 / 1;
+    padding: 16px;
+  }
+  .main-image.is-polzahl10 { padding: 60px; }
+  .tile-row { gap: 6px; }
+  /* Only flex-equalise rows with 4 tiles (polzahl); leave the 2-tile
+     stil/hebel rows at their natural widths so they don't stretch. */
+  .tile-row:has(.vtile:nth-child(4)) .vtile { flex: 1 1 0; }
+  .vtile { padding: 8px 6px; min-width: 60px; }
+  .vtile.selected { padding: 7px 5px; }
+  .vtile-value { font-size: 14px; }
+  .vtile-price { font-size: 12px; }
+  .vtile-unit { font-size: 10px; }
+  /* Compact the "Zuletzt gekauft" pill so it doesn't push the
+     tile past its share of the row. */
+  .vtile-history { font-size: 9px; padding: 1px 5px; margin-top: 4px; gap: 3px; line-height: 1.25; white-space: normal; }
+  .vtile-history svg { width: 9px; height: 9px; }
+}
+@media (max-width: 900px) {
+  .product-main {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ============================================================
+   MOBILE  (≤ 767 px)
+   ============================================================ */
+@media (max-width: 767px) {
+  /* Hide the Conrad PRO promo strip to recover vertical space. */
+  .pro-ad { display: none; }
+
+  /* Brand-claims strip: hide on mobile (eats 4 rows of vertical space). */
+  .promo-strip { display: none; }
+
+  /* --- Header collapse -------------------------------------- */
+  .header { padding: 12px 0 12px; }
+  .header-inner { padding: 0 16px; }
+  .header-row1 { gap: 12px; margin-bottom: 12px; }
+  .logo svg { width: 96px; }
+  .conrad-pro-link { display: none; }                /* hide PRO inline link */
+  .header-right { gap: 4px; margin-left: auto; }
+
+  /* --- Search card ------------------------------------------ */
+  .search-card { height: 48px; padding: 0 6px 0 12px; gap: 8px; }
+  .search-card .search-input { font-size: 14px; }
+  .search-input::placeholder { font-size: 13px; }
+  /* Schmal: nur die Lupe im Knopf, dafuer entfaellt die zweite im Feld. */
+  .search-card .search-icon { display: none; }
+  .search-btn { padding: 0 10px; }
+  .search-btn-text { display: none; }
+  .search-btn-icon-box { width: 26px; height: 26px; padding: 4px; margin-right: -4px; }
+
+  /* --- Breadcrumb ------------------------------------------- */
+  .breadcrumb {
+    padding: 12px 16px 0;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    font-size: 12px;
+  }
+  .breadcrumb a, .breadcrumb-current { white-space: nowrap; }
+
+  /* --- PDP layout ------------------------------------------- */
+  .pdp { padding: 12px 16px; gap: 16px; }
+  .product-main { padding: 16px; gap: 16px; }
+  .product-main { grid-template-columns: 1fr; }
+  .main-image { width: 100%; max-width: 100%; height: auto; aspect-ratio: 1 / 1; padding: 16px; }
+  .main-image.is-polzahl10 { padding: 40px; }
+  .info-col { gap: 12px; }
+
+  /* --- Buy box --------------------------------------------- */
+  .buy-box { padding: 16px; }
+
+  /* --- Pack pills: 2-up ------------------------------------ */
+  .pack-row { grid-template-columns: repeat(2, 1fr); }
+
+  /* --- Bundle cards ---------------------------------------- */
+  /* Bundle cards already collapse to 100% at 600 px; here we just
+     tighten the section heading margin a touch on mobile. */
+  #section-zusammen > h2 { font-size: 17px; }
+
+  /* --- Tab content padding --------------------------------- */
+  .tab-content-body { padding: 14px 16px 16px; }
+  .tabs-wrap { padding: 8px 16px 0; }
+
+  /* --- Reserve space for the sticky buy bar ---------------- */
+  body.has-mobile-buy-bar { padding-bottom: 76px; }
+}
+
+/* ============================================================
+   SMALL MOBILE  (max. 480 px), polzahl 2x2 grid for fatter tap targets
+   ============================================================ */
+@media (max-width: 480px) {
+  .tile-row:has(.vtile:nth-child(4)) {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+  .tile-row:has(.vtile:nth-child(4)) .vtile { flex: 0 1 auto; }
+}
+
+/* ============================================================
+   STICKY BOTTOM BUY BAR  (mobile-only; toggled in JS)
+   ============================================================ */
+
+@media (max-width: 767px) {
+  .mobile-buy-bar.is-visible {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background: var(--c-bg-white);
+    border-top: 1px solid var(--c-border);
+    padding: 10px 16px;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 -6px 18px rgba(15, 23, 42, 0.12);
+  }
+  .mobile-buy-bar-price {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.1;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 0;
+    text-align: left;
+    color: var(--c-text);
+  }
+  .mobile-buy-bar-amount { font-size: 17px; font-weight: 700; }
+  .mobile-buy-bar-unit   { font-size: 11px; color: var(--c-text-tertiary); margin-top: 2px; }
+  .mobile-buy-bar-cta {
+    flex: 1;
+    background: var(--c-blue);
+    color: var(--c-text-on-dark);
+    border: none;
+    height: 44px;
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    cursor: pointer;
+  }
+  .mobile-buy-bar-cta:disabled { background: var(--c-disabled-bg); color: var(--c-disabled-text); cursor: not-allowed; }
+  .mobile-buy-bar-cta svg { width: 18px; height: 18px; }
+}
+
+.image-thumb:hover, .image-thumb.active { border-color: var(--c-blue); }
+
+@media (max-width: 900px) {
+  .main-image { width: 100%; height: auto; aspect-ratio: 1 / 1; }
+}
+
+/* ===== PRODUCT INFO COLUMN ===== */
+
+/* ===== VARIANT GROUP (rows of tiles) ===== */
+
+.vtile.selected {
+  border: 2px solid var(--c-blue);
+  padding: 9px 13px;
+  background: var(--c-blue-tint);
+}
+
+.vtile.disabled.placeholder { display: none; }
+
+.vtile.selected .vtile-value { color: var(--c-text); }
+
+/* Custom tooltip for dashed/disabled tiles (native title is too slow
+   and unreliable on disabled buttons across browsers). */
+
+/* Disabled tile: muted via explicit colours, not parent opacity, so the
+   custom tooltip rendered as ::after stays at full intensity. */
+.vtile.disabled {
+  cursor: not-allowed;
+  background: var(--c-bg-tint);
+  border-color: var(--c-border);
+  color: var(--c-text-tertiary);
+}
+.vtile.disabled .vtile-value,
+.vtile.disabled .vtile-price,
+.vtile.disabled .vtile-unit { color: var(--c-text-tertiary); }
+.vtile.disabled .vtile-divider { background: var(--c-border); }
+
+/* Soft divider between the qty/pack block and the PRO usp block. */
+
+/* ===== READ-ONLY KEY SPECS (below configurator) ===== */
+
+/* ===== AI CALLOUT ===== */
+
+/* ===== EAN / Bestellnr. CHIPS ===== */
+
+/* One split-button component: [ DE v | (pdf) Datenblatt öffnen ] */
+
+/* Plain list rows: text, divider line, text - no pill styling. The
+   selector needs .id-chip-actions to outrank its generic button rule. */
+
+.id-chip-actions .datenblatt-item.selected { background: var(--c-bg-tint); }
+
+/* ===== RIGHT BUY BOX ===== */
+
+.price-main {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+.price-main .amount {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--c-text);
+}
+.price-main .unit {
+  font-size: 13px;
+  color: var(--c-text-secondary);
+}
+.tax-note {
+  font-size: 12px;
+  color: var(--c-text-tertiary);
+  margin-bottom: 14px;
+}
+
+.stock-text.is-soldout { color: var(--c-danger); font-weight: 600; }
+.stock-text.is-lowstock { color: var(--c-warning); font-weight: 600; }
+
+.cta.is-disabled {
+  background: var(--c-disabled-bg);
+  color: var(--c-disabled-text);
+  cursor: not-allowed;
+  pointer-events: none;
+}
+.cta.is-disabled:hover { background: var(--c-disabled-bg); }
+
+.stock-text {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--c-text);
+  margin-bottom: 6px;
+}
+
+.delivery-pill {
+  background: var(--c-success-bg);
+  color: var(--c-success-text);
+  height: 32px;
+  border-radius: var(--radius-sm);
+  padding: 0 8px;
+  font-size: 14px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+.delivery-pill-icon {
+  width: 32px;
+  height: 32px;
+  background: var(--c-success);
+  border-radius: var(--radius-sm);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-left: -8px;
+}
+.delivery-pill-icon svg { width: 18px; height: 18px; }
+
+.shipper-line {
+  font-size: 13px;
+  margin-bottom: 14px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--c-border);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.shipper-line strong {
+  font-weight: 600;
+}
+
+.qty-row {
+  display: flex;
+  align-items: stretch;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.pack-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+  margin-bottom: 10px;
+}
+.pack-pill {
+  width: 100%;
+  background: var(--c-bg-white);
+  border: 1px solid var(--c-border-control);
+  border-radius: var(--radius-sm);
+  padding: 8px 10px;
+  font-family: inherit;
+  font-size: 13px;
+  color: var(--c-text);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  line-height: 1.2;
+  transition: border-color 0.1s;
+}
+.pack-pill:hover { border-color: var(--c-blue); }
+.pack-pill.selected {
+  border: 2px solid var(--c-blue);
+  padding: 7px 9px;
+  background: var(--c-blue-tint);
+}
+.pack-pill-value {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--c-text);
+}
+.pack-pill-sub {
+  font-size: 11px;
+  color: var(--c-text-tertiary);
+}
+.pack-total {
+  display: inline-flex;
+  align-items: center;
+  font-size: 13px;
+  color: var(--c-text-secondary);
+  font-variant-numeric: tabular-nums;
+  padding-left: 4px;
+}
+
+.qty-input-wrap {
+  display: flex;
+  align-items: center;
+  background: var(--c-bg-tint);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-sm);
+  flex: 0 0 220px;
+  width: 220px;
+  /* Gleicher optischer Innenabstand links wie rechts an den Pucks. */
+  padding-left: 8px;
+  /* Nicht vom Kontext erben - haelt das Feld ueberall gleich hoch. */
+  line-height: 1.5;
+}
+/* Die Zahl ist ein echtes Eingabefeld - weisser Grund, Rahmen und
+   Textcursor machen das sichtbar, der Fokusring ist zugleich die
+   Tastaturmarkierung. */
+.qty-input-wrap input {
+  background: var(--c-bg-white);
+  border: 1px solid var(--c-border-control);
+  border-radius: var(--radius-sm);
+  text-align: center;
+  padding: 5px 6px;
+  /* content-box, damit die ch-Breite wirklich der Zahl gilt und nicht
+     von Padding und Rahmen aufgefressen wird. */
+  box-sizing: content-box;
+  min-width: 3ch;
+  width: 3ch;
+  field-sizing: content;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  cursor: text;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.qty-input-wrap input:hover { border-color: var(--c-border-strong); }
+.qty-input-wrap input:focus {
+  border-color: var(--c-blue);
+  box-shadow: 0 0 0 3px rgba(55, 110, 239, 0.16);
+}
+.qty-btn {
+  background: transparent;
+  border: none;
+  width: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  color: var(--c-text-secondary);
+}
+.qty-btn { padding: 6px 2px; width: auto; }
+.qty-btn-group {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: auto;
+  padding-right: 6px;
+}
+.qty-unit {
+  font-size: 14px;
+  color: var(--c-text-secondary);
+  padding-left: 8px;
+  align-self: center;
+}
+.qty-btn-puck {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  background: var(--c-bg-white);
+  border: 1px solid var(--c-border);
+  color: var(--c-text-secondary);
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 1;
+  transition: background 0.15s, color 0.15s;
+}
+/* Das Mengenfeld waehlt nichts aus, es stellt ein - also die neutrale
+   Verstaerkung, wie am Steppfeld in der Schublade. */
+.qty-btn:hover .qty-btn-puck { border-color: var(--c-border-strong); }
+.qty-btn:active .qty-btn-puck { background: var(--c-blue-tint); }
+
+.pro-usp {
+  background: var(--c-blue-tint-soft);
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  color: var(--c-text);
+  display: flex;
+  justify-content: center;
+  margin-bottom: 4px;
+}
+.pro-usp-main {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.pro-logo {
+  display: inline-block;
+  vertical-align: middle;
+  flex-shrink: 0;
+}
+
+.cta-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 14px;
+  align-items: stretch;
+}
+.cta {
+  flex: 1;
+  background: var(--c-blue);
+  color: var(--c-text-on-dark);
+  border: none;
+  padding: 14px 18px;
+  border-radius: var(--radius-sm);
+  font-size: 15px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.cta:hover { background: var(--c-blue-hover); }
+.cta svg { width: 18px; height: 18px; }
+.wishlist-btn {
+  background: var(--c-bg-tint);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-sm);
+  width: 52px;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--c-text-secondary);
+}
+.wishlist-btn svg { width: 20px; height: 20px; transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); }
+.wishlist-btn svg path { transition: fill 0.18s ease, stroke 0.18s ease; }
+.wishlist-btn { position: relative; overflow: visible; }
+.wishlist-btn.active { color: var(--c-blue); border-color: var(--c-blue); background: var(--c-blue-tint); }
+.wishlist-btn.active svg path { fill: var(--c-blue); stroke: var(--c-blue); }
+.wishlist-btn.bounce svg { animation: wishlist-bounce 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); }
+@keyframes wishlist-bounce {
+  0%   { transform: scale(1); }
+  35%  { transform: scale(1.28); }
+  62%  { transform: scale(0.92); }
+  100% { transform: scale(1); }
+}
+.wishlist-btn::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: var(--radius);
+  border: 2px solid var(--c-blue);
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.9);
+}
+.wishlist-btn.pulse::after { animation: wishlist-pulse 0.65s ease-out; }
+@keyframes wishlist-pulse {
+  0%   { opacity: 0.55; transform: scale(0.9); }
+  100% { opacity: 0;    transform: scale(1.55); }
+}
+
+/* Toast (bottom-left, fixed). Light card on a drop-shadow so it sits
+   on top of the page without competing with the dark navy header. */
+
+@keyframes toast-slide-in  { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes toast-slide-out { from { opacity: 1; transform: translateY(0); }    to { opacity: 0; transform: translateY(12px); } }
+
+/* Compact buy box on short viewports: tighten spacing so the whole
+   box stays visible without scrolling. */
+@media (max-height: 900px) {
+  .buy-box { padding: 14px 16px; top: 8px; }
+  .price-savings { margin-bottom: 2px; }
+  .price-main { margin-bottom: 2px; }
+  .price-main .amount { font-size: 24px; }
+  .tax-note { margin-bottom: 8px; }
+  .stock-text { margin-bottom: 4px; }
+  .delivery-pill { height: 28px; margin-bottom: 4px; }
+  .delivery-pill-icon { width: 28px; height: 28px; }
+  .delivery-pill-icon svg { width: 16px; height: 16px; }
+  .countdown { margin-bottom: 8px; }
+  .invoice-note { padding: 6px 10px; gap: 10px; margin-bottom: 5px; }
+  .shipper-line { margin-bottom: 8px; padding-bottom: 8px; }
+  .pack-label { margin-bottom: 4px; }
+  .qty-row { margin-bottom: 8px; }
+  .qty-min-note { margin-top: 4px; }
+  .buy-divider { margin: 8px 0; }
+  .pro-usp-sub { margin-bottom: 8px; }
+  .cta-row { margin-top: 10px; }
+  .cta { padding: 11px 18px; }
+  .return-note { margin-top: 8px; }
+  .other-sellers { margin-top: 10px; padding-top: 10px; }
+  .pack-pill { padding: 6px 8px; }
+  .qty-btn-puck { width: 32px; height: 32px; }
+  .invoice-note-text { font-size: 11px; }
+  .pro-usp { padding: 6px 12px; }
+  .return-note { margin-top: 6px; }
+}
+
+/* ===== TABS (pill style) ===== */
+
+/* Scroll-to nav: plain text labels with a blue underline on the
+   active tab. No card chrome - the row sits flat on the page bg. */
+
+.tab.active {
+  color: var(--c-blue);
+  border-bottom-color: var(--c-blue);
+  font-weight: 600;
+}
+
+/* Kill any default top margin on the first child so the gap above
+   it stays at the panel's 16 px top padding on every card. */
+
+/* Serie & Zubehör keeps its single-panel look (two internal headings). */
+
+/* === Serie & Zubehör tab content === */
+
+/* Current-product tab: marker persists independent of selection. */
+
+@media (max-width: 1023px) {
+  .serie-grid { grid-template-columns: repeat(2, 1fr); }
+  .compare-specs { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 767px) {
+  .serie-grid { grid-template-columns: 1fr; }
+  .compare-tabs { flex-wrap: nowrap; }
+}
+
+/* Compact treatment for the Serie & Zubehör block (above the nav).
+   Same building blocks as elsewhere - just tighter spacing, smaller
+   icons and text, and a horizontal card layout. */
+
+/* Vertical layout: tabs on the left, comparison card on the right. */
+
+/* "Zur Serie →" as a small brand-blue button on the right edge of
+   the card (hidden on the 221 "Aktuelles Produkt" tab, visible on
+   the alternatives). */
+
+/* Beschreibung body copy */
+
+/* Produktsicherheit / Hersteller-Kontaktblock */
+
+/* Compare block: stack tabs above the panel on tablet/mobile. */
+@media (max-width: 700px) {
+  .serie-block .compare-wrap {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .serie-block .compare-tabs {
+    flex-direction: row;
+    overflow-x: auto;
+    gap: 6px;
+    margin-bottom: 4px;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+  }
+  .serie-block .compare-tab { flex: 0 0 auto; min-width: 110px; }
+  .compare-specs { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* FAQ accordion */
+/* "Wird oft zusammen gekauft" - standalone product cards */
+
+.bundle-card-actions .qty-input-wrap {
+  /* Buy-box wrap declares flex: 0 0 220px; in a column-flex
+     parent that 220px becomes HEIGHT, so reset basis here. */
+  flex: 0 0 auto;
+  width: 100%;
+  height: 44px;
+  padding-left: 12px;
+}
+.bundle-card-actions .qty-input-wrap input { min-width: 3.5ch; }
+
+@media (max-width: 600px) {
+  .bundle-card { flex-basis: 100%; max-width: 100%; }
+}
+
+
+/* ===== NACH OBEN =====
+   Ruhige Aktion in der Bauform der Symbolknoepfe: weisse Flaeche,
+   Umrandung, 6 px Radius. Kein runder Knopf und kein Blau - beides
+   wuerde mit dem Kaufknopf konkurrieren, der auf jeder Seite die
+   Hauptaktion ist. Erscheint erst unterhalb der ersten Bildschirmhoehe. */
+.to-top {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 90;
+  width: 44px;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  background: var(--c-bg-white);
+  border: 1px solid var(--c-border-control);
+  border-radius: var(--radius-sm);
+  color: var(--c-text-secondary);
+  cursor: pointer;
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.14);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(8px);
+  transition: opacity 0.18s ease, transform 0.18s ease, visibility 0.18s;
+}
+.to-top.is-visible { opacity: 1; visibility: visible; transform: none; }
+.to-top:hover { border-color: var(--c-border-strong); color: var(--c-text); }
+.to-top:focus-visible { outline: 2px solid var(--c-blue); outline-offset: 2px; }
+.to-top svg { width: 20px; height: 20px; display: block; }
+@media (max-width: 767px) {
+  /* Ueber der Kaufleiste bleiben, wo es sie gibt. */
+  .to-top { right: 16px; bottom: 16px; }
+  body.has-mobile-buy-bar .to-top { bottom: 88px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .to-top { transition: none; }
+}
+
+/* ===== FOOTER ===== */
+/* --- Rechtsleiste --- */
+.footer-legalbar { background: var(--c-navy); }
+.footer-legalbar-inner {
+  max-width: 1680px;
+  margin: 0 auto;
+  padding: 14px 24px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px 28px;
+}
+.footer-legalbar a {
+  color: var(--c-text-on-dark) !important;
+  font-size: 13px;
+}
+/* Preishinweis und Betreiber - inhaltsgleich mit dem Fuss im Warenkorb. */
+.footer-legalbar-meta {
+  max-width: 1680px;
+  margin: 0 auto;
+  padding: 0 24px 16px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px 24px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.62);
+}
+/* Im Warenkorb steht die Leiste allein - sie braucht den Abstand,
+   den sonst der helle Block darueber mitbringt. */
+.footer-legalbar-solo { display: block; margin-top: 60px; }
+.footer {
+  background: var(--c-navy);
+  color: var(--c-text-on-dark);
+  margin-top: 60px;
+  padding: 28px 0;
+}
+
+@media (max-width: 640px) {
+  .footer-links { gap: 10px 18px; }
+  .footer-inner { padding: 0 16px; }
+}
+
+/* ===== IMAGE ZOOM OVERLAY ===== */
+
+.image-overlay.active {
+  display: flex;
+}
+
+/* ===== FOOTER PROTOTYPE LABEL ===== */
+
+/* Wago logo */
+
+/* ===== HEADER DRAWERS (Kategorien / Konto) ===== */
+.hdr-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 31, 66, 0.45);
+  z-index: 950;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+.hdr-backdrop.open { opacity: 1; }
+.hdr-backdrop[hidden] { display: none; }
+.hdr-drawer {
+  position: fixed;
+  top: 0;
+  height: 100%;
+  width: 420px;
+  max-width: 92vw;
+  background: var(--c-bg-white);
+  z-index: 951;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.26s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+.hdr-drawer[hidden] { display: none; }
+.hdr-drawer.left {
+  left: 0;
+  transform: translateX(-100%);
+  box-shadow: 12px 0 32px rgba(15, 23, 42, 0.18);
+  border-radius: 0 12px 12px 0;
+}
+.hdr-drawer.right {
+  right: 0;
+  transform: translateX(100%);
+  box-shadow: -12px 0 32px rgba(15, 23, 42, 0.18);
+  border-radius: 12px 0 0 12px;
+}
+.hdr-drawer.open { transform: none; }
+.hdr-drawer-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 18px 20px 6px;
+}
+.hdr-drawer-title { font-size: 15px; font-weight: 600; color: var(--c-text-secondary); margin: 0; }
+.hdr-drawer-close {
+  background: none;
+  border: none;
+  padding: 6px;
+  border-radius: 4px;
+  color: var(--c-text-secondary);
+  cursor: pointer;
+  display: inline-flex;
+}
+.hdr-drawer-close:hover { color: var(--c-text); background: var(--c-bg-tint); }
+.hdr-drawer-close svg { width: 18px; height: 18px; }
+.hdr-drawer-body { flex: 1; overflow-y: auto; padding: 4px 8px 20px; }
+.hdr-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 12px;
+  border-radius: 4px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--c-text);
+  text-decoration: none;
+}
+.hdr-item:hover { background: var(--c-bg-tint); text-decoration: none; }
+.hdr-item > svg { width: 18px; height: 18px; color: var(--c-text-tertiary); flex-shrink: 0; }
+.hdr-item-lead { display: inline-flex; align-items: center; gap: 10px; min-width: 0; }
+.hdr-item-lead svg { width: 18px; height: 18px; color: var(--c-text-secondary); flex-shrink: 0; }
+.hdr-item-lead .pro-logo-inline { display: inline-flex; align-items: center; }
+/* Muss die generische 18px-Icon-Regel darueber ueberschreiben. */
+.hdr-item-lead .pro-logo-inline svg { width: 56px; height: 13px; }
+.hdr-sep { border: none; border-top: 1px solid var(--c-border); margin: 10px 12px; }
+.hdr-login {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 48px;
+  margin: 6px 12px 10px;
+  background: var(--c-blue);
+  color: var(--c-text-on-dark);
+  border: none;
+  border-radius: var(--radius-sm);
+  font: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+}
+.hdr-login:hover { background: var(--c-blue-hover); text-decoration: none; }
+
+/* ===== "Einkaufen als" Flyout ===== */
+.gk-wrap, .fly-wrap { position: relative; display: inline-flex; }
+.gk-flyout, .fly-panel {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 0;
+  width: var(--fly-w, 330px);
+  background: var(--c-bg-white);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 14px 32px rgba(15, 23, 42, 0.18);
+  z-index: 940;
+  display: none;
+  text-align: left;
+  overflow: hidden;
+}
+/* Unsichtbare Bruecke ueber die Luecke, damit der Zeiger vom Button
+   ins Overlay wandern kann, ohne den Hover zu verlieren. Sie haengt am
+   Wrapper, weil das Flyout selbst overflow:hidden hat. */
+.gk-wrap::after, .fly-wrap::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  height: 12px;
+  display: none;
+}
+.gk-wrap:hover::after, .fly-wrap:hover::after { display: block; }
+.gk-wrap.suppress::after, .fly-wrap.suppress::after { display: none; }
+.gk-wrap:hover .gk-flyout,
+.gk-wrap:focus-within .gk-flyout,
+.fly-wrap:hover .fly-panel,
+.fly-wrap:focus-within .fly-panel { display: block; }
+.gk-wrap.suppress .gk-flyout, .fly-wrap.suppress .fly-panel { display: none; }
+/* Auskappmenues der Kopfzeile: gleiche Karte wie das Kundenart-Menue,
+   aber rechtsbuendig unter dem Symbol. */
+.fly-panel { left: auto; right: 0; }
+.fly-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--c-border);
+}
+.fly-title { font-size: 15px; font-weight: 600; color: var(--c-text); }
+.fly-link { font-size: 14px; color: var(--c-blue); white-space: nowrap; }
+.fly-link:hover { text-decoration: underline; }
+.fly-sub {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 4px;
+  font-size: 13px;
+  color: var(--c-text-secondary);
+}
+.fly-empty {
+  padding: 28px 16px;
+  text-align: center;
+  font-size: 14px;
+  color: var(--c-text-tertiary);
+}
+/* --- Einkaufswagen --- */
+/* Hoch genug fuer die fuenf Zeilen, die render() hoechstens ausgibt (5 x 82 px).
+   Das overflow bleibt als Reserve, falls ein langer Titel eine Zeile umbricht. */
+.fly-list { max-height: 410px; overflow-y: auto; }
+.fly-item {
+  display: grid;
+  grid-template-columns: 44px 1fr auto;
+  gap: 12px;
+  align-items: start;
+  padding: 12px 16px;
+}
+.fly-item + .fly-item { border-top: 1px solid var(--c-border); }
+.fly-more {
+  display: block;
+  padding: 12px 16px;
+  border-top: 1px solid var(--c-border);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--c-blue);
+  text-align: center;
+}
+.fly-more:hover { background: var(--c-bg-tint); text-decoration: underline; }
+/* Die Merkliste hat keine eigene Seite - dort ist der Rest ein Hinweis,
+   kein Verweis, und darf nicht anklickbar aussehen. */
+.fly-more.as-note { color: var(--c-text-secondary); font-weight: 500; }
+.fly-more.as-note:hover { background: none; text-decoration: none; }
+
+.fly-item-img {
+  width: 44px; height: 44px;
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-sm);
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
+}
+.fly-item-img img { max-width: 90%; max-height: 90%; object-fit: contain; }
+.fly-item-img-leer { width: 22px; height: 22px; color: var(--c-text-tertiary); }
+.fly-item-name {
+  font-size: 13px;
+  line-height: 1.35;
+  color: var(--c-text);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.fly-item-name a { color: inherit; text-decoration: none; }
+.fly-item-name a:hover { text-decoration: underline; }
+.fly-item-img:hover { border-color: var(--c-border-strong); }
+.fly-item-qty { margin-top: 3px; font-size: 12px; color: var(--c-text-secondary); }
+.fly-item-right { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
+.fly-item-price { font-size: 14px; font-weight: 700; color: var(--c-text); white-space: nowrap; }
+.fly-item-del {
+  width: 28px; height: 28px;
+  padding: 0;
+  background: none;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  color: var(--c-text-tertiary);
+  cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center;
+  transition: color 0.15s, border-color 0.15s;
+}
+.fly-item-del svg { width: 15px; height: 15px; }
+.fly-item-del:hover { color: var(--c-danger); border-color: var(--c-border); }
+/* --- Hilfe & Support --- */
+.fly-tiles {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  padding: 14px 16px;
+}
+.fly-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 62px;
+  padding: 10px 8px;
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  color: var(--c-text);
+  text-align: center;
+  transition: border-color 0.15s, background 0.15s;
+}
+.fly-tile:hover { border-color: var(--c-border-strong); background: var(--c-bg-tint); text-decoration: none; }
+.fly-tile svg { width: 18px; height: 18px; color: var(--c-text-secondary); }
+.fly-foot {
+  padding: 12px 16px;
+  border-top: 1px solid var(--c-border);
+  font-size: 13px;
+}
+.fly-foot-tel { display: flex; align-items: center; gap: 8px; font-weight: 600; color: var(--c-text); }
+.fly-foot-tel svg { width: 15px; height: 15px; color: var(--c-text-secondary); }
+.fly-foot-hours { margin: 4px 0 0 23px; font-size: 12px; color: var(--c-text-secondary); }
+.gk-flyout-title {
+  font-size: 15px;
+  color: var(--c-text);
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--c-border);
+}
+.gk-option {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  width: 100%;
+  padding: 14px 18px;
+  background: none;
+  border: none;
+  border-top: 1px solid var(--c-border);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.gk-option:first-of-type { border-top: none; }
+.gk-option:hover { background: var(--c-bg-tint); }
+.gk-radio {
+  width: 22px;
+  height: 22px;
+  border-radius: var(--radius-pill);
+  border: 2px solid var(--c-text-tertiary);
+  flex-shrink: 0;
+  margin-top: 2px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--c-text-on-dark);
+}
+.gk-option.selected .gk-radio { background: var(--c-navy); border-color: var(--c-navy); }
+.gk-radio svg { width: 12px; height: 12px; display: none; }
+.gk-option.selected .gk-radio svg { display: block; }
+.gk-option-name { font-size: 15px; font-weight: 700; color: var(--c-text); }
+.gk-option ul { margin: 4px 0 0; padding-left: 18px; font-size: 14px; color: var(--c-text-secondary); }
+.gk-option li { padding: 1px 0; }
+@media (prefers-reduced-motion: reduce) {
+  .hdr-drawer, .hdr-backdrop { transition: none; }
+}
+
+/* ===== CART PAGE ===== */
+.cart-main {
+  max-width: 1680px;
+  margin: 0 auto;
+  padding: 8px 24px 0;
+}
+/* Title row mirrors the cart-layout grid so the toolbar's right edge
+   aligns with the product card, not the whole page. */
+.cart-title-row {
+  display: grid;
+  grid-template-columns: 1fr 400px;
+  gap: 16px;
+  margin: 10px 0 16px;
+}
+.cart-title-left {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.cart-title { font-size: 20px; font-weight: 700; margin: 0; }
+.cart-title .cart-count { font-size: 14px; font-weight: 500; color: var(--c-text-secondary); margin-left: 8px; }
+.cart-layout {
+  display: grid;
+  grid-template-columns: 1fr 400px;
+  gap: 16px;
+  align-items: start;
+}
+.cart-card, .summary-card {
+  background: var(--c-bg-white);
+  border-radius: var(--radius);
+  box-shadow:
+    0 8px 12px -1px rgba(17, 18, 19, 0.06),
+    0 1px 2px 0 rgba(17, 18, 19, 0.08);
+}
+/* Same rhythm as summary card -> Vorteilscode accordion (16px). */
+[data-cart-list] { display: flex; flex-direction: column; gap: 16px; }
+/* Sachlicher Hinweis, kein Fehler - deshalb die Blaufamilie und kein
+   Schliessen-Knopf: die Bedingung gilt weiter, auch weggeklickt. */
+.login-note {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  padding: 12px 14px;
+  background: var(--c-blue-tint);
+  /* Der Tint hat fast dieselbe Helligkeit wie die Seite - die Kante
+     kommt aus dem Blauton, nicht aus dem Helligkeitsunterschied. */
+  border: 1px solid rgba(55, 110, 239, 0.22);
+  border-radius: var(--radius-sm);
+}
+.login-note[hidden] { display: none; }
+.login-note-icon { display: inline-flex; color: var(--c-blue); flex-shrink: 0; }
+.login-note-icon svg { width: 18px; height: 18px; display: block; }
+.login-note-text { margin: 0; flex: 1; font-size: 13px; line-height: 1.45; color: var(--c-text); }
+.login-note-text strong { font-weight: 600; }
+.login-note-btn {
+  height: 36px;
+  padding: 0 16px;
+  flex-shrink: 0;
+  background: var(--c-bg-white);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-sm);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--c-navy);
+  cursor: pointer;
+}
+.login-note-btn:hover { border-color: var(--c-border-strong); }
+@media (max-width: 640px) {
+  .login-note { flex-wrap: wrap; }
+  .login-note-btn { width: 100%; }
+}
+.cart-card { display: flex; flex-direction: column; padding: 20px; }
+.cart-card-top { display: flex; gap: 16px; }
+/* Wie .shipper-line auf der PDP. */
+.cart-card-seller { font-size: 13px; font-weight: 400; color: var(--c-text); }
+/* Marktplatzware traegt Verkauf und Versand untereinander. */
+.cart-card-seller span { display: block; }
+.cart-card-seller strong { font-weight: 600; }
+.cart-card-actions { display: flex; gap: 8px; align-self: flex-start; flex-shrink: 0; }
+.cart-card-actions .icon-btn-danger { margin-left: 16px; }
+/* Pack pills, stepper and item actions on one horizontal line. */
+/* Bottom row: interactions left, price right, top-aligned. */
+.cart-card-bottom {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+.cart-card-bottom .cart-card-price { flex-shrink: 0; margin-top: 0; }
+.cart-card-interact {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  flex: 1;
+}
+.cart-card-interact .pack-row { flex: 0 0 380px; margin-bottom: 0; }
+.cart-card-interact .qty-row { margin-bottom: 0; }
+.cart-card-divider {
+  border: none;
+  border-top: 1px solid var(--c-border);
+  margin: 12px 0;
+}
+.cart-card > .cart-card-price { margin-top: 6px; }
+.icon-btn.icon-btn-danger:hover { border-color: var(--c-danger); color: var(--c-danger); }
+.icon-btn.icon-btn-danger:hover svg { stroke: var(--c-danger); }
+/* Heart buttons behave like the PDP wishlist button. */
+.wishlist-btn:hover { border-color: var(--c-blue); }
+.icon-btn.bounce svg { animation: wishlist-bounce 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); }
+.icon-btn[data-act="wishlist"].active { color: var(--c-blue); border-color: var(--c-blue); background: var(--c-blue-tint); }
+.icon-btn[data-act="wishlist"].active svg path { fill: var(--c-blue); stroke: var(--c-blue); }
+.cart-card-img {
+  width: 110px;
+  height: 110px;
+  flex-shrink: 0;
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-sm);
+  background: var(--c-bg-white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.cart-card-img img { max-width: 92%; max-height: 92%; object-fit: contain; }
+/* Positionen ohne Produktfoto - etwa Zubehoer aus der Stueckliste. */
+.cart-card-img-leer { width: 34px; height: 34px; color: var(--c-text-tertiary); }
+.cart-card-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+.cart-card-name a { color: inherit; text-decoration: none; }
+.cart-card-name a:hover { text-decoration: underline; }
+.cart-card-name { font-size: 15px; font-weight: 600; margin: 0; }
+/* Bestell-Nr. und EAN nebeneinander, mit Trennpunkt dazwischen. */
+.cart-card-id {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 6px;
+  font-size: 12px;
+  color: var(--c-text-secondary);
+  margin-top: 6px;
+}
+.cart-card-id span + span::before { content: '·'; margin-right: 6px; color: var(--c-text-tertiary); }
+.cart-toolbar { display: flex; gap: 8px; }
+/* Werkzeugleiste: Icon plus Beschriftung statt reiner Icon-Buttons. */
+.cart-toolbar .icon-btn {
+  width: auto;
+  height: 36px;
+  padding: 0 12px;
+  gap: 8px;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.icon-btn {
+  position: relative;
+  width: 36px;
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--c-bg-white);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-sm);
+  color: var(--c-text-secondary);
+  cursor: pointer;
+  padding: 0;
+}
+.icon-btn:hover { border-color: var(--c-border-strong); }
+.icon-btn svg { width: 18px; height: 18px; }
+.icon-btn[data-tooltip]:hover::after,
+.icon-btn[data-tooltip]:focus-visible::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  background: var(--c-navy);
+  color: var(--c-text-on-dark);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.4;
+  padding: 6px 10px;
+  border-radius: var(--radius-sm);
+  white-space: nowrap;
+  z-index: 50;
+  pointer-events: none;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.18);
+}
+.cart-card-note { margin-top: 10px; }
+.cart-card-note .cart-acc-input { width: 100%; }
+.cart-card-body .stock-text { margin: 2px 0 0; }
+.cart-card-body .delivery-pill { align-self: flex-start; margin: 2px 0; padding-right: 12px; height: auto; min-height: 32px; }
+.cart-card-price { text-align: right; display: flex; flex-direction: column; gap: 2px; flex-shrink: 0; }
+.cart-card-total { font-size: 18px; font-weight: 700; }
+.cart-card-unit { font-size: 12px; color: var(--c-text-secondary); }
+
+/* ===== QUICK ADD (Bestell-Nr. / CSV) ===== */
+/* Trennt das PRO-Modul von der Schnellerfassung - gleicher Abstand
+   ueber und unter der Linie. */
+.cart-section-divider {
+  border: none;
+  border-top: 1px solid var(--c-border);
+  margin: 20px 0;
+}
+.cart-section-divider + .quickadd { margin-top: 0; }
+/* Stueckliste: das staerkere Werkzeug, deshalb die groessere Flaeche. */
+.bomcard {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 16px;
+  padding: 16px 20px;
+  background: var(--c-bg-white);
+  border-radius: var(--radius);
+  box-shadow:
+    0 8px 12px -1px rgba(17, 18, 19, 0.06),
+    0 1px 2px 0 rgba(17, 18, 19, 0.08);
+  color: var(--c-text);
+  text-decoration: none;
+  transition: box-shadow 0.15s ease;
+}
+.bomcard:hover {
+  text-decoration: none;
+  box-shadow:
+    0 10px 20px -4px rgba(17, 18, 19, 0.12),
+    0 2px 6px 0 rgba(17, 18, 19, 0.10);
+}
+.bomcard-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: var(--radius-sm);
+  background: var(--c-blue-tint);
+  color: var(--c-blue);
+}
+.bomcard-icon svg { width: 20px; height: 20px; }
+.bomcard-body { flex: 1; min-width: 0; }
+.bomcard-title { display: block; font-size: 14px; font-weight: 600; }
+.bomcard-text { display: block; margin-top: 2px; font-size: 13px; color: var(--c-text-secondary); }
+.bomcard-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--c-blue);
+}
+.bomcard-cta svg { width: 16px; height: 16px; }
+.bomcard:hover .bomcard-cta { text-decoration: underline; }
+@media (max-width: 640px) {
+  .bomcard { flex-wrap: wrap; }
+  .bomcard-cta { width: 100%; justify-content: flex-end; }
+}
+
+/* Weniger als jeder zwanzigste nutzt die Schnellerfassung - im
+   gefuellten Warenkorb steht sie deshalb zugeklappt da. */
+
+@media (prefers-reduced-motion: reduce) {
+  .quickadd-chevron { transition: none; }
+}
+
+/* Bestell-Nr.-Feld mit CSV-Icon rechts im Feld. */
+
+.quickadd-form .qty-input-wrap { flex: 0 0 200px; width: 200px; height: 48px; }
+
+/* Ab einer gewissen Groesse ist die Stueckliste das richtige Werkzeug. */
+
+.quickadd-msg.ok { color: var(--c-success); font-weight: 500; }
+.quickadd-msg.err { color: var(--c-danger); font-weight: 500; }
+
+/* ===== EMPTY CART STATE ===== */
+.cart-empty {
+  background: transparent;
+  box-shadow: none;
+  border-radius: 0;
+  padding: 0;
+  text-align: left;
+  display: none;
+}
+.cart-empty-head { max-width: 760px; }
+.cart-empty-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--c-navy);
+  margin: 8px 0 8px;
+}
+.cart-empty-sub {
+  font-size: 14px;
+  color: var(--c-text-secondary);
+  margin: 0 0 18px;
+}
+.cart-empty-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+.cart-empty-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  padding: 0 20px;
+  border-radius: var(--radius-sm);
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  border: 1px solid transparent;
+}
+.cart-empty-btn.primary { background: var(--c-blue); color: var(--c-text-on-dark); }
+.cart-empty-btn.primary:hover { background: var(--c-blue-hover); text-decoration: none; }
+/* Gleicher Sekundaerbutton wie in Summenbox und Schnellerfassung. */
+.cart-empty-btn.secondary {
+  background: var(--c-blue-soft);
+  color: var(--c-navy);
+  border-color: transparent;
+}
+.cart-empty-btn.secondary:hover { background: var(--c-blue-soft-hover); text-decoration: none; }
+.cart-empty-divider {
+  border: none;
+  border-top: 1px solid var(--c-border);
+  margin: 28px 0 20px;
+}
+/* Der Abstand kommt von der Trennlinie, nicht zusaetzlich vom Block. */
+[data-tool-slot] .bomcard { margin-top: 0; }
+.recent-title { font-size: 18px; font-weight: 600; color: var(--c-navy); margin: 0 0 14px; }
+.recent-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 16px;
+}
+.recent-card {
+  background: var(--c-bg-white);
+  border-radius: var(--radius);
+  box-shadow:
+    0 8px 12px -1px rgba(17, 18, 19, 0.06),
+    0 1px 2px 0 rgba(17, 18, 19, 0.08);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  /* Ganze Kachel fuehrt auf die PDP - Schatten wie bei der
+     Zubehoerkarte dort. */
+  cursor: pointer;
+  transition: box-shadow 0.15s ease;
+}
+.recent-card:hover,
+.recent-card:focus-within {
+  box-shadow:
+    0 10px 20px -4px rgba(17, 18, 19, 0.12),
+    0 2px 6px 0 rgba(17, 18, 19, 0.10);
+}
+.recent-card-name a { color: inherit; text-decoration: none; }
+.recent-card:hover .recent-card-name a { text-decoration: underline; }
+.recent-card-img {
+  height: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+.recent-card-img img { max-width: 88%; max-height: 100%; object-fit: contain; }
+.recent-card-name {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.35;
+  margin: 0 0 8px;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.recent-card .delivery-pill {
+  height: auto;
+  min-height: 28px;
+  font-size: 12px;
+  margin-bottom: 10px;
+  padding-right: 10px;
+}
+.recent-card .delivery-pill-icon { width: 28px; height: 28px; }
+.recent-card .delivery-pill-icon svg { width: 15px; height: 15px; }
+/* PDP buy-box components, tuned for the narrower card. */
+.recent-card .price-main { margin-bottom: 2px; }
+.recent-card .price-main .amount { font-size: 20px; }
+.recent-card .price-main .unit { font-size: 12px; }
+.recent-card .tax-note { margin-bottom: 10px; }
+.recent-card .stock-text { font-size: 13px; margin-bottom: 6px; }
+.recent-card .shipper-line {
+  border-bottom: none;
+  padding-bottom: 0;
+  margin-bottom: 0;
+  font-size: 12px;
+}
+.recent-card .shipper-line strong { font-weight: 600; }
+.recent-card .cta-row { margin-top: auto; padding-top: 12px; }
+.recent-card .wishlist-btn { width: 44px; }
+.recent-card .wishlist-btn svg { width: 18px; height: 18px; }
+.recent-card .cta { padding: 11px 14px; font-size: 14px; gap: 8px; }
+.recent-card .cta svg { width: 16px; height: 16px; }
+@media (max-width: 640px) {
+  .recent-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
+}
+
+/* PRO membership opt-in card below the item list. */
+.pro-upsell {
+  background: var(--c-bg-white);
+  border-radius: var(--radius);
+  box-shadow:
+    0 8px 12px -1px rgba(17, 18, 19, 0.06),
+    0 1px 2px 0 rgba(17, 18, 19, 0.08);
+  padding: 20px;
+  margin-top: 16px;
+}
+/* Kopfzeile: Haken, PRO-Zeichen, Aussage. Die Folgezeilen ruecken auf
+   die Textkante der Aussage ein (18px Haken + 10px + 46px Zeichen). */
+.pro-upsell-optin {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  cursor: pointer;
+}
+.pro-upsell-optin input {
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  flex-shrink: 0;
+  accent-color: var(--c-blue);
+  cursor: pointer;
+}
+.pro-upsell-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 27px;
+  flex-shrink: 0;
+  border-radius: 4px;
+  background: var(--c-blue);
+}
+.pro-upsell-badge svg { display: block; }
+.pro-upsell-badge svg path { fill: var(--c-text-on-dark); }
+.pro-upsell-claim { flex: 1; min-width: 0; font-size: 15px; color: var(--c-text); line-height: 1.35; }
+/* Was der Haken fuer DIESE Bestellung bringt - offen als Versprechen,
+   angehakt als Bestaetigung. */
+.pro-savings {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: auto;
+  flex-shrink: 0;
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  background: var(--c-success-bg);
+  color: var(--c-success-text);
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.pro-savings-check { width: 14px; height: 14px; display: none; flex-shrink: 0; }
+.pro-savings.is-active { background: var(--c-success); color: var(--c-text-on-dark); }
+.pro-savings.is-active .pro-savings-check { display: block; }
+.pro-upsell-claim strong { font-weight: 700; }
+.pro-upsell-terms {
+  margin: 6px 0 0;
+  padding-left: 94px;
+  font-size: 13px;
+  color: var(--c-text-secondary);
+}
+.pro-upsell-benefits-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px 20px;
+  margin-top: 10px;
+  padding-left: 94px;
+  font-size: 14px;
+  color: var(--c-text);
+}
+.pro-benefit { display: inline-flex; align-items: center; gap: 7px; }
+.pro-benefit svg { width: 16px; height: 16px; fill: var(--c-success); flex-shrink: 0; }
+.pro-upsell-all { font-size: 14px; color: var(--c-blue); }
+.pro-upsell-divider {
+  border: none;
+  border-top: 1px solid var(--c-border);
+  margin: 14px 0 0;
+}
+.pro-upsell-legal {
+  margin: 12px 0 0;
+  font-size: 13px;
+  color: var(--c-text-secondary);
+}
+.pro-upsell-legal a { color: var(--c-blue); }
+@media (max-width: 640px) {
+  .pro-upsell-terms, .pro-upsell-benefits-row { padding-left: 0; }
+}
+.summary-row[hidden] { display: none; }
+/* Erklaerknopf in einer Summenzeile - mehrzeiliger Tooltip, weil die
+   Regel laenger als eine Zeile ist. */
+.summary-info {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--c-text-tertiary);
+  cursor: help;
+}
+.summary-info svg { width: 14px; height: 14px; display: block; }
+.summary-info:hover { color: var(--c-text-secondary); }
+.summary-info:hover::after,
+.summary-info:focus-visible::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--c-navy);
+  color: var(--c-text-on-dark);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.4;
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  width: max-content;
+  max-width: 240px;
+  white-space: normal;
+  text-align: left;
+  z-index: 50;
+  pointer-events: none;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.18);
+}
+.summary-row .summary-label { display: inline-flex; align-items: center; gap: 6px; }
+.summary-row .pro-logo[hidden] { display: none; }
+.summary-value .shipping-was {
+  color: var(--c-text-tertiary);
+  font-weight: 400;
+  text-decoration: line-through;
+  margin-right: 6px;
+}
+/* Weg zum kostenfreien Versand - erklaert die Versandzeile darueber.
+   Gleiche Darstellung wie in der Kauf-Bestaetigung auf der PDP. */
+.summary-ship { margin: 2px 0 12px; }
+.summary-ship[hidden] { display: none; }
+.summary-ship-group + .summary-ship-group { margin-top: 10px; }
+/* Versender und sein Anteil - eine Zeile, Betrag rechts auf der Achse
+   der Betraege darueber. */
+.summary-ship-who {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  margin: 0 0 2px;
+  font-size: 12px;
+  color: var(--c-text-secondary);
+}
+.summary-ship-cost {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.summary-ship-group.is-free .summary-ship-cost { color: var(--c-success); }
+.summary-ship-text { margin: 0; font-size: 13px; line-height: 1.4; color: var(--c-text); }
+.summary-ship-text strong { font-weight: 600; }
+.summary-ship-group.is-free .summary-ship-text { color: var(--c-success); font-weight: 600; }
+.summary-ship-bar {
+  height: 6px;
+  margin-top: 8px;
+  border-radius: var(--radius-pill);
+  background: var(--c-bg-tint);
+  overflow: hidden;
+}
+.summary-ship-bar span {
+  display: block;
+  height: 100%;
+  border-radius: var(--radius-pill);
+  background: var(--c-success);
+  transition: width 0.25s ease;
+}
+@media (prefers-reduced-motion: reduce) {
+  .summary-ship-bar span { transition: none; }
+}
+.summary-pro-usp { margin: 0 0 12px; }
+.summary-pro-usp[hidden] { display: none; }
+/* Brief highlight when the PRO tick changes shipping/total. */
+@keyframes sum-pulse {
+  0% { background: var(--c-blue-tint); }
+  100% { background: transparent; }
+}
+.summary-row.pulse, .summary-total-row.pulse { animation: sum-pulse 0.9s ease; }
+
+.summary-card {
+  padding: 20px;
+  position: sticky;
+  top: 16px;
+}
+/* Die Spalte muss die Zeilenhoehe fuellen, sonst hat sticky keinen
+   Weg zum Mitlaufen. */
+.cart-layout > aside { align-self: stretch; }
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 14px;
+  margin-bottom: 12px;
+}
+.summary-row .summary-label { font-weight: 600; }
+.summary-row .summary-value { font-variant-numeric: tabular-nums; font-weight: 600; }
+.summary-divider { border: none; border-top: 1px solid var(--c-border); margin: 14px 0; }
+.summary-total-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 2px;
+}
+.summary-total-label { font-size: 18px; font-weight: 700; }
+.summary-total-value { font-size: 20px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.summary-total-sub { font-size: 12px; color: var(--c-text-secondary); margin: 0 0 14px; }
+.summary-cta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 48px;
+  background: var(--c-blue);
+  color: var(--c-text-on-dark);
+  border: none;
+  padding: 0 18px;
+  border-radius: var(--radius-sm);
+  font: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  text-align: center;
+  cursor: pointer;
+}
+.summary-cta:hover { background: var(--c-blue-hover); }
+.summary-cta:disabled { opacity: 0.45; cursor: default; }
+
+/* Ein Einloese-Element, in der Summenbox statt als eigene Karten. */
+.summary-acc {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid var(--c-border);
+  text-align: center;
+}
+.summary-acc summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--c-text);
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+}
+.summary-acc summary:hover { text-decoration: underline; }
+.summary-acc summary::-webkit-details-marker { display: none; }
+.summary-acc-caret { width: 14px; height: 14px; color: var(--c-blue); transition: transform 0.15s; flex-shrink: 0; }
+.summary-acc[open] .summary-acc-caret { transform: rotate(180deg); }
+.summary-acc-body { margin-top: 12px; text-align: left; }
+.summary-acc-group + .summary-acc-group { margin-top: 14px; }
+.summary-acc-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--c-text-secondary);
+  margin: 0 0 6px;
+}
+.summary-acc-row { display: flex; gap: 8px; }
+.summary-acc-row .cart-acc-input { height: 40px; padding: 0 12px; }
+.summary-acc-pin { flex: 0 0 72px; }
+.summary-acc-apply {
+  flex-shrink: 0;
+  height: 40px;
+  padding: 0 16px;
+  background: var(--c-blue-soft);
+  color: var(--c-navy);
+  border: none;
+  border-radius: var(--radius-sm);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.summary-acc-apply:hover { background: var(--c-blue-soft-hover); }
+.cart-acc-input { width: 100%; }
+@media (max-width: 640px) {
+  .recent-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
+}
+
+.cart-acc-input {
+  flex: 1;
+  min-width: 0;
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-sm);
+  padding: 9px 12px;
+  font: inherit;
+  font-size: 13px;
+}
+.cart-acc-input:focus { outline: none; border-color: var(--c-blue); }
+
+.cart-layout.is-empty { grid-template-columns: 1fr; }
+@media (max-width: 1023px) {
+  .cart-layout { grid-template-columns: 1fr; }
+  .cart-title-row { grid-template-columns: 1fr; }
+  .cart-card-top { flex-wrap: wrap; }
+  .cart-card-interact .pack-row { flex: 1 1 100%; }
+  /* Ohne Umbruch bleiben diese Reihen breiter als der Bildschirm und
+     schieben die ganze Seite seitlich weg. */
+  .cart-title-left { flex-wrap: wrap; }
+  .cart-toolbar { flex-wrap: wrap; }
+  .cart-card-bottom { flex-wrap: wrap; }
+  .cart-card-interact { flex-wrap: wrap; }
+  .login-note { flex-wrap: wrap; }
+}
+@media (max-width: 767px) {
+  /* Untergrenze fuer die Textspalte, sonst quetschen Bild und Aktionen
+     den Artikelnamen auf ein Wort je Zeile. Die Aktionen weichen dann
+     in die naechste Reihe aus. */
+  .cart-card-body { min-width: 150px; }
+  .cart-card-actions { margin-left: auto; }
+  /* Gleiches Muster im PRO-Baustein: ohne Untergrenze schrumpft der
+     Anspruchstext neben der Sparmarke auf ein Wort je Zeile. */
+  .pro-upsell-claim { min-width: 170px; }
+}
+
+/* ==========================================================================
+   KONTO
+   Neue Regeln fuer den Kontobereich. Alles darueber ist Bestand.
+   Gebaut aus den vorhandenen Bausteinen: .cart-card als Kartenflaeche,
+   .bom-table als Liste, .bom-status als Statuspille, .cta / .summary-cta /
+   .cart-empty-btn als Knopfhierarchie.
+   ========================================================================== */
+
+.konto-main {
+  max-width: 1680px;
+  margin: 0 auto;
+  padding: 0 16px 48px;
+}
+/* Zwei Spalten: Navigation und Inhalt. Die Navigation laeuft mit, damit man
+   aus jeder Liste in jede andere springt, ohne zurueckzugehen. */
+.konto-layout {
+  display: grid;
+  grid-template-columns: 248px minmax(0, 1fr);
+  gap: 16px;
+  align-items: start;
+}
+.konto-aside { position: sticky; top: 16px; }
+
+/* --- Seitennavigation ---------------------------------------------------- */
+.konto-nav {
+  background: var(--c-bg-white);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius);
+  padding: 8px;
+}
+.konto-nav-group + .konto-nav-group {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid var(--c-border);
+}
+/* Die Gruppen sind beschriftet. In der Produktion trennen nur Haarlinien,
+   und die Zuordnung muss geraten werden (Befund A7). */
+.konto-nav-title {
+  margin: 4px 0 4px;
+  padding: 0 10px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--c-text-secondary);
+}
+.konto-nav a {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 10px;
+  border-radius: var(--radius-xs);
+  font-size: 14px;
+  color: var(--c-text);
+  text-decoration: none;
+  transition: background 0.15s;
+}
+.konto-nav a:hover { background: var(--c-bg-tint); text-decoration: none; }
+.konto-nav a[aria-current="page"] {
+  background: var(--c-blue-tint);
+  color: var(--c-blue);
+  font-weight: 600;
+}
+.konto-nav svg { width: 16px; height: 16px; flex-shrink: 0; }
+/* Zaehler am Eintrag: man sieht ohne Klick, wo etwas liegt. */
+.konto-nav-count {
+  margin-left: auto;
+  min-width: 20px;
+  padding: 0 6px;
+  border-radius: var(--radius-pill);
+  background: var(--c-bg-tint);
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 18px;
+  text-align: center;
+  color: var(--c-text-secondary);
+  font-variant-numeric: tabular-nums;
+}
+.konto-nav a[aria-current="page"] .konto-nav-count { background: var(--c-bg-white); color: var(--c-blue); }
+.konto-nav-count.is-warn { background: #fdf6ec; color: var(--c-warning); }
+
+/* --- Seitenkopf ---------------------------------------------------------- */
+.konto-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin: 0 0 16px;
+}
+.konto-h1 { font-size: 22px; font-weight: 700; margin: 0; }
+.konto-head-sub { margin: 2px 0 0; font-size: 13px; color: var(--c-text-secondary); }
+.konto-head-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+
+/* --- Karte --------------------------------------------------------------- */
+.konto-card {
+  background: var(--c-bg-white);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius);
+  padding: 16px;
+}
+.konto-card-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 0 0 12px;
+}
+.konto-card-title { font-size: 15px; font-weight: 600; margin: 0; }
+.konto-card-link { font-size: 13px; font-weight: 500; }
+.konto-section { margin-top: 24px; }
+.konto-section-title { font-size: 16px; font-weight: 700; margin: 0 0 12px; }
+
+/* --- Aufmerksamkeitsband ------------------------------------------------- */
+/* Steht vor allem anderen. Die Produktionsuebersicht spiegelt nur die
+   Navigation und sagt nicht, was offen ist (Befund A9). */
+.konto-attention {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 12px;
+  margin-bottom: 20px;
+}
+.konto-kpi {
+  display: block;
+  background: var(--c-bg-white);
+  border: 1px solid var(--c-border);
+  border-left: 3px solid var(--c-border-control);
+  border-radius: var(--radius);
+  padding: 12px 14px;
+  color: var(--c-text);
+  text-decoration: none;
+  transition: background 0.15s, border-color 0.15s;
+}
+.konto-kpi:hover { background: var(--c-bg-tint); border-color: var(--c-border-strong); text-decoration: none; }
+.konto-kpi.is-warn { border-left-color: var(--c-warning); }
+.konto-kpi.is-blue { border-left-color: var(--c-blue); }
+.konto-kpi.is-ok { border-left-color: var(--c-success); }
+.konto-kpi-value { font-size: 20px; font-weight: 700; font-variant-numeric: tabular-nums; line-height: 1.2; }
+.konto-kpi-label { font-size: 13px; color: var(--c-text-secondary); margin-top: 2px; }
+.konto-kpi-note { font-size: 12px; color: var(--c-text-tertiary); margin-top: 4px; }
+.konto-kpi.is-warn .konto-kpi-note { color: var(--c-warning); font-weight: 600; }
+
+/* --- Raster der Uebersicht ----------------------------------------------- */
+.konto-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 16px;
+  align-items: start;
+}
+
+/* --- Werkzeugleiste ueber Listen ----------------------------------------- */
+.konto-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+.konto-search {
+  position: relative;
+  flex: 1 1 260px;
+  min-width: 200px;
+}
+.konto-search input {
+  width: 100%;
+  height: 36px;
+  padding: 0 12px 0 34px;
+  border: 1px solid var(--c-border-control);
+  border-radius: var(--radius-xs);
+  background: var(--c-bg-white);
+  font: inherit;
+  font-size: 14px;
+  color: var(--c-text);
+  transition: border-color 0.15s;
+}
+.konto-search input:hover { border-color: var(--c-border-strong); }
+.konto-search svg {
+  position: absolute;
+  left: 10px; top: 50%;
+  width: 16px; height: 16px;
+  transform: translateY(-50%);
+  color: var(--c-text-tertiary);
+  pointer-events: none;
+}
+.konto-select {
+  height: 36px;
+  padding: 0 30px 0 10px;
+  border: 1px solid var(--c-border-control);
+  border-radius: var(--radius-xs);
+  background: var(--c-bg-white) var(--pfeil-unten) no-repeat right 10px center;
+  background-size: 12px;
+  font: inherit;
+  font-size: 14px;
+  color: var(--c-text);
+  cursor: pointer;
+  appearance: none;
+  transition: border-color 0.15s;
+}
+.konto-select:hover { border-color: var(--c-border-strong); }
+:root { --pfeil-unten: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235a6171' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E"); }
+.konto-toolbar-right { margin-left: auto; display: flex; gap: 8px; flex-wrap: wrap; }
+/* Knopf in Hoehe der Filter, sekundaere Stufe wie im Warenkorb. */
+.konto-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 36px;
+  padding: 0 14px;
+  border: none;
+  border-radius: var(--radius-xs);
+  background: var(--c-blue-soft);
+  color: var(--c-navy);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.15s;
+}
+.konto-btn:hover { background: var(--c-blue-soft-hover); text-decoration: none; }
+.konto-btn:disabled { background: var(--c-disabled-bg); color: var(--c-disabled-text); cursor: default; }
+.konto-btn.primary { background: var(--c-blue); color: var(--c-text-on-dark); }
+.konto-btn.primary:hover { background: var(--c-blue-hover); }
+.konto-btn.ghost {
+  background: none;
+  border: 1px solid var(--c-border-control);
+  color: var(--c-text);
+  font-weight: 500;
+}
+.konto-btn.ghost:hover { background: var(--c-bg-tint); border-color: var(--c-border-strong); }
+.konto-btn svg { width: 16px; height: 16px; }
+
+/* --- Liste ---------------------------------------------------------------- */
+/* Basis ist .bom-table aus der Stueckliste, inklusive waagerechtem Rollen
+   auf schmalen Schirmen. Hier nur die Ergaenzungen. */
+.konto-table-wrap { overflow-x: auto; background: var(--c-bg-white); border: 1px solid var(--c-border); border-radius: var(--radius); }
+.konto-table { width: max-content; min-width: 100%; border-collapse: collapse; font-size: 14px; }
+.konto-table th {
+  text-align: left;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--c-text-secondary);
+  padding: 12px;
+  border-bottom: 1px solid var(--c-border);
+  white-space: nowrap;
+  background: var(--c-bg-tint);
+}
+.konto-table td { padding: 12px; border-bottom: 1px solid var(--c-border); vertical-align: middle; }
+.konto-table tbody tr:last-child td { border-bottom: none; }
+.konto-table tbody tr:hover { background: var(--c-bg-tint); }
+.konto-table tr[hidden] { display: none; }
+.konto-num { font-variant-numeric: tabular-nums; white-space: nowrap; }
+.konto-amount { font-variant-numeric: tabular-nums; white-space: nowrap; text-align: right; font-weight: 600; }
+.konto-table th.konto-amount { text-align: right; }
+.konto-cell-sub { display: block; margin-top: 2px; font-size: 12px; color: var(--c-text-secondary); }
+.konto-row-actions { display: flex; gap: 6px; justify-content: flex-end; white-space: nowrap; }
+.konto-check { width: 16px; height: 16px; accent-color: var(--c-blue); cursor: pointer; }
+/* Sammelaktion erscheint erst, wenn etwas ausgewaehlt ist. */
+.konto-bulk {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+  padding: 10px 14px;
+  background: var(--c-blue-tint);
+  border: 1px solid var(--c-blue);
+  border-radius: var(--radius);
+  font-size: 14px;
+}
+.konto-bulk[hidden] { display: none; }
+.konto-bulk-count { font-weight: 600; }
+.konto-bulk-actions { margin-left: auto; display: flex; gap: 8px; }
+
+/* --- Leerzustand --------------------------------------------------------- */
+/* Gleiche Bauart wie der leere Warenkorb: Titel, ein Satz, Handlung. */
+.konto-empty {
+  background: var(--c-bg-white);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius);
+  padding: 40px 24px;
+  text-align: center;
+}
+.konto-empty-title { font-size: 16px; font-weight: 700; margin: 0 0 6px; }
+.konto-empty-text { font-size: 14px; color: var(--c-text-secondary); margin: 0 auto 16px; max-width: 520px; line-height: 1.5; }
+.konto-empty-actions { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+
+/* --- Ladezustand --------------------------------------------------------- */
+/* Im Bestand gibt es keinen. Auf der Produktionsliste standen Zeilen im
+   Ladezustand wie fertige Bestellungen da (Befund B2). Hier sagt eine Zeile,
+   dass geladen wird, und zwar auch fuer Vorlesewerkzeuge. */
+.konto-skeleton td { color: transparent; }
+.konto-skeleton-bar {
+  display: block;
+  height: 12px;
+  border-radius: var(--radius-xs);
+  background: linear-gradient(90deg, #eef0f4 25%, #e3e6ec 37%, #eef0f4 63%);
+  background-size: 400% 100%;
+  animation: konto-shimmer 1.4s ease infinite;
+}
+@keyframes konto-shimmer { 0% { background-position: 100% 50%; } 100% { background-position: 0 50%; } }
+@media (prefers-reduced-motion: reduce) { .konto-skeleton-bar { animation: none; } }
+
+/* --- Fehlerzustand ------------------------------------------------------- */
+.konto-error {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 14px 16px;
+  background: #fdecef;
+  border: 1px solid var(--c-danger);
+  border-radius: var(--radius);
+  font-size: 14px;
+  margin-bottom: 12px;
+}
+.konto-error svg { width: 18px; height: 18px; color: var(--c-danger); flex-shrink: 0; margin-top: 1px; }
+.konto-error-actions { margin-left: auto; }
+
+/* --- Hinweis mit Weg ----------------------------------------------------- */
+/* Die Produktion sagt "bitte IBAN hinterlegen" ohne Verweis darauf, wo das
+   geht (Befund B12/F5). Jeder Hinweis hier traegt seine Handlung. */
+.konto-note {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  background: var(--c-blue-tint-soft);
+  border: 1px solid var(--c-blue-soft);
+  border-radius: var(--radius);
+  font-size: 14px;
+  margin-bottom: 16px;
+}
+.konto-note svg { width: 18px; height: 18px; color: var(--c-blue); flex-shrink: 0; }
+.konto-note a { margin-left: auto; font-weight: 600; white-space: nowrap; }
+
+/* --- Definitionsliste fuer Stammdaten ------------------------------------ */
+.konto-dl { margin: 0; font-size: 14px; }
+.konto-dl > div { display: flex; gap: 12px; padding: 7px 0; border-bottom: 1px solid var(--c-border); }
+.konto-dl > div:last-child { border-bottom: none; }
+.konto-dl dt { flex: 0 0 150px; color: var(--c-text-secondary); }
+.konto-dl dd { margin: 0; flex: 1; }
+
+/* --- Positionszeile einer Bestellung ------------------------------------- */
+.konto-pos { display: flex; gap: 14px; padding: 14px 0; border-bottom: 1px solid var(--c-border); }
+.konto-pos:last-child { border-bottom: none; }
+.konto-pos-img {
+  width: 64px; height: 64px;
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-xs);
+  background: var(--c-bg-white);
+  overflow: hidden;
+}
+.konto-pos-img img { max-width: 100%; max-height: 100%; }
+.konto-pos-body { flex: 1; min-width: 0; }
+.konto-pos-name { font-size: 14px; font-weight: 600; margin: 0 0 2px; }
+.konto-pos-meta { font-size: 12px; color: var(--c-text-secondary); display: flex; gap: 10px; flex-wrap: wrap; }
+.konto-pos-right { text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
+.konto-pos-price { font-size: 15px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.konto-pos-unit { font-size: 12px; color: var(--c-text-secondary); }
+
+/* --- Summenblock --------------------------------------------------------- */
+/* Netto, Versand, MwSt., Gesamt. Die Produktion zeigt "Bruttopreis" und
+   darunter eine MwSt.-Zeile zwischen zwei gleichen Betraegen (Befund B8). */
+.konto-sum { max-width: 340px; margin-left: auto; font-size: 14px; }
+.konto-sum-row { display: flex; justify-content: space-between; gap: 16px; padding: 5px 0; }
+.konto-sum-row span:last-child { font-variant-numeric: tabular-nums; }
+.konto-sum-total {
+  display: flex; justify-content: space-between; gap: 16px;
+  margin-top: 8px; padding-top: 10px;
+  border-top: 1px solid var(--c-border);
+  font-size: 16px; font-weight: 700;
+}
+.konto-sum-note { font-size: 12px; color: var(--c-text-secondary); text-align: right; margin: 4px 0 0; }
+
+/* --- Zeitstrahl der Sendung ---------------------------------------------- */
+.konto-steps { display: flex; gap: 0; margin: 12px 0 0; }
+.konto-step { flex: 1; position: relative; padding-top: 22px; font-size: 12px; color: var(--c-text-secondary); }
+.konto-step::before {
+  content: '';
+  position: absolute; top: 4px; left: 0;
+  width: 12px; height: 12px;
+  border-radius: 50%;
+  background: var(--c-bg-white);
+  border: 2px solid var(--c-border-control);
+}
+.konto-step::after {
+  content: '';
+  position: absolute; top: 9px; left: 12px; right: 0;
+  height: 2px;
+  background: var(--c-border);
+}
+.konto-step:last-child::after { display: none; }
+.konto-step.is-done::before { background: var(--c-success); border-color: var(--c-success); }
+.konto-step.is-done::after { background: var(--c-success); }
+.konto-step.is-now::before { border-color: var(--c-blue); background: var(--c-blue); }
+.konto-step.is-now { color: var(--c-text); font-weight: 600; }
+
+/* --- Schmalere Schirme ---------------------------------------------------- */
+/* Der Schwerpunkt liegt auf dem Schreibtisch, siehe 02-concept.md. Hier nur
+   so viel, dass nichts seitlich aus der Seite laeuft. */
+@media (max-width: 900px) {
+  .konto-layout { grid-template-columns: 1fr; }
+  .konto-aside { position: static; }
+  .konto-nav { display: flex; flex-wrap: wrap; gap: 4px; }
+  .konto-nav-group { display: contents; }
+  .konto-nav-title { display: none; }
+  .konto-nav a { border: 1px solid var(--c-border); }
+  .konto-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+  .konto-main { padding: 0 12px 32px; }
+  .konto-sum { max-width: none; }
+  .konto-pos { flex-wrap: wrap; }
+  .konto-pos-right { width: 100%; align-items: flex-start; text-align: left; }
+}
+
+/* --- Kurzmeldung ---------------------------------------------------------
+   Woertlich aus wago221.html. Die Regeln liegen dort, nicht in cart.html,
+   deshalb hier nachgetragen. */
+.toast {
+  position: fixed;
+  bottom: 24px;
+  left: 24px;
+  z-index: 2000;
+  background: var(--c-navy);
+  color: var(--c-text-on-dark);
+  padding: 12px 12px 12px 16px;
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.28), 0 2px 6px rgba(15, 23, 42, 0.16);
+  font-size: 14px;
+  font-weight: 500;
+  width: max-content;
+  max-width: 50vw;
+  animation: toast-slide-in 0.28s ease;
+}
+.toast.out { animation: toast-slide-out 0.22s ease forwards; }
+.toast-msg { display: inline-flex; align-items: center; gap: 10px; white-space: nowrap; }
+.toast-msg svg { flex-shrink: 0; color: var(--c-success-on-dark); }
+.toast-close {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.72);
+  cursor: pointer;
+  padding: 4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+}
+.toast-close:hover { color: var(--c-text-on-dark); background: rgba(255, 255, 255, 0.14); }
+.toast-close svg { display: block; }
+@keyframes toast-slide-in  { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes toast-slide-out { from { opacity: 1; transform: translateY(0); }    to { opacity: 0; transform: translateY(12px); } }
+
+/* Aus wago221.html nachgetragen: cart.html kennt die Klasse nicht, benutzt sie
+   aber im Markup. Ohne sie stehen die Beschriftungen der Filter sichtbar da. */
+.visually-hidden {
+  position: absolute;
+  width: 1px; height: 1px;
+  margin: -1px; padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Statuspille aus stueckliste.html. Die Regeln liegen dort, nicht in
+   cart.html - der Kontobereich nutzt dieselbe Pille fuer Bestellungen,
+   Belege und Ruecksendungen, damit es im Prototyp nur eine gibt. */
+.bom-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 9px;
+  border-radius: var(--radius-pill);
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.bom-status.ok { background: var(--c-success-bg); color: var(--c-success-text); }
+.bom-status.warn { background: #fdf6ec; color: var(--c-warning); }
+.bom-status.err { background: #fdecef; color: var(--c-danger); }
