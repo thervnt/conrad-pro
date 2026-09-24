@@ -147,6 +147,17 @@
       art: 'rechnung', status: 'ausgeglichen', netto: 1104.50 }
   ];
 
+  // Merklisten tragen Namen, die der Einkauf selbst vergibt. Die Produktion
+  // nennt sie "Merkliste vom 03.07.2026" (Befund E1).
+  var merklisten = [
+    { id: 'm1', name: 'Halle 3 / Elektroinstallation', angelegt: '2026-07-03', geaendert: '2026-09-20',
+      besitzer: 'u1', artikel: 14, wert: 1842.60, bild: 'bilder/klein/wago-221-413-01.webp' },
+    { id: 'm2', name: 'Standardlager Werkstatt', angelegt: '2026-03-18', geaendert: '2026-08-01',
+      besitzer: 'u2', artikel: 7, wert: 318.45, bild: 'bilder/klein/wago-221-415-01.webp' },
+    { id: 'm3', name: 'Angebot Stadtwerke (Entwurf)', angelegt: '2026-09-12', geaendert: '2026-09-12',
+      besitzer: 'u1', artikel: 3, wert: 96.30, bild: null }
+  ];
+
   var ruecksendungen = [
     { nr: 'RMA-2026-0417', datum: '2026-08-01', bestellung: '2017498612', status: 'erstattet',
       grund: 'Falsche Verpackungseinheit bestellt', betrag: 214.90,
@@ -249,6 +260,7 @@
     MWST: MWST, HEUTE: HEUTE,
     firma: firma, benutzer: benutzer, kostenstellen: kostenstellen, lieferadressen: lieferadressen,
     bestellungen: bestellungen, rechnungen: rechnungen, ruecksendungen: ruecksendungen,
+    merklisten: merklisten,
     euro: euro, datum: datum, tageBis: tageBis, esc: esc, netto: netto,
     person: person, adresse: adresse, pille: pille, STATUS: STATUS,
     nachbestellen: nachbestellen, melden: melden

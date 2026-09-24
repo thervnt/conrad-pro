@@ -122,8 +122,13 @@ graph TD
 | Belege cross link to the order and back | The same document was reachable by two unconnected routes | IA observations |
 | Benutzer and Kostenstellen link into a filtered order list | The question "what did Sabine order on KST-4100" now has one path | A6 |
 
-Open: whether "Angebotsanforderung" is in scope. It is in the navigation of the
-concept but has no page, because no production screenshot exists for it.
+Open: whether "Angebotsanforderung" is in scope. It was in the first draft of
+this navigation and was removed again in the rework, because it has no page and
+no production screenshot behind it. Section 9 carries the navigation as built.
+
+Also changed in the rework: "Unternehmen" is one entry rather than three. The
+page carries Stammdaten, Benutzer and Kostenstellen as sections. Three entries
+pointing at anchors on the same page made the current page state ambiguous.
 
 ---
 
@@ -438,3 +443,103 @@ selection contains. Both decide whether the design scales past this fixture set.
   `aria-busy` and a text row, labels are real `<label>` elements rather than
   placeholders (H3), and every status is a word next to its colour. That is the
   floor, not a verified result.
+
+---
+
+## 9. Überarbeitung nach dem ersten Durchgang
+
+Review findings from the first walk through the prototype, and what was changed.
+
+### Defects found and fixed
+
+| # | Defect | Cause | Fix |
+|---|---|---|---|
+| R1 | The copy chip rendered as a full size icon stacked above the number | The whole `.id-chip*` family lives in `wago221.html`, not in `cart.html`, whose stylesheet formed the base of `konto.css`. Sixteen rules were missing. | Copied into `konto.css` and marked as copied. This is now the fourth component in that situation, after `.visually-hidden`, `.toast` and `.bom-status`. |
+| R2 | Seven of thirteen navigation entries pointed at `#` | Only the six pages of the agreed minimum scope existed | Six further pages built: Profil, Adressen, Zahlungsart, Merklisten, Newsletter, Conrad PRO. Every navigation entry now has a target. |
+| R3 | "Stücklisten" led to a page without the account navigation | It links to the existing tool page, which has no account shell. This reproduced finding A1 inside my own draft. | The entry keeps its target but is marked as leaving the account area, with an icon and a `visually-hidden` note "(verlässt den Kontobereich)". Building an account wrapper around the tool would duplicate it, changing the tool itself is out of scope. |
+| R4 | Name and explanation ran together in the payment options | `.konto-option-name` and `.konto-option-note` were inline spans | Both are blocks |
+| R5 | A disabled primary button looked ready to press | `.konto-btn:disabled` stood before `.konto-btn.primary` at the same specificity, so the variant won | The disabled rule now stands after the variants |
+| R6 | Definition list rows wrapped inside three column cards | `dt` was 152 px, `dd` 200 px, together wider than the card | 120 px and 140 px |
+
+### 8 dp spacing
+
+The KONTO section of `konto.css` was rewritten against a grid of 4, 8, 12, 16,
+24, 32, 40, 48. Before: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 14, 16, 18, 20, 22,
+24, 36, 40, 64. After: 4, 8, 16, 24, 40, plus 1 for hairlines and 11 for the
+optical centring of the shipment line against a 16 px dot.
+
+Control heights are 40 (8 times 5), which also clears the target size floor.
+Navigation entries have `min-height: 40`.
+
+The inherited part of `konto.css`, the roughly 2000 lines from `cart.html`, was
+not touched. It follows no grid, which is recorded in
+`00-prototype-baseline.md` §4 and §9.2. Bringing the existing pages onto a grid
+would mean editing them, which is out of scope.
+
+### Accessibility, second pass
+
+Added:
+
+- **Skip link** on every page, visible on focus, jumping to the content column.
+  The prototype has none.
+- **Visible focus ring** on navigation, tiles, buttons, search, selects,
+  checkboxes and table links. The inherited stylesheet has no consistent focus
+  treatment.
+- **`scope="col"` on all 35 table headers.** Without it a screen reader does not
+  tie a cell to its column, which matters most on the twelve column order list.
+- **`aria-live="polite"`** on the result counts of the order and invoice lists
+  and on the bulk selection bar, so a filter change and a selection are
+  announced.
+- **`aria-busy` plus a text row** on the loading state, which was already there
+  and is what production's grey bars lacked.
+- **The external marker is text, not only an icon** (R3).
+
+Measured on the built pages, contrast against the actual background:
+
+| Element | Ratio |
+|---|---|
+| KPI value 20 px bold | 14.0 |
+| Status pill 12 px 600 | 10.6 |
+| Button label 14 px 500 | 12.9 |
+| KPI label 13 px | 6.2 |
+| Navigation group title 11 px 600 | 6.2 |
+| Navigation counter 11 px 600 | 5.9 |
+| Page subtitle 13 px | 5.7 |
+| KPI note 12 px | 5.3 |
+| Overdue note 12 px 600 on white | 5.0 |
+
+Lowest value 5.0 against a requirement of 4.5. Heading order is h1 then h2 on
+every page, no level skipped. No pointer target below 24 px. No page overflows
+horizontally at 1440 px.
+
+Still not verified: actual keyboard traversal and a screen reader run. The
+above is what static inspection and measurement can establish.
+
+### Conrad PRO
+
+Rebuilt as the loyalty programme rather than a sales page. It shows the
+membership state (member since, renewal date, annual fee net, link to the
+membership invoices), what the membership returned in the last twelve months
+(shipping waived on twelve shipments, PRO prices against list prices, both
+against the fee), the benefits, and a cancellation path. The 19,95 € from the
+production screen is the consumer price and does not appear.
+
+Solves F7 and F8.
+
+### Navigation logic after the rework
+
+Five groups, twelve entries, every one with a target:
+
+- **Übersicht**
+- **Bestellen**: Bestellungen (counter), Stücklisten (leaves the area),
+  Merklisten
+- **Belege**: Rechnungen & Gutschriften (counter, warning colour when something
+  is overdue), Rücksendungen (counter)
+- **Unternehmen**: one entry, the page carries Stammdaten, Benutzer and
+  Kostenstellen as sections. The earlier separate "Benutzer" entry pointing at
+  an anchor on the same page made the current page state ambiguous.
+- **Einstellungen**: Profil, Adressen, Zahlungsart, Newsletter, Conrad PRO
+
+Cross links that now exist in both directions: order and invoice, order and
+return, user and their orders, cost centre and its orders, payment option and
+the bank details it requires, profile and company data.
