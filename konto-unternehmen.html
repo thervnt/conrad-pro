@@ -2,14 +2,14 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
-<title>Unternehmen · Conrad Electronic</title>
+<title>Unternehmensdaten · Conrad Electronic</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex,nofollow">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="konto.css?v=55fb6f1d">
-<link rel="stylesheet" href="konto-huelle.css?v=b68e45e1">
+<link rel="stylesheet" href="konto-huelle.css?v=28723fc6">
 <script src="cart-seed.js?v=28a5fe8f"></script>
 </head>
 <body>
@@ -138,7 +138,7 @@
   <span class="breadcrumb-sep" aria-hidden="true">›</span>
   <a href="konto.html">Mein Konto</a>
   <span class="breadcrumb-sep" aria-hidden="true">›</span>
-  <span class="breadcrumb-current" aria-current="page">Unternehmen</span>
+  <span class="breadcrumb-current" aria-current="page">Unternehmensdaten</span>
 </nav>
 <main class="konto-main">
   <div class="konto-layout">
@@ -173,45 +173,28 @@
 </nav>
     </aside>
     <div class="konto-content" id="inhalt" tabindex="-1">
+      <!-- Die Seite traegt genau einen Gegenstand: den Datensatz der Firma.
+           Deshalb nennt ihn die Ueberschrift, nicht noch einmal ein
+           Kartenkopf darunter, und die Handlung steht im Seitenkopf. Der
+           Benutzerbereich ist entfallen, weil es keine Benutzerverwaltung
+           gibt - eine Tabelle, die nur zeigt, wer schon da ist, ohne dass
+           sich etwas daran aendern laesst, verspricht mehr als sie haelt.
+           Die Lieferadressen sind aus demselben Grund frueher entfallen:
+           sie stehen auf der Adressen-Seite, und zweimal dieselben Daten
+           laufen auseinander. -->
       <div class="konto-head">
         <div>
-          <h1 class="konto-h1">Unternehmen</h1>
-          <p class="konto-head-sub" data-sub></p>
+          <h1 class="konto-h1">Unternehmensdaten</h1>
+          <p class="konto-head-sub">Gilt für alle Bestellungen dieses Firmenkontos</p>
         </div>
-      </div>
-
-      <div class="konto-note">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-        <span>Dieser Entwurf zeigt die einfache Stufe: wer bestellt und worauf gebucht wird. Rechte, Rollen und Freigaben sind bewusst nicht enthalten.</span>
-      </div>
-
-      <!-- Die Lieferadressen sind hier ganz entfallen: sie stehen auf der
-           Adressen-Seite, und zweimal dieselben Daten laufen auseinander.
-           Der Titel steht im Kartenkopf und nicht als Abschnittstitel darueber,
-           damit die Seite ein Ueberschriftensystem hat und nicht zwei. Die
-           Handlung steht daneben statt unten links: ein "Bearbeiten" am Ende
-           eines Lesefeldes findet man erst, wenn man alles gelesen hat. -->
-      <div class="konto-card konto-section" style="margin-top:0">
-        <div class="konto-card-head">
-          <h2 class="konto-card-title">Stammdaten</h2>
+        <div class="konto-head-actions">
           <button type="button" class="konto-btn ghost" data-stamm-bearbeiten>Bearbeiten</button>
         </div>
+      </div>
+
+      <div class="konto-card">
         <dl class="konto-fakten" data-stamm></dl>
       </div>
-
-      <div class="konto-section" id="benutzer">
-        <div class="konto-head">
-          <div>
-            <h2 class="konto-section-title" style="margin:0">Benutzer</h2>
-            <p class="konto-head-sub">Wer für dieses Konto bestellt</p>
-          </div>
-          <div class="konto-head-actions">
-            <button type="button" class="konto-btn" data-einladen>Benutzer hinzufügen</button>
-          </div>
-        </div>
-        <div data-benutzer></div>
-      </div>
-
 
     </div>
   </div>
@@ -389,9 +372,6 @@
   var E = K.esc, EU = K.euro, D = K.datum;
   var f = K.firma;
 
-  document.querySelector('[data-sub]').textContent =
-    f.name + ' \u00b7 Kundennummer ' + f.kundennummer;
-
   document.querySelector('[data-stamm]').innerHTML =
     '<div><dt>Firma</dt><dd>' + E(f.name) + '<br><span style="color:var(--c-text-secondary)">' + E(f.zusatz) + '</span></dd></div>' +
     '<div><dt>Anschrift</dt><dd>' + E(f.strasse) + '<br>' + E(f.plz) + ' ' + E(f.ort) + '<br>' + E(f.land) +
@@ -400,26 +380,12 @@
       '<svg class="id-chip-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>' +
       '<span class="id-chip-num">' + E(f.kundennummer) + '</span></button></span></dd></div>' +
     '<div><dt>USt-IdNr.</dt><dd>' + E(f.ustId) + '</dd></div>' +
-    '<div><dt>Zahlungsart</dt><dd>' + E(f.zahlart) + ', ' + E(f.zahlungsziel) + '</dd></div>' +
+    '<div><dt>Zahlungsart</dt><dd>' + E(f.zahlart) + '<br>' + E(f.zahlungsziel) +
+      '<br><a href="konto-zahlungsart.html">Zahlungsart ändern</a></dd></div>' +
     '<div><dt>Preise</dt><dd>Nettopreise (exkl. MwSt.)</dd></div>';
-
-  document.querySelector('[data-benutzer]').innerHTML =
-    '<div class="konto-table-wrap"><table class="konto-table">' +
-    '<thead><tr><th scope="col">Name</th><th scope="col">E-Mail</th><th scope="col">Funktion</th>' +
-    '<th scope="col">Im Konto seit</th></tr></thead><tbody>' +
-    K.benutzer.map(function (u) {
-      return '<tr>' +
-        '<td><strong>' + E(u.name) + '</strong>' +
-          (u.ichSelbst ? '<span class="konto-cell-sub">Das sind Sie</span>' : '') + '</td>' +
-        '<td>' + E(u.mail) + '</td>' +
-        '<td>' + E(u.funktion) + '</td>' +
-        '<td class="konto-num">' + D(u.seit) + '</td></tr>';
-    }).join('') + '</tbody></table></div>';
-
 
   document.addEventListener('click', function (e) {
     if (e.target.closest('[data-stamm-bearbeiten]')) K.melden('Stammdaten bearbeiten');
-    if (e.target.closest('[data-einladen]')) K.melden('Einladung per E-Mail versenden');
     var kopie = e.target.closest('[data-copy]');
     if (kopie && navigator.clipboard) {
       navigator.clipboard.writeText(kopie.dataset.copy);

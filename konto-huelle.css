@@ -144,10 +144,6 @@
 .konto-card-title { font-size: 16px; font-weight: 600; margin: 0; }
 .konto-card-link { font-size: 13px; font-weight: 500; }
 .konto-section { margin-top: 24px; }
-/* Gleiches Gewicht wie .konto-card-title: der Titel einer Tabelle, die ihren
-   Rahmen selbst mitbringt, soll nicht schwerer wiegen als der Titel einer
-   Karte. Nur der Traeger ist ein anderer, nicht der Rang. */
-.konto-section-title { font-size: 16px; font-weight: 600; margin: 0 0 16px; }
 
 /* --- Aufmerksamkeitsband ------------------------------------------------- */
 /* Steht vor allem anderen. Die Produktionsuebersicht spiegelt nur die

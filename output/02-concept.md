@@ -1775,3 +1775,58 @@ Aufruf vor jedem Commit, der eine der gemeinsamen Dateien anfasst:
 ```
 python3 stempel.py
 ```
+
+---
+
+## 29. Benutzerbereich entfernt, Unternehmensdaten neu aufgebaut
+
+**Befund von Nico:** "benutzer aktuell nicht vorhanden. entferne diesen
+bereich. redesigne die stammdaten darüber"
+
+### Entfernt
+
+Der Benutzerbereich ist weg. Er zeigte drei Zeilen mit Name, E-Mail, Funktion
+und Eintrittsdatum und darüber einen Knopf "Benutzer hinzufügen", der eine
+Kurzmeldung absetzte. Eine Tabelle, die nur zeigt, wer schon da ist, ohne dass
+sich etwas daran ändern lässt, verspricht mehr als sie hält.
+
+Mitgegangen sind drei Verweise, die ins Leere gezeigt hätten:
+
+* Der Hinweis auf der Profilseite hiess "Firmendaten und Benutzer verwalten Sie
+  unter Unternehmen" und heisst jetzt "Die Daten der Firma stehen unter
+  Unternehmensdaten".
+* Die Übersichtskarte zählte "3 Benutzer" und nennt jetzt Kundennummer und
+  USt-IdNr.
+* Der Hinweiskasten auf der Seite selbst erklärte, dass Rechte, Rollen und
+  Freigaben bewusst fehlen. Ohne Benutzerbereich gibt es nichts mehr zu
+  qualifizieren. Wenn der Satz als Erklärung für Mitlesende gebraucht wird,
+  hole ich ihn zurück.
+
+`.konto-section-title` wurde nur von dieser einen Stelle benutzt und ist aus
+dem Stylesheet entfernt.
+
+### Neu aufgebaut
+
+Die Seite trägt jetzt genau einen Gegenstand: den Datensatz der Firma. Daraus
+folgt der Rest:
+
+* **Ein Titel statt zwei.** Vorher stand "Unternehmen" als Seitenüberschrift
+  und "Stammdaten" als Kartenkopf darunter, für dieselbe Sache. Die
+  Überschrift nennt sie jetzt, die Karte trägt nur noch die Angaben.
+* **Ein Name.** Die Navigation sagte "Unternehmensdaten", Seitentitel,
+  Brotkrume und Überschrift sagten "Unternehmen". Jetzt überall
+  "Unternehmensdaten".
+* **Die Handlung im Seitenkopf.** "Bearbeiten" steht rechts neben der
+  Überschrift. Bei einer Seite mit einem einzigen Gegenstand ist die
+  Seitenhandlung auch die Kartenhandlung.
+* **Der Untertitel sagt, was gilt**, statt Firma und Kundennummer zu
+  wiederholen, die zwei Zeilen darunter noch einmal stehen: "Gilt für alle
+  Bestellungen dieses Firmenkontos".
+* **Zwei Querverweise dorthin, wo geändert wird.** Unter der Anschrift steht
+  schon "Lieferadressen verwalten", unter der Zahlungsart steht jetzt
+  "Zahlungsart ändern". Die Seite zeigt damit den Stand und sagt bei jedem
+  Punkt, wo er gepflegt wird.
+
+Die Seite ist dadurch kurz: eine Karte mit sechs Angaben. Das ist ehrlich. Sie
+mit etwas zu füllen, das es nicht gibt, war genau der Fehler des
+Benutzerbereichs.
