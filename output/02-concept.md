@@ -1731,3 +1731,47 @@ Die Regel lautet jetzt:
 Geändert wurden damit vier Beschriftungen: der Spaltenkopf und der Untertitel
 in Merklisten und in Stücklisten, der Spaltenkopf in Bestellungen und dessen
 CSV-Kopfzeile.
+
+---
+
+## 28. "undefined" und kaputte Bilder: ein Cache-Problem, kein Datenfehler
+
+**Befund von Nico:** Screenshot der Artikelspalte mit "undefined" unter den
+Bildern und leeren Bildrahmen.
+
+Die ausgelieferten Dateien waren in Ordnung; ein frischer Abruf von
+`konto-bestellungen.html` auf der Produktion zeigte alle sieben Kurztitel und
+kein fehlendes Bild. Was Nico sah, war eine Mischung aus zwei Ständen.
+
+GitHub Pages liefert alles mit `cache-control: max-age=600`. HTML, CSS und JS
+laufen damit unabhängig voneinander ab. Wer `konto-daten.js` im Cache hatte und
+danach die frische `konto-bestellungen.html` bekam, hatte eine Seite, die
+`p.kurz` liest, und Daten, die dieses Feld noch nicht kennen. Ergebnis:
+"undefined" in der Zelle, und dazu die alten Verweise auf die beiden
+Bilddateien, die es nicht gibt. Beides genau das, was im Screenshot steht.
+
+Das ist keine Eigenheit dieser einen Änderung. Der Prototyp hat fünf
+gemeinsame Dateien, die von 17 Seiten geladen werden: `konto.css`,
+`konto-huelle.css`, `konto-daten.js`, `cart-seed.js`, `header-flyouts.js`.
+Jedes Mal, wenn eine davon zusammen mit einer Seite geändert wird, kann
+derselbe Mischstand entstehen.
+
+### Lösung
+
+`stempel.py` im Wurzelverzeichnis hängt an jeden Verweis auf eine gemeinsame
+Datei ein Kürzel aus dem Inhalt der Datei:
+
+```
+<script src="konto-daten.js?v=12df478b"></script>
+```
+
+Ändert sich die Datei, ändert sich das Kürzel, und der Browser holt sie neu,
+weil die Adresse eine andere ist. Ändert sie sich nicht, bleibt das Kürzel
+gleich und der Cache greift weiter. Das Skript ist wiederholbar: ein zweiter
+Aufruf ohne Dateiänderung schreibt nichts.
+
+Aufruf vor jedem Commit, der eine der gemeinsamen Dateien anfasst:
+
+```
+python3 stempel.py
+```
