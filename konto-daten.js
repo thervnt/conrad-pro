@@ -53,8 +53,12 @@
   // --- Positionen ----------------------------------------------------------
   // sku und bild passen zum Bestand, damit eine Nachbestellung eine echte
   // Warenkorbzeile ergibt und nicht nur einen Namen.
-  function pos(sku, packSize, titel, menge, einzel, bild) {
-    return { sku: sku, packSize: packSize, titel: titel, menge: menge, einzel: einzel, bild: bild || null };
+  // "kurz" ist der Titel fuer Listen: Marke, Artikelnummer, Gattung, das eine
+  // unterscheidende Merkmal. Der volle Titel ist fuer eine Tabellenzelle zu
+  // lang, und abgeschnitten sagt er nichts mehr.
+  function pos(sku, packSize, titel, kurz, menge, einzel, bild) {
+    return { sku: sku, packSize: packSize, titel: titel, kurz: kurz,
+      menge: menge, einzel: einzel, bild: bild || null };
   }
 
   var bestellungen = [
@@ -68,9 +72,9 @@
           adresse: 'a2', pos: [0, 1, 2] }
       ],
       positionen: [
-        pos('221-413', 50, 'WAGO 221-413-50 221 Verbindungsklemme flexibel: 0.14-4 mm² starr: 0.2-4 mm² Polzahl: 3 Transparent, Orange Box', 40, 14.99, 'bilder/klein/wago-221-413-01.webp'),
-        pos('221-415', 25, 'WAGO 221-415-25 221 Verbindungsklemme flexibel: 0.14-4 mm² starr: 0.2-4 mm² Polzahl: 5 Transparent, Orange Box', 24, 13.79, 'bilder/klein/wago-221-415-01.webp'),
-        pos('221-500', 1, 'WAGO 221-500 Serie 221 Befestigungsadapter', 120, 0.87, null)
+        pos('221-413', 50, 'WAGO 221-413-50 221 Verbindungsklemme flexibel: 0.14-4 mm² starr: 0.2-4 mm² Polzahl: 3 Transparent, Orange Box', 'WAGO 221-413 Verbindungsklemme, 3-polig', 40, 14.99, 'bilder/klein/wago-221-413-01.webp'),
+        pos('221-415', 25, 'WAGO 221-415-25 221 Verbindungsklemme flexibel: 0.14-4 mm² starr: 0.2-4 mm² Polzahl: 5 Transparent, Orange Box', 'WAGO 221-415 Verbindungsklemme, 5-polig', 24, 13.79, 'bilder/klein/wago-221-415-01.webp'),
+        pos('221-500', 1, 'WAGO 221-500 Serie 221 Befestigungsadapter', 'WAGO 221-500 Befestigungsadapter', 120, 0.87, null)
       ]
     },
     {
@@ -82,8 +86,8 @@
           sendung: '00340161386265956229', frachtfuehrer: 'DHL', adresse: 'a1', pos: [0, 1] }
       ],
       positionen: [
-        pos('221-423', 50, 'WAGO 221-423-50 221 Verbindungsklemme flexibel: 0.14-4 mm² starr: 0.2-4 mm² Polzahl: 3 Transparent, Grün Box', 20, 17.50, 'bilder/klein/wago-221-423-01.webp'),
-        pos('221-412', 100, 'WAGO 221-412-100 221 Verbindungsklemme flexibel: 0.14-4 mm² starr: 0.2-4 mm² Polzahl: 2 Transparent, Orange Box', 2, 3.45, 'bilder/klein/wago-221-412-01.webp')
+        pos('221-423', 50, 'WAGO 221-423-50 221 Verbindungsklemme flexibel: 0.14-4 mm² starr: 0.2-4 mm² Polzahl: 3 Transparent, Grün Box', 'WAGO 221-423 Verbindungsklemme, 3-polig', 20, 17.50, 'bilder/klein/wago-221-423-01.webp'),
+        pos('221-412', 100, 'WAGO 221-412-100 221 Verbindungsklemme flexibel: 0.14-4 mm² starr: 0.2-4 mm² Polzahl: 2 Transparent, Orange Box', 'WAGO 221-412 Verbindungsklemme, 2-polig', 2, 3.45, 'bilder/klein/wago-221-412-01.webp')
       ]
     },
     {
@@ -95,8 +99,8 @@
           sendung: '00340161386265739983', frachtfuehrer: 'DHL', adresse: 'a2', pos: [0, 1] }
       ],
       positionen: [
-        pos('221-420', 15, 'WAGO 221-420-15 221 Verbindungsklemme flexibel: 0.14-4 mm² starr: 0.2-4 mm² Polzahl: 10 Transparent, Orange Box', 60, 40.60, 'bilder/klein/wago-221-420-01.webp'),
-        pos('221-613', 1, 'WAGO 221-613 221 Verbindungsklemme flexibel: 0.5-6 mm² starr: 0.5-6 mm² Polzahl: 3 Transparent, Orange', 500, 0.95, 'bilder/klein/wago-221-613-01.webp')
+        pos('221-420', 15, 'WAGO 221-420-15 221 Verbindungsklemme flexibel: 0.14-4 mm² starr: 0.2-4 mm² Polzahl: 10 Transparent, Orange Box', 'WAGO 221-420 Verbindungsklemme, 10-polig', 60, 40.60, 'bilder/klein/wago-221-420-01.webp'),
+        pos('221-613', 1, 'WAGO 221-613 221 Verbindungsklemme flexibel: 0.5-6 mm² starr: 0.5-6 mm² Polzahl: 3 Transparent, Orange', 'WAGO 221-613 Verbindungsklemme, 3-polig', 500, 0.95, null)
       ]
     },
     {
@@ -108,7 +112,7 @@
           sendung: '00340161386261190689', frachtfuehrer: 'DHL', adresse: 'a1', pos: [0] }
       ],
       positionen: [
-        pos('221-500', 1, 'WAGO 221-500 Serie 221 Befestigungsadapter', 100, 0.87, null)
+        pos('221-500', 1, 'WAGO 221-500 Serie 221 Befestigungsadapter', 'WAGO 221-500 Befestigungsadapter', 100, 0.87, null)
       ]
     },
     {
@@ -122,8 +126,8 @@
           adresse: 'a1', pos: [1], grund: 'Artikel wird nachproduziert' }
       ],
       positionen: [
-        pos('221-413', 100, 'WAGO 221-413-100 221 Verbindungsklemme flexibel: 0.14-4 mm² starr: 0.2-4 mm² Polzahl: 3 Transparent, Orange Box', 20, 26.99, 'bilder/klein/wago-221-413-01.webp'),
-        pos('221-425', 25, 'WAGO 221-425-25 221 Verbindungsklemme flexibel: 0.14-4 mm² starr: 0.2-4 mm² Polzahl: 5 Transparent, Grün Box', 5, 14.50, 'bilder/klein/wago-221-425-01.webp')
+        pos('221-413', 100, 'WAGO 221-413-100 221 Verbindungsklemme flexibel: 0.14-4 mm² starr: 0.2-4 mm² Polzahl: 3 Transparent, Orange Box', 'WAGO 221-413 Verbindungsklemme, 3-polig', 20, 26.99, 'bilder/klein/wago-221-413-01.webp'),
+        pos('221-425', 25, 'WAGO 221-425-25 221 Verbindungsklemme flexibel: 0.14-4 mm² starr: 0.2-4 mm² Polzahl: 5 Transparent, Grün Box', 'WAGO 221-425 Verbindungsklemme, 5-polig', 5, 14.50, 'bilder/klein/wago-221-425-01.webp')
       ],
       offenePositionen: 1
     },
@@ -136,8 +140,8 @@
           sendung: '00340161386255401118', frachtfuehrer: 'DHL', adresse: 'a2', pos: [0, 1] }
       ],
       positionen: [
-        pos('221-412', 50, 'WAGO 221-412-50 221 Verbindungsklemme flexibel: 0.14-4 mm² starr: 0.2-4 mm² Polzahl: 2 Transparent, Orange Box', 50, 12.49, 'bilder/klein/wago-221-412-01.webp'),
-        pos('221-615', 1, 'WAGO 221-615 221 Verbindungsklemme flexibel: 0.5-6 mm² starr: 0.5-6 mm² Polzahl: 5 Transparent, Orange', 300, 1.60, 'bilder/klein/wago-221-615-01.webp')
+        pos('221-412', 50, 'WAGO 221-412-50 221 Verbindungsklemme flexibel: 0.14-4 mm² starr: 0.2-4 mm² Polzahl: 2 Transparent, Orange Box', 'WAGO 221-412 Verbindungsklemme, 2-polig', 50, 12.49, 'bilder/klein/wago-221-412-01.webp'),
+        pos('221-615', 1, 'WAGO 221-615 221 Verbindungsklemme flexibel: 0.5-6 mm² starr: 0.5-6 mm² Polzahl: 5 Transparent, Orange', 'WAGO 221-615 Verbindungsklemme, 5-polig', 300, 1.60, null)
       ]
     },
     {
@@ -148,7 +152,7 @@
       storniertAm: '2026-07-03',
       stornoGrund: 'Auf Wunsch des Unternehmens vor dem Versand storniert.',
       positionen: [
-        pos('221-500', 1, 'WAGO 221-500 Serie 221 Befestigungsadapter', 50, 0.87, null)
+        pos('221-500', 1, 'WAGO 221-500 Serie 221 Befestigungsadapter', 'WAGO 221-500 Befestigungsadapter', 50, 0.87, null)
       ]
     }
   ];
@@ -202,8 +206,8 @@
     { id: 's2', name: 'Wartungspaket Umspannstation', angelegt: '2026-08-12', geaendert: '2026-08-14',
       zuletztBestellt: '2026-08-14',
       zeilen: [
-        zeile('221-613;Verbindungsklemme 6 mm²;120', '221-613', 1, 'WAGO 221-613 221 Verbindungsklemme flexibel: 0.5-6 mm² starr: 0.5-6 mm² Polzahl: 3 Transparent, Orange', 120, 0.95, 'bilder/klein/wago-221-613-01.webp'),
-        zeile('221-615;Verbindungsklemme 6 mm² 5-Leiter;80', '221-615', 1, 'WAGO 221-615 221 Verbindungsklemme flexibel: 0.5-6 mm² starr: 0.5-6 mm² Polzahl: 5 Transparent, Orange', 80, 1.60, 'bilder/klein/wago-221-615-01.webp'),
+        zeile('221-613;Verbindungsklemme 6 mm²;120', '221-613', 1, 'WAGO 221-613 221 Verbindungsklemme flexibel: 0.5-6 mm² starr: 0.5-6 mm² Polzahl: 3 Transparent, Orange', 120, 0.95, null),
+        zeile('221-615;Verbindungsklemme 6 mm² 5-Leiter;80', '221-615', 1, 'WAGO 221-615 221 Verbindungsklemme flexibel: 0.5-6 mm² starr: 0.5-6 mm² Polzahl: 5 Transparent, Orange', 80, 1.60, null),
         zeile('SIE-3RV2011-1JA10;Leistungsschalter;4', null, null, null, 4, 0, null),
         zeile('PHOENIX-3044076;Reihenklemme UT 2,5;60', null, null, null, 60, 0, null)
       ] },

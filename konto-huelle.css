@@ -434,6 +434,45 @@
 .konto-error svg { width: 24px; height: 24px; color: var(--c-danger); flex-shrink: 0; }
 .konto-error-actions { margin-left: auto; }
 
+/* --- Artikelvorschau in einer Liste -------------------------------------- */
+/* Eine Bestellliste ohne Artikel zwingt zum Oeffnen jeder Zeile, nur um zu
+   sehen, worum es ging. Hersteller-Nummern helfen dabei nicht; ein Bild und
+   ein kurzer Titel schon. Drei Bilder reichen: mehr wird zur Zahl. */
+.konto-vorschau { display: flex; align-items: center; gap: 4px; margin-bottom: 4px; }
+.konto-vorschau-bild {
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--c-bg-white);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-xs);
+  overflow: hidden;
+}
+.konto-vorschau-bild img { width: 100%; height: 100%; object-fit: contain; }
+.konto-vorschau-mehr {
+  flex-shrink: 0;
+  padding: 0 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--c-text-secondary);
+  font-variant-numeric: tabular-nums;
+}
+/* Hoechstens zwei Zeilen: die Zelle soll die Zeilenhoehe der Tabelle nicht
+   sprengen, und ein dritter Umbruch bringt kein Unterscheidungsmerkmal mehr. */
+.konto-vorschau-titel {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  max-width: 34ch;
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--c-text);
+}
+
 /* --- Beilaeufige Bemerkung ------------------------------------------------ */
 /* Ein Satz, der nur einen Zustand erklaert, ist kein Hinweisbanner. .konto-note
    traegt Rahmen, Flaeche und eine Handlung und liest sich deshalb als Warnung.
@@ -588,6 +627,10 @@
      aendert das nichts, und wenn es eng wird, spart es die Rollleiste. */
   .konto-row-actions { white-space: normal; }
   .konto-table .bom-status { white-space: normal; }
+  /* Der Kurztitel auf eine Zeile. Das spart der Zeile rund 18px Hoehe. Die
+     Bilder bleiben alle drei: sie sind 32px schmal, und eines davon zu
+     verstecken wuerde die Zahl daneben ("+1") falsch machen. */
+  .konto-vorschau-titel { -webkit-line-clamp: 1; max-width: 22ch; }
 }
 @media (max-width: 1100px) {
   .konto-table { font-size: 13px; }
@@ -596,6 +639,11 @@
   .konto-row-actions { flex-direction: column; align-items: stretch; gap: 4px; }
   .konto-row-actions .konto-btn { min-height: 32px; font-size: 13px; padding: 4px 8px; }
   .konto-cell-sub { font-size: 11px; }
+  /* Eine Spalte weniger, bevor die Knopfbeschriftung dreizeilig wird. Faellt
+     die, die am wenigsten sagt: wie viele Positionen es sind, steht auch auf
+     der Bestellseite. Die Artikelvorschau bleibt - sie ist der Grund, warum
+     die Liste ueberhaupt gelesen wird. */
+  .konto-table .konto-spalte-opt { display: none; }
 }
 /* Letzter Schritt vor dem Umbruch der Seitenleiste bei 900. Muss nach dem
    1100er-Block stehen: beide treffen zu, und bei gleicher Staerke gewinnt der

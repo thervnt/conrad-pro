@@ -359,7 +359,7 @@
   var listen = K.merklisten;
 
   document.querySelector('[data-zahl]').textContent =
-    listen.length + ' Listen \u00b7 Werte netto';
+    listen.length + ' Listen \u00b7 alle Beträge netto';
 
   /* Eigene Namen statt "Merkliste vom 03.07.2026" (Befund E1), eine
      Darstellung fuer alle Karten (Befund E2), und etwas, das man damit tun
@@ -368,7 +368,7 @@
     '<div class="konto-table-wrap"><table class="konto-table">' +
     '<thead><tr><th scope="col">Merkliste</th>' +
     '<th scope="col">Zuletzt geändert</th><th scope="col" class="konto-amount">Artikel</th>' +
-    '<th scope="col" class="konto-amount">Wert netto</th>' +
+    '<th scope="col" class="konto-amount">Betrag netto</th>' +
     '<th scope="col"><span class="visually-hidden">Aktionen</span></th></tr></thead><tbody>' +
     listen.map(function (m) {
       return '<tr>' +

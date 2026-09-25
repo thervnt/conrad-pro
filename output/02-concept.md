@@ -1660,3 +1660,74 @@ verschwindet, und **Stornierung beantragen** danach, solange nichts versendet
 ist, mit Prüfung durch Conrad und einem eigenen Status. Das zweite ist gebaut,
 das erste ist die Frist. Sag Bescheid, wenn die beiden nebeneinander stehen
 sollen.
+
+---
+
+## 27. Artikelvorschau in der Bestellliste, und ein Wort für einen Betrag
+
+**Befund von Nico:** "1. I still dont see any hint which products might be part
+of each order. didnt we decided to add preview images? 2. wordings for similar
+values are 'betrag netto, wert netto, summe netto ....' not consistent."
+
+Zu 1: Die Empfehlung stand, gebaut war sie nicht. Ich hatte mit "Soll ich das
+so bauen?" geendet und die Antwort nie bekommen. Jetzt gebaut.
+
+### Artikelvorschau
+
+Neue Spalte **Artikel** zwischen Status und Positionen. Je Zeile bis zu drei
+Vorschaubilder mit 32 px, dahinter die Zahl der übrigen ("+1"), darunter der
+Kurztitel des ersten Artikels. Wie viele Artikel es insgesamt sind, steht in
+der Spalte daneben, deshalb nicht noch einmal darunter.
+
+Dafür trägt jede Position ein neues Feld `kurz`: Marke, Artikelnummer,
+Gattung, das eine unterscheidende Merkmal, zum Beispiel "WAGO 221-413
+Verbindungsklemme, 3-polig". Der volle Katalogtitel ist für eine
+Tabellenzelle zu lang, und abgeschnitten sagt er nichts mehr. Positionen ohne
+Bild zeigen dasselbe Platzhaltersymbol wie auf der Bestellseite.
+
+Platz: die Tabelle hatte keinen frei. Zwei Zugeständnisse, beide entlang der
+Regel "lieber etwas weglassen als waagerecht rollen":
+
+* Unter 1100 px fällt die Spalte **Positionen**. Sie sagt am wenigsten, und die
+  Zahl steht auf der Bestellseite. Die Vorschau bleibt, denn sie ist der Grund,
+  warum die Liste gelesen wird.
+* Unter 1280 px steht der Kurztitel auf einer Zeile statt zwei. Das spart der
+  Zeile rund 18 px.
+
+Was es trotzdem kostet: zwischen 768 und 1280 px bricht die Beschriftung
+"Nochmal bestellen" jetzt auf zwei Zeilen, vorher stand sie auf einer. Der
+Prototyp hat diese Reihenfolge schon vorher festgelegt: erst Polsterung, dann
+Schriftgrösse, dann darf die Knopfbeschriftung brechen, erst danach käme die
+Rollleiste. Wer die Zeile zurück will, hat zwei Möglichkeiten: den Knopf in der
+Liste streichen (die Bestellnummer führt auf die Seite, die "Alle Positionen in
+den Warenkorb" trägt) oder ihn "Nachbestellen" nennen. Beides ändert mehr als
+diese Liste, deshalb habe ich nichts davon von mir aus getan.
+
+**Nebenbefund:** `221-613` und `221-615` verwiesen auf Bilddateien, die es im
+Prototyp nicht gibt. In der Liste stand dadurch das Symbol für ein kaputtes
+Bild. Die vier Verweise sind entfernt, die Positionen zeigen jetzt den
+Platzhalter.
+
+### Ein Wort für einen Betrag
+
+Gefunden waren fünf Wörter für dieselbe Art Zahl: Summe netto (Bestellungen,
+Stücklisten), Betrag netto (Rechnungen), Wert netto (Merklisten), Gutschrift
+netto (Rücksendungen), Nettopreis (Summenblöcke).
+
+Die Regel lautet jetzt:
+
+* **Betrag** ist der Wert eines Datensatzes, also einer Zeile in einer Liste.
+  Das ist der Spaltenkopf in Bestellungen, Rechnungen, Stücklisten und
+  Merklisten, und der Untertitel heisst überall "alle Beträge netto".
+* **Summe** ist die Addition der Zeilen, die darüber stehen. Das ist die
+  Summenzeile, etwa am Ende einer Stückliste.
+* **Nettopreis** und **Gesamtpreis** bleiben ausschliesslich im
+  Summenblock im Warenkorbstil. Diese Wörter stehen so im Warenkorb, und der
+  Kontobereich darf davon nicht abweichen.
+* **Gutschrift** bleibt bei den Rücksendungen. Das ist kein zweiter Name für
+  dasselbe, sondern Geld in die andere Richtung.
+* **Wert** fällt ersatzlos weg. Von den fünf war es das vageste.
+
+Geändert wurden damit vier Beschriftungen: der Spaltenkopf und der Untertitel
+in Merklisten und in Stücklisten, der Spaltenkopf in Bestellungen und dessen
+CSV-Kopfzeile.

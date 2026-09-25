@@ -372,7 +372,7 @@
      Seite. Vorher zeigte der Eintrag direkt auf das Werkzeug, das keine
      Kontonavigation hat - im eigenen Entwurf derselbe Befund wie A1. */
   document.querySelector('[data-zahl]').textContent = listen.length
-    ? listen.length + ' gespeicherte Listen \u00b7 Summen netto'
+    ? listen.length + ' gespeicherte Listen \u00b7 alle Beträge netto'
     : 'Abgeglichene Listen bleiben hier gespeichert';
 
   var el = document.querySelector('[data-liste]');
@@ -392,7 +392,7 @@
   el.innerHTML = '<div class="konto-table-wrap"><table class="konto-table">' +
     '<thead><tr><th scope="col">Stückliste</th><th scope="col">Zuletzt geändert</th>' +
     '<th scope="col">Abgleich</th><th scope="col" class="konto-amount">Positionen</th>' +
-    '<th scope="col" class="konto-amount">Summe netto</th><th scope="col">Zuletzt bestellt</th>' +
+    '<th scope="col" class="konto-amount">Betrag netto</th><th scope="col">Zuletzt bestellt</th>' +
     '<th scope="col"><span class="visually-hidden">Aktionen</span></th></tr></thead><tbody>' +
     listen.map(function (l) {
       /* "ohneTreffer" kommt aus dem Abgleich und ist der Grund, warum jemand
