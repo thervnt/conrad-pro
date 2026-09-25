@@ -352,7 +352,8 @@
 (function () {
   var K = window.KONTO;
   var E = K.esc, EU = K.euro, D = K.datum;
-  var nr = new URLSearchParams(location.search).get('nr') || K.bestellungen[0].nr;
+  var param = new URLSearchParams(location.search);
+  var nr = param.get('nr') || K.bestellungen[0].nr;
   var b = K.bestellungen.filter(function (x) { return x.nr === nr; })[0];
 
   var elKopf = document.querySelector('[data-kopf]');
@@ -371,13 +372,37 @@
   var krumeAktiv = document.querySelector('.breadcrumb-current');
   if (krumeAktiv) krumeAktiv.textContent = 'Bestellung ' + b.nr;
 
-  var storniert = b.status === 'storniert';
-  var netto = K.netto(b);
-  var summe = netto + b.versand;
-  var mwst = summe * K.MWST;
   var rechnung = K.rechnungen.filter(function (r) {
     return r.bestellung === b.nr && r.art === 'rechnung';
   })[0];
+
+  /* Zustaende der Seite. Sie leben ausserhalb von zeichne(), weil sie einen
+     Neuaufbau ueberdauern muessen. */
+  var stornoFrage = null;   /* Index der Sendung, zu der gerade gefragt wird */
+  /* Wer von der Rueckgabeliste kommt, hat die Bestellung schon gewaehlt und
+     landet direkt im Formular. */
+  var rmaOffen = param.get('rma') === '1';
+  var rmaFehler = '';
+
+  var SCHRITTE = ['Bestellt', 'In Bearbeitung', 'Versendet', 'Zugestellt'];
+  var STAND = { bearbeitung: 1, versendet: 2, zugestellt: 3 };
+
+  /* Zurueckgeben laesst sich nur, was auch angekommen ist. Was noch unterwegs
+     ist, wird nicht zurueckgeschickt, und was storniert wurde, kam nie an. */
+  function rueckgabePositionen() {
+    if (!b.sendungen) return [];
+    return b.sendungen.reduce(function (liste, s) {
+      return s.status === 'zugestellt' ? liste.concat(s.pos) : liste;
+    }, []);
+  }
+
+  function zeichne() {
+    var storniert = b.status === 'storniert';
+    var netto = K.nettoOffen(b);
+    var entfallen = K.netto(b) - netto;
+    var versand = netto === 0 ? 0 : b.versand;
+    var summe = netto + versand;
+    var mwst = summe * K.MWST;
 
   /* --- Kopf: eine Handlung ------------------------------------------------ */
   /* Nachbestellen ist die Handlung der Seite. Die Belege standen vorher als
@@ -388,16 +413,15 @@
       '<div>' +
         '<h1 class="konto-h1">Bestellung ' + E(b.nr) + '</h1>' +
         '<p class="konto-head-sub">Aufgegeben am ' + D(b.datum) +
-        (b.referenz ? ' \u00b7 ' + E(b.referenz) : '') + '</p>' +
+        (b.referenz ? ' · ' + E(b.referenz) : '') + '</p>' +
       '</div>' +
-      (storniert ? '' :
-        '<div class="konto-head-actions">' +
-          '<button type="button" class="konto-btn primary" data-alle>Alle Positionen in den Warenkorb</button>' +
-        '</div>') +
+      '<div class="konto-head-actions">' +
+        '<button type="button" class="konto-btn primary" data-alle>Alle Positionen in den Warenkorb</button>' +
+      '</div>' +
     '</div>';
 
   /* --- Position als Zeile ------------------------------------------------- */
-  function posZeile(p, i, offen) {
+  function posZeile(p, i) {
     return '<div class="konto-pos">' +
       '<span class="konto-pos-img">' + (p.bild
         ? '<img src="' + E(p.bild) + '" alt="" width="56" height="56" loading="lazy">'
@@ -406,14 +430,14 @@
       '<div class="konto-pos-body">' +
         '<p class="konto-pos-name">' + E(p.titel) + '</p>' +
         '<div class="konto-pos-meta">' +
-          '<span>' + p.menge + ' \u00d7 ' + (p.packSize === 1 ? 'Stück' : p.packSize + 'er-Set') + '</span>' +
+          '<span>' + p.menge + ' × ' + (p.packSize === 1 ? 'Stück' : p.packSize + 'er-Set') + '</span>' +
           '<span>Hst.-Nr. ' + E(p.sku) + '-' + p.packSize + '</span>' +
         '</div>' +
       '</div>' +
       '<div class="konto-pos-right">' +
         '<span class="konto-pos-price">' + EU(p.menge * p.einzel) + '</span>' +
         '<span class="konto-pos-unit">' + EU(p.einzel) + ' je Einheit, netto</span>' +
-        (storniert ? '' : '<button type="button" class="konto-btn" data-pos="' + i + '">Nochmal bestellen</button>') +
+        '<button type="button" class="konto-btn" data-pos="' + i + '">Nochmal bestellen</button>' +
       '</div></div>';
   }
 
@@ -422,14 +446,15 @@
      an ihnen. Vorher trug die Seite genau eine Sendungskarte - bei
      "Teilweise versendet" liess sich damit nicht sagen, was gekommen ist und
      was fehlt. Genau das ist die erste Frage. */
-  var SCHRITTE = ['Bestellt', 'In Bearbeitung', 'Versendet', 'Zugestellt'];
-  var STAND = { bearbeitung: 1, versendet: 2, zugestellt: 3 };
-
   function sendungKarte(s, i) {
     var mehrere = b.sendungen.length > 1;
     var adr = K.adresse(s.adresse);
-    var unterwegs = s.status === 'versendet' || s.status === 'zugestellt';
+    var weg = s.status === 'storniert';
     var stand = STAND[s.status];
+    /* Storniert wird, was noch nicht unterwegs ist. Einen Lkw holt man nicht
+       zurueck - dafuer gibt es die Ruecksendung. */
+    var kannStorno = K.stornierbar(s);
+    var einzige = b.sendungen.length === 1;
     return '<div class="konto-card konto-section">' +
       '<div class="konto-card-head">' +
         '<h2 class="konto-card-title">' +
@@ -440,9 +465,11 @@
       '</div>' +
       '<dl class="konto-dl">' +
         '<div><dt>Versand durch</dt><dd>' + E(s.versender) + '</dd></div>' +
-        '<div><dt>' + (s.status === 'zugestellt' ? 'Zugestellt am' : 'Voraussichtlich am') + '</dt>' +
-          '<dd>' + D(s.termin) + (s.grund ? ' <span style="color:var(--c-text-secondary)">\u00b7 ' + E(s.grund) + '</span>' : '') + '</dd></div>' +
-        (s.sendung
+        (weg
+          ? '<div><dt>Storniert am</dt><dd>' + D(s.storniertAm || b.storniertAm || K.HEUTE_ISO) + '</dd></div>'
+          : '<div><dt>' + (s.status === 'zugestellt' ? 'Zugestellt am' : 'Voraussichtlich am') + '</dt>' +
+            '<dd>' + D(s.termin) + (s.grund ? ' <span style="color:var(--c-text-secondary)">· ' + E(s.grund) + '</span>' : '') + '</dd></div>') +
+        (s.sendung && !weg
           ? '<div><dt>Sendungsnummer</dt><dd>' +
             '<span class="id-chip"><button class="id-chip-value" data-copy="' + E(s.sendung) + '" title="In Zwischenablage kopieren">' +
             '<svg class="id-chip-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>' +
@@ -451,17 +478,43 @@
           : '') +
         '<div><dt>Lieferadresse</dt><dd>' + E(adr.label) + ', ' + E(adr.zeile) + ', ' + E(adr.ort) + '</dd></div>' +
       '</dl>' +
-      '<div class="konto-steps">' + SCHRITTE.map(function (t, k) {
-        var klasse = k < stand ? 'is-done' : (k === stand ? 'is-now' : '');
-        return '<div class="konto-step ' + klasse + '">' + t + '</div>';
-      }).join('') + '</div>' +
+      (weg
+        ? '<p class="konto-note" style="margin:16px 0 0">Diese Sendung wird nicht versendet und nicht berechnet.</p>'
+        : '<div class="konto-steps">' + SCHRITTE.map(function (t, k) {
+            var klasse = k < stand ? 'is-done' : (k === stand ? 'is-now' : '');
+            return '<div class="konto-step ' + klasse + '">' + t + '</div>';
+          }).join('') + '</div>') +
       '<div class="konto-section" style="margin-top:16px">' +
-        s.pos.map(function (idx) { return posZeile(b.positionen[idx], idx, !unterwegs); }).join('') +
+        s.pos.map(function (idx) { return posZeile(b.positionen[idx], idx); }).join('') +
       '</div>' +
+      /* Die Rueckfrage steht an der Sendung, um die es geht, nicht in einem
+         Dialog, der sie verdeckt. */
+      (stornoFrage === i
+        ? '<div class="konto-frage" role="group" aria-labelledby="frage-' + i + '">' +
+            '<p class="konto-frage-titel" id="frage-' + i + '">' +
+            (einzige ? 'Bestellung wirklich stornieren?' : 'Sendung ' + (i + 1) + ' wirklich stornieren?') + '</p>' +
+            '<p class="konto-frage-text">' +
+            (s.pos.length === 1 ? 'Diese Position wird' : 'Diese ' + s.pos.length + ' Positionen werden') +
+            ' nicht versendet und nicht berechnet. Das lässt sich nicht rückgängig machen. ' +
+            'Sie können die Artikel danach jederzeit neu bestellen.</p>' +
+            '<div class="konto-frage-aktionen">' +
+              '<button type="button" class="konto-btn danger" data-storno-ja="' + i + '">Ja, stornieren</button>' +
+              '<button type="button" class="konto-btn ghost" data-storno-nein>Abbrechen</button>' +
+            '</div>' +
+          '</div>'
+        : (kannStorno
+          ? '<div class="konto-zeilenleiste">' +
+              '<span class="konto-note" style="margin:0">Noch nicht versendet, deshalb noch stornierbar.</span>' +
+              '<div class="konto-zeilenleiste-rechts">' +
+                '<button type="button" class="konto-btn danger" data-storno="' + i + '">' +
+                (einzige ? 'Bestellung stornieren' : 'Sendung stornieren') + '</button>' +
+              '</div>' +
+            '</div>'
+          : '')) +
     '</div>';
   }
 
-  var sendungen = storniert
+  var sendungen = (storniert && !b.sendungen)
     ? '<div class="konto-card konto-section">' +
         '<div class="konto-card-head"><h2 class="konto-card-title">Storniert</h2>' +
           '<span>' + K.pille('storniert') + '</span></div>' +
@@ -473,7 +526,7 @@
         'Es wurde nichts versendet und nichts berechnet. Eine Rechnung zu dieser ' +
         'Bestellung gibt es deshalb nicht.</p>' +
         '<div class="konto-section" style="margin-top:16px">' +
-          b.positionen.map(function (p, i) { return posZeile(p, i, true); }).join('') +
+          b.positionen.map(function (p, i) { return posZeile(p, i); }).join('') +
         '</div>' +
       '</div>'
     : b.sendungen.map(sendungKarte).join('');
@@ -497,10 +550,16 @@
     '<div class="konto-card-head"><h2 class="konto-card-title">Summe und Zahlung</h2></div>' +
     '<div class="konto-sum" style="max-width:none;margin:0">' +
       '<div class="konto-sum-row"><span>Nettopreis</span><span>' + EU(netto) + '</span></div>' +
-      '<div class="konto-sum-row"><span>Versand</span><span>' + (b.versand ? EU(b.versand) : 'Kostenfrei') + '</span></div>' +
+      '<div class="konto-sum-row"><span>Versand</span><span>' + (versand ? EU(versand) : 'Kostenfrei') + '</span></div>' +
       '<div class="konto-sum-row"><span>MwSt. (19 %)</span><span>' + EU(mwst) + '</span></div>' +
       '<div class="konto-sum-total"><span>Gesamtpreis</span><span>' +
-        (storniert ? '\u2013' : EU(summe + mwst)) + '</span></div>' +
+        (storniert ? '–' : EU(summe + mwst)) + '</span></div>' +
+      /* Was storniert wurde, faellt aus der Summe heraus. Ohne diesen Satz
+         sieht die Zahl nach einem Fehler aus. */
+      (entfallen > 0 && !storniert
+        ? '<p class="konto-note" style="margin:8px 0 0">' + EU(entfallen) +
+          ' netto aus stornierten Sendungen sind nicht enthalten.</p>'
+        : '') +
       '<div class="konto-section" style="margin-top:16px;padding-top:16px;border-top:1px solid var(--c-border)">' +
         zahlung +
         '<div class="konto-sum-row"><span>Zahlungsart</span><span>' + E(K.firma.zahlart) + ', ' + E(K.firma.zahlungsziel) + '</span></div>' +
@@ -513,26 +572,71 @@
         '<p class="konto-nav-title" style="padding:0;margin-bottom:8px">Belege</p>' +
         '<div class="konto-head-actions">' +
           (rechnung ? '<button type="button" class="konto-btn ghost" data-beleg="Rechnung ' + E(rechnung.nr) + '">Rechnung (PDF)</button>' : '') +
-          (b.sendungen.some(function (s) { return s.sendung; })
+          ((b.sendungen || []).some(function (s) { return s.sendung && s.status !== 'storniert'; })
             ? '<button type="button" class="konto-btn ghost" data-beleg="Lieferschein">Lieferschein (PDF)</button>' : '') +
         '</div>' +
       '</div>') +
   '</div>';
 
   /* --- Rueckgabe ---------------------------------------------------------- */
+  /* Vorher fuehrte "Rücksendung starten" nur auf die Uebersichtsseite, wo
+     derselbe Knopf noch einmal stand. Es entstand nie ein Vorgang. Jetzt
+     waehlt man hier die Positionen und den Grund, und der Vorgang steht
+     danach in der Liste. */
+  var rmaPos = rueckgabePositionen();
   var rma = K.ruecksendungen.filter(function (r) { return r.bestellung === b.nr; })[0];
-  var rueck = (b.status !== 'zugestellt' && !rma) ? '' :
+
+  function rmaFormular() {
+    return '<form data-rma-form>' +
+      '<fieldset class="konto-satz">' +
+        '<legend>Welche Artikel senden Sie zurück?</legend>' +
+        rmaPos.map(function (idx) {
+          var p = b.positionen[idx];
+          return '<label class="konto-wahl">' +
+            '<input type="checkbox" class="konto-check" name="pos" value="' + idx + '">' +
+            '<span class="konto-wahl-body">' +
+              '<span class="konto-wahl-name">' + E(p.titel) + '</span>' +
+              '<span class="konto-wahl-note">' + p.menge + ' × ' +
+              (p.packSize === 1 ? 'Stück' : p.packSize + 'er-Set') + ' · Hst.-Nr. ' +
+              E(p.sku) + '-' + p.packSize + '</span>' +
+            '</span>' +
+            '<span class="konto-wahl-preis">' + EU(p.menge * p.einzel) + '</span>' +
+          '</label>';
+        }).join('') +
+      '</fieldset>' +
+      '<div class="konto-feld" style="max-width:420px">' +
+        '<label class="konto-feld-label" for="rma-grund">Grund der Rücksendung</label>' +
+        '<select class="konto-select" id="rma-grund" name="grund" required>' +
+          K.RMA_GRUENDE.map(function (g) { return '<option>' + E(g) + '</option>'; }).join('') +
+        '</select>' +
+      '</div>' +
+      (rmaFehler
+        ? '<p class="konto-feld-fehler" role="alert">' + E(rmaFehler) + '</p>'
+        : '<p class="konto-feld-hilfe">Sie erhalten die Rücksendenummer sofort. ' +
+          'Das Rücksendeetikett kommt per E-Mail an ' + E((K.benutzer.filter(function (u) { return u.ichSelbst; })[0] || K.benutzer[0]).mail) + '.</p>') +
+      '<div class="konto-zeilenleiste">' +
+        '<div class="konto-zeilenleiste-links">' +
+          '<button type="submit" class="konto-btn primary">Rücksendung anmelden</button>' +
+          '<button type="button" class="konto-btn ghost" data-rma-ab>Abbrechen</button>' +
+        '</div>' +
+      '</div>' +
+    '</form>';
+  }
+
+  var rueck = (!rmaPos.length && !rma) ? '' :
     '<div class="konto-card konto-section">' +
       '<div class="konto-card-head"><h2 class="konto-card-title">Rücksendung</h2></div>' +
       (rma
         ? '<p style="margin:0 0 16px;font-size:14px">' + K.pille(rma.status) +
           ' <strong style="margin-left:8px">' + E(rma.nr) + '</strong> vom ' + D(rma.datum) +
-          ' \u00b7 ' + E(rma.artikel) + ' \u00b7 ' + EU(rma.betrag) + ' netto</p>' +
+          ' · ' + E(rma.artikel) + ' · ' + EU(rma.betrag) + ' netto</p>' +
           '<a class="konto-btn ghost" href="konto-ruecksendungen.html">Rücksendungen anzeigen</a>'
-        : '<p class="konto-empty-text" style="margin:0 0 16px;max-width:none">' +
-          'Sie können Artikel aus dieser Bestellung noch bis zum ' + D('2026-10-15') +
-          ' zurücksenden. Die Gutschrift erstellt Conrad Electronic, unabhängig davon, wer versendet hat.</p>' +
-          '<button type="button" class="konto-btn" data-rma>Rücksendung starten</button>') +
+        : (rmaOffen
+          ? rmaFormular()
+          : '<p class="konto-empty-text" style="margin:0 0 16px;max-width:none">' +
+            'Sie können Artikel aus dieser Bestellung noch bis zum ' + D('2026-10-15') +
+            ' zurücksenden. Die Gutschrift erstellt Conrad Electronic, unabhängig davon, wer versendet hat.</p>' +
+            '<button type="button" class="konto-btn" data-rma>Rücksendung starten</button>')) +
     '</div>';
 
   /* --- Streifen mit den Stammdaten ---------------------------------------- */
@@ -552,7 +656,10 @@
     '</div>' +
   '</div>';
 
-  elInhalt.innerHTML = sendungen + summeBlock + rueck + streifen;
+    elInhalt.innerHTML = sendungen + summeBlock + rueck + streifen;
+  }
+
+  zeichne();
 
   /* --- Handlungen ---------------------------------------------------------- */
   document.addEventListener('click', function (e) {
@@ -561,13 +668,85 @@
     if (p) { K.nachbestellen([b.positionen[Number(p.dataset.pos)]]); K.melden('In den Einkaufswagen gelegt'); return; }
     var beleg = e.target.closest('[data-beleg]');
     if (beleg) { K.melden(beleg.dataset.beleg + ' wird heruntergeladen'); return; }
-    if (e.target.closest('[data-rma]')) { location.href = 'konto-ruecksendungen.html?neu=' + b.nr; return; }
+
+    /* Stornieren: fragen, dann tun. */
+    var frage = e.target.closest('[data-storno]');
+    if (frage) {
+      stornoFrage = Number(frage.dataset.storno);
+      zeichne();
+      var ja = document.querySelector('[data-storno-ja]');
+      if (ja) ja.focus();
+      return;
+    }
+    if (e.target.closest('[data-storno-nein]')) { stornoFrage = null; zeichne(); return; }
+    var ja = e.target.closest('[data-storno-ja]');
+    if (ja) {
+      var i = Number(ja.dataset.stornoJa);
+      var einzeln = b.sendungen.length === 1;
+      K.stornieren(b.nr, i);
+      b.sendungen[i].status = 'storniert';
+      b.sendungen[i].storniertAm = K.HEUTE_ISO;
+      if (b.sendungen.every(function (s) { return s.status === 'storniert'; })) {
+        b.status = 'storniert';
+        b.storniertAm = K.HEUTE_ISO;
+        b.stornoGrund = 'Von Ihnen storniert';
+      } else if (!b.sendungen.some(function (s) { return s.status === 'bearbeitung'; })) {
+        b.status = b.sendungen.some(function (s) { return s.status === 'versendet'; }) ? 'versendet' : 'zugestellt';
+      }
+      b.offenePositionen = b.sendungen.reduce(function (n, s) {
+        return s.status === 'bearbeitung' ? n + s.pos.length : n;
+      }, 0);
+      stornoFrage = null;
+      zeichne();
+      K.melden(einzeln ? 'Bestellung storniert' : 'Sendung ' + (i + 1) + ' storniert');
+      return;
+    }
+
+    /* Ruecksendung: Formular auf, Formular zu. */
+    if (e.target.closest('[data-rma]')) {
+      rmaOffen = true; rmaFehler = '';
+      zeichne();
+      var erste = document.querySelector('[data-rma-form] input[name="pos"]');
+      if (erste) erste.focus();
+      return;
+    }
+    if (e.target.closest('[data-rma-ab]')) { rmaOffen = false; rmaFehler = ''; zeichne(); return; }
     var kopie = e.target.closest('[data-copy]');
     if (kopie && navigator.clipboard) {
       navigator.clipboard.writeText(kopie.dataset.copy);
       kopie.classList.add('copied');
       setTimeout(function () { kopie.classList.remove('copied'); }, 1400);
     }
+  });
+
+  /* Die Ruecksendung entsteht hier, nicht auf der naechsten Seite. */
+  document.addEventListener('submit', function (e) {
+    var form = e.target.closest('[data-rma-form]');
+    if (!form) return;
+    e.preventDefault();
+    var gewaehlt = Array.prototype.slice.call(form.querySelectorAll('input[name="pos"]:checked'))
+      .map(function (el) { return Number(el.value); });
+    if (!gewaehlt.length) {
+      rmaFehler = 'Wählen Sie mindestens einen Artikel aus, den Sie zurücksenden möchten.';
+      zeichne();
+      var hinweis = document.querySelector('[data-rma-form] .konto-feld-fehler');
+      if (hinweis) hinweis.scrollIntoView({ block: 'nearest' });
+      return;
+    }
+    var erste = b.positionen[gewaehlt[0]];
+    var neu = K.rmaAnlegen({
+      bestellung: b.nr,
+      grund: form.elements.grund.value,
+      artikel: gewaehlt.length === 1
+        ? erste.titel
+        : erste.titel + ' und ' + (gewaehlt.length - 1) + ' weitere',
+      betrag: gewaehlt.reduce(function (t, i) {
+        return t + b.positionen[i].menge * b.positionen[i].einzel;
+      }, 0)
+    });
+    rmaOffen = false; rmaFehler = '';
+    zeichne();
+    K.melden('Rücksendung ' + neu.nr + ' angemeldet');
   });
 })();
 </script>

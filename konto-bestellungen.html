@@ -458,7 +458,7 @@
           '<td>' + K.pille(b.status) +
             (b.status === 'teilversand' ? '<span class="konto-cell-sub">' + b.offenePositionen + ' Position offen</span>' : '') + '</td>' +
           '<td class="konto-num">' + b.positionen.length + '<span class="konto-cell-sub">' + stk + ' Stück</span></td>' +
-          '<td class="konto-amount">' + EU(K.netto(b)) + '</td>' +
+          '<td class="konto-amount">' + (b.status === 'storniert' ? '\u2013' : EU(K.nettoOffen(b))) + '</td>' +
           /* Kein zweiter Knopf fuer die Details: die Bestell-Nr. in der ersten
              Spalte fuehrt schon dorthin. Der Knopf war eine Dopplung und die
              breiteste Spalte der Liste. */
@@ -495,7 +495,7 @@
     var zeilen = [['Bestell-Nr.', 'Datum', 'Status', 'Positionen', 'Summe netto EUR'].join(';')];
     liste.forEach(function (b) {
       zeilen.push([b.nr, K.datum(b.datum), K.STATUS[b.status].text, b.positionen.length,
-        K.netto(b).toFixed(2).replace('.', ',')].join(';'));
+        K.nettoOffen(b).toFixed(2).replace('.', ',')].join(';'));
     });
     var blob = new Blob(['\ufeff' + zeilen.join('\r\n')], { type: 'text/csv;charset=utf-8' });
     var a = document.createElement('a');

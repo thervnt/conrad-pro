@@ -498,7 +498,7 @@
         '<td><a href="konto-bestellung.html?nr=' + E(b.nr) + '">' + E(b.nr) + '</a>' +
           '<span class="konto-cell-sub">' + D(b.datum) + '</span></td>' +
         '<td>' + K.pille(b.status) + '</td>' +
-        '<td class="konto-amount">' + EU(K.netto(b)) + '<span class="konto-cell-sub" style="font-weight:400">netto</span></td>' +
+        '<td class="konto-amount">' + (b.status === 'storniert' ? '\u2013' : EU(K.nettoOffen(b)) + '<span class="konto-cell-sub" style="font-weight:400">netto</span>') + '</td>' +
       '</tr>';
     }).join('') + '</tbody></table></div>';
 

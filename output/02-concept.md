@@ -1388,3 +1388,90 @@ Bestellliste bekommt Spalte und Filter zurück.
 Fünfzehn Seiten: kein "Kostenstelle", kein "Besteller", kein "KST-" mehr im
 sichtbaren Text, keine Tabelle rollt, keine Seite schiebt, jede Seite hat ihre
 Überschrift.
+
+---
+
+## 23. Stornieren und Zurücksenden sind jetzt möglich
+
+**Befund von Nico:** "es gibt den status 'storniert' aber nirgendwo die
+möglichkeit zu stornieren oder retournieren"
+
+Beides bestätigt. Der Prototyp zeigte einen Zustand, in den kein Weg führte.
+
+* **Stornieren:** In keiner der 14 Kontoseiten gab es eine Handlung, die eine
+  Bestellung storniert. Der Status "Storniert" stand fest in den Daten der
+  Bestellung 2017466085 und liess sich nur ansehen.
+* **Zurücksenden:** "Rücksendung starten" auf der Bestelldetailseite führte auf
+  `konto-ruecksendungen.html`, wo derselbe Knopf noch einmal stand und eine
+  Kurzmeldung absetzte. Es entstand nie ein Vorgang, und die Liste blieb
+  unverändert.
+
+### Stornieren
+
+Storniert wird je Sendung, nicht je Bestellung. Was noch in Bearbeitung ist,
+lässt sich aufhalten. Was schon unterwegs ist, nicht mehr; dafür gibt es die
+Rücksendung. Der Knopf steht deshalb in der Sendungskarte, unter den
+Positionen, die er betrifft, und heisst "Bestellung stornieren", wenn die
+Bestellung nur eine Sendung hat, sonst "Sendung stornieren".
+
+Der Schritt lässt sich nicht widerrufen, also wird gefragt. Die Rückfrage
+erscheint an derselben Stelle statt in einem Dialog, der die Sendung verdeckt,
+um die es geht. Sie nennt den Umfang ("Diese 3 Positionen werden nicht
+versendet und nicht berechnet"), sagt, dass es endgültig ist, und nennt den
+Ausweg: neu bestellen geht jederzeit. Der Fokus springt auf "Ja, stornieren",
+"Abbrechen" steht daneben in Weiss.
+
+Danach ändert sich die Seite sichtbar:
+
+* Die Sendung trägt die Statuspille "Storniert", statt des Liefertermins das
+  Stornodatum, keine Sendungsnummer und keine Fortschrittsschritte, dafür den
+  Satz "Diese Sendung wird nicht versendet und nicht berechnet."
+* Die Summe rechnet die stornierten Positionen heraus. Damit die kleinere Zahl
+  nicht nach einem Fehler aussieht, steht darunter "72,50 € netto aus
+  stornierten Sendungen sind nicht enthalten."
+* Sind alle Sendungen storniert, gilt die ganze Bestellung als storniert, der
+  Gesamtpreis wird zum Strich, "Berechnet: nichts" tritt an die Stelle des
+  Zahlungsstands, und die Belegknöpfe verschwinden, weil es die Belege nicht
+  gibt.
+* Bestellliste, Übersicht und die Zahl am Navigationspunkt folgen dem neuen
+  Stand. Der Betrag einer stornierten Bestellung ist dort ein Strich, keine
+  Null: berechnet wurde nichts.
+
+Der Zustand liegt unter `conradStornos` im localStorage und wird beim Laden auf
+die Daten geschrieben, damit jede Seite dasselbe sieht.
+
+Die Liste bekommt bewusst keinen eigenen Stornoknopf. Eine Handlung, die sich
+nicht zurücknehmen lässt, gehört an die Stelle, an der man sieht, was man
+storniert. Die Bestellnummer führt von der Zeile dorthin.
+
+### Zurücksenden
+
+Zurückschicken lässt sich, was zugestellt wurde. Nicht, was noch unterwegs ist,
+und nicht, was storniert wurde und nie ankam.
+
+Auf der Bestelldetailseite öffnet "Rücksendung starten" jetzt ein Formular an
+Ort und Stelle: eine Auswahlzeile je zugestellter Position mit Titel, Menge,
+Hersteller-Nummer und Betrag, darunter der Grund aus fünf Einträgen. Die ganze
+Zeile ist anklickbar, nicht nur das Kästchen, und die gewählte Zeile färbt sich
+blau. Ohne Auswahl erscheint eine Fehlermeldung statt einer leeren
+Rücksendung.
+
+Beim Absenden entsteht ein Vorgang mit Nummer, Datum, Grund und Betrag. Die
+Rückmeldung ist nicht nur eine Kurzmeldung: die Karte zeigt danach den Status
+"In Prüfung", die Nummer und den Weg in die Liste, wo der Vorgang oben steht.
+Gespeichert wird unter `conradRuecksendungen`.
+
+Auf der Rücksendungsseite führt "Rücksendung starten" nicht mehr ins Leere. Eine
+Rücksendung gehört immer zu einer Bestellung, also wird zuerst die Bestellung
+gewählt: eine Liste der Bestellungen, zu denen eine Rücksendung möglich ist, mit
+Zustelldatum, Anzahl der Positionen und Betrag. Von dort geht es mit `?rma=1`
+direkt ins Formular der gewählten Bestellung. Gibt es keine solche Bestellung,
+sagt die Karte das und nennt die Regel, statt eine leere Auswahl zu zeigen.
+
+### Nebenbefund
+
+Beim Einbau fiel eine zweite Sache auf: `konto-daten.js` hatte nach meiner
+ersten Fassung zwei Variablen namens `HEUTE` im selben Geltungsbereich, eine als
+Datum und eine als Zeichenkette. Dadurch stand auf der Übersicht "fällig in NaN
+Tagen". Behoben, indem das ISO-Datum aus dem vorhandenen Datum abgeleitet wird
+statt ein zweites Mal geschrieben zu werden.

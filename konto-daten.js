@@ -14,6 +14,9 @@
 
   var MWST = 0.19;
   var HEUTE = new Date('2026-09-24T09:00:00');
+  var HEUTE_ISO = HEUTE.getFullYear() + '-' +
+    String(HEUTE.getMonth() + 1).padStart(2, '0') + '-' +
+    String(HEUTE.getDate()).padStart(2, '0');
 
   // --- Unternehmen ---------------------------------------------------------
   // Einfache Ebene: Stammdaten, wer bestellt, worauf gebucht wird. Keine
@@ -353,6 +356,94 @@
     return i.slice(0, 4) + ' ' + '•••• '.repeat(Math.max(0, Math.ceil((i.length - 8) / 4))).trim() + ' ' + i.slice(-4);
   }
 
+  // --- Stornieren ----------------------------------------------------------
+  // Den Zustand "storniert" gab es in den Daten, aber keinen Weg dorthin.
+  // Storniert wird je Sendung: was schon unterwegs ist, laesst sich nicht
+  // mehr aufhalten, was noch in Bearbeitung ist, schon.
+  var STORNO_KEY = 'conradStornos';
+  function stornoLesen() {
+    try { return JSON.parse(localStorage.getItem(STORNO_KEY)) || {}; } catch (e) { return {}; }
+  }
+  function stornierbar(s) { return s.status === 'bearbeitung'; }
+  function stornieren(nr, i) {
+    var alle = stornoLesen();
+    var eintrag = alle[nr] || (alle[nr] = { am: HEUTE_ISO, pos: [] });
+    if (eintrag.pos.indexOf(i) === -1) eintrag.pos.push(i);
+    try { localStorage.setItem(STORNO_KEY, JSON.stringify(alle)); } catch (e) { /* voll */ }
+    document.dispatchEvent(new CustomEvent('conrad:storno-changed'));
+  }
+  // Der gespeicherte Storno wird beim Laden in die Daten geschrieben, damit
+  // jede Seite - Liste, Detail, Uebersicht - denselben Zustand sieht.
+  function stornoAnwenden() {
+    var alle = stornoLesen();
+    bestellungen.forEach(function (b) {
+      var eintrag = alle[b.nr];
+      if (!eintrag || !eintrag.pos.length || !b.sendungen) return;
+      eintrag.pos.forEach(function (i) {
+        if (!b.sendungen[i]) return;
+        b.sendungen[i].status = 'storniert';
+        b.sendungen[i].storniertAm = eintrag.am;
+      });
+      var sg = b.sendungen;
+      var offen = sg.filter(function (s) { return s.status === 'bearbeitung'; }).length;
+      var weg = sg.filter(function (s) { return s.status === 'versendet' || s.status === 'zugestellt'; }).length;
+      if (!offen && !weg) {
+        b.status = 'storniert';
+        if (!b.storniertAm) { b.storniertAm = eintrag.am; b.stornoGrund = 'Von Ihnen storniert'; }
+      } else if (offen && weg) {
+        b.status = 'teilversand';
+      } else if (!offen) {
+        b.status = sg.every(function (s) { return s.status !== 'versendet'; }) ? 'zugestellt' : 'versendet';
+      }
+      b.offenePositionen = sg.reduce(function (n, s) {
+        return s.status === 'bearbeitung' ? n + s.pos.length : n;
+      }, 0);
+    });
+  }
+  // Nur, was nicht storniert ist, wird berechnet.
+  function nettoOffen(b) {
+    if (b.status === 'storniert') return 0;
+    if (!b.sendungen || !b.sendungen.length) return netto(b);
+    return b.sendungen.reduce(function (summe, s) {
+      if (s.status === 'storniert') return summe;
+      return summe + s.pos.reduce(function (t, i) {
+        return t + b.positionen[i].menge * b.positionen[i].einzel;
+      }, 0);
+    }, 0);
+  }
+
+  // --- Ruecksendungen anlegen ----------------------------------------------
+  // "Ruecksendung starten" setzte nur eine Meldung ab. Jetzt entsteht ein
+  // Vorgang, der in der Liste steht.
+  var RMA_KEY = 'conradRuecksendungen';
+  var RMA_GRUENDE = [
+    'Artikel nicht benötigt',
+    'Falsch bestellt',
+    'Artikel beschädigt geliefert',
+    'Falsche Lieferung',
+    'Artikel entspricht nicht der Beschreibung'
+  ];
+  function rmaEigene() {
+    try { var v = JSON.parse(localStorage.getItem(RMA_KEY)); return Array.isArray(v) ? v : []; } catch (e) { return []; }
+  }
+  function rmaAlle() { return rmaEigene().concat(ruecksendungen); }
+  function rmaAnlegen(daten) {
+    var eigene = rmaEigene();
+    var nummer = 'RMA-2026-' + String(600 + eigene.length).slice(-4);
+    var neu = {
+      nr: nummer, datum: HEUTE_ISO, bestellung: daten.bestellung, status: 'pruefung',
+      grund: daten.grund, betrag: daten.betrag, artikel: daten.artikel, eigen: true
+    };
+    eigene.unshift(neu);
+    try { localStorage.setItem(RMA_KEY, JSON.stringify(eigene)); } catch (e) { /* voll */ }
+    ruecksendungen.unshift(neu);
+    document.dispatchEvent(new CustomEvent('conrad:rma-changed'));
+    return neu;
+  }
+
+  stornoAnwenden();
+  ruecksendungen = rmaEigene().concat(ruecksendungen);
+
   // --- Kurzmeldung ---------------------------------------------------------
   // Gleicher Baustein wie die Snackbar der Produktseite.
   function melden(text) {
@@ -378,6 +469,9 @@
     person: person, adresse: adresse, pille: pille, STATUS: STATUS,
     nachbestellen: nachbestellen, melden: melden,
     bankLesen: bankLesen, bankSchreiben: bankSchreiben,
+    stornierbar: stornierbar, stornieren: stornieren, HEUTE_ISO: HEUTE_ISO,
+    nettoOffen: nettoOffen,
+    rmaAlle: rmaAlle, rmaAnlegen: rmaAnlegen, RMA_GRUENDE: RMA_GRUENDE,
     ibanPruefen: ibanPruefen, ibanGruppiert: ibanGruppiert, ibanVerdeckt: ibanVerdeckt
   };
 })();

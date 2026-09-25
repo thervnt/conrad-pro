@@ -399,14 +399,71 @@
 
   /* Anlegen bleibt im Kontobereich. In der Produktion fuehrt der Knopf in ein
      eigenes Portal, ohne Hinweis und ohne Rueckmeldung in dieser Liste
-     (Befund D1). */
+     (Befund D1). Vorher setzte er hier nur eine Meldung ab - es entstand
+     nichts. Eine Ruecksendung gehoert immer zu einer Bestellung, deshalb
+     fuehrt der Weg jetzt ueber die Wahl der Bestellung zum Formular, in dem
+     die Positionen und der Grund stehen. */
+  var elWahl = document.createElement('div');
+  elWahl.className = 'konto-section';
+  elListe.parentNode.insertBefore(elWahl, elListe);
+
+  function ruecksendbar(b) {
+    if (!b.sendungen) return false;
+    if (K.ruecksendungen.some(function (r) { return r.bestellung === b.nr; })) return false;
+    return b.sendungen.some(function (s) { return s.status === 'zugestellt'; });
+  }
+  function zustellDatum(b) {
+    var zu = b.sendungen.filter(function (s) { return s.status === 'zugestellt'; });
+    return zu[zu.length - 1].termin;
+  }
+
+  function wahlZeichnen(offen) {
+    if (!offen) { elWahl.innerHTML = ''; return; }
+    var moeglich = K.bestellungen.filter(ruecksendbar);
+    elWahl.innerHTML = '<div class="konto-card konto-section">' +
+      '<div class="konto-card-head"><h2 class="konto-card-title">Rücksendung starten</h2></div>' +
+      (moeglich.length
+        ? '<fieldset class="konto-satz">' +
+            '<legend>Zu welcher Bestellung gehört die Rücksendung?</legend>' +
+            moeglich.map(function (b) {
+              return '<a class="konto-wahl" href="konto-bestellung.html?nr=' + E(b.nr) + '&rma=1" style="text-decoration:none;color:inherit">' +
+                '<span class="konto-wahl-body">' +
+                  '<span class="konto-wahl-name">Bestellung ' + E(b.nr) + '</span>' +
+                  '<span class="konto-wahl-note">Zugestellt am ' + D(zustellDatum(b)) +
+                  ' \u00b7 ' + b.positionen.length +
+                  (b.positionen.length === 1 ? ' Position' : ' Positionen') + '</span>' +
+                '</span>' +
+                '<span class="konto-wahl-preis">' + EU(K.nettoOffen(b)) + '</span>' +
+              '</a>';
+            }).join('') +
+          '</fieldset>' +
+          '<p class="konto-feld-hilfe" style="margin-top:0">Im nächsten Schritt wählen Sie die Artikel und den Grund.</p>'
+        : '<p class="konto-empty-text" style="margin:0;max-width:none">' +
+          'Zu keiner Ihrer Bestellungen ist derzeit eine Rücksendung möglich. ' +
+          'Zurückschicken lässt sich, was bereits versendet oder zugestellt wurde ' +
+          'und wozu noch keine Rücksendung läuft.</p>') +
+      '<div class="konto-zeilenleiste">' +
+        '<div class="konto-zeilenleiste-links">' +
+          '<button type="button" class="konto-btn ghost" data-wahl-ab>Abbrechen</button>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
+  }
+
   document.addEventListener('click', function (e) {
+    if (e.target.closest('[data-wahl-ab]')) { wahlZeichnen(false); return; }
     if (!e.target.closest('[data-neu]') && !e.target.closest('[data-neu2]')) return;
     var vor = param.get('neu');
-    K.melden(vor
-      ? 'Rücksendung zu Bestellung ' + vor + ' wird angelegt'
-      : 'Wählen Sie im nächsten Schritt die Bestellung aus');
+    if (vor && K.bestellungen.some(function (b) { return b.nr === vor && ruecksendbar(b); })) {
+      location.href = 'konto-bestellung.html?nr=' + encodeURIComponent(vor) + '&rma=1';
+      return;
+    }
+    wahlZeichnen(true);
+    elWahl.scrollIntoView({ block: 'nearest' });
+    var erste = elWahl.querySelector('.konto-wahl, [data-wahl-ab]');
+    if (erste) erste.focus();
   });
+
 })();
 </script>
 </body>

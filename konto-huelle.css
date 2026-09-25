@@ -742,6 +742,59 @@
 .konto-annahme.ist-aktiv .konto-annahme-name { color: var(--c-success); }
 .konto-annahme-note { display: block; font-size: 13px; color: var(--c-text-secondary); line-height: 1.45; }
 
+/* --- Rueckfrage vor einer Handlung, die nicht zurueckgeht ---------------- */
+/* Stornieren laesst sich nicht widerrufen. Die Rueckfrage steht deshalb an
+   der Stelle, an der geklickt wurde, und nicht in einem Dialog, der die
+   Sendung verdeckt, um die es geht. */
+.konto-frage {
+  margin-top: 16px;
+  padding: 16px;
+  background: #fdecef;
+  border: 1px solid var(--c-danger);
+  border-radius: var(--radius);
+}
+.konto-frage-titel { margin: 0; font-size: 15px; font-weight: 700; line-height: 1.35; }
+.konto-frage-text {
+  margin: 4px 0 12px;
+  max-width: 62ch;
+  font-size: 14px;
+  color: var(--c-text-secondary);
+  line-height: 1.5;
+}
+.konto-frage-aktionen { display: flex; gap: 8px; flex-wrap: wrap; }
+
+/* --- Auswahlzeile in einem Formular -------------------------------------- */
+/* Fuer das Waehlen einzelner Positionen einer Ruecksendung. Die ganze Zeile
+   ist das Ziel, nicht nur das 16px grosse Kaestchen. */
+.konto-satz { border: 0; padding: 0; margin: 0 0 16px; min-width: 0; }
+.konto-satz > legend { padding: 0; margin-bottom: 8px; font-size: 13px; color: var(--c-text-secondary); }
+.konto-wahl {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 12px;
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-xs);
+  background: var(--c-bg-white);
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+.konto-wahl + .konto-wahl { margin-top: 8px; }
+.konto-wahl:hover { border-color: var(--c-border-strong); background: var(--c-bg-tint); }
+.konto-wahl:has(input:checked) { border-color: var(--c-blue); background: var(--c-blue-tint); }
+.konto-wahl:has(input:focus-visible) { outline: 2px solid var(--c-blue); outline-offset: 2px; }
+.konto-wahl input { margin: 2px 0 0; flex-shrink: 0; }
+.konto-wahl-body { min-width: 0; }
+.konto-wahl-name { display: block; font-size: 14px; font-weight: 600; line-height: 1.4; }
+.konto-wahl-note { display: block; margin-top: 2px; font-size: 13px; color: var(--c-text-secondary); }
+.konto-wahl-preis {
+  margin-left: auto;
+  padding-left: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
 /* Hilfetext und Fehlermeldung eines Formulars. */
 .konto-feld-hilfe { margin: 8px 0 0; font-size: 13px; color: var(--c-text-secondary); line-height: 1.45; }
 .konto-feld-fehler {
