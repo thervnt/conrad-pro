@@ -1830,3 +1830,57 @@ folgt der Rest:
 Die Seite ist dadurch kurz: eine Karte mit sechs Angaben. Das ist ehrlich. Sie
 mit etwas zu füllen, das es nicht gibt, war genau der Fehler des
 Benutzerbereichs.
+
+---
+
+## 30. Zurück zur Liste: ein Raster hat zwei Leserichtungen
+
+**Befund von Nico:** "matrix struktur ist nicht so gut wie eine listenstruktur
+untereinander"
+
+Er hat recht, und mein Fehler in Kapitel 25 war eine Überkorrektur. Ich habe
+richtig gesehen, was am ersten Stand falsch war, und daraus den falschen
+Schluss gezogen.
+
+### Was am Raster nicht stimmt
+
+* **Zwei Leserichtungen.** Wer "USt-IdNr." sucht, muss Zeile 1 absuchen und
+  dann Zeile 2. In einer Liste läuft das Auge eine Spalte hinunter.
+* **Keine Wertspalte.** Im Raster beginnen Bezeichnung und Wert an derselben
+  Kante. Damit bildet weder das eine noch das andere eine Spalte, an der
+  entlanggelesen werden kann.
+* **Unklare Zeilenzugehörigkeit.** Bei unterschiedlich hohen Zellen - "Firma"
+  zwei Zeilen, "Anschrift" vier - franst das Raster aus, und es ist nicht mehr
+  zu sehen, was nebeneinander gehört.
+* **Unklare Reihenfolge.** Ein Raster wird zeilenweise gefüllt, gelesen wird
+  oft spaltenweise. Bei sechs Angaben in drei Spalten weiss niemand, ob nach
+  "Kundennummer" die "USt-IdNr." kommt oder die "Anschrift".
+
+### Was am ersten Stand wirklich falsch war
+
+Nicht die Liste. Sondern dass sie über die ganze Kartenbreite lief: eine
+Wertspalte von 1198 px für Werte von höchstens 268 px, und unter jeder Zeile
+eine Linie quer durch den leeren Teil. Die Linie hat den leeren Raum sichtbar
+gemacht und die Liste dadurch kaputt aussehen lassen.
+
+### Der jetzige Stand
+
+Wieder eine Liste, mit drei Korrekturen gegenüber dem ersten Stand:
+
+1. **Sie hört bei 640 px auf.** Was rechts davon frei bleibt, ist Rand, kein
+   abgerissenes Raster. Gemessen: alle sechs Werte beginnen an derselben Kante,
+   184 px von links.
+2. **Keine Linien.** Getrennt wird durch Abstand und die Farbe der
+   Bezeichnung.
+3. **Die Bezeichnungsspalte ist 160 px statt 120 px.** "Voraussichtlich am"
+   misst 130 px und brach vorher um. Bleibt für den Wert zu wenig Platz, rutscht
+   er unter die Bezeichnung, statt Buchstabe für Buchstabe zu brechen - das
+   passiert ab etwa 375 px Behälterbreite.
+
+Die Unternehmensdaten sind damit 329 px hoch statt 260 px im Raster. Die
+Adresszeile auf der Adressen-Seite wird dagegen kürzer: 159 px statt 171 px.
+Der Höhenunterschied ist der Preis für eine Leserichtung statt zweier, und er
+ist ihn wert.
+
+Geprüft: 40 Listen über fünf Fensterbreiten, kein Raster mehr übrig, keine
+Linien, keine Liste breiter als 640 px.

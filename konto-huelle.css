@@ -501,33 +501,40 @@
 .konto-note > span { flex: 1 1 320px; }
 .konto-note a { margin-left: auto; font-weight: 600; white-space: nowrap; }
 
-/* --- Datensatz: Bezeichnung ueber Wert ----------------------------------- */
-/* Vorher stand die Bezeichnung links in einer festen Spalte von 120px und der
-   Wert nahm den ganzen Rest. In einer Karte ueber die volle Seitenbreite hiess
-   das bei 1920px Fenster: 1198px Wertspalte fuer Werte von hoechstens 268px,
-   also 78 Prozent leer, und unter jeder Zeile eine Linie quer durch den leeren
-   Teil. Jetzt steht die Bezeichnung ueber dem Wert und die Paare stehen im
-   Raster nebeneinander. Getrennt wird durch Groesse und Farbe der Bezeichnung,
-   nicht durch Linien.
-   280px, weil der laengste Wert im Prototyp 268px misst und damit nie
-   umbricht; darunter faellt das Raster auf eine Spalte. */
+/* --- Datensatz: Liste untereinander -------------------------------------- */
+/* Drei Anlaeufe, deshalb hier die ganze Begruendung.
+   Der erste Stand: Bezeichnung links in fester Spalte von 120px, Wert nimmt
+   den ganzen Rest, unter jeder Zeile eine Linie. Bei 1920px Fenster waren das
+   1198px Wertspalte fuer Werte von hoechstens 268px - und die Linie lief quer
+   durch den leeren Teil.
+   Der zweite Stand war ein Raster mit Bezeichnung ueber dem Wert. Das fuellte
+   die Breite, kostete aber mehr, als es brachte: ein Raster hat zwei
+   Leserichtungen. Wer "USt-IdNr." sucht, muss Zeile 1 absuchen und dann Zeile
+   2. Bezeichnung und Wert beginnen an derselben Kante, also bilden weder die
+   Bezeichnungen noch die Werte eine Spalte, an der das Auge entlanglaufen
+   kann. Und bei unterschiedlich hohen Zellen ist nicht mehr zu sehen, was in
+   dieselbe Zeile gehoert.
+   Jetzt wieder die Liste - der Fehler des ersten Standes war nicht die Liste,
+   sondern dass sie ueber die ganze Kartenbreite lief. Sie hoert bei 640px auf.
+   Was rechts davon frei bleibt, ist Rand, kein abgerissenes Raster. Getrennt
+   wird durch Abstand und die Farbe der Bezeichnung, nicht durch Linien. */
 .konto-fakten {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 24px 32px;
   margin: 0;
+  max-width: 640px;
   font-size: 14px;
 }
-.konto-fakten > div { min-width: 0; }
-.konto-fakten dt {
-  margin: 0 0 4px;
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: var(--c-text-secondary);
+.konto-fakten > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 24px;
+  padding: 6px 0;
+  min-width: 0;
 }
-.konto-fakten dd { margin: 0; line-height: 1.5; }
+/* 160px statt der frueheren 120px: "Voraussichtlich am" misst 130px und
+   brach vorher um. Bleibt zu wenig Platz fuer den Wert, rutscht er unter die
+   Bezeichnung, statt Buchstabe fuer Buchstabe zu brechen. */
+.konto-fakten dt { flex: 0 0 160px; margin: 0; color: var(--c-text-secondary); }
+.konto-fakten dd { flex: 1 1 200px; margin: 0; min-width: 0; line-height: 1.5; }
 
 /* --- Positionszeile einer Bestellung ------------------------------------- */
 .konto-pos { display: flex; gap: 16px; padding: 16px 0; border-bottom: 1px solid var(--c-border); }
