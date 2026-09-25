@@ -1915,3 +1915,53 @@ Drei Korrekturen:
 
 Die Karte misst jetzt 720 × 383 px statt 1128 × 363 px. Sie ist höher und
 deutlich schmaler, und sie ist voll.
+
+---
+
+## 32. Listen nebeneinander: Liste bleiben und trotzdem die Breite nutzen
+
+**Befund von Nico:** "schmaler??? nein! nutze die breite des content-bereichs."
+
+Vierter Anlauf, und diesmal der Punkt, an dem sich beide Anforderungen
+vertragen. Die bisherigen drei:
+
+1. **Liste über die volle Breite, mit Linien.** Wertspalte 1198 px für Werte
+   von höchstens 268 px, Linie quer durch den leeren Teil.
+2. **Raster mit Bezeichnung über dem Wert.** Füllte die Breite, hatte aber
+   zwei Leserichtungen und keine Wertspalte.
+3. **Liste, auf 640 px begrenzt.** Leserichtung stimmte, aber die Leere war
+   nur verschoben: aus den Zeilen in den Kartenrahmen, 42 Prozent davon leer.
+
+Der Unterschied zwischen "Raster" und "Spalten" ist die Richtung, in der
+gefüllt wird. Ein Raster füllt zeilenweise: Angabe 1 links, Angabe 2 in der
+Mitte, Angabe 3 rechts, Angabe 4 wieder links. Wer eine bestimmte Angabe
+sucht, muss jede Zeile absuchen. Ein Spaltensatz füllt spaltenweise: erst die
+linke Spalte von oben nach unten, dann die nächste. Jede Spalte ist für sich
+eine Liste, mit einer Spalte Bezeichnungen und einer Spalte Werte, und gelesen
+wird sie wie eine Liste.
+
+`.konto-fakten` ist deshalb jetzt ein Spaltensatz mit `column-width: 420px`.
+Es entstehen so viele Spalten, wie hineinpassen, und `break-inside: avoid`
+hält Bezeichnung und Wert zusammen. Gemessen:
+
+| Fenster | Spalten | Höhe der Unternehmensliste |
+|---|---|---|
+| 1920 px | 2 | 141 px |
+| 1440 px | 2 | 141 px |
+| 1280 px | 2 | 141 px |
+| 1024 px | 1 | 275 px |
+| 640 px | 1 | 275 px |
+
+In jeder Spalte fluchten die Werte: bei 1440 px beginnt in Spalte eins jeder
+Wert bei 184 px, in Spalte zwei jeder bei 755 px, jeweils 160 px nach dem
+Spaltenanfang.
+
+Karte und Seitenkopf stehen wieder über die volle Inhaltsbreite; das schmale
+Mass aus Kapitel 31 ist weg. Die Stammdatenkarte misst jetzt 1128 × 249 px
+statt 720 × 383 px. Dasselbe gilt automatisch für alle anderen acht Stellen:
+die Sendungskarte schrumpft von 137 px auf 71 px, die Profilkarten von 99 px
+auf 66 px. Wo der Behälter schmal ist - Adresszeile, schmale Karte, Telefon -
+entsteht eine Spalte, und es bleibt bei der einfachen Liste.
+
+Die grosse Schreibweise der Firma aus Kapitel 31 bleibt: sie ist der
+Gegenstand der Seite, keine Angabe unter sechs.
