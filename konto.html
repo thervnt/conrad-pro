@@ -496,7 +496,7 @@
     K.bestellungen.slice(0, 4).map(function (b) {
       return '<tr>' +
         '<td><a href="konto-bestellung.html?nr=' + E(b.nr) + '">' + E(b.nr) + '</a>' +
-          '<span class="konto-cell-sub">' + D(b.datum) + ' \u00b7 ' + E(K.person(b.besteller)) + '</span></td>' +
+          '<span class="konto-cell-sub">' + D(b.datum) + '</span></td>' +
         '<td>' + K.pille(b.status) + '</td>' +
         '<td class="konto-amount">' + EU(K.netto(b)) + '<span class="konto-cell-sub" style="font-weight:400">netto</span></td>' +
       '</tr>';
@@ -550,8 +550,8 @@
     '<div class="konto-strip-col">' +
       '<p class="konto-strip-label">Unternehmen</p>' +
       '<p class="konto-strip-value">' + E(K.firma.name) + '</p>' +
-      '<p class="konto-strip-note">' + K.benutzer.length + ' Benutzer, ' +
-        K.kostenstellen.length + ' Kostenstellen<br>Kundennummer ' + E(K.firma.kundennummer) + '</p>' +
+      '<p class="konto-strip-note">' + K.benutzer.length + ' Benutzer<br>Kundennummer ' +
+        E(K.firma.kundennummer) + '</p>' +
       '<a class="konto-strip-link" href="konto-unternehmen.html">Unternehmensdaten</a>' +
     '</div>';
 })();

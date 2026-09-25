@@ -215,18 +215,6 @@
         <div data-benutzer></div>
       </div>
 
-      <div class="konto-section" id="kostenstellen">
-        <div class="konto-head">
-          <div>
-            <h2 class="konto-section-title" style="margin:0">Kostenstellen</h2>
-            <p class="konto-head-sub">Bestellungen der letzten 12 Monate, netto</p>
-          </div>
-          <div class="konto-head-actions">
-            <button type="button" class="konto-btn" data-kst-neu>Kostenstelle anlegen</button>
-          </div>
-        </div>
-        <div data-kostenstellen></div>
-      </div>
 
     </div>
   </div>
@@ -419,45 +407,21 @@
 
   document.querySelector('[data-benutzer]').innerHTML =
     '<div class="konto-table-wrap"><table class="konto-table">' +
-    '<thead><tr><th scope="col">Name</th><th scope="col">E-Mail</th><th scope="col">Funktion</th><th scope="col">Kostenstelle</th>' +
-    '<th scope="col">Im Konto seit</th><th scope="col" class="konto-amount">Bestellungen</th>' +
-    '<th scope="col"><span class="visually-hidden">Aktionen</span></th></tr></thead><tbody>' +
+    '<thead><tr><th scope="col">Name</th><th scope="col">E-Mail</th><th scope="col">Funktion</th>' +
+    '<th scope="col">Im Konto seit</th></tr></thead><tbody>' +
     K.benutzer.map(function (u) {
       return '<tr>' +
         '<td><strong>' + E(u.name) + '</strong>' +
           (u.ichSelbst ? '<span class="konto-cell-sub">Das sind Sie</span>' : '') + '</td>' +
         '<td>' + E(u.mail) + '</td>' +
         '<td>' + E(u.funktion) + '</td>' +
-        '<td class="konto-num">' + E(u.kostenstelle) + '</td>' +
-        '<td class="konto-num">' + D(u.seit) + '</td>' +
-        '<td class="konto-amount">' + u.bestellungen + '</td>' +
-        '<td><span class="konto-row-actions">' +
-          '<a class="konto-btn ghost" href="konto-bestellungen.html?person=' + E(u.id) + '">Bestellungen</a>' +
-        '</span></td></tr>';
+        '<td class="konto-num">' + D(u.seit) + '</td></tr>';
     }).join('') + '</tbody></table></div>';
 
-  document.querySelector('[data-kostenstellen]').innerHTML =
-    '<div class="konto-table-wrap"><table class="konto-table">' +
-    '<thead><tr><th scope="col">Kostenstelle</th><th scope="col">Bezeichnung</th>' +
-    '<th scope="col" class="konto-amount">Bestellungen</th><th scope="col" class="konto-amount">Summe netto</th>' +
-    '<th scope="col"><span class="visually-hidden">Aktionen</span></th></tr></thead><tbody>' +
-    K.kostenstellen.map(function (k) {
-      var b = K.bestellungen.filter(function (x) { return x.kostenstelle === k.nr && x.status !== 'storniert'; });
-      var summe = b.reduce(function (s, x) { return s + K.netto(x); }, 0);
-      return '<tr>' +
-        '<td class="konto-num"><strong>' + E(k.nr) + '</strong></td>' +
-        '<td>' + E(k.name) + '</td>' +
-        '<td class="konto-amount">' + b.length + '</td>' +
-        '<td class="konto-amount">' + EU(summe) + '</td>' +
-        '<td><span class="konto-row-actions">' +
-          '<a class="konto-btn ghost" href="konto-bestellungen.html?kst=' + E(k.nr) + '">Bestellungen</a>' +
-        '</span></td></tr>';
-    }).join('') + '</tbody></table></div>';
 
   document.addEventListener('click', function (e) {
     if (e.target.closest('[data-stamm-bearbeiten]')) K.melden('Stammdaten bearbeiten');
     if (e.target.closest('[data-einladen]')) K.melden('Einladung per E-Mail versenden');
-    if (e.target.closest('[data-kst-neu]')) K.melden('Neue Kostenstelle anlegen');
     var kopie = e.target.closest('[data-copy]');
     if (kopie && navigator.clipboard) {
       navigator.clipboard.writeText(kopie.dataset.copy);

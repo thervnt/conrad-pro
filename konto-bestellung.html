@@ -387,8 +387,8 @@
     '<div class="konto-head">' +
       '<div>' +
         '<h1 class="konto-h1">Bestellung ' + E(b.nr) + '</h1>' +
-        '<p class="konto-head-sub">Aufgegeben am ' + D(b.datum) + ' von ' + E(K.person(b.besteller)) +
-        ' \u00b7 Kostenstelle ' + E(b.kostenstelle) + (b.referenz ? ' \u00b7 ' + E(b.referenz) : '') + '</p>' +
+        '<p class="konto-head-sub">Aufgegeben am ' + D(b.datum) +
+        (b.referenz ? ' \u00b7 ' + E(b.referenz) : '') + '</p>' +
       '</div>' +
       (storniert ? '' :
         '<div class="konto-head-actions">' +
@@ -467,7 +467,6 @@
           '<span>' + K.pille('storniert') + '</span></div>' +
         '<dl class="konto-dl">' +
           '<div><dt>Storniert am</dt><dd>' + D(b.storniertAm) + '</dd></div>' +
-          '<div><dt>Durch</dt><dd>' + E(K.person(b.storniertVon)) + '</dd></div>' +
           '<div><dt>Grund</dt><dd>' + E(b.stornoGrund) + '</dd></div>' +
         '</dl>' +
         '<p class="konto-empty-text" style="margin:16px 0 0;max-width:none">' +
@@ -547,11 +546,9 @@
         E(K.firma.plz) + ' ' + E(K.firma.ort) + '</p>' +
     '</div>' +
     '<div class="konto-strip-col">' +
-      '<p class="konto-strip-label">Buchung</p>' +
-      '<p class="konto-strip-value">' + E(b.kostenstelle) + '</p>' +
-      '<p class="konto-strip-note">Besteller: ' + E(K.person(b.besteller)) + '<br>' +
-        'Referenz: ' + (b.referenz ? E(b.referenz) : 'keine') + '</p>' +
-      '<a class="konto-strip-link" href="konto-bestellungen.html?kst=' + E(b.kostenstelle) + '">Weitere Bestellungen dieser Kostenstelle</a>' +
+      '<p class="konto-strip-label">Referenz</p>' +
+      '<p class="konto-strip-value">' + (b.referenz ? E(b.referenz) : 'keine') + '</p>' +
+      '<p class="konto-strip-note">Ihre eigene Angabe zu dieser Bestellung</p>' +
     '</div>' +
   '</div>';
 

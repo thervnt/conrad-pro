@@ -456,9 +456,9 @@
 
     elListe.innerHTML = '<div class="konto-table-wrap"><table class="konto-table">' +
       '<thead><tr>' +
-        '<th><input type="checkbox" class="konto-check" data-alle aria-label="Alle Belege auswählen"></th>' +
-        '<th>Beleg</th><th>Datum</th><th>Fällig</th><th>Bestellung</th><th>Status</th>' +
-        '<th class="konto-amount">Betrag netto</th><th><span class="visually-hidden">Aktionen</span></th>' +
+        '<th scope="col"><input type="checkbox" class="konto-check" data-alle aria-label="Alle Belege auswählen"></th>' +
+        '<th scope="col">Beleg</th><th scope="col">Datum</th><th scope="col">Fällig</th><th scope="col">Bestellung</th><th scope="col">Status</th>' +
+        '<th scope="col" class="konto-amount">Betrag netto</th><th scope="col"><span class="visually-hidden">Aktionen</span></th>' +
       '</tr></thead><tbody>' +
       liste.map(function (r) {
         var tage = r.faellig ? K.tageBis(r.faellig) : null;

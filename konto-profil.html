@@ -379,7 +379,6 @@
   document.querySelector('[data-person]').innerHTML =
     '<div><dt>Name</dt><dd>' + E(ich.name) + '</dd></div>' +
     '<div><dt>Funktion</dt><dd>' + E(ich.funktion) + '</dd></div>' +
-    '<div><dt>Kostenstelle</dt><dd>' + E(ich.kostenstelle) + '</dd></div>' +
     '<div><dt>Im Konto seit</dt><dd>' + D(ich.seit) + '</dd></div>';
 
   /* Kundennummer als Kopier-Chip: sie wird am Telefon abgefragt (Befund F6).
@@ -468,7 +467,7 @@
 
   document.querySelector('[data-hinweis]').innerHTML =
     '<div class="konto-note"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>' +
-    '<span>Firmendaten, Benutzer und Kostenstellen verwalten Sie unter Unternehmen.</span>' +
+    '<span>Firmendaten und Benutzer verwalten Sie unter Unternehmen.</span>' +
     '<a href="konto-unternehmen.html">Zu den Unternehmensdaten</a></div>';
 
   document.addEventListener('click', function (e) {

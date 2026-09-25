@@ -200,10 +200,6 @@
           <option value="zugestellt">Zugestellt</option>
           <option value="storniert">Storniert</option>
         </select>
-        <label class="visually-hidden" for="f-person">Besteller</label>
-        <select class="konto-select" id="f-person" data-f-person></select>
-        <label class="visually-hidden" for="f-kst">Kostenstelle</label>
-        <select class="konto-select" id="f-kst" data-f-kst></select>
         <div class="konto-toolbar-right">
           <button type="button" class="konto-btn ghost" data-export><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Export (CSV)</button>
         </div>
@@ -391,25 +387,13 @@
   var elListe = document.querySelector('[data-liste]');
   var elSuche = document.querySelector('[data-suche]');
   var elStatus = document.querySelector('[data-f-status]');
-  var elPerson = document.querySelector('[data-f-person]');
-  var elKst = document.querySelector('[data-f-kst]');
-
-  elPerson.innerHTML = '<option value="">Besteller</option>' +
-    K.benutzer.map(function (u) { return '<option value="' + u.id + '">' + E(u.name) + '</option>'; }).join('');
-  elKst.innerHTML = '<option value="">Kostenstelle</option>' +
-    K.kostenstellen.map(function (k) { return '<option value="' + k.nr + '">' + E(k.nr) + ' ' + E(k.name) + '</option>'; }).join('');
-
   if (param.get('status')) elStatus.value = param.get('status');
   if (param.get('suche')) elSuche.value = param.get('suche');
-  if (param.get('person')) elPerson.value = param.get('person');
-  if (param.get('kst')) elKst.value = param.get('kst');
 
   function gefiltert() {
     var q = elSuche.value.trim().toLowerCase();
     return K.bestellungen.filter(function (b) {
       if (elStatus.value && b.status !== elStatus.value) return false;
-      if (elPerson.value && b.besteller !== elPerson.value) return false;
-      if (elKst.value && b.kostenstelle !== elKst.value) return false;
       if (!q) return true;
       var heu = b.nr + ' ' + b.referenz + ' ' + b.positionen.map(function (p) { return p.titel; }).join(' ');
       return heu.toLowerCase().indexOf(q) !== -1;
@@ -417,7 +401,7 @@
   }
 
   var KOPF = '<thead><tr>' +
-    '<th scope="col">Bestell-Nr.</th><th scope="col">Datum</th><th scope="col">Besteller</th><th scope="col">Kostenstelle</th>' +
+    '<th scope="col">Bestell-Nr.</th><th scope="col">Datum</th>' +
     '<th scope="col">Status</th><th scope="col">Positionen</th><th scope="col" class="konto-amount">Summe netto</th>' +
     '<th scope="col"><span class="visually-hidden">Aktionen</span></th></tr></thead>';
 
@@ -450,7 +434,7 @@
       liste.length + ' von ' + K.bestellungen.length + ' Bestellungen \u00b7 alle Beträge netto';
 
     if (!liste.length) {
-      var gefilterte = elSuche.value || elStatus.value || elPerson.value || elKst.value;
+      var gefilterte = elSuche.value || elStatus.value;
       elListe.innerHTML = '<div class="konto-empty">' +
         '<p class="konto-empty-title">' + (gefilterte ? 'Keine Bestellung passt zu dieser Auswahl' : 'Noch keine Bestellungen') + '</p>' +
         '<p class="konto-empty-text">' + (gefilterte
@@ -471,8 +455,6 @@
           '<td class="konto-num"><a href="konto-bestellung.html?nr=' + E(b.nr) + '">' + E(b.nr) + '</a>' +
             (b.referenz ? '<span class="konto-cell-sub">' + E(b.referenz) + '</span>' : '') + '</td>' +
           '<td class="konto-num">' + D(b.datum) + '</td>' +
-          '<td>' + E(K.person(b.besteller)) + '</td>' +
-          '<td class="konto-num">' + E(b.kostenstelle) + '</td>' +
           '<td>' + K.pille(b.status) +
             (b.status === 'teilversand' ? '<span class="konto-cell-sub">' + b.offenePositionen + ' Position offen</span>' : '') + '</td>' +
           '<td class="konto-num">' + b.positionen.length + '<span class="konto-cell-sub">' + stk + ' Stück</span></td>' +
@@ -489,7 +471,7 @@
   elListe.addEventListener('click', function (e) {
     var r = e.target.closest('[data-reset]');
     if (r) {
-      elSuche.value = ''; elStatus.value = ''; elPerson.value = ''; elKst.value = '';
+      elSuche.value = ''; elStatus.value = '';
       zeichne();
       return;
     }
@@ -501,7 +483,7 @@
     K.melden(b.positionen.length + ' Positionen in den Einkaufswagen gelegt');
   });
 
-  [elSuche, elStatus, elPerson, elKst].forEach(function (el) {
+  [elSuche, elStatus].forEach(function (el) {
     el.addEventListener('input', zeichne);
     el.addEventListener('change', zeichne);
   });
@@ -510,10 +492,9 @@
      deutscher Einstellung die Spalten trifft. */
   document.querySelector('[data-export]').addEventListener('click', function () {
     var liste = gefiltert();
-    var zeilen = [['Bestell-Nr.', 'Datum', 'Besteller', 'Kostenstelle', 'Status', 'Positionen', 'Summe netto EUR'].join(';')];
+    var zeilen = [['Bestell-Nr.', 'Datum', 'Status', 'Positionen', 'Summe netto EUR'].join(';')];
     liste.forEach(function (b) {
-      zeilen.push([b.nr, K.datum(b.datum), K.person(b.besteller), b.kostenstelle,
-        K.STATUS[b.status].text, b.positionen.length,
+      zeilen.push([b.nr, K.datum(b.datum), K.STATUS[b.status].text, b.positionen.length,
         K.netto(b).toFixed(2).replace('.', ',')].join(';'));
     });
     var blob = new Blob(['\ufeff' + zeilen.join('\r\n')], { type: 'text/csv;charset=utf-8' });

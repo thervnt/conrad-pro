@@ -33,17 +33,11 @@
 
   var benutzer = [
     { id: 'u1', name: 'Nico Santangelo', mail: 'nico.santangelo@elektro-brandhuber.de',
-      funktion: 'Einkauf', kostenstelle: 'KST-4200', seit: '2023-04-11', bestellungen: 4, ichSelbst: true },
+      funktion: 'Einkauf', seit: '2023-04-11', ichSelbst: true },
     { id: 'u2', name: 'Sabine Weller', mail: 's.weller@elektro-brandhuber.de',
-      funktion: 'Technik', kostenstelle: 'KST-4100', seit: '2024-01-08', bestellungen: 2 },
+      funktion: 'Technik', seit: '2024-01-08' },
     { id: 'u3', name: 'Thomas Obermeier', mail: 't.obermeier@elektro-brandhuber.de',
-      funktion: 'Buchhaltung', kostenstelle: 'KST-1000', seit: '2022-09-01', bestellungen: 1 }
-  ];
-
-  var kostenstellen = [
-    { nr: 'KST-1000', name: 'Verwaltung' },
-    { nr: 'KST-4100', name: 'Instandhaltung' },
-    { nr: 'KST-4200', name: 'Neubau Halle 3' }
+      funktion: 'Buchhaltung', seit: '2022-09-01' }
   ];
 
   var lieferadressen = [
@@ -62,7 +56,7 @@
 
   var bestellungen = [
     {
-      nr: '2017621738', datum: '2026-09-22', besteller: 'u1', kostenstelle: 'KST-4200',
+      nr: '2017621738', datum: '2026-09-22', 
       status: 'bearbeitung', lieferung: '2026-09-25',
       versand: 0, referenz: 'Halle 3 / 2. Bauabschnitt',
       adresse: 'a2',
@@ -77,7 +71,7 @@
       ]
     },
     {
-      nr: '2017619004', datum: '2026-09-18', besteller: 'u2', kostenstelle: 'KST-4100',
+      nr: '2017619004', datum: '2026-09-18', 
       status: 'versendet', lieferung: '2026-09-25',
       versand: 5.95, referenz: 'Wartung Umspannstation', adresse: 'a1',
       sendungen: [
@@ -90,7 +84,7 @@
       ]
     },
     {
-      nr: '2017604117', datum: '2026-09-11', besteller: 'u1', kostenstelle: 'KST-4200',
+      nr: '2017604117', datum: '2026-09-11', 
       status: 'zugestellt', lieferung: '2026-09-15',
       versand: 0, referenz: 'Halle 3 / Grundausstattung', adresse: 'a2',
       sendungen: [
@@ -103,7 +97,7 @@
       ]
     },
     {
-      nr: '2017588250', datum: '2026-08-28', besteller: 'u3', kostenstelle: 'KST-1000',
+      nr: '2017588250', datum: '2026-08-28', 
       status: 'zugestellt', lieferung: '2026-09-01',
       versand: 5.95, referenz: '', adresse: 'a1',
       sendungen: [
@@ -115,7 +109,7 @@
       ]
     },
     {
-      nr: '2017551903', datum: '2026-08-14', besteller: 'u2', kostenstelle: 'KST-4100',
+      nr: '2017551903', datum: '2026-08-14', 
       status: 'teilversand', lieferung: '2026-09-29',
       versand: 0, referenz: 'Nachbestellung Lager', adresse: 'a1',
       sendungen: [
@@ -131,7 +125,7 @@
       offenePositionen: 1
     },
     {
-      nr: '2017498612', datum: '2026-07-30', besteller: 'u1', kostenstelle: 'KST-4200',
+      nr: '2017498612', datum: '2026-07-30', 
       status: 'zugestellt', lieferung: '2026-08-03',
       versand: 0, referenz: 'Halle 3 / Erstbestellung', adresse: 'a2',
       sendungen: [
@@ -144,12 +138,12 @@
       ]
     },
     {
-      nr: '2017466085', datum: '2026-07-02', besteller: 'u1', kostenstelle: 'KST-1000',
+      nr: '2017466085', datum: '2026-07-02', 
       status: 'storniert', lieferung: null,
       versand: 0, referenz: '', adresse: 'a1',
       sendungen: [],
-      storniertAm: '2026-07-03', storniertVon: 'u1',
-      stornoGrund: 'Auf Wunsch des Bestellers vor dem Versand storniert.',
+      storniertAm: '2026-07-03',
+      stornoGrund: 'Auf Wunsch des Unternehmens vor dem Versand storniert.',
       positionen: [
         pos('221-500', 1, 'WAGO 221-500 Serie 221 Befestigungsadapter', 50, 0.87, null)
       ]
@@ -195,7 +189,7 @@
   }
   var stuecklisten = [
     { id: 's1', name: 'Halle 3 / Schaltschrank A', angelegt: '2026-09-08', geaendert: '2026-09-19',
-      zuletztBestellt: '2026-09-11', kostenstelle: 'KST-4200',
+      zuletztBestellt: '2026-09-11',
       zeilen: [
         zeile('221-413-50;Verbindungsklemme 3-Leiter;20', '221-413', 50, 'WAGO 221-413-50 221 Verbindungsklemme flexibel: 0.14-4 mm² starr: 0.2-4 mm² Polzahl: 3 Transparent, Orange Box', 20, 14.99, 'bilder/klein/wago-221-413-01.webp'),
         zeile('221-415-25;Verbindungsklemme 5-Leiter;40', '221-415', 25, 'WAGO 221-415-25 221 Verbindungsklemme flexibel: 0.14-4 mm² starr: 0.2-4 mm² Polzahl: 5 Transparent, Orange Box', 40, 13.79, 'bilder/klein/wago-221-415-01.webp'),
@@ -203,7 +197,7 @@
         zeile('221-500;Befestigungsadapter;250', '221-500', 1, 'WAGO 221-500 Serie 221 Befestigungsadapter', 250, 0.87, null)
       ] },
     { id: 's2', name: 'Wartungspaket Umspannstation', angelegt: '2026-08-12', geaendert: '2026-08-14',
-      zuletztBestellt: '2026-08-14', kostenstelle: 'KST-4100',
+      zuletztBestellt: '2026-08-14',
       zeilen: [
         zeile('221-613;Verbindungsklemme 6 mm²;120', '221-613', 1, 'WAGO 221-613 221 Verbindungsklemme flexibel: 0.5-6 mm² starr: 0.5-6 mm² Polzahl: 3 Transparent, Orange', 120, 0.95, 'bilder/klein/wago-221-613-01.webp'),
         zeile('221-615;Verbindungsklemme 6 mm² 5-Leiter;80', '221-615', 1, 'WAGO 221-615 221 Verbindungsklemme flexibel: 0.5-6 mm² starr: 0.5-6 mm² Polzahl: 5 Transparent, Orange', 80, 1.60, 'bilder/klein/wago-221-615-01.webp'),
@@ -211,7 +205,7 @@
         zeile('PHOENIX-3044076;Reihenklemme UT 2,5;60', null, null, null, 60, 0, null)
       ] },
     { id: 's3', name: 'Ausschreibung Stadtwerke 2026', angelegt: '2026-09-21', geaendert: '2026-09-21',
-      zuletztBestellt: null, kostenstelle: 'KST-4200',
+      zuletztBestellt: null,
       zeilen: [
         zeile('221-412-100;Verbindungsklemme 2-Leiter;25', '221-412', 100, 'WAGO 221-412-100 221 Verbindungsklemme flexibel: 0.14-4 mm² starr: 0.2-4 mm² Polzahl: 2 Transparent, Orange Box', 25, 26.99, 'bilder/klein/wago-221-412-01.webp'),
         zeile('221-423-50;Verbindungsklemme 3-Leiter Green;30', '221-423', 50, 'WAGO 221-423-50 221 Verbindungsklemme flexibel: 0.14-4 mm² starr: 0.2-4 mm² Polzahl: 3 Transparent, Grün Box', 30, 17.50, 'bilder/klein/wago-221-423-01.webp'),
@@ -377,7 +371,7 @@
 
   window.KONTO = {
     MWST: MWST, HEUTE: HEUTE,
-    firma: firma, benutzer: benutzer, kostenstellen: kostenstellen, lieferadressen: lieferadressen,
+    firma: firma, benutzer: benutzer, lieferadressen: lieferadressen,
     bestellungen: bestellungen, rechnungen: rechnungen, ruecksendungen: ruecksendungen,
     merklisten: merklisten, stuecklisten: stuecklisten,
     euro: euro, datum: datum, tageBis: tageBis, esc: esc, netto: netto,

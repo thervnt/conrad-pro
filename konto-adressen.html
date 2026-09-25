@@ -389,7 +389,6 @@
           '<div><dt>Empfänger</dt><dd>' + E(a.name) + '</dd></div>' +
           '<div><dt>Anschrift</dt><dd>' + E(a.zeile) + ', ' + E(a.ort) + '</dd></div>' +
           '<div><dt>Ansprechpartner</dt><dd>' + (a.ansprech ? E(a.ansprech) : 'nicht hinterlegt') + '</dd></div>' +
-          '<div><dt>Kostenstelle</dt><dd>' + (a.id === 'a2' ? 'KST-4200' : 'keine Vorbelegung') + '</dd></div>' +
         '</dl>' +
       '</div>' +
       '<div class="konto-pos-right">' +
@@ -419,7 +418,6 @@
           feld('Straße und Nummer', a.zeile) +
           feld('PLZ und Ort', a.ort) +
           feld('Ansprechpartner', a.ansprech, 'nicht hinterlegt') +
-          feld('Kostenstelle', a.id === 'a2' ? 'KST-4200' : '', 'keine Vorbelegung') +
         '</div>' +
         '<div class="konto-zeilenleiste">' +
           '<span class="konto-zeilenleiste-links">' +

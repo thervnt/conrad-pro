@@ -1340,3 +1340,51 @@ Entered a wrong check digit, got the right message. Entered a valid IBAN, saw it
 stored masked, then found the payment page offering Bankeinzug and saving it,
 and the invoice hint gone. Removed the details again: both hints came back and
 the profile offered "IBAN hinterlegen".
+
+---
+
+## 22. Besteller und Kostenstelle entfernt
+
+Taken out on request, with everything that hung on them.
+
+### Was wegfällt
+
+| Stelle | vorher | jetzt |
+|---|---|---|
+| Bestellliste | Spalten Besteller und Kostenstelle, zwei Filter, zwei Spalten im CSV | sechs Spalten, ein Statusfilter |
+| Bestelldetails | "Aufgegeben am ... von X · Kostenstelle Y" | "Aufgegeben am ... · Referenz" |
+| Bestelldetails, Streifen | Spalte "Buchung" mit Kostenstelle, Besteller, Referenz | Spalte "Referenz" |
+| Übersicht | "22.09.2026 · Nico Santangelo" unter der Bestellnummer | nur das Datum |
+| Unternehmen | Abschnitt Kostenstellen, Spalten Kostenstelle und Bestellungen, Link je Benutzer | Stammdaten und Benutzer, vier Spalten |
+| Profil | Zeile Kostenstelle | entfällt |
+| Adressen | Feld Kostenstelle in Ansicht und Formular | entfällt |
+| Stücklisten-Detail | Kostenstelle im Untertitel | entfällt |
+| Daten | `besteller`, `kostenstelle`, `storniertVon`, `kostenstellen[]`, `benutzer[].kostenstelle`, `benutzer[].bestellungen` | entfernt |
+
+Mit ihnen fallen die Routen `?person=` und `?kst=` weg, weil nichts mehr darauf
+zeigt und nichts mehr danach filtern könnte.
+
+### Was davon abhing und deshalb mitgeht
+
+Die Benutzertabelle zählte Bestellungen je Person und verlinkte in die
+gefilterte Liste. Beides las den Besteller aus der Bestellung. Ohne dieses Feld
+wären es Zahlen ohne Grundlage und ein Link ins Leere, also sind sie weg. Die
+Tabelle nennt jetzt Name, E-Mail, Funktion und seit wann jemand im Konto ist.
+
+Der Stornotext nannte "auf Wunsch des Bestellers" und die Detailseite zeigte,
+wer storniert hat. Beides bezog sich auf dieselbe Person. Jetzt: "Auf Wunsch des
+Unternehmens vor dem Versand storniert."
+
+### Folge für die Analyse
+
+Befund A6 wollte eine einfache Unternehmensebene: wer bestellt und worauf
+gebucht wird. Der zweite Teil entfällt damit. Die Ebene besteht jetzt aus
+Stammdaten, Benutzern und Adressen. Falls Kostenstellen später doch gebraucht
+werden, hängen sie an der Bestellung und an der Lieferadresse, und die
+Bestellliste bekommt Spalte und Filter zurück.
+
+### Geprüft
+
+Fünfzehn Seiten: kein "Kostenstelle", kein "Besteller", kein "KST-" mehr im
+sichtbaren Text, keine Tabelle rollt, keine Seite schiebt, jede Seite hat ihre
+Überschrift.
