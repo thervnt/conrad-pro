@@ -1884,3 +1884,34 @@ ist ihn wert.
 
 Geprüft: 40 Listen über fünf Fensterbreiten, kein Raster mehr übrig, keine
 Linien, keine Liste breiter als 640 px.
+
+---
+
+## 31. Nachbesserung: die Karte war das Problem, nicht die Liste
+
+**Befund von Nico:** "sieht immer noch scheisse aus."
+
+Nachgemessen, und er hat wieder recht. Ich hatte in Kapitel 30 die Liste auf
+640 px begrenzt, die Karte darum aber über die ganze Breite stehen lassen:
+1128 px Rahmen, Inhalt bis 657 px, **42 Prozent der Karte leer**. Ich hatte die
+Leere nur verschoben, aus den Zeilen in den Rahmen. Und ein Rahmen macht leeren
+Raum sichtbar, während blosser Rand einfach Rand ist.
+
+Drei Korrekturen:
+
+1. **Ein Mass für Überschrift und Karte.** Beide stehen jetzt in einem
+   Behälter von 720 px. Damit steht "Bearbeiten" über dem, worauf es wirkt,
+   statt allein am rechten Seitenrand zu hängen. Gemessen: die rechte Kante des
+   Knopfes und die rechte Kante der Karte liegen auf demselben Pixel, von
+   1920 px bis 640 px Fenster.
+2. **Die Firma steht oben und gross.** Sie ist nicht eine Angabe unter sechs,
+   sondern der Gegenstand der Seite. Sie trägt deshalb keine Bezeichnung mehr,
+   sondern steht in derselben Auszeichnung wie die gültige Zahlungsart auf
+   ihrer Seite: 20 px, darunter der Zusatz in sekundärer Farbe. Die Liste
+   darunter trägt nur noch, was tatsächlich eine Bezeichnung braucht.
+3. **Die Querverweise treten zurück.** "Lieferadressen verwalten" und
+   "Zahlungsart ändern" stehen mit 13 px neben ihrem Wert statt mit 14 px.
+   Ein Verweis begleitet einen Wert, er übertönt ihn nicht.
+
+Die Karte misst jetzt 720 × 383 px statt 1128 × 363 px. Sie ist höher und
+deutlich schmaler, und sie ist voll.

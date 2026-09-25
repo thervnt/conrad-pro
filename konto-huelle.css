@@ -142,6 +142,16 @@
   margin: 0 0 16px;
 }
 .konto-card-title { font-size: 16px; font-weight: 600; margin: 0; }
+/* Eine Seite, die nur einen Datensatz traegt, ist so breit wie ihr Inhalt.
+   Ueber die ganze Seitenbreite gezogen war die Karte ein Rahmen, dessen
+   rechte Haelfte leer blieb - und ein Rahmen macht leeren Raum sichtbar,
+   waehrend blosser Rand einfach Rand ist. Das Mass gilt fuer Ueberschrift und
+   Karte gemeinsam, damit die Handlung im Seitenkopf ueber dem steht, worauf
+   sie wirkt, und nicht allein am rechten Seitenrand haengt. */
+.konto-schmal { max-width: 720px; }
+/* Ein Verweis, der neben einem Wert steht, begleitet ihn und uebertoent
+   ihn nicht. */
+.konto-mini { font-size: 13px; }
 .konto-card-link { font-size: 13px; font-weight: 500; }
 .konto-section { margin-top: 24px; }
 

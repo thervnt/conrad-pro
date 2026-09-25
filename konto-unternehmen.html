@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="konto.css?v=55fb6f1d">
-<link rel="stylesheet" href="konto-huelle.css?v=88049fd9">
+<link rel="stylesheet" href="konto-huelle.css?v=d6a63471">
 <script src="cart-seed.js?v=28a5fe8f"></script>
 </head>
 <body>
@@ -182,6 +182,7 @@
            Die Lieferadressen sind aus demselben Grund frueher entfallen:
            sie stehen auf der Adressen-Seite, und zweimal dieselben Daten
            laufen auseinander. -->
+      <div class="konto-schmal">
       <div class="konto-head">
         <div>
           <h1 class="konto-h1">Unternehmensdaten</h1>
@@ -193,7 +194,10 @@
       </div>
 
       <div class="konto-card">
-        <dl class="konto-fakten" data-stamm></dl>
+        <p class="konto-gewaehlt" data-firma></p>
+        <p class="konto-gewaehlt-note" data-zusatz></p>
+        <dl class="konto-fakten" style="margin-top:24px" data-stamm></dl>
+      </div>
       </div>
 
     </div>
@@ -372,16 +376,18 @@
   var E = K.esc, EU = K.euro, D = K.datum;
   var f = K.firma;
 
+  document.querySelector('[data-firma]').textContent = f.name;
+  document.querySelector('[data-zusatz]').textContent = f.zusatz;
+
   document.querySelector('[data-stamm]').innerHTML =
-    '<div><dt>Firma</dt><dd>' + E(f.name) + '<br><span style="color:var(--c-text-secondary)">' + E(f.zusatz) + '</span></dd></div>' +
     '<div><dt>Anschrift</dt><dd>' + E(f.strasse) + '<br>' + E(f.plz) + ' ' + E(f.ort) + '<br>' + E(f.land) +
-      '<br><a href="konto-adressen.html">Lieferadressen verwalten</a></dd></div>' +
+      '<br><a href="konto-adressen.html" class="konto-mini">Lieferadressen verwalten</a></dd></div>' +
     '<div><dt>Kundennummer</dt><dd><span class="id-chip"><button class="id-chip-value" data-copy="' + E(f.kundennummer) + '" title="In Zwischenablage kopieren">' +
       '<svg class="id-chip-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>' +
       '<span class="id-chip-num">' + E(f.kundennummer) + '</span></button></span></dd></div>' +
     '<div><dt>USt-IdNr.</dt><dd>' + E(f.ustId) + '</dd></div>' +
     '<div><dt>Zahlungsart</dt><dd>' + E(f.zahlart) + '<br>' + E(f.zahlungsziel) +
-      '<br><a href="konto-zahlungsart.html">Zahlungsart ändern</a></dd></div>' +
+      '<br><a href="konto-zahlungsart.html" class="konto-mini">Zahlungsart ändern</a></dd></div>' +
     '<div><dt>Preise</dt><dd>Nettopreise (exkl. MwSt.)</dd></div>';
 
   document.addEventListener('click', function (e) {
