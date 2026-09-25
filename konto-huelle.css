@@ -144,7 +144,10 @@
 .konto-card-title { font-size: 16px; font-weight: 600; margin: 0; }
 .konto-card-link { font-size: 13px; font-weight: 500; }
 .konto-section { margin-top: 24px; }
-.konto-section-title { font-size: 16px; font-weight: 700; margin: 0 0 16px; }
+/* Gleiches Gewicht wie .konto-card-title: der Titel einer Tabelle, die ihren
+   Rahmen selbst mitbringt, soll nicht schwerer wiegen als der Titel einer
+   Karte. Nur der Traeger ist ein anderer, nicht der Rang. */
+.konto-section-title { font-size: 16px; font-weight: 600; margin: 0 0 16px; }
 
 /* --- Aufmerksamkeitsband ------------------------------------------------- */
 /* Steht vor allem anderen. Die Produktionsuebersicht spiegelt nur die
@@ -450,14 +453,33 @@
 .konto-note > span { flex: 1 1 320px; }
 .konto-note a { margin-left: auto; font-weight: 600; white-space: nowrap; }
 
-/* --- Definitionsliste fuer Stammdaten ------------------------------------ */
-.konto-dl { margin: 0; font-size: 14px; }
-.konto-dl > div { display: flex; gap: 16px; flex-wrap: wrap; padding: 8px 0; border-bottom: 1px solid var(--c-border); }
-.konto-dl > div:last-child { border-bottom: none; }
-/* Schmal genug, dass Bezeichnung und Wert auch in einer Karte des
-   dreispaltigen Rasters nebeneinander stehen. */
-.konto-dl dt { flex: 0 0 120px; color: var(--c-text-secondary); }
-.konto-dl dd { margin: 0; flex: 1 1 140px; min-width: 0; }
+/* --- Datensatz: Bezeichnung ueber Wert ----------------------------------- */
+/* Vorher stand die Bezeichnung links in einer festen Spalte von 120px und der
+   Wert nahm den ganzen Rest. In einer Karte ueber die volle Seitenbreite hiess
+   das bei 1920px Fenster: 1198px Wertspalte fuer Werte von hoechstens 268px,
+   also 78 Prozent leer, und unter jeder Zeile eine Linie quer durch den leeren
+   Teil. Jetzt steht die Bezeichnung ueber dem Wert und die Paare stehen im
+   Raster nebeneinander. Getrennt wird durch Groesse und Farbe der Bezeichnung,
+   nicht durch Linien.
+   280px, weil der laengste Wert im Prototyp 268px misst und damit nie
+   umbricht; darunter faellt das Raster auf eine Spalte. */
+.konto-fakten {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px 32px;
+  margin: 0;
+  font-size: 14px;
+}
+.konto-fakten > div { min-width: 0; }
+.konto-fakten dt {
+  margin: 0 0 4px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--c-text-secondary);
+}
+.konto-fakten dd { margin: 0; line-height: 1.5; }
 
 /* --- Positionszeile einer Bestellung ------------------------------------- */
 .konto-pos { display: flex; gap: 16px; padding: 16px 0; border-bottom: 1px solid var(--c-border); }

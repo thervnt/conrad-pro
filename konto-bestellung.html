@@ -463,7 +463,7 @@
           (s.pos.length === 1 ? ' Position' : ' Positionen') + '</span></h2>' +
         '<span>' + K.pille(s.status) + '</span>' +
       '</div>' +
-      '<dl class="konto-dl">' +
+      '<dl class="konto-fakten">' +
         '<div><dt>Versand durch</dt><dd>' + E(s.versender) + '</dd></div>' +
         (weg
           ? '<div><dt>Storniert am</dt><dd>' + D(s.storniertAm || b.storniertAm || K.HEUTE_ISO) + '</dd></div>'
@@ -518,7 +518,7 @@
     ? '<div class="konto-card konto-section">' +
         '<div class="konto-card-head"><h2 class="konto-card-title">Storniert</h2>' +
           '<span>' + K.pille('storniert') + '</span></div>' +
-        '<dl class="konto-dl">' +
+        '<dl class="konto-fakten">' +
           '<div><dt>Storniert am</dt><dd>' + D(b.storniertAm) + '</dd></div>' +
           '<div><dt>Grund</dt><dd>' + E(b.stornoGrund) + '</dd></div>' +
         '</dl>' +

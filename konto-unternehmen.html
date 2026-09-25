@@ -185,21 +185,18 @@
         <span>Dieser Entwurf zeigt die einfache Stufe: wer bestellt und worauf gebucht wird. Rechte, Rollen und Freigaben sind bewusst nicht enthalten.</span>
       </div>
 
-      <!-- Diese Seite traegt Tabellen, und .konto-table-wrap bringt seinen
-           Rahmen schon mit. Eine Karte darum waeren zwei Rahmen ineinander,
-           also stehen hier alle Abschnittsueberschriften auf der Seite - auch
-           die von "Stammdaten", die vorher als einzige in einer Karte sass.
-           Die Lieferadressen sind ganz entfallen: sie stehen auf der
-           Adressen-Seite, und zweimal dieselben Daten laufen auseinander. -->
-      <div class="konto-section" style="margin-top:0">
-        <h2 class="konto-section-title">Stammdaten</h2>
-        <div class="konto-card">
-          <dl class="konto-dl" data-stamm></dl>
-          <div class="konto-head-actions" style="margin-top:16px">
-            <button type="button" class="konto-btn ghost" data-stamm-bearbeiten>Stammdaten bearbeiten</button>
-            <a class="konto-btn ghost" href="konto-adressen.html">Adressen verwalten</a>
-          </div>
+      <!-- Die Lieferadressen sind hier ganz entfallen: sie stehen auf der
+           Adressen-Seite, und zweimal dieselben Daten laufen auseinander.
+           Der Titel steht im Kartenkopf und nicht als Abschnittstitel darueber,
+           damit die Seite ein Ueberschriftensystem hat und nicht zwei. Die
+           Handlung steht daneben statt unten links: ein "Bearbeiten" am Ende
+           eines Lesefeldes findet man erst, wenn man alles gelesen hat. -->
+      <div class="konto-card konto-section" style="margin-top:0">
+        <div class="konto-card-head">
+          <h2 class="konto-card-title">Stammdaten</h2>
+          <button type="button" class="konto-btn ghost" data-stamm-bearbeiten>Bearbeiten</button>
         </div>
+        <dl class="konto-fakten" data-stamm></dl>
       </div>
 
       <div class="konto-section" id="benutzer">
@@ -397,7 +394,8 @@
 
   document.querySelector('[data-stamm]').innerHTML =
     '<div><dt>Firma</dt><dd>' + E(f.name) + '<br><span style="color:var(--c-text-secondary)">' + E(f.zusatz) + '</span></dd></div>' +
-    '<div><dt>Anschrift</dt><dd>' + E(f.strasse) + '<br>' + E(f.plz) + ' ' + E(f.ort) + '<br>' + E(f.land) + '</dd></div>' +
+    '<div><dt>Anschrift</dt><dd>' + E(f.strasse) + '<br>' + E(f.plz) + ' ' + E(f.ort) + '<br>' + E(f.land) +
+      '<br><a href="konto-adressen.html">Lieferadressen verwalten</a></dd></div>' +
     '<div><dt>Kundennummer</dt><dd><span class="id-chip"><button class="id-chip-value" data-copy="' + E(f.kundennummer) + '" title="In Zwischenablage kopieren">' +
       '<svg class="id-chip-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>' +
       '<span class="id-chip-num">' + E(f.kundennummer) + '</span></button></span></dd></div>' +

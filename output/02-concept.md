@@ -1524,3 +1524,81 @@ Inhalte auseinanderschneiden:
 
 Sollen diese auch fallen, sag Bescheid; sie sind alle an einer Stelle in
 `konto-huelle.css` definiert.
+
+---
+
+## 25. Stammdaten: Bezeichnung über Wert statt fester Spalte
+
+**Befund von Nico:** "Review the default layout structure (width of label
+container, horizontal line, edit buttons at the bottom etc.)"
+
+Gemessen an der Stammdatenkarte, bevor etwas geändert wurde:
+
+| Fenster | Wertspalte | längster Wert | ungenutzt |
+|---|---|---|---|
+| 1920 px | 1198 px | 268 px | 78 % |
+| 1440 px | 954 px | 268 px | 72 % |
+| 1280 px | 794 px | 268 px | 66 % |
+| 1024 px | 538 px | 268 px | 50 % |
+
+Vier Dinge stimmten nicht:
+
+1. **Die Achse war falsch.** Sechs kurze Angaben stapelten sich über 430 px
+   Höhe, während zwei Drittel der Breite leer blieben. `.konto-dl` setzte die
+   Bezeichnung auf feste 120 px und gab dem Wert den ganzen Rest. Diese Breite
+   war für die schmalen Karten des dreispaltigen Rasters gewählt worden und in
+   einer Karte über die volle Seitenbreite die falsche Annahme.
+2. **Sechs durchgezogene Linien**, die meisten quer durch leeren Raum. Getrennt
+   wird hier schon durch den Typkontrast zwischen Bezeichnung und Wert.
+3. **Die Knöpfe unten links.** Ein "Bearbeiten" am Ende eines Lesefeldes findet
+   man erst, wenn man alles gelesen hat; die anderen Karten tragen ihre
+   Handlung im Kartenkopf. Und "Adressen verwalten" war gar keine Handlung an
+   den Stammdaten, sondern ein Sprung auf eine andere Seite, sah aber wie ein
+   gleichrangiger Knopf aus.
+4. **Zwei Überschriftensysteme.** "Stammdaten" stand als `konto-section-title`
+   über der Karte, alle anderen Blöcke tragen ihren Titel als
+   `konto-card-head` darin.
+
+### Gebaut
+
+`.konto-dl` ist durch `.konto-fakten` ersetzt, an allen neun Stellen in sechs
+Seiten (Stammdaten, Profil mit Person, Zugang und Bankverbindung, Conrad PRO,
+Newsletter, Adressdetail, Sendung und stornierte Bestellung):
+
+* Bezeichnung über dem Wert, die Paare im Raster nebeneinander:
+  `repeat(auto-fit, minmax(280px, 1fr))`, 24 px Zeilen- und 32 px
+  Spaltenabstand. Vier Spalten ab 1920, drei bei 1440 und 1280, zwei bei 1024
+  und 900, eine darunter. 280 px, weil der längste Wert 268 px misst und damit
+  nie umbricht.
+* Bezeichnung in derselben Auszeichnung wie die Beschriftung der
+  Streifenkarten: 11 px, Versalien, sekundär. Keine Linien mehr.
+* Die Stammdatenkarte ist von 430 px auf 260 px Höhe geschrumpft.
+
+Handlungen: die Handlung, die den gezeigten Datensatz ändert, steht im
+Kartenkopf. Das betrifft "Bearbeiten" bei den Stammdaten und bei den
+persönlichen Daten (dort vorher ein Textlink, jetzt derselbe Knopf wie
+überall), "Passwort ändern" beim Zugang und "Ändern" bei der Bankverbindung.
+Der Knopf der Bankverbindung zeigt nur, solange es etwas zu ändern gibt und das
+Formular zu ist; im Leerzustand trägt der Text darunter seine eigene Handlung.
+
+Was unten bleibt, bleibt mit Grund: **Abmelden** ändert nicht den Datensatz
+darüber, sondern beendet die Sitzung. **Mitgliedschaft kündigen** steht
+absichtlich am Ende seiner Karte und in der Warnfarbe.
+
+"Adressen verwalten" ist kein Knopf mehr, sondern ein Textlink unter der
+Anschrift, wo er hingehört. `.konto-section-title` wiegt jetzt 600 statt 700,
+damit der Titel einer Tabelle, die ihren Rahmen selbst mitbringt, nicht
+schwerer wiegt als der Titel einer Karte.
+
+### Eine Stelle wird dabei höher
+
+Die Adresszeile auf der Adressen-Seite misst jetzt 171 px statt vorher etwa
+140 px: drei Angaben in einem schmalen Behälter ergeben bei 1280 px zwei
+Spalten in zwei Zeilen. Das ist der Preis für ein Muster statt zwei. Wenn die
+Liste dadurch zu lang wird, wäre die bessere Antwort dort, die Labels ganz
+wegzulassen und die Adresse als Adressblock zu setzen.
+
+### Nachtrag zur Zahl
+
+In der Empfehlung stand "11 Stellen". Es sind neun; ich hatte die schliessenden
+Tags mitgezählt.

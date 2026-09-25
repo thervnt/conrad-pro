@@ -185,19 +185,22 @@
       <div class="konto-stapel">
         <div class="konto-card">
           <div class="konto-card-head"><h2 class="konto-card-title">Persönliche Daten</h2>
-            <a class="konto-card-link" href="#">Bearbeiten</a></div>
-          <dl class="konto-dl" data-person></dl>
+            <button type="button" class="konto-btn ghost" data-person-bearbeiten>Bearbeiten</button></div>
+          <dl class="konto-fakten" data-person></dl>
         </div>
         <div class="konto-card">
-          <div class="konto-card-head"><h2 class="konto-card-title">Zugang</h2></div>
-          <dl class="konto-dl" data-zugang></dl>
+          <div class="konto-card-head"><h2 class="konto-card-title">Zugang</h2>
+            <button type="button" class="konto-btn ghost" data-pw>Passwort ändern</button></div>
+          <dl class="konto-fakten" data-zugang></dl>
+          <!-- Abmelden bleibt unten: es aendert nicht den Datensatz darueber,
+               sondern beendet die Sitzung. -->
           <div class="konto-head-actions" style="margin-top:16px">
-            <button type="button" class="konto-btn" data-pw>Passwort ändern</button>
             <button type="button" class="konto-btn ghost" data-abmelden>Abmelden</button>
           </div>
         </div>
         <div class="konto-card" id="bankverbindung">
-          <div class="konto-card-head"><h2 class="konto-card-title">Bankverbindung</h2></div>
+          <div class="konto-card-head"><h2 class="konto-card-title">Bankverbindung</h2>
+            <span data-bank-aktion></span></div>
           <div data-bank></div>
         </div>
       </div>
@@ -401,6 +404,13 @@
 
   function bankZeichnen() {
     var b = K.bankLesen();
+    /* Der Knopf im Kartenkopf zeigt nur, solange es etwas zu aendern gibt und
+       das Formular zu ist. Im Leerzustand traegt der Text darunter seine
+       eigene Handlung, und bei offenem Formular waere ein zweiter Knopf fuer
+       dieselbe Sache daneben. */
+    document.querySelector('[data-bank-aktion]').innerHTML = (b && !bankOffen)
+      ? '<button type="button" class="konto-btn ghost" data-bank-oeffnen>Ändern</button>'
+      : '';
     if (bankOffen) {
       elBank.innerHTML =
         '<div class="konto-felder" style="margin-top:0">' +
@@ -428,14 +438,11 @@
       return;
     }
     elBank.innerHTML = b
-      ? '<dl class="konto-dl">' +
+      ? '<dl class="konto-fakten">' +
           '<div><dt>Kontoinhaber</dt><dd>' + E(b.inhaber) + '</dd></div>' +
           '<div><dt>IBAN</dt><dd><span class="konto-num">' + E(K.ibanVerdeckt(b.iban)) + '</span></dd></div>' +
           '<div><dt>Hinterlegt am</dt><dd>' + K.datum(b.seit) + '</dd></div>' +
-        '</dl>' +
-        '<div class="konto-head-actions" style="margin-top:16px">' +
-          '<button type="button" class="konto-btn ghost" data-bank-oeffnen>Bankverbindung ändern</button>' +
-        '</div>'
+        '</dl>'
       : '<p class="konto-empty-text" style="margin:0 0 16px;max-width:none">Noch keine Bankverbindung hinterlegt. ' +
         'Gutschriften aus Rücksendungen können erst danach ausgezahlt werden, und der Bankeinzug ' +
         'steht als Zahlungsart erst danach zur Verfügung.</p>' +
@@ -443,7 +450,9 @@
   }
   bankZeichnen();
 
-  elBank.addEventListener('click', function (e) {
+  /* Auf der ganzen Karte, nicht nur im Inhalt: "Ändern" steht jetzt im
+     Kartenkopf und damit ausserhalb von elBank. */
+  document.querySelector('#bankverbindung').addEventListener('click', function (e) {
     if (e.target.closest('[data-bank-oeffnen]')) { bankOffen = true; bankFehler = null; bankZeichnen(); return; }
     if (e.target.closest('[data-bank-abbrechen]')) { bankOffen = false; bankFehler = null; bankZeichnen(); return; }
     if (e.target.closest('[data-bank-loeschen]')) {
@@ -471,6 +480,7 @@
     '<a href="konto-unternehmen.html">Zu den Unternehmensdaten</a></div>';
 
   document.addEventListener('click', function (e) {
+    if (e.target.closest('[data-person-bearbeiten]')) K.melden('Persönliche Daten bearbeiten');
     if (e.target.closest('[data-pw]')) K.melden('Passwort ändern');
     if (e.target.closest('[data-abmelden]')) K.melden('Abmelden');
     if (e.target.closest('[data-iban]')) K.melden('IBAN hinterlegen');
