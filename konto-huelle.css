@@ -203,18 +203,21 @@
 .konto-card-foot a { font-weight: 600; white-space: nowrap; }
 
 /* --- Streifen fuer Nachschlagewerte -------------------------------------- */
-/* Adresse, Zahlungsart und Unternehmen sind keine Aufgaben. Als drei eigene
-   Karten trugen sie dasselbe Gewicht wie die Listen darueber und franste die
-   Reihe aus. Ein Rahmen, drei Spalten, kleinere Beschriftung. */
+/* Adresse, Zahlungsart und Unternehmen sind keine Aufgaben. Sie stehen
+   deshalb kleiner als die Listen darueber - aber jede Angabe in einer eigenen
+   Karte. Ein Rahmen mit Trennlinien darin sah aus wie eine Karte, die in
+   Spalten zerschnitten wurde: zusammen und getrennt zugleich. */
 .konto-strip {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+}
+.konto-strip-col {
+  padding: 16px;
   background: var(--c-bg-white);
   border: 1px solid var(--c-border);
   border-radius: var(--radius);
 }
-.konto-strip-col { padding: 16px; }
-.konto-strip-col + .konto-strip-col { border-left: 1px solid var(--c-border); }
 .konto-strip-label {
   margin: 0 0 8px;
   font-size: 11px;
@@ -226,10 +229,6 @@
 .konto-strip-value { margin: 0; font-size: 14px; font-weight: 600; line-height: 1.4; }
 .konto-strip-note { margin: 4px 0 0; font-size: 13px; color: var(--c-text-secondary); line-height: 1.5; }
 .konto-strip-link { display: inline-block; margin-top: 8px; font-size: 13px; font-weight: 500; }
-@media (max-width: 767px) {
-  .konto-strip-col + .konto-strip-col { border-left: none; border-top: 1px solid var(--c-border); }
-}
-
 /* --- Werkzeugleiste ueber Listen ----------------------------------------- */
 .konto-toolbar {
   display: flex;

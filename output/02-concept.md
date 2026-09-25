@@ -1475,3 +1475,52 @@ ersten Fassung zwei Variablen namens `HEUTE` im selben Geltungsbereich, eine als
 Datum und eine als Zeichenkette. Dadurch stand auf der Übersicht "fällig in NaN
 Tagen". Behoben, indem das ISO-Datum aus dem vorhandenen Datum abgeleitet wird
 statt ein zweites Mal geschrieben zu werden.
+
+---
+
+## 24. Keine durchgezogenen Linien in Karten
+
+**Befund von Nico:** "keine durchgezogene linie - erstelle immer eigene cards
+mit entsprechend padding - review all pages and change elements matching"
+
+Anlass war der Streifen mit Rechnungsadresse und Referenz unter der Bestellung:
+ein Rahmen, zwei Spalten, dazwischen eine senkrechte Linie. Das liest sich
+widersprüchlich. Der gemeinsame Rahmen sagt "das gehört zusammen", die Linie
+sagt "das sind zwei Dinge". Eine Karte, die zerschnitten aussieht, statt zweier
+Karten.
+
+Die Regel lautet jetzt: was eigenständig ist, bekommt einen eigenen Rahmen und
+eigenen Innenabstand. Geändert an vier Stellen:
+
+1. **`.konto-strip`** (Bestelldetails, Übersicht) ist kein Rahmen mit
+   Innenlinien mehr, sondern ein Raster aus eigenen Karten mit 16 px Abstand,
+   16 px Innenabstand, eigenem Rand und eigener Rundung. Die Sonderregel für
+   schmale Fenster, die die senkrechte Linie in eine waagerechte drehte,
+   entfällt ersatzlos: bei einer Spalte stapeln sich die Karten mit demselben
+   Abstand.
+2. **"Summe und Zahlung"** auf der Bestelldetailseite war eine Karte mit zwei
+   durchgezogenen Linien darin. Daraus wurden drei Karten: **Summe**,
+   **Zahlung** und **Belege**. Die Belegkarte entsteht nur, wenn es Belege
+   gibt, statt als leerer Abschnitt stehen zu bleiben.
+3. **Zahlungsart**: "Ihre Zahlungsart" und "Von Conrad angenommen" standen in
+   einer Karte mit einer Linie dazwischen. Jetzt zwei Karten. Die zweite
+   Überschrift war vorher als kleine Beschriftung gesetzt und ist jetzt ein
+   richtiger Kartentitel, weil sie einen eigenen Abschnitt anführt.
+
+### Was bleibt
+
+Nicht jede waagerechte Linie trennt zwei Karten. Diese bleiben, weil sie zur
+inneren Ordnung eines einzelnen Blocks gehören und nicht zwei eigenständige
+Inhalte auseinanderschneiden:
+
+* Zeilenlinien in Tabellen, Definitionslisten und Positionslisten.
+* Die Linie über dem Gesamtpreis. Sie ist die übliche Summenlinie und steht so
+  auch im Warenkorb.
+* Die Fusszeile einer Karte ("7 Bestellungen in den letzten 12 Monaten · Alle
+  anzeigen"). Sie schliesst die Tabelle darüber ab und wäre als eigene Karte
+  eine Karte ohne Inhalt.
+* Die Handlungsleiste unter einem aufgeklappten Formular.
+* Die Trennstriche innerhalb des Segmentschalters, die den Schalter ausmachen.
+
+Sollen diese auch fallen, sag Bescheid; sie sind alle an einer Stelle in
+`konto-huelle.css` definiert.

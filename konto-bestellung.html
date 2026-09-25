@@ -546,37 +546,47 @@
           : '')
       : '<div class="konto-sum-row"><span>Rechnung</span><span>folgt mit dem Versand</span></div>');
 
+  /* Drei Fragen, drei Karten. Vorher stand alles in einer Karte, getrennt
+     durch zwei durchgezogene Linien - das sah aus wie eine Karte, die in
+     Streifen geschnitten wurde. Was eigenstaendig ist, bekommt einen eigenen
+     Rahmen und eigenen Innenabstand. */
+  var belege = storniert ? [] : [
+    rechnung ? '<button type="button" class="konto-btn ghost" data-beleg="Rechnung ' + E(rechnung.nr) + '">Rechnung (PDF)</button>' : '',
+    (b.sendungen || []).some(function (s) { return s.sendung && s.status !== 'storniert'; })
+      ? '<button type="button" class="konto-btn ghost" data-beleg="Lieferschein">Lieferschein (PDF)</button>' : ''
+  ].filter(Boolean);
+
   var summeBlock = '<div class="konto-card konto-section">' +
-    '<div class="konto-card-head"><h2 class="konto-card-title">Summe und Zahlung</h2></div>' +
+    '<div class="konto-card-head"><h2 class="konto-card-title">Summe</h2></div>' +
     '<div class="konto-sum" style="max-width:none;margin:0">' +
       '<div class="konto-sum-row"><span>Nettopreis</span><span>' + EU(netto) + '</span></div>' +
       '<div class="konto-sum-row"><span>Versand</span><span>' + (versand ? EU(versand) : 'Kostenfrei') + '</span></div>' +
       '<div class="konto-sum-row"><span>MwSt. (19 %)</span><span>' + EU(mwst) + '</span></div>' +
       '<div class="konto-sum-total"><span>Gesamtpreis</span><span>' +
-        (storniert ? '–' : EU(summe + mwst)) + '</span></div>' +
+        (storniert ? '\u2013' : EU(summe + mwst)) + '</span></div>' +
       /* Was storniert wurde, faellt aus der Summe heraus. Ohne diesen Satz
          sieht die Zahl nach einem Fehler aus. */
       (entfallen > 0 && !storniert
         ? '<p class="konto-note" style="margin:8px 0 0">' + EU(entfallen) +
           ' netto aus stornierten Sendungen sind nicht enthalten.</p>'
         : '') +
-      '<div class="konto-section" style="margin-top:16px;padding-top:16px;border-top:1px solid var(--c-border)">' +
-        zahlung +
-        '<div class="konto-sum-row"><span>Zahlungsart</span><span>' + E(K.firma.zahlart) + ', ' + E(K.firma.zahlungsziel) + '</span></div>' +
-      '</div>' +
     '</div>' +
-    /* Nur Belege, die es gibt. Eine stornierte Bestellung hatte vorher
-       Knoepfe fuer Rechnung und Lieferschein, die beide nicht existieren. */
-    (storniert ? '' :
-      '<div class="konto-section" style="padding-top:16px;border-top:1px solid var(--c-border)">' +
-        '<p class="konto-nav-title" style="padding:0;margin-bottom:8px">Belege</p>' +
-        '<div class="konto-head-actions">' +
-          (rechnung ? '<button type="button" class="konto-btn ghost" data-beleg="Rechnung ' + E(rechnung.nr) + '">Rechnung (PDF)</button>' : '') +
-          ((b.sendungen || []).some(function (s) { return s.sendung && s.status !== 'storniert'; })
-            ? '<button type="button" class="konto-btn ghost" data-beleg="Lieferschein">Lieferschein (PDF)</button>' : '') +
-        '</div>' +
-      '</div>') +
-  '</div>';
+  '</div>' +
+  '<div class="konto-card konto-section">' +
+    '<div class="konto-card-head"><h2 class="konto-card-title">Zahlung</h2></div>' +
+    '<div class="konto-sum" style="max-width:none;margin:0">' +
+      zahlung +
+      '<div class="konto-sum-row"><span>Zahlungsart</span><span>' + E(K.firma.zahlart) + ', ' + E(K.firma.zahlungsziel) + '</span></div>' +
+    '</div>' +
+  '</div>' +
+  /* Nur Belege, die es gibt. Eine stornierte Bestellung hatte vorher
+     Knoepfe fuer Rechnung und Lieferschein, die beide nicht existieren. */
+  (belege.length
+    ? '<div class="konto-card konto-section">' +
+        '<div class="konto-card-head"><h2 class="konto-card-title">Belege</h2></div>' +
+        '<div class="konto-head-actions">' + belege.join('') + '</div>' +
+      '</div>'
+    : '');
 
   /* --- Rueckgabe ---------------------------------------------------------- */
   /* Vorher fuehrte "Rücksendung starten" nur auf die Uebersichtsseite, wo

@@ -385,8 +385,14 @@
       '</div>' +
       '<p class="konto-gewaehlt">' + E(o.name) + '</p>' +
       '<p class="konto-gewaehlt-note">' + E(o.note) + '</p>' +
-      '<div class="konto-section" style="padding-top:16px;border-top:1px solid var(--c-border)">' +
-        '<p class="konto-nav-title" style="padding:0;margin-bottom:8px">Von Conrad angenommen</p>' +
+    '</div>' +
+    /* Was gilt, und was sonst moeglich waere, sind zwei Aussagen. Vorher
+       standen sie in einer Karte, getrennt durch eine durchgezogene Linie -
+       eine Karte, die aussieht, als waere sie zerschnitten. Jetzt zwei
+       Karten mit eigenem Innenabstand. */
+    '<div class="konto-card konto-section">' +
+      '<div class="konto-card-head"><h2 class="konto-card-title">Von Conrad angenommen</h2></div>' +
+      '<div>' +
         OPTIONEN.map(function (x) {
           var aktiv = x.id === gespeichert;
           return '<div class="konto-annahme' + (aktiv ? ' ist-aktiv' : '') + '">' +
