@@ -434,6 +434,19 @@
 .konto-error svg { width: 24px; height: 24px; color: var(--c-danger); flex-shrink: 0; }
 .konto-error-actions { margin-left: auto; }
 
+/* --- Beilaeufige Bemerkung ------------------------------------------------ */
+/* Ein Satz, der nur einen Zustand erklaert, ist kein Hinweisbanner. .konto-note
+   traegt Rahmen, Flaeche und eine Handlung und liest sich deshalb als Warnung.
+   "Noch nicht versendet, deshalb noch stornierbar" hat so ausgesehen wie eine
+   Meldung, auf die man reagieren muss. */
+.konto-bemerkung {
+  margin: 0;
+  max-width: 72ch;
+  font-size: 13px;
+  color: var(--c-text-secondary);
+  line-height: 1.5;
+}
+
 /* --- Hinweis mit Weg ----------------------------------------------------- */
 /* Die Produktion sagt "bitte IBAN hinterlegen" ohne Verweis darauf, wo das
    geht (Befund B12/F5). Jeder Hinweis hier traegt seine Handlung. */
@@ -746,6 +759,9 @@
   border-top: 1px solid var(--c-border);
 }
 .konto-zeilenleiste-links, .konto-zeilenleiste-rechts { display: flex; gap: 8px; flex-wrap: wrap; }
+/* Ein erklaerender Satz in der Leiste schrumpft mit, statt den Knopf in die
+   naechste Zeile zu draengen. */
+.konto-zeilenleiste .konto-bemerkung { flex: 1 1 280px; }
 
 /* Zusatz am Kartentitel: nennt den Umfang, ohne wie eine zweite Ueberschrift
    auszusehen. */

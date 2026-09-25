@@ -453,7 +453,9 @@
     var stand = STAND[s.status];
     /* Storniert wird, was noch nicht unterwegs ist. Einen Lkw holt man nicht
        zurueck - dafuer gibt es die Ruecksendung. */
-    var kannStorno = K.stornierbar(s);
+    var kannStorno = K.stornierbar(s, b);
+    var restMin = K.stornoRestMin(b);
+    var frist = K.stornoFrist(b);
     var einzige = b.sendungen.length === 1;
     return '<div class="konto-card konto-section">' +
       '<div class="konto-card-head">' +
@@ -479,7 +481,7 @@
         '<div><dt>Lieferadresse</dt><dd>' + E(adr.label) + ', ' + E(adr.zeile) + ', ' + E(adr.ort) + '</dd></div>' +
       '</dl>' +
       (weg
-        ? '<p class="konto-note" style="margin:16px 0 0">Diese Sendung wird nicht versendet und nicht berechnet.</p>'
+        ? '<p class="konto-bemerkung" style="margin:16px 0 0">Diese Sendung wird nicht versendet und nicht berechnet.</p>'
         : '<div class="konto-steps">' + SCHRITTE.map(function (t, k) {
             var klasse = k < stand ? 'is-done' : (k === stand ? 'is-now' : '');
             return '<div class="konto-step ' + klasse + '">' + t + '</div>';
@@ -504,13 +506,25 @@
           '</div>'
         : (kannStorno
           ? '<div class="konto-zeilenleiste">' +
-              '<span class="konto-note" style="margin:0">Noch nicht versendet, deshalb noch stornierbar.</span>' +
+              '<p class="konto-bemerkung">Noch ' +
+                (restMin === 1 ? 'eine Minute' : restMin + ' Minuten') + ' stornierbar, bis ' +
+                K.uhrzeit(frist) + ' Uhr. Danach geht die Bestellung in die Kommissionierung ' +
+                'und die Artikel lassen sich nur noch nach der Zustellung zurücksenden.</p>' +
               '<div class="konto-zeilenleiste-rechts">' +
                 '<button type="button" class="konto-btn danger" data-storno="' + i + '">' +
                 (einzige ? 'Bestellung stornieren' : 'Sendung stornieren') + '</button>' +
               '</div>' +
             '</div>'
-          : '')) +
+          /* Frist abgelaufen: der Satz sagt, warum hier kein Knopf mehr steht,
+             statt den Knopf wortlos verschwinden zu lassen. */
+          : (s.status === 'bearbeitung'
+            ? '<div class="konto-zeilenleiste">' +
+                '<p class="konto-bemerkung">Die Stornofrist von ' + K.STORNO_FRIST_MIN +
+                ' Minuten nach Bestelleingang ist am ' + D(b.datum) + ' um ' +
+                K.uhrzeit(frist) + ' Uhr abgelaufen. Nach der Zustellung können Sie ' +
+                'die Artikel zurücksenden.</p>' +
+              '</div>'
+            : ''))) +
     '</div>';
   }
 
@@ -567,7 +581,7 @@
       /* Was storniert wurde, faellt aus der Summe heraus. Ohne diesen Satz
          sieht die Zahl nach einem Fehler aus. */
       (entfallen > 0 && !storniert
-        ? '<p class="konto-note" style="margin:8px 0 0">' + EU(entfallen) +
+        ? '<p class="konto-bemerkung" style="margin:8px 0 0">' + EU(entfallen) +
           ' netto aus stornierten Sendungen sind nicht enthalten.</p>'
         : '') +
     '</div>' +

@@ -59,12 +59,12 @@
 
   var bestellungen = [
     {
-      nr: '2017621738', datum: '2026-09-22', 
-      status: 'bearbeitung', lieferung: '2026-09-25',
+      nr: '2017621738', datum: '2026-09-24', bestelltUm: '2026-09-24T08:56:00',
+      status: 'bearbeitung', lieferung: '2026-09-27',
       versand: 0, referenz: 'Halle 3 / 2. Bauabschnitt',
       adresse: 'a2',
       sendungen: [
-        { status: 'bearbeitung', versender: 'Conrad Electronic', termin: '2026-09-25',
+        { status: 'bearbeitung', versender: 'Conrad Electronic', termin: '2026-09-27',
           adresse: 'a2', pos: [0, 1, 2] }
       ],
       positionen: [
@@ -364,7 +364,26 @@
   function stornoLesen() {
     try { return JSON.parse(localStorage.getItem(STORNO_KEY)) || {}; } catch (e) { return {}; }
   }
-  function stornierbar(s) { return s.status === 'bearbeitung'; }
+  /* Storniert wird nicht unbegrenzt. Nach Ablauf der Frist geht die Bestellung
+     in die Kommissionierung und laesst sich nur noch zurueckschicken. Ohne
+     Uhrzeit in den Daten gilt 12:00 des Bestelltages, was jede aeltere
+     Bestellung ausserhalb der Frist liegen laesst. */
+  var STORNO_FRIST_MIN = 15;
+  function bestellzeit(b) {
+    return new Date(b.bestelltUm || (b.datum + 'T12:00:00'));
+  }
+  function stornoFrist(b) {
+    return new Date(bestellzeit(b).getTime() + STORNO_FRIST_MIN * 60000);
+  }
+  function stornoRestMin(b) {
+    return Math.ceil((stornoFrist(b) - HEUTE) / 60000);
+  }
+  function stornierbar(s, b) {
+    return s.status === 'bearbeitung' && (!b || stornoRestMin(b) > 0);
+  }
+  function uhrzeit(d) {
+    return String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0');
+  }
   function stornieren(nr, i) {
     var alle = stornoLesen();
     var eintrag = alle[nr] || (alle[nr] = { am: HEUTE_ISO, pos: [] });
@@ -470,6 +489,8 @@
     nachbestellen: nachbestellen, melden: melden,
     bankLesen: bankLesen, bankSchreiben: bankSchreiben,
     stornierbar: stornierbar, stornieren: stornieren, HEUTE_ISO: HEUTE_ISO,
+    STORNO_FRIST_MIN: STORNO_FRIST_MIN, stornoFrist: stornoFrist,
+    stornoRestMin: stornoRestMin, uhrzeit: uhrzeit,
     nettoOffen: nettoOffen,
     rmaAlle: rmaAlle, rmaAnlegen: rmaAnlegen, RMA_GRUENDE: RMA_GRUENDE,
     ibanPruefen: ibanPruefen, ibanGruppiert: ibanGruppiert, ibanVerdeckt: ibanVerdeckt

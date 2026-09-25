@@ -1602,3 +1602,61 @@ wegzulassen und die Adresse als Adressblock zu setzen.
 
 In der Empfehlung stand "11 Stellen". Es sind neun; ich hatte die schliessenden
 Tags mitgezählt.
+
+---
+
+## 26. Stornofrist, und ein Satz, der wie ein Alarm aussah
+
+**Befund von Nico:** "is this an alert?? plus, add the information that the
+order is cancellable till eg 15min or similar after placing the order"
+
+### Der falsche Behälter
+
+"Noch nicht versendet, deshalb noch stornierbar." stand in `.konto-note`. Diese
+Klasse ist das Hinweisbanner des Kontobereichs: blaue Fläche, blauer Rand,
+Symbol, und laut Bauregel trägt jeder Hinweis seine eigene Handlung. Ein Satz,
+der nur einen Zustand erklärt, gehört da nicht hinein. Er sah aus wie eine
+Meldung, auf die man reagieren muss.
+
+Neu ist `.konto-bemerkung`: 13 px, sekundäre Farbe, keine Fläche, kein Rand.
+Innerhalb einer Handlungsleiste schrumpft sie mit, damit der Knopf rechts
+stehen bleibt statt in die nächste Zeile zu rutschen. Zwei weitere Sätze aus
+derselben Runde standen im selben falschen Behälter und sind mit umgezogen:
+"Diese Sendung wird nicht versendet und nicht berechnet." und der Satz über die
+aus der Summe herausgerechneten Positionen.
+
+### Die Frist
+
+Die Stornofrist steht jetzt in den Daten: `STORNO_FRIST_MIN = 15`, gerechnet ab
+`bestelltUm`. Fehlt die Uhrzeit, gilt 12:00 des Bestelltages, wodurch jede
+ältere Bestellung ausserhalb der Frist liegt.
+
+Zwei Zustände an der Sendung:
+
+* **Frist läuft:** "Noch 11 Minuten stornierbar, bis 09:11 Uhr. Danach geht die
+  Bestellung in die Kommissionierung und die Artikel lassen sich nur noch nach
+  der Zustellung zurücksenden." Daneben der Knopf.
+* **Frist abgelaufen:** "Die Stornofrist von 15 Minuten nach Bestelleingang ist
+  am 14.08.2026 um 12:15 Uhr abgelaufen. Nach der Zustellung können Sie die
+  Artikel zurücksenden." Kein Knopf. Der Satz sagt, warum er fehlt, statt ihn
+  wortlos verschwinden zu lassen.
+
+Damit der Weg im Prototyp begehbar bleibt, liegt die jüngste Bestellung
+2017621738 jetzt auf dem 24.09.2026 um 08:56 Uhr, also elf Minuten vor der
+Prototyp-Gegenwart.
+
+### Was die Frist kostet
+
+Eine Fünfzehn-Minuten-Frist und der Status "In Bearbeitung" beschreiben zwei
+verschiedene Modelle. Die Sendung 2 der Bestellung 2017551903 steht seit dem
+14.08. in Bearbeitung, weil der Artikel nachproduziert wird; mit der Frist ist
+sie nicht mehr stornierbar. Der Fall "eine von zwei Sendungen stornieren", den
+Kapitel 23 beschreibt, kann damit praktisch nicht mehr auftreten: eine
+Teilsendung heisst, dass Tage vergangen sind.
+
+Wer beides will, braucht zwei Handlungen mit zwei Namen: **Stornieren**
+innerhalb der Frist, solange nichts angefasst wurde und die Bestellung einfach
+verschwindet, und **Stornierung beantragen** danach, solange nichts versendet
+ist, mit Prüfung durch Conrad und einem eigenen Status. Das zweite ist gebaut,
+das erste ist die Frist. Sag Bescheid, wenn die beiden nebeneinander stehen
+sollen.
