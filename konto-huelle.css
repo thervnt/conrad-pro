@@ -325,6 +325,29 @@
   font-weight: 500;
 }
 .konto-btn.danger:hover { background: #fdecef; border-color: var(--c-danger); }
+/* Symbolknopf fuer genau eine Handlung mit eindeutigem Zeichen - Teilen zum
+   Beispiel. Kein Punktemenue: das waere ein Behaelter ohne Aussage, und was
+   darin steht, erfaehrt man erst nach einem Klick. Die Flaeche misst 40px,
+   damit sie ohne Zielhilfe zu treffen ist. */
+.konto-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  padding: 0;
+  border: 1px solid var(--c-border-control);
+  border-radius: var(--radius-xs);
+  background: var(--c-bg-white);
+  color: var(--c-text);
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+.konto-icon-btn svg { width: 18px; height: 18px; }
+.konto-icon-btn:hover { background: var(--c-bg-tint); border-color: var(--c-border-strong); }
+.konto-icon-btn:focus-visible { outline: 2px solid var(--c-blue); outline-offset: 2px; }
+
 /* Steht nach den Spielarten, sonst gewinnt .primary bei gleicher Staerke. */
 .konto-btn:disabled,
 .konto-btn:disabled:hover {
@@ -648,6 +671,9 @@
   .konto-table th, .konto-table td { padding: 12px 6px; }
   .konto-row-actions { flex-direction: column; align-items: stretch; gap: 4px; }
   .konto-row-actions .konto-btn { min-height: 32px; font-size: 13px; padding: 4px 8px; }
+  /* Gestapelt bleibt der Symbolknopf quadratisch: ueber die ganze Zellbreite
+     gezogen saehe ein Zeichen in der Mitte aus wie ein leerer Knopf. */
+  .konto-row-actions .konto-icon-btn { align-self: flex-end; width: 32px; height: 32px; }
   .konto-cell-sub { font-size: 11px; }
   /* Eine Spalte weniger, bevor die Knopfbeschriftung dreizeilig wird. Faellt
      die, die am wenigsten sagt: wie viele Positionen es sind, steht auch auf

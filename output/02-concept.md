@@ -1965,3 +1965,57 @@ entsteht eine Spalte, und es bleibt bei der einfachen Liste.
 
 Die grosse Schreibweise der Firma aus Kapitel 31 bleibt: sie ist der
 Gegenstand der Seite, keine Angabe unter sechs.
+
+---
+
+## 33. Merklisten: sehen, öffnen, bestellen, teilen
+
+**Befund von Nico:** "1. Show also the preview of products as on the order
+overview page. 2. Use a share iconbutton instead of copy secondary button.
+3. Primary button opens the list, secondary button is add all to cart"
+
+### Voraussetzung: die Listen brauchten Inhalt
+
+Merklisten trugen bisher nur eine Zahl, einen Betrag und ein einzelnes Bild.
+Damit liess sich weder eine Vorschau bauen noch etwas in den Warenkorb legen -
+"Alle Artikel in den Warenkorb" setzte eine Kurzmeldung ab und tat nichts.
+Jede Liste trägt jetzt ihre Positionen, aus dem vorhandenen Sortiment. Anzahl
+und Betrag werden daraus gerechnet, damit sie nicht auseinanderlaufen können;
+die Zahlen ändern sich dadurch (vier statt vierzehn Artikel in der ersten
+Liste), sind aber jetzt wahr.
+
+### 1. Vorschau
+
+Dieselbe Darstellung wie in der Bestellliste: bis zu drei Bilder mit 32 px,
+dahinter die Zahl der übrigen, darunter der Kurztitel des ersten Artikels. Die
+Funktion stand bisher in `konto-bestellungen.html`; sie wird jetzt von zwei
+Listen gebraucht und steht deshalb als `K.vorschau()` in `konto-daten.js`.
+Beide Listen benutzen dieselbe. Die Spaltennamen sind gleich geworden:
+**Artikel** ist die Vorschau, **Positionen** die Anzahl - und Positionen fällt
+unter 1100 px weg, wie in der Bestellliste.
+
+### 2. Teilen als Symbolknopf
+
+Ein Symbolknopf mit dem Teilen-Zeichen, 40 × 40 px, mit `title` und
+`aria-label`, das den Namen der Liste nennt. Das ist etwas anderes als das
+Punktemenü, das ich früher einmal gebaut hatte und das zu Recht durchgefallen
+ist: ein Punktemenü ist ein Behälter ohne Aussage, dessen Inhalt man erst nach
+einem Klick erfährt. Ein Symbol für genau eine bekannte Handlung ist
+eindeutig. Gestapelt (unter 1100 px) bleibt der Knopf quadratisch, statt sich
+über die Zellbreite zu ziehen.
+
+### 3. Öffnen und bestellen
+
+"Liste öffnen" ist der Hauptknopf, "Alle in den Warenkorb" steht daneben in
+Weiss. Dafür musste es die Seite erst geben, die geöffnet wird: **`konto-merkliste.html`** ist
+neu. Sie zeigt die Artikel der Liste mit Bild, Titel, Menge, Einzel- und
+Positionspreis, hat eine Summenzeile, einen Knopf je Position und oben
+dieselben zwei Handlungen wie die Zeile in der Liste. Der Name der Liste in
+der Übersicht führt jetzt ebenfalls dorthin statt auf `#`.
+
+"Alle in den Warenkorb" legt wirklich etwas hinein: geprüft, vier Positionen
+landen im echten Warenkorb. Es gibt einen Leerzustand für eine Kennung, die es
+nicht gibt.
+
+Geprüft: 17 Seiten über fünf Fensterbreiten, kein seitliches Rollen, keine
+rollende Tabelle, kein Symbolknopf ohne Beschriftung, keine Konsolenfehler.

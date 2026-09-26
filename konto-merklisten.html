@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="konto.css?v=55fb6f1d">
-<link rel="stylesheet" href="konto-huelle.css?v=ff9c6f5b">
+<link rel="stylesheet" href="konto-huelle.css?v=bc61d0e7">
 <script src="cart-seed.js?v=28a5fe8f"></script>
 </head>
 <body>
@@ -352,7 +352,7 @@
   pruefe();
 })();
 </script>
-<script src="konto-daten.js?v=12df478b"></script>
+<script src="konto-daten.js?v=1dcfdbd9"></script>
 <script>
 (function () {
   var K = window.KONTO, E = K.esc, EU = K.euro, D = K.datum;
@@ -363,22 +363,35 @@
 
   /* Eigene Namen statt "Merkliste vom 03.07.2026" (Befund E1), eine
      Darstellung fuer alle Karten (Befund E2), und etwas, das man damit tun
-     kann (Befund E3). */
+     kann (Befund E3). Die Artikelvorschau ist dieselbe wie in der
+     Bestellliste: eine Liste von Listen sagt sonst nichts darueber, was in
+     ihnen steckt. */
+  var TEILEN_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" ' +
+    'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+    '<circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>' +
+    '<line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>';
+
   document.querySelector('[data-liste]').innerHTML =
     '<div class="konto-table-wrap"><table class="konto-table">' +
-    '<thead><tr><th scope="col">Merkliste</th>' +
-    '<th scope="col">Zuletzt geändert</th><th scope="col" class="konto-amount">Artikel</th>' +
+    '<thead><tr><th scope="col">Merkliste</th><th scope="col">Artikel</th>' +
+    '<th scope="col">Zuletzt geändert</th>' +
+    '<th scope="col" class="konto-amount konto-spalte-opt">Positionen</th>' +
     '<th scope="col" class="konto-amount">Betrag netto</th>' +
     '<th scope="col"><span class="visually-hidden">Aktionen</span></th></tr></thead><tbody>' +
     listen.map(function (m) {
+      var ziel = 'konto-merkliste.html?id=' + encodeURIComponent(m.id);
       return '<tr>' +
-        '<td><a href="#">' + E(m.name) + '</a></td>' +
+        '<td><a href="' + E(ziel) + '">' + E(m.name) + '</a></td>' +
+        '<td>' + K.vorschau(m.positionen) + '</td>' +
         '<td class="konto-num">' + D(m.geaendert) + '</td>' +
-        '<td class="konto-amount">' + m.artikel + '</td>' +
+        '<td class="konto-amount konto-spalte-opt">' + m.artikel + '</td>' +
         '<td class="konto-amount">' + EU(m.wert) + '</td>' +
         '<td><span class="konto-row-actions">' +
-          '<button type="button" class="konto-btn" data-wagen="' + E(m.id) + '">In den Warenkorb</button>' +
-          '<button type="button" class="konto-btn ghost" data-teilen="' + E(m.id) + '">Teilen</button>' +
+          '<a class="konto-btn primary" href="' + E(ziel) + '">Liste öffnen</a>' +
+          '<button type="button" class="konto-btn ghost" data-wagen="' + E(m.id) + '">Alle in den Warenkorb</button>' +
+          '<button type="button" class="konto-icon-btn" data-teilen="' + E(m.id) + '" ' +
+            'title="Merkliste teilen" aria-label="Merkliste &quot;' + E(m.name) + '&quot; teilen">' +
+            TEILEN_SVG + '</button>' +
         '</span></td></tr>';
     }).join('') + '</tbody></table></div>';
 
@@ -387,7 +400,8 @@
     var w = e.target.closest('[data-wagen]');
     if (w) {
       var m = listen.filter(function (x) { return x.id === w.dataset.wagen; })[0];
-      K.melden('Alle ' + m.artikel + ' Artikel aus "' + m.name + '" in den Warenkorb');
+      K.nachbestellen(m.positionen);
+      K.melden(m.artikel + ' Artikel aus "' + m.name + '" in den Einkaufswagen gelegt');
     }
     if (e.target.closest('[data-teilen]')) K.melden('Merkliste mit Kollegen teilen');
   });

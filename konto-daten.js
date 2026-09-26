@@ -177,14 +177,34 @@
   // Merklisten haengen am Firmenkonto, nicht an einer Person. Ein Feld
   // "angelegt von" gibt es in den Daten nicht, also steht es auch nicht in
   // der Tabelle. Dasselbe gilt fuer Stuecklisten.
+  // Merklisten tragen ihre Positionen, statt nur eine Zahl und ein Bild. Erst
+  // damit laesst sich zeigen, was in einer Liste steckt, und "Alles in den
+  // Warenkorb" legt wirklich etwas hinein. Anzahl und Betrag werden daraus
+  // gerechnet, damit sie nicht auseinanderlaufen koennen.
   var merklisten = [
     { id: 'm1', name: 'Halle 3 / Elektroinstallation', angelegt: '2026-07-03', geaendert: '2026-09-20',
-      artikel: 14, wert: 1842.60, bild: 'bilder/klein/wago-221-413-01.webp' },
+      positionen: [
+        pos('221-413', 50, 'WAGO 221-413-50 221 Verbindungsklemme flexibel: 0.14-4 mm² starr: 0.2-4 mm² Polzahl: 3 Transparent, Orange Box', 'WAGO 221-413 Verbindungsklemme, 3-polig', 12, 14.99, 'bilder/klein/wago-221-413-01.webp'),
+        pos('221-420', 15, 'WAGO 221-420-15 221 Verbindungsklemme flexibel: 0.14-4 mm² starr: 0.2-4 mm² Polzahl: 10 Transparent, Orange Box', 'WAGO 221-420 Verbindungsklemme, 10-polig', 20, 40.60, 'bilder/klein/wago-221-420-01.webp'),
+        pos('221-423', 50, 'WAGO 221-423-50 221 Verbindungsklemme flexibel: 0.14-4 mm² starr: 0.2-4 mm² Polzahl: 3 Transparent, Grün Box', 'WAGO 221-423 Verbindungsklemme, 3-polig', 8, 17.50, 'bilder/klein/wago-221-423-01.webp'),
+        pos('221-500', 1, 'WAGO 221-500 Serie 221 Befestigungsadapter', 'WAGO 221-500 Befestigungsadapter', 200, 0.87, null)
+      ] },
     { id: 'm2', name: 'Standardlager Werkstatt', angelegt: '2026-03-18', geaendert: '2026-08-01',
-      artikel: 7, wert: 318.45, bild: 'bilder/klein/wago-221-415-01.webp' },
+      positionen: [
+        pos('221-415', 25, 'WAGO 221-415-25 221 Verbindungsklemme flexibel: 0.14-4 mm² starr: 0.2-4 mm² Polzahl: 5 Transparent, Orange Box', 'WAGO 221-415 Verbindungsklemme, 5-polig', 10, 13.79, 'bilder/klein/wago-221-415-01.webp'),
+        pos('221-412', 100, 'WAGO 221-412-100 221 Verbindungsklemme flexibel: 0.14-4 mm² starr: 0.2-4 mm² Polzahl: 2 Transparent, Orange Box', 'WAGO 221-412 Verbindungsklemme, 2-polig', 6, 3.45, 'bilder/klein/wago-221-412-01.webp'),
+        pos('221-425', 25, 'WAGO 221-425-25 221 Verbindungsklemme flexibel: 0.14-4 mm² starr: 0.2-4 mm² Polzahl: 5 Transparent, Grün Box', 'WAGO 221-425 Verbindungsklemme, 5-polig', 4, 14.50, 'bilder/klein/wago-221-425-01.webp')
+      ] },
     { id: 'm3', name: 'Angebot Stadtwerke (Entwurf)', angelegt: '2026-09-12', geaendert: '2026-09-12',
-      artikel: 3, wert: 96.30, bild: null }
+      positionen: [
+        pos('221-613', 1, 'WAGO 221-613 221 Verbindungsklemme flexibel: 0.5-6 mm² starr: 0.5-6 mm² Polzahl: 3 Transparent, Orange', 'WAGO 221-613 Verbindungsklemme, 3-polig', 60, 0.95, null),
+        pos('221-500', 1, 'WAGO 221-500 Serie 221 Befestigungsadapter', 'WAGO 221-500 Befestigungsadapter', 45, 0.87, null)
+      ] }
   ];
+  merklisten.forEach(function (m) {
+    m.artikel = m.positionen.length;
+    m.wert = m.positionen.reduce(function (t, p) { return t + p.menge * p.einzel; }, 0);
+  });
 
   // Gespeicherte Stuecklisten. "ohneTreffer" kommt aus dem Abgleich des
   // Werkzeugs und ist damit echte Angabe, kein erfundenes Feld.
@@ -467,6 +487,28 @@
   stornoAnwenden();
   ruecksendungen = rmaEigene().concat(ruecksendungen);
 
+  // --- Artikelvorschau fuer Listen ------------------------------------------
+  // Bis zu drei Bilder, dahinter die Zahl der uebrigen, darunter der Kurztitel
+  // des ersten Artikels. Hersteller-Nummern unterscheiden nichts, ein Bild und
+  // ein kurzer Titel schon.
+  var PLATZHALTER = '<svg viewBox="0 0 24 24" fill="none" stroke="#b6bcc7" stroke-width="1.4" ' +
+    'stroke-linecap="round" stroke-linejoin="round" width="18" height="18" aria-hidden="true">' +
+    '<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/>' +
+    '<path d="M21 15l-5-5L5 21"/></svg>';
+  function vorschau(positionen) {
+    var zeigen = positionen.slice(0, 3);
+    var rest = positionen.length - zeigen.length;
+    return '<div class="konto-vorschau" aria-hidden="true">' +
+      zeigen.map(function (p) {
+        return '<span class="konto-vorschau-bild">' + (p.bild
+          ? '<img src="' + esc(p.bild) + '" alt="" width="32" height="32" loading="lazy">'
+          : PLATZHALTER) + '</span>';
+      }).join('') +
+      (rest > 0 ? '<span class="konto-vorschau-mehr">+' + rest + '</span>' : '') +
+    '</div>' +
+    '<span class="konto-vorschau-titel">' + esc(positionen[0].kurz) + '</span>';
+  }
+
   // --- Kurzmeldung ---------------------------------------------------------
   // Gleicher Baustein wie die Snackbar der Produktseite.
   function melden(text) {
@@ -495,7 +537,7 @@
     stornierbar: stornierbar, stornieren: stornieren, HEUTE_ISO: HEUTE_ISO,
     STORNO_FRIST_MIN: STORNO_FRIST_MIN, stornoFrist: stornoFrist,
     stornoRestMin: stornoRestMin, uhrzeit: uhrzeit,
-    nettoOffen: nettoOffen,
+    nettoOffen: nettoOffen, vorschau: vorschau,
     rmaAlle: rmaAlle, rmaAnlegen: rmaAnlegen, RMA_GRUENDE: RMA_GRUENDE,
     ibanPruefen: ibanPruefen, ibanGruppiert: ibanGruppiert, ibanVerdeckt: ibanVerdeckt
   };
