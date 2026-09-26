@@ -2560,3 +2560,36 @@ mit derselben Aussage.
 Geprüft: der ganze Kreis abgemeldet → Einwilligung → wartet → bestätigt →
 angemeldet → abbestellen → Umfrage, jeweils mit gespeichertem Stand; 16 Seiten
 über vier Fensterbreiten ohne Konsolenfehler und ohne seitlichen Überlauf.
+
+---
+
+## 47. Eingabefeld auch im Konto
+
+**Befund von Nico:** "es gibt immer noch kein input field für die email
+adresse"
+
+Ich hatte es weggelassen mit dem Argument, die Adresse sei ja bekannt. Das war
+eine Annahme zu viel: der Newsletter muss nicht an dieselbe Adresse gehen wie
+die Rechnungen. Wer im Einkauf sitzt, will die Fachinformationen vielleicht an
+seine eigene Adresse und nicht an die Sammeladresse des Kontos.
+
+Der abgemeldete Zustand trägt jetzt dieselbe Eingabereihe wie das
+Anmeldeband: Feld und Knopf als eine Einheit, das Feld mit der Kontoadresse
+vorbelegt und änderbar. Darunter unverändert das Einwilligungs-Kästchen und
+der Hinweis auf die Bestätigungsmail.
+
+**Eine Quelle für die Prüfung.** Damit zwei Formulare desselben Prototyps bei
+derselben Eingabe nicht Verschiedenes sagen, veröffentlicht
+`newsletter-anmeldung.js` jetzt `window.NEWSLETTER` mit der Prüfung, dem
+Tippfehler-Vorschlag und dem Hinweistext. Die Kontoseite benutzt dieselben
+Funktionen: gleiche Fehlermeldungen, gleicher Vorschlag, gleiche Reihenfolge
+(erst die Adresse prüfen, dann die Einwilligung).
+
+Die eingetragene Adresse wandert durch die ganze Kette: sie steht in der
+Bestätigungsmeldung, im Zustand "Bestätigung fehlt noch" und danach als
+Adresse des Abos. Gespeichert unter `conradNewsletterAbo`.
+
+Geprüft: ungültige Adresse, Tippfehler-Vorschlag mit Übernahme, fehlender
+Haken, Anmeldung, Bestätigung; Kartenhöhe 401 px in allen vier Zuständen; 60
+Anmeldebänder über 15 Seiten und vier Breiten weiterhin da, die Kontoseite
+weiterhin ohne Band, keine Konsolenfehler.

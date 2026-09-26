@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="konto.css?v=55fb6f1d">
-<link rel="stylesheet" href="konto-huelle.css?v=3d4e80dc">
+<link rel="stylesheet" href="konto-huelle.css?v=a931e910">
 <script src="cart-seed.js?v=28a5fe8f"></script>
 </head>
 <body data-ohne-nl-band>
@@ -341,7 +341,7 @@
 })();
 </script>
 <script src="header-flyouts.js?v=25fb8a50"></script>
-<script src="newsletter-anmeldung.js?v=590ad420"></script>
+<script src="newsletter-anmeldung.js?v=1bf2545d"></script>
 <button type="button" class="to-top" data-to-top aria-label="Zum Seitenanfang">
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>
 </button>
@@ -390,6 +390,9 @@
   var lage = stand.lage || (stand.abo === false ? 'aus' : 'an');
   var zugestimmt = false;
   var consentFehler = null;
+  var mail = stand.mail || ich.mail;   /* vorbelegt, aber aenderbar */
+  var mailFehler = null;
+  var tippMail = null;
   var abgemeldetAm = stand.abgemeldetAm || null;
   var HINWEIS_DOI = 'Wir schicken Ihnen zuerst eine Bestätigungsmail; erst nach Ihrem Klick darin erhalten Sie den Newsletter.';
   var rueckmeldung = stand.rueckmeldung || null;   /* gesendeter Grund */
@@ -424,8 +427,7 @@
       return '<p class="konto-gewaehlt">Sie erhalten den Conrad Newsletter</p>' +
         '<p class="konto-gewaehlt-note">Etwa vierzehntägig, mit Nettopreisen für Geschäftskunden.</p>' +
         '<dl class="konto-fakten" style="margin-top:24px">' +
-          '<div><dt>Adresse</dt><dd>' + E(ich.mail) +
-            '<br><a class="konto-mini" href="konto-profil.html">Adresse ändern</a></dd></div>' +
+          '<div><dt>Adresse</dt><dd>' + E(mail) + '</dd></div>' +
           '<div><dt>Angemeldet seit</dt><dd>' + D('2023-04-11') + '</dd></div>' +
         '</dl>' +
         /* Die Abmeldung ist eine bewusste Handlung, kein Haken, den man im
@@ -443,7 +445,7 @@
 
     if (lage === 'wartet') {
       return '<p class="konto-gewaehlt">Ihre Bestätigung fehlt noch</p>' +
-        '<p class="konto-gewaehlt-note">Wir haben eine E-Mail an ' + E(ich.mail) + ' geschickt. ' +
+        '<p class="konto-gewaehlt-note">Wir haben eine E-Mail an ' + E(mail) + ' geschickt. ' +
         'Erst mit dem Klick darin erhalten Sie den Newsletter.</p>' +
         '<dl class="konto-fakten" style="margin-top:24px">' +
           '<div><dt>Absender</dt><dd>newsletter@conrad.de</dd></div>' +
@@ -464,21 +466,37 @@
         '</div>';
     }
 
-    /* Abgemeldet: die Anmeldung braucht dieselbe Einwilligung wie im
-       Anmeldeband. Die Adresse ist bekannt, also gibt es kein Eingabefeld -
-       alles andere ist gleich. */
+    /* Abgemeldet: die Anmeldung laeuft wie im Anmeldeband ueber dem
+       Seitenfuss, mit Eingabefeld und Einwilligung. Das Feld ist mit der
+       Adresse des Kontos vorbelegt, bleibt aber aenderbar: der Newsletter
+       muss nicht an dieselbe Adresse gehen wie die Rechnungen. */
     return '<p class="konto-gewaehlt">Sie erhalten derzeit keinen Newsletter</p>' +
       '<p class="konto-gewaehlt-note">' +
         (abgemeldetAm ? 'Abgemeldet am ' + D(abgemeldetAm) + '. ' : '') +
         'Ihre Adresse bleibt für Bestellbestätigungen und Rechnungen in Gebrauch; ' +
         'davon ist nur der Newsletter betroffen.</p>' +
-      '<dl class="konto-fakten" style="margin-top:24px">' +
-        '<div><dt>Adresse</dt><dd>' + E(ich.mail) + '</dd></div>' +
-        (rueckmeldung
-          ? '<div><dt>Ihre Rückmeldung</dt><dd>' + E(grundText(rueckmeldung)) + '</dd></div>'
-          : '') +
-      '</dl>' +
+      (rueckmeldung
+        ? '<dl class="konto-fakten" style="margin-top:24px">' +
+          '<div><dt>Ihre Rückmeldung</dt><dd>' + E(grundText(rueckmeldung)) + '</dd></div></dl>'
+        : '') +
       '<div class="konto-section" style="margin-top:24px">' +
+        '<div class="konto-feld">' +
+          '<label class="konto-feld-label" for="nl-mail">Geschäftliche E-Mail-Adresse</label>' +
+          '<div class="konto-eingabe-reihe">' +
+            '<input type="email" id="nl-mail" data-mail autocomplete="email" inputmode="email" ' +
+              'spellcheck="false" placeholder="einkauf@firma.de" value="' + E(mail) + '"' +
+              (mailFehler ? ' aria-invalid="true" aria-describedby="nl-mailfehler"' : '') + '>' +
+            '<button type="button" class="konto-btn primary" data-an>Newsletter abonnieren</button>' +
+          '</div>' +
+          '<div class="konto-eingabe-meldung" role="status" aria-live="polite">' +
+            (mailFehler
+              ? '<p class="konto-feldfehler" id="nl-mailfehler" style="margin:0">' + E(mailFehler) + '</p>'
+              : (tippMail
+                ? '<p class="konto-tipp" style="margin:0">Meinten Sie <button type="button" data-tipp>' +
+                  E(tippMail) + '</button>?</p>'
+                : '')) +
+          '</div>' +
+        '</div>' +
         '<label class="konto-einwilligung">' +
           '<input type="checkbox" data-consent' + (zugestimmt ? ' checked' : '') +
             (consentFehler ? ' aria-invalid="true" aria-describedby="nl-consent"' : '') + '>' +
@@ -491,7 +509,6 @@
             ? '<span class="konto-feldfehler" id="nl-consent">' + E(consentFehler) + '</span>'
             : E(HINWEIS_DOI)) +
         '</p>' +
-        '<button type="button" class="konto-btn primary" data-an>Newsletter abonnieren</button>' +
       '</div>';
   }
 
@@ -568,7 +585,27 @@
 
     /* Anmelden geht nur mit Einwilligung, und danach ist man noch nicht
        angemeldet, sondern wartet auf die Bestaetigung. */
+    var t = e.target.closest('[data-tipp]');
+    if (t) {
+      mail = t.textContent;
+      tippMail = null;
+      mailFehler = null;
+      zeichne();
+      var feld = elEmpfang.querySelector('[data-mail]');
+      if (feld) feld.focus();
+      return;
+    }
+
     if (e.target.closest('[data-an]')) {
+      mailFehler = window.NEWSLETTER ? window.NEWSLETTER.pruefen(mail) : null;
+      if (mailFehler) {
+        tippMail = null;
+        consentFehler = null;
+        zeichne();
+        var f2 = elEmpfang.querySelector('[data-mail]');
+        if (f2) f2.focus();
+        return;
+      }
       if (!zugestimmt) {
         consentFehler = 'Bitte bestätigen Sie die Einwilligung, damit wir Ihnen den ' +
           'Newsletter schicken dürfen.';
@@ -578,18 +615,19 @@
         return;
       }
       consentFehler = null;
+      tippMail = null;
       lage = 'wartet';
       umfrageOffen = false;
-      schreiben({ lage: 'wartet' });
+      schreiben({ lage: 'wartet', mail: mail });
       zeichne();
-      K.melden('Bestätigungsmail an ' + ich.mail + ' geschickt');
+      K.melden('Bestätigungsmail an ' + mail + ' geschickt');
       return;
     }
 
     if (e.target.closest('[data-bestaetigen]')) {
       lage = 'an';
       zugestimmt = false;
-      schreiben({ lage: 'an' });
+      schreiben({ lage: 'an', mail: mail });
       zeichne();
       K.melden('Anmeldung bestätigt');
       return;
@@ -618,6 +656,32 @@
       zeichne();
       return;
     }
+  });
+
+  /* Waehrend des Tippens ist jede Adresse eine Weile unfertig: geprueft wird
+     beim Verlassen des Feldes, und ein stehender Fehler geht beim Tippen weg,
+     ohne dass das Feld neu gebaut wird. */
+  document.addEventListener('input', function (e) {
+    var feld = e.target.closest('[data-mail]');
+    if (!feld) return;
+    mail = feld.value;
+    if (mailFehler || tippMail) {
+      mailFehler = null;
+      tippMail = null;
+      feld.removeAttribute('aria-invalid');
+      feld.removeAttribute('aria-describedby');
+      var platz = elEmpfang.querySelector('.konto-eingabe-meldung');
+      if (platz) platz.innerHTML = '';
+    }
+  });
+
+  document.addEventListener('focusout', function (e) {
+    var feld = e.target.closest('[data-mail]');
+    if (!feld || !window.NEWSLETTER) return;
+    if (!feld.value.trim()) { tippMail = null; zeichne(); return; }
+    mailFehler = window.NEWSLETTER.pruefen(feld.value);
+    tippMail = mailFehler ? null : window.NEWSLETTER.vorschlag(feld.value);
+    zeichne();
   });
 
   /* Der Haken nimmt seine Meldung sofort wieder weg, ohne Neuaufbau. */

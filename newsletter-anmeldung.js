@@ -11,10 +11,6 @@
 (function () {
   'use strict';
 
-  if (document.querySelector('[data-nl-band]')) return;
-  /* Nicht auf der Seite, die das Abo schon verwaltet: dort waere ein
-     Anmeldeband unter der Abmeldung ein Widerspruch. */
-  if (document.body.hasAttribute('data-ohne-nl-band')) return;
 
   function E(s) {
     return String(s == null ? '' : s)
@@ -150,6 +146,16 @@
   }
 
   var HINWEIS = 'Wir schicken Ihnen zuerst eine Bestätigungsmail; erst nach Ihrem Klick darin geht es los.';
+
+  /* Pruefung, Vorschlag und Wortlaut stehen auch der Newsletter-Seite im Konto
+     zur Verfuegung. Eine Quelle statt zweier: sonst sagen zwei Formulare
+     desselben Prototyps bei derselben Eingabe Verschiedenes. */
+  window.NEWSLETTER = { pruefen: pruefen, vorschlag: vorschlag, HINWEIS: HINWEIS };
+
+  if (document.querySelector('[data-nl-band]')) return;
+  /* Nicht auf der Seite, die das Abo schon verwaltet: dort waere ein
+     Anmeldeband unter der Abmeldung ein Widerspruch. */
+  if (document.body.hasAttribute('data-ohne-nl-band')) return;
 
   /* --- Bauteil ------------------------------------------------------------ */
   function Formular(wurzel) {

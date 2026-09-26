@@ -518,6 +518,42 @@
   color: var(--c-text);
 }
 
+/* --- Eingabereihe: Feld und Knopf als eine Einheit ------------------------ */
+/* Gleiche Bauart wie im Anmeldeband ueber dem Seitenfuss. Unter 560px stapeln
+   beide und werden wieder rundum gerundet. */
+.konto-eingabe-reihe { display: flex; flex-wrap: wrap; max-width: 520px; }
+.konto-eingabe-reihe input[type="email"] {
+  flex: 1 1 200px;
+  min-width: 0;
+  height: 48px;
+  padding: 0 14px;
+  border: 1px solid var(--c-border-control);
+  border-right: 0;
+  border-radius: var(--radius-xs) 0 0 var(--radius-xs);
+  background: var(--c-bg-white);
+  font: inherit;
+  font-size: 16px;
+  color: var(--c-text);
+  transition: border-color 0.15s;
+}
+.konto-eingabe-reihe input[type="email"]:hover { border-color: var(--c-border-strong); }
+.konto-eingabe-reihe input[type="email"][aria-invalid="true"] { border-color: var(--c-danger); }
+.konto-eingabe-reihe input[type="email"]:focus-visible { position: relative; z-index: 1; }
+.konto-eingabe-reihe .konto-btn { flex: 0 0 auto; min-height: 48px; border-radius: 0 var(--radius-xs) var(--radius-xs) 0; }
+@media (max-width: 559px) {
+  .konto-eingabe-reihe { gap: 8px; }
+  .konto-eingabe-reihe input[type="email"] { flex: 1 1 100%; border-right: 1px solid var(--c-border-control); border-radius: var(--radius-xs); }
+  .konto-eingabe-reihe .konto-btn { flex: 1 1 100%; border-radius: var(--radius-xs); }
+}
+/* Fester Platz fuer Fehler und Tippfehler-Vorschlag. */
+.konto-eingabe-meldung { min-height: 46px; padding-top: 8px; font-size: 13px; }
+.konto-eingabe-meldung .konto-feldfehler { display: flex; gap: 8px; color: var(--c-danger); }
+.konto-eingabe-meldung .konto-tipp { color: var(--c-text-secondary); }
+.konto-eingabe-meldung .konto-tipp button {
+  border: 0; background: none; padding: 0; font: inherit; font-weight: 600;
+  color: var(--c-blue); text-decoration: underline; cursor: pointer;
+}
+
 /* --- Einwilligung --------------------------------------------------------- */
 /* Gleiche Bauart wie im Anmeldeband und im Konzept: ein Kaestchen, das etwas
    bedeutet, nie vorausgewaehlt, mit eigener Meldung. */
