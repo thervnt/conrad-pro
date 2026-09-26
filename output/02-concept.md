@@ -2356,3 +2356,51 @@ Geprüft: alle vier Serverantworten, beide Fehlerfälle des Feldes,
 Tippfehler-Vorschlag, Ladezustand, kein Sprung zwischen den Zuständen, kein
 seitlicher Überlauf bei 375 px, keine Konsolenfehler, kein Feld ohne
 Beschriftung, nichts vorausgewählt.
+
+---
+
+## 42. Nachbesserung Newsletter-Seite: Eingabefeld und Reihenfolge
+
+**Befund von Nico:** "die Newsletter seite ist schlecht. USPs oder value
+unten. Email feld kein input"
+
+Zwei Treffer, einer davon ein handfester Fehler.
+
+### Das Eingabefeld war keins
+
+`.feld input[type="email"]` verlangt, dass das Feld **in** `.feld` steht. Es
+stand daneben: das Label war `.feld`, das Feld ein Geschwisterelement dahinter.
+Die Regel hat nie gegriffen, und der Browser hat sein Standardfeld gezeichnet.
+Gemessen: 22 px hoch, 2 px Innenrahmen, 13,3 px Schrift, keine Rundung. Nach
+der Korrektur: 48 px hoch, 1 px Rand in der Randfarbe, 4 px Rundung, 16 px
+Schrift, volle Spaltenbreite.
+
+Das ist mir durchgegangen, weil ich Höhen und Zustände gemessen habe, aber nie
+geprüft, ob die Regel überhaupt trifft. Die Zeile
+`{cssTrifft: !!i.closest('.feld')}` hätte es in der ersten Runde gesagt.
+
+### Die Entscheidung stand hinter der Begründung
+
+Der Kopfbereich war 579 px hoch, bevor das Formular anfing. Auf einem
+Laptop war die Anmeldung damit nicht zu sehen, ohne zu scrollen. Die
+Nutzenargumente und die Leseprobe standen davor.
+
+Neuer Aufbau, drei Blöcke statt zwei Spalten:
+
+* **Ab 900 px:** links Überschrift, Untertitel und die drei Marken, darunter
+  die vier Inhalte; rechts das Formular über beide Zeilen. Das Formular
+  beginnt jetzt bei 208 px statt bei 579 px, der Absendeknopf bei 448 px.
+  Beides ohne Scrollen sichtbar.
+* **Darunter:** Überschrift, dann Formular, dann die vier Inhalte. Am Telefon
+  zählt die Reihenfolge im Dokument, und dort darf die Anmeldung nicht hinter
+  vier Argumenten liegen.
+* **Die Leseprobe** ist als eigene Karte unter die ganze Reihe gerutscht. Sie
+  ist der längste Block der Seite und der Beleg, nicht das Argument: wer ihn
+  braucht, scrollt.
+
+Nebenbei: die Demo-Steuerung klappt am Telefon jetzt tatsächlich eingeklappt
+auf.
+
+Geprüft: Feldhöhe und Rahmen in allen Zuständen, kein Sprung zwischen Ruhe,
+Fehler und Vorschlag (450 px durchgehend), Tippfehler-Vorschlag und Absenden,
+kein seitlicher Überlauf bei 375 px.
