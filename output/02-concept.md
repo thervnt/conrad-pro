@@ -3142,3 +3142,43 @@ Der Knopf steht auf allen 18 Seiten mit Kopfzeile, also auch im Warenkorb, auf
 der Produktseite und auf der Stücklistenseite selbst. Dort führt er auf die
 eigene Seite zurück, was kein Fehler ist: ein global verfügbarer Einstieg, der
 auf einer einzelnen Seite fehlt, wäre die größere Irritation.
+
+## 62. Ein Stilblatt statt vier Kopien
+
+Drei Seiten - Warenkorb, Produktseite, Stücklistenseite - trugen die Regeln
+für Werbeleiste, Kopfzeile, Suchfeld, Brotkrumen und die Schubladen als eigene
+Kopie im Dokument. Dieselben Regeln lagen noch einmal in `konto.css`. Jede
+Änderung an der Kopfzeile musste also viermal gemacht werden, und der Knopf
+zum Hochladen aus dem vorigen Kapitel war der Anlass, das zu beenden.
+
+Die drei Seiten laden jetzt `konto.css`, und die doppelten Abschnitte sind aus
+ihnen verschwunden: 3151 Zeilen weniger. Beim Warenkorb und bei der
+Stücklistenseite war der gesamte gemeinsame Teil Wort für Wort identisch, dort
+fiel er ganz weg. Die Produktseite hat sich über die Zeit weiterentwickelt, bei
+ihr sind nur die fünf wortgleichen Hüllen-Abschnitte gegangen; ihr eigener
+Aufbau bleibt inline.
+
+Das Stilblatt steht vor dem eigenen `<style>`-Block jeder Seite. Damit gewinnt
+bei gleicher Gewichtung weiterhin die Seite, nicht die gemeinsame Datei - eine
+Seite kann also abweichen, wo sie muss, ohne dass jemand `!important` braucht.
+
+### Eine Stelle, an der es nicht von selbst passte
+
+An genau einem Punkt hat die gemeinsame Datei etwas mitgebracht, das die
+Produktseite nicht hatte: `konto.css` gibt dem Mengenfeld in den Bündelkarten
+inzwischen eine feste Höhe, mehr Innenabstand und ein breiteres Zahlenfeld -
+gewachsen für den Warenkorb. Weil die Produktseite dafür keine eigene Regel
+besaß, hätte sie diese übernommen, und die Karte wäre um sechs Pixel
+geschrumpft. Die alten Maße stehen dort jetzt ausdrücklich, mit einer Zeile,
+die sagt warum.
+
+### Wie geprüft wurde
+
+Nicht durch Hinsehen. Vor dem Umbau wurde von jeder der drei Seiten ein
+Abdruck genommen: für jedes Element im Dokument die Position, die Größe und
+42 berechnete Eigenschaften. Nach dem Umbau dasselbe, Element für Element
+verglichen, bei 1440, 1280, 1024, 768 und 375 Pixeln.
+
+Der erste Durchlauf meldete 774 Abweichungen auf der Produktseite. Alle gingen
+auf das eine Mengenfeld zurück. Nach der einen Korrektur: 1788 Elemente,
+885 Elemente, 532 Elemente - kein einziger Unterschied, auf keiner Breite.

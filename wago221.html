@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="konto.css?v=3d138a8d">
 <style>
 :root {
   --c-blue: #376EEF;
@@ -101,278 +102,13 @@ a:hover { text-decoration: underline; }
 
 button { font: inherit; cursor: pointer; }
 
-/* ===== TOP PROMO STRIP (white text on brand blue) ===== */
+/* TOP PROMO STRIP (white text on brand blue) -> steht in konto.css */
 
-.promo-strip {
-  background: var(--c-blue);
-  color: var(--c-text-on-dark);
-  font-size: 14px;
-  padding: 7px 0;
-  border-bottom: 1px solid rgba(255,255,255,0.06);
-}
-.promo-strip-inner {
-  max-width: 1680px;
-  margin: 0 auto;
-  padding: 0 24px;
-  display: flex;
-  gap: 48px;
-  justify-content: space-around;
-  flex-wrap: wrap;
-}
-.promo-strip-inner span {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-weight: 500;
-}
-.check-icon {
-  color: var(--c-text-on-dark);
-  display: inline-flex;
-  align-items: center;
-}
-.check-icon svg {
-  width: 15px;
-  height: 15px;
-  fill: currentColor;
-  display: block;
-}
+/* HEADER -> steht in konto.css */
 
-/* ===== HEADER ===== */
-.header {
-  background: var(--c-navy);
-  color: var(--c-text-on-dark);
-  padding: 16px 0 24px;
-}
-.header-inner {
-  max-width: 1680px;
-  margin: 0 auto;
-  padding: 0 24px;
-}
-.header-row1 {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  margin-bottom: 24px;
-}
-/* Jede Kopfzeilen-Interaktion ist eine eigene Klickflaeche mit
-   abgerundetem Hover-Hintergrund. */
-.header-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 12px;
-  border-radius: 4px;
-  color: var(--c-text-on-dark);
-  font-size: 15px;
-  font-weight: 500;
-  white-space: nowrap;
-  transition: background 0.15s ease;
-}
-.header-btn:hover { background: rgba(255, 255, 255, 0.05); text-decoration: none; }
-.header-btn:active { background: rgba(255, 255, 255, 0.09); }
-.header-btn svg { height: 22px; width: auto; display: block; flex-shrink: 0; }
-.header-btn.icon-only { padding: 8px; }
-/* Das PRO-Logo im Badge behaelt seine eigene Groesse. */
-.header-btn .pro-badge svg { width: 38px; height: 9px; }
-/* Schmale Viewports: nur Icons, Labels aus. */
-@media (max-width: 1279px) {
-  .header-btn .header-btn-label { display: none; }
-  .header-btn { padding: 8px; gap: 0; }
-  .conrad-pro-link .header-btn-label { display: inline; }
-  .conrad-pro-link { padding: 8px 12px; gap: 8px; }
-}
-.icon-wrap { position: relative; display: inline-flex; }
-.logo {
-  display: inline-flex;
-  align-items: center;
-  flex-shrink: 0;
-}
-.logo svg { width: 130px; height: auto; display: block; }
+/* SEARCH BAR (white card on navy bg) -> steht in konto.css */
 
-.conrad-pro-link {
-  color: var(--c-text-on-dark);
-  font-weight: 600;
-  font-size: 14px;
-}
-.conrad-pro-link .pro-badge {
-  background: var(--c-bg-white);
-  width: 56px;
-  height: 27px;
-  padding: 0;
-  border-radius: 4px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-.conrad-pro-link .pro-badge svg {
-  display: block;
-}
-
-.header-right {
-  margin-left: auto;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-.icon-badge.bump { animation: badge-bump 0.55s cubic-bezier(0.34, 1.56, 0.64, 1); }
-@keyframes badge-bump {
-  0%   { transform: scale(1);    box-shadow: 0 0 0 0 rgba(255, 255, 0, 0.85); }
-  40%  { transform: scale(1.45); box-shadow: 0 0 0 8px rgba(255, 255, 0, 0); }
-  70%  { transform: scale(0.92); box-shadow: 0 0 0 8px rgba(255, 255, 0, 0); }
-  100% { transform: scale(1);    box-shadow: 0 0 0 0 rgba(255, 255, 0, 0); }
-}
-.icon-badge {
-  position: absolute;
-  top: -6px;
-  left: 14px;
-  background: #FFFF00;
-  color: var(--c-navy);
-  border-radius: var(--radius-pill);
-  width: 18px;
-  height: 18px;
-  font-size: 11px;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* ===== SEARCH BAR (white card on navy bg) ===== */
-.search-card {
-  background: var(--c-bg-white);
-  border-radius: var(--radius-lg);
-  height: 72px;
-  padding: 0 12px 0 20px;
-  display: flex;
-  align-items: center;
-  gap: 18px;
-}
-.search-input {
-  flex: 1;
-  border: none;
-  outline: none;
-  background: transparent;
-  font: inherit;
-  font-size: 15px;
-  color: var(--c-text);
-  min-width: 0;
-}
-.search-input::placeholder { color: var(--c-text-tertiary); }
-.search-icon {
-  width: 20px;
-  height: 20px;
-  color: var(--c-text-tertiary);
-  flex-shrink: 0;
-}
-
-/* Knopf zum Hochladen einer Stueckliste, links vom Suchknopf. Er ist
-   absichtlich ruhig: gleiche Hoehe und gleiche Ecken wie der blaue Knopf
-   daneben, aber nur Umriss statt Flaeche, damit die Suche der erste
-   Handgriff bleibt. Die Beschriftung steht im Titel, weil im Feld kein
-   Platz fuer Text ist. */
-.search-upload {
-  flex-shrink: 0;
-  width: 48px;
-  height: 48px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  box-sizing: border-box;
-  border: 1px solid var(--c-border-control);
-  border-radius: var(--radius-sm);
-  background: var(--c-bg-white);
-  color: var(--c-text-secondary);
-  cursor: pointer;
-  padding: 0;
-}
-.search-upload:hover {
-  background: var(--c-bg-tint);
-  border-color: var(--c-border-strong);
-  color: var(--c-text);
-}
-.search-upload svg { width: 20px; height: 20px; display: block; }
-.search-upload[data-tooltip]:hover::after,
-.search-upload[data-tooltip]:focus-visible::after {
-  content: attr(data-tooltip);
-  position: absolute;
-  top: calc(100% + 8px);
-  right: 0;
-  background: var(--c-navy);
-  color: var(--c-text-on-dark);
-  font-size: 12px;
-  font-weight: 400;
-  line-height: 1.4;
-  padding: 6px 10px;
-  border-radius: var(--radius-sm);
-  white-space: nowrap;
-  z-index: 50;
-  pointer-events: none;
-  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.18);
-}
-
-.search-btn {
-  background: var(--c-blue);
-  color: var(--c-text-on-dark);
-  border: none;
-  height: 48px;
-  padding: 0 24px;
-  border-radius: var(--radius-sm);
-  font-weight: 600;
-  font-size: 14px;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-}
-.search-btn:hover { background: var(--c-blue-hover); }
-/* Eigener Behaelter fuer das Zeichen links der Beschriftung -
-   quadratisch, Zeichen mittig, Farbe wie der Text des Knopfes. */
-.search-btn-icon-box {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  width: 28px;
-  height: 28px;
-  padding: 5px;
-  box-sizing: border-box;
-  border-radius: var(--radius-xs);
-  color: var(--c-text-on-dark);
-  /* Der Innenabstand des Behaelters wuerde sich zum Abstand des Knopfes
-     addieren. Der negative Aussenabstand zieht ihn wieder heraus, damit
-     zwischen Zeichen und Text dieselben 8 px stehen wie im Kaufknopf. */
-  margin-right: -5px;
-}
-.search-btn-icon { width: 100%; height: 100%; display: block; }
-.search-btn-text { display: inline; }
-
-/* ===== BREADCRUMB ===== */
-.breadcrumb {
-  max-width: 1680px;
-  margin: 0 auto;
-  padding: 16px 24px 0;
-  font-size: 13px;
-  color: var(--c-text-secondary);
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 6px;
-  line-height: 1.5;
-}
-.breadcrumb a {
-  color: var(--c-text-secondary);
-  text-decoration: none;
-}
-.breadcrumb a:hover { color: var(--c-blue); text-decoration: underline; }
-.breadcrumb-sep {
-  color: var(--c-text-tertiary);
-  font-size: 12px;
-  user-select: none;
-}
-.breadcrumb-current {
-  color: var(--c-text);
-  font-weight: 500;
-}
+/* BREADCRUMB -> steht in konto.css */
 
 /* ===== MAIN PDP GRID ===== */
 .pdp {
@@ -2700,6 +2436,12 @@ button { font: inherit; cursor: pointer; }
   flex: 0 0 auto;
   width: 100%;
 }
+/* konto.css gibt demselben Kaestchen inzwischen eine feste Hoehe, mehr
+   Innenabstand und ein breiteres Zahlenfeld - das ist fuer den Warenkorb
+   gewachsen. Auf der Produktseite bleibt das bisherige Mass stehen, damit
+   das Zusammenlegen der Stilblaetter nichts verschiebt. */
+.bundle-card-actions .qty-input-wrap { height: auto; padding-left: 8px; }
+.bundle-card-actions .qty-input-wrap input { min-width: 3ch; }
 .bundle-cta-row {
   display: flex;
   align-items: stretch;
@@ -3498,100 +3240,7 @@ button { font: inherit; cursor: pointer; }
 }
 .main-image .brand-wago svg { width: 84px; }
 
-/* ===== HEADER DRAWERS (Kategorien / Konto) ===== */
-.hdr-backdrop {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 31, 66, 0.45);
-  z-index: 950;
-  opacity: 0;
-  transition: opacity 0.2s ease;
-}
-.hdr-backdrop.open { opacity: 1; }
-.hdr-backdrop[hidden] { display: none; }
-.hdr-drawer {
-  position: fixed;
-  top: 0;
-  height: 100%;
-  width: 420px;
-  max-width: 92vw;
-  background: var(--c-bg-white);
-  z-index: 951;
-  display: flex;
-  flex-direction: column;
-  transition: transform 0.26s cubic-bezier(0.22, 0.61, 0.36, 1);
-}
-.hdr-drawer[hidden] { display: none; }
-.hdr-drawer.left {
-  left: 0;
-  transform: translateX(-100%);
-  box-shadow: 12px 0 32px rgba(15, 23, 42, 0.18);
-  border-radius: 0 12px 12px 0;
-}
-.hdr-drawer.right {
-  right: 0;
-  transform: translateX(100%);
-  box-shadow: -12px 0 32px rgba(15, 23, 42, 0.18);
-  border-radius: 12px 0 0 12px;
-}
-.hdr-drawer.open { transform: none; }
-.hdr-drawer-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 18px 20px 6px;
-}
-.hdr-drawer-title { font-size: 15px; font-weight: 600; color: var(--c-text-secondary); margin: 0; }
-.hdr-drawer-close {
-  background: none;
-  border: none;
-  padding: 6px;
-  border-radius: 4px;
-  color: var(--c-text-secondary);
-  cursor: pointer;
-  display: inline-flex;
-}
-.hdr-drawer-close:hover { color: var(--c-text); background: var(--c-bg-tint); }
-.hdr-drawer-close svg { width: 18px; height: 18px; }
-.hdr-drawer-body { flex: 1; overflow-y: auto; padding: 4px 8px 20px; }
-.hdr-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 14px 12px;
-  border-radius: 4px;
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--c-text);
-  text-decoration: none;
-}
-.hdr-item:hover { background: var(--c-bg-tint); text-decoration: none; }
-.hdr-item > svg { width: 18px; height: 18px; color: var(--c-text-tertiary); flex-shrink: 0; }
-.hdr-item-lead { display: inline-flex; align-items: center; gap: 10px; min-width: 0; }
-.hdr-item-lead svg { width: 18px; height: 18px; color: var(--c-text-secondary); flex-shrink: 0; }
-.hdr-item-lead .pro-logo-inline { display: inline-flex; align-items: center; }
-/* Muss die generische 18px-Icon-Regel darueber ueberschreiben. */
-.hdr-item-lead .pro-logo-inline svg { width: 56px; height: 13px; }
-.hdr-sep { border: none; border-top: 1px solid var(--c-border); margin: 10px 12px; }
-.hdr-login {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 48px;
-  margin: 6px 12px 10px;
-  background: var(--c-blue);
-  color: var(--c-text-on-dark);
-  border: none;
-  border-radius: var(--radius-sm);
-  font: inherit;
-  font-size: 15px;
-  font-weight: 600;
-  cursor: pointer;
-  text-decoration: none;
-}
-.hdr-login:hover { background: var(--c-blue-hover); text-decoration: none; }
+/* HEADER DRAWERS (Kategorien / Konto) -> steht in konto.css */
 
 /* ===== "Einkaufen als" Flyout ===== */
 .gk-wrap, .fly-wrap { position: relative; display: inline-flex; }
