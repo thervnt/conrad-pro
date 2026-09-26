@@ -3306,3 +3306,42 @@ von oben nach unten, wie bei allen anderen Inhaltsfeldern auch.
 Nachgemessen, jedes Formular einzeln geöffnet: Label zu Feld überall 6 Pixel,
 Feld zu nächstem Label überall 16, Feldhöhe überall 48, Spaltenbreite überall
 620. Bei 1440, 1024, 768 und 375 Pixeln eine Spalte, kein Überlauf.
+
+## 67. Umbrüche, die keine waren
+
+"49,95 € netto" und "per Rechnung" standen untereinander, obwohl in der Spalte
+456 Pixel zur Verfügung stehen und beides zusammen 180 braucht. Der Umbruch
+war ein hart gesetztes `<br>`, kein Platzmangel - und er zerlegte eine Angabe
+in zwei, die getrennt beide unvollständig sind.
+
+Geprüft wurden alle erzwungenen Umbrüche im Kontobereich, jeder einzeln
+gemessen: wie breit ist der Platz, wie breit wäre der Inhalt ohne Umbruch.
+
+**Entfernt, weil die Teile eine Angabe sind und Platz da ist:**
+
+| Seite | Angabe | brauchte | hatte |
+| --- | --- | --- | --- |
+| Conrad PRO | 49,95 € netto · per Rechnung | 180 px | 456 px |
+| Unternehmensdaten | Rechnung · 16 Tage netto | 284 px | 456 px |
+| Newsletter | Angemeldet seit 11.04.2023 | 210 px | 456 px |
+
+Zwischen zwei Textwerten trennt ein Mittelpunkt. Nach einer Statusmarke nicht:
+deren Rand trennt schon, ein Punkt dahinter wäre ein zweites Trennzeichen für
+dieselbe Fuge.
+
+**Geblieben, weil der Umbruch dort die Sache ist:**
+
+Anschriften. Straße, Postleitzahl mit Ort und Land stehen untereinander, weil
+eine Anschrift so geschrieben wird - auf dem Umschlag genauso. Das betrifft
+die Rechnungsadresse unter Adressen, die Anschrift in den Unternehmensdaten
+und die Lieferanschrift auf der Bestellseite.
+
+**Geblieben, weil kein Platz da ist:**
+
+Die beiden Kacheln auf der Übersicht, die zwei Angaben übereinander zeigen
+("Zahlungsziel 16 Tage netto" über "Nettopreise", "Kundennummer" über
+"USt-IdNr."), brauchen 323 und 329 Pixel bei 330 verfügbaren. Zusammengezogen
+würden sie beim nächsten längeren Wert ohnehin umbrechen, und ein Umbruch
+mitten im Satz sieht schlechter aus als einer, der gewollt ist. Der Verweis
+unter der Zahlungsart bleibt ebenfalls auf eigener Zeile: er ist eine
+Handlung, kein Teil des Wertes.
