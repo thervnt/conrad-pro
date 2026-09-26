@@ -2909,3 +2909,38 @@ sag Bescheid, dann ziehe ich alle gleichzeitig nach.
 
 Geprüft: alle fünf Kästen auf der Seite mit 2 px Rahmen, 16 Seiten über fünf
 Fensterbreiten ohne Konsolenfehler und ohne seitlichen Überlauf.
+
+---
+
+## 56. Zurück auf die Sprache des Prototyps
+
+**Befund von Nico:** "wtf is this?? change it!!!! adapt it to current styling
+of the prototype"
+
+Der Produktionsstil war ein Fehlgriff. Ich hatte ihn selbst als Risiko
+benannt - zwei Runden vorher stand hier, ein zweiter Feldstil neben den
+vorhandenen Eingaben wäre auffälliger als der Gewinn - und ihn dann auf
+Zuruf trotzdem übernommen, ohne zu zeigen, wie er neben dem Rest aussieht.
+Ein Screenshot der fertigen Seite hätte die Frage in einer Runde geklärt
+statt in dreien.
+
+Die Felder sehen jetzt aus wie jede andere Eingabe im Kontobereich:
+
+| | Produktionsstil | jetzt |
+|---|---|---|
+| Rahmen | 2 px in Textfarbe | 1 px `--c-border-control` |
+| Rundung | 8 px | 4 px |
+| Höhe | 68 px | 48 px |
+| Beschriftung | 13 px im Rahmen | 13 px fett darüber |
+| Wert | 17 px | 14 px |
+| Haken im Feld | ja | nein |
+
+Geblieben ist, was Information trägt und nicht Gestaltung ist: der **Stern**
+am Pflichtfeld, der Zusatz **(optional)**, der **Zeichenzähler** unter den
+Textfeldern und der rote Rahmen im Fehlerfall. Die Adresszeile ist wieder
+48 px hoch und bündig am Knopf.
+
+Beim Umbau sind mir die Zustandsvariablen der Seite aus dem Skript gefallen
+(`rueckmeldung`, `umfrageOffen`, die Gründe der Umfrage) - eine Ersetzung, die
+mehr erwischt hat als gemeint. Die Karte blieb leer. Aus der letzten Fassung
+zurückgeholt und geprüft.

@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="konto.css?v=55fb6f1d">
-<link rel="stylesheet" href="konto-huelle.css?v=9d63ec85">
+<link rel="stylesheet" href="konto-huelle.css?v=851dafea">
 <script src="cart-seed.js?v=28a5fe8f"></script>
 </head>
 <body>
@@ -402,42 +402,38 @@
   };
   var profilFehler = {};
 
-  var HAKEN = '<svg class="konto-feldbox-haken" viewBox="0 0 24 24" fill="none" stroke="currentColor" ' +
-    'stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
-    '<polyline points="20 6 9 17 4 12"/></svg>';
   var PFEIL = '<svg class="konto-feldbox-pfeil" viewBox="0 0 24 24" fill="none" stroke="currentColor" ' +
     'stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
     '<polyline points="6 9 12 15 18 9"/></svg>';
 
   function feldkasten(name, bez, pflicht, wert, max) {
     var fehler = profilFehler[name];
-    var gueltig = !fehler && (pflicht ? String(wert).trim().length > 0 : String(wert).length > 0);
-    return '<div>' +
-      '<label class="konto-feldbox' + (fehler ? ' ist-fehler' : '') + '">' +
-        '<span class="konto-feldbox-label">' + E(bez) +
-          (pflicht ? '<span class="pflicht">*</span>' : ' (optional)') + '</span>' +
-        '<input type="text" data-profil="' + name + '" maxlength="' + max + '" ' +
-          'value="' + E(wert) + '"' + (fehler ? ' aria-invalid="true"' : '') + '>' +
-        (gueltig ? HAKEN : '') +
-      '</label>' +
+    var id = 'nl-' + name;
+    return '<div class="konto-feldbox' + (fehler ? ' ist-fehler' : '') + '">' +
+      '<label class="konto-feldbox-label" for="' + id + '">' + E(bez) +
+        (pflicht ? '<span class="pflicht">*</span>' : ' <span class="pflicht">(optional)</span>') + '</label>' +
+      '<input type="text" id="' + id + '" data-profil="' + name + '" maxlength="' + max + '" ' +
+        'value="' + E(wert) + '"' + (fehler ? ' aria-invalid="true"' : '') + '>' +
       '<span class="konto-feldbox-zaehler">' + String(wert).length + ' / ' + max + '</span>' +
     '</div>';
   }
 
   function wahlkasten(name, bez, pflicht, wert, werte) {
-    return '<div>' +
-      '<label class="konto-feldbox">' +
-        '<span class="konto-feldbox-label">' + E(bez) +
-          (pflicht ? '<span class="pflicht">*</span>' : ' (optional)') + '</span>' +
-        '<select data-profil="' + name + '">' +
+    var id = 'nl-' + name;
+    return '<div class="konto-feldbox">' +
+      '<label class="konto-feldbox-label" for="' + id + '">' + E(bez) +
+        (pflicht ? '<span class="pflicht">*</span>' : ' <span class="pflicht">(optional)</span>') + '</label>' +
+      '<div class="konto-feldbox-wrap">' +
+        '<select id="' + id + '" data-profil="' + name + '">' +
           werte.map(function (w) {
             return '<option value="' + E(w) + '"' + (w === wert ? ' selected' : '') + '>' +
               (w ? E(w) : 'Bitte wählen') + '</option>';
           }).join('') +
         '</select>' + PFEIL +
-      '</label>' +
+      '</div>' +
     '</div>';
   }
+
   var mailFehler = null;
   var tippMail = null;
   var abgemeldetAm = stand.abgemeldetAm || null;
@@ -541,15 +537,13 @@
           feldkasten('vorname', 'Vorname', true, profil.vorname, 35) +
           feldkasten('nachname', 'Nachname', true, profil.nachname, 35) +
         '</div>' +
-        '<div style="margin-top:16px">' +
+        '<div class="konto-feldbox" style="margin-top:16px">' +
+          '<label class="konto-feldbox-label" for="nl-mail">Geschäftliche E-Mail-Adresse' +
+            '<span class="pflicht">*</span></label>' +
           '<div class="konto-eingabe-reihe">' +
-            '<label class="konto-feldbox' + (mailFehler ? ' ist-fehler' : '') + '" for="nl-mail">' +
-              '<span class="konto-feldbox-label">Geschäftliche E-Mail-Adresse<span class="pflicht">*</span></span>' +
-              '<input type="email" id="nl-mail" data-mail autocomplete="email" inputmode="email" ' +
-                'spellcheck="false" placeholder="einkauf@firma.de" value="' + E(mail) + '"' +
-                (mailFehler ? ' aria-invalid="true" aria-describedby="nl-mailfehler"' : '') + '>' +
-              (!mailFehler && mail.trim() ? HAKEN : '') +
-            '</label>' +
+            '<input type="email" id="nl-mail" data-mail autocomplete="email" inputmode="email" ' +
+              'spellcheck="false" placeholder="einkauf@firma.de" value="' + E(mail) + '"' +
+              (mailFehler ? ' aria-invalid="true" aria-describedby="nl-mailfehler"' : '') + '>' +
             '<button type="button" class="konto-btn primary" data-an>Newsletter abonnieren</button>' +
           '</div>' +
           '<div class="konto-eingabe-meldung" role="status" aria-live="polite">' +
@@ -745,7 +739,7 @@
     if (pf) {
       profil[pf.dataset.profil] = pf.value;
       var kasten = pf.closest('.konto-feldbox');
-      var zaehler = kasten.parentElement.querySelector('.konto-feldbox-zaehler');
+      var zaehler = kasten.querySelector('.konto-feldbox-zaehler');
       if (zaehler) zaehler.textContent = pf.value.length + ' / ' + pf.getAttribute('maxlength');
       /* Haken und Fehlerrahmen in Ort setzen: ein Neuaufbau bei jedem Zeichen
          braeche Cursor und Rueckgaengig-Kette. */
@@ -756,9 +750,6 @@
         var note = elEmpfang.querySelector('.konto-einwilligung-note');
         if (note && !consentFehler) note.textContent = '';
       }
-      var hat = kasten.querySelector('.konto-feldbox-haken');
-      if (pf.value.trim() && !hat) kasten.insertAdjacentHTML('beforeend', HAKEN);
-      if (!pf.value.trim() && hat) hat.remove();
       return;
     }
     var feld = e.target.closest('[data-mail]');
