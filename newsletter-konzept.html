@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Newsletter-Anmeldung · Konzeptprototyp</title>
+<style>
+/* ===========================================================================
+   Newsletter-Anmeldung, Konzeptprototyp.
+   Eine Datei, kein Bauschritt, keine echte Schnittstelle. Die Anmeldung
+   laeuft gegen eine erfundene Antwort mit 800 ms Verzoegerung; welche
+   Antwort kommt, stellt das Demo-Feld unten rechts ein.
+   Farben und Schrift sind dieselben wie im uebrigen Prototyp, damit die
+   Seite daneben nicht fremd wirkt.
+   ======================================================================== */
+:root {
+  --c-blue: #376EEF;
+  --c-blue-dark: #2b58bd;
+  --c-navy: #001F42;
+  --c-page-bg: #F4F5F7;
+  --c-bg-white: #ffffff;
+  --c-bg-tint: #f8f9fb;
+  --c-blue-tint: #eaf0fe;
+  --c-text: #272C35;
+  --c-text-secondary: #5a6171;
+  --c-text-tertiary: #666c7a;
+  --c-text-on-dark: #ffffff;
+  --c-border: #cfd4dd;
+  --c-border-control: #b6bcc7;
+  --c-border-strong: #6f7787;
+  --c-success: #218972;
+  --c-success-bg: #e8f5f1;
+  --c-danger: #d9234c;
+  --c-danger-bg: #fdecef;
+  --c-warning: #b45309;
+  --c-warning-bg: #fef6e7;
+  --radius-xs: 4px;
+  --radius: 8px;
+  --radius-pill: 999px;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--c-page-bg);
+  color: var(--c-text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+}
+h1, h2, h3 { margin: 0; line-height: 1.25; }
+p { margin: 0; }
+a { color: var(--c-blue); }
+:focus-visible { outline: 2px solid var(--c-blue); outline-offset: 2px; border-radius: 2px; }
+.visually-hidden {
+  position: absolute; width: 1px; height: 1px; margin: -1px;
+  padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+/* --- Leiste des Prototyps -------------------------------------------------
+   Gehoert nicht zum Entwurf, sondern erlaubt das Durchklicken. Sie ist
+   deshalb dunkel und als solche beschriftet. */
+.proto {
+  background: var(--c-navy);
+  color: var(--c-text-on-dark);
+  padding: 12px 16px;
+}
+.proto-inner {
+  max-width: 1100px; margin: 0 auto;
+  display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+}
+.proto-label { font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; opacity: 0.7; }
+.proto-tabs { display: flex; gap: 4px; flex-wrap: wrap; }
+.proto-tabs button {
+  border: 1px solid rgba(255,255,255,0.28);
+  background: transparent;
+  color: var(--c-text-on-dark);
+  font: inherit; font-size: 14px;
+  padding: 6px 12px; border-radius: var(--radius-pill);
+  cursor: pointer;
+}
+.proto-tabs button:hover { background: rgba(255,255,255,0.12); }
+.proto-tabs button[aria-pressed="true"] { background: var(--c-bg-white); color: var(--c-navy); border-color: var(--c-bg-white); font-weight: 600; }
+
+/* --- Seitenraster --------------------------------------------------------- */
+.wrap { max-width: 1100px; margin: 0 auto; padding: 32px 16px 64px; }
+.view[hidden] { display: none; }
+.karte {
+  background: var(--c-bg-white);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius);
+  padding: 24px;
+}
+@media (min-width: 720px) { .karte { padding: 32px; } }
+
+/* --- Kopf der Newsletter-Seite -------------------------------------------- */
+.hero { max-width: 40ch; }
+.hero h1 { font-size: 28px; font-weight: 700; }
+@media (min-width: 720px) { .hero h1 { font-size: 36px; } }
+.hero-sub { margin-top: 12px; font-size: 17px; color: var(--c-text-secondary); }
+.fakten { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
+.fakt {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 6px 12px; border-radius: var(--radius-pill);
+  background: var(--c-blue-tint); color: var(--c-navy);
+  font-size: 13px; font-weight: 600;
+}
+.spalten { display: grid; gap: 24px; margin-top: 32px; }
+@media (min-width: 900px) { .spalten { grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr); gap: 32px; align-items: start; } }
+
+/* --- Leistungsliste ------------------------------------------------------- */
+.liste { margin: 0; padding: 0; list-style: none; }
+.liste li { display: flex; gap: 12px; padding: 10px 0; }
+.liste li + li { border-top: none; }
+.haken { flex-shrink: 0; color: var(--c-success); margin-top: 3px; }
+.liste b { display: block; font-size: 15px; }
+.liste span { display: block; font-size: 14px; color: var(--c-text-secondary); }
+
+/* --- Leseprobe ------------------------------------------------------------
+   Zeigt, was kommt, statt es zu behaupten. */
+.probe { margin-top: 24px; border: 1px solid var(--c-border); border-radius: var(--radius); overflow: hidden; }
+.probe-kopf {
+  background: var(--c-bg-tint); border-bottom: 1px solid var(--c-border);
+  padding: 12px 16px; font-size: 13px; color: var(--c-text-secondary);
+}
+.probe-kopf b { color: var(--c-text); }
+.probe-body { padding: 16px; }
+.probe-body h3 { font-size: 15px; }
+.probe-body ul { margin: 12px 0 0; padding-left: 18px; font-size: 14px; color: var(--c-text-secondary); }
+.probe-body li { margin-bottom: 6px; }
+
+/* --- Formular ------------------------------------------------------------- */
+.form-karte { position: relative; }
+.form-titel { font-size: 18px; font-weight: 700; }
+.form-note { margin-top: 6px; font-size: 14px; color: var(--c-text-secondary); }
+.feld { display: block; margin-top: 20px; }
+.feld-label { display: block; font-size: 14px; font-weight: 600; margin-bottom: 6px; }
+.feld input[type="email"] {
+  width: 100%; height: 48px; padding: 0 14px;
+  border: 1px solid var(--c-border-control); border-radius: var(--radius-xs);
+  background: var(--c-bg-white); font: inherit; font-size: 16px; color: var(--c-text);
+  transition: border-color 0.15s;
+}
+.feld input[type="email"]:hover { border-color: var(--c-border-strong); }
+.feld input[type="email"][aria-invalid="true"] { border-color: var(--c-danger); }
+.feld input[type="email"]:disabled { background: var(--c-bg-tint); color: var(--c-text-tertiary); }
+
+/* Fester Platz fuer Meldungen. Ohne ihn springt alles darunter, sobald ein
+   Fehler oder ein Vorschlag erscheint. */
+/* Platz fuer zwei Zeilen Meldung, damit zwischen Ruhe, Fehler und Vorschlag
+   nichts springt. Eine Zeile reichte nicht: die laengste Fehlermeldung
+   bricht in der schmalen Spalte um. */
+.meldungsplatz { min-height: 58px; padding-top: 8px; }
+.feldfehler { display: flex; gap: 8px; font-size: 14px; color: var(--c-danger); }
+.feldfehler svg { flex-shrink: 0; margin-top: 2px; }
+.vorschlag { font-size: 14px; color: var(--c-text-secondary); }
+.vorschlag button {
+  border: 0; background: none; padding: 0; font: inherit; font-weight: 600;
+  color: var(--c-blue); text-decoration: underline; cursor: pointer;
+}
+
+/* --- Themen, ausdruecklich freiwillig ------------------------------------- */
+.themen { border: 0; padding: 0; margin: 20px 0 0; min-width: 0; }
+.themen legend { padding: 0; font-size: 14px; font-weight: 600; }
+.themen-note { margin: 2px 0 10px; font-size: 13px; color: var(--c-text-secondary); }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 8px 14px; border: 1px solid var(--c-border-control);
+  border-radius: var(--radius-pill); background: var(--c-bg-white);
+  font-size: 14px; cursor: pointer; transition: border-color 0.15s, background 0.15s;
+}
+.chip:hover { border-color: var(--c-border-strong); background: var(--c-bg-tint); }
+.chip input { position: absolute; opacity: 0; width: 0; height: 0; }
+.chip:has(input:checked) { border-color: var(--c-blue); background: var(--c-blue-tint); color: var(--c-navy); font-weight: 600; }
+.chip:has(input:focus-visible) { outline: 2px solid var(--c-blue); outline-offset: 2px; }
+.chip-haken { width: 14px; color: var(--c-blue); visibility: hidden; }
+.chip:has(input:checked) .chip-haken { visibility: visible; }
+
+/* --- Knopf ---------------------------------------------------------------- */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+  min-height: 48px; padding: 10px 20px;
+  border: 1px solid transparent; border-radius: var(--radius-xs);
+  background: var(--c-blue); color: var(--c-text-on-dark);
+  font: inherit; font-size: 16px; font-weight: 600; cursor: pointer;
+  transition: background 0.15s;
+}
+.btn:hover { background: var(--c-blue-dark); }
+.btn[disabled] { background: var(--c-border-control); cursor: default; }
+.btn.sekundaer { background: var(--c-bg-white); color: var(--c-text); border-color: var(--c-border-control); font-weight: 500; }
+.btn.sekundaer:hover { background: var(--c-bg-tint); border-color: var(--c-border-strong); }
+.btn-voll { width: 100%; margin-top: 4px; }
+.spinner {
+  width: 16px; height: 16px; border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.45); border-top-color: #fff;
+  animation: dreh 0.7s linear infinite;
+}
+@keyframes dreh { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .spinner { animation-duration: 2.4s; } }
+
+/* --- Einwilligung --------------------------------------------------------- */
+.consent { margin-top: 12px; font-size: 13px; color: var(--c-text-secondary); line-height: 1.5; }
+
+/* --- Ergebniszustaende ---------------------------------------------------- */
+.ergebnis { display: flex; gap: 14px; }
+.ergebnis-zeichen { flex-shrink: 0; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+.ergebnis.ok .ergebnis-zeichen { background: var(--c-success-bg); color: var(--c-success); }
+.ergebnis.info .ergebnis-zeichen { background: var(--c-blue-tint); color: var(--c-blue); }
+.ergebnis.warn .ergebnis-zeichen { background: var(--c-warning-bg); color: var(--c-warning); }
+.ergebnis h3 { font-size: 18px; }
+.ergebnis p { margin-top: 8px; font-size: 15px; color: var(--c-text-secondary); }
+.ergebnis-schritte { margin: 14px 0 0; padding-left: 20px; font-size: 14px; color: var(--c-text-secondary); }
+.ergebnis-schritte li { margin-bottom: 6px; }
+.ergebnis-aktionen { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 18px; }
+.bandage {
+  display: flex; gap: 12px; align-items: flex-start;
+  margin-top: 16px; padding: 14px 16px; border-radius: var(--radius);
+  background: var(--c-danger-bg); border: 1px solid var(--c-danger);
+  font-size: 14px;
+}
+.bandage svg { flex-shrink: 0; color: var(--c-danger); margin-top: 2px; }
+
+/* --- Inline-Variante ------------------------------------------------------ */
+.inline-demo { background: var(--c-navy); border-radius: var(--radius); padding: 24px; color: var(--c-text-on-dark); }
+@media (min-width: 720px) { .inline-demo { padding: 32px; } }
+.inline-demo h2 { font-size: 20px; }
+.inline-demo .inline-sub { margin-top: 6px; font-size: 15px; color: rgba(255,255,255,0.72); max-width: 52ch; }
+.inline-form { margin-top: 20px; max-width: 620px; }
+.inline-reihe { display: grid; gap: 8px; }
+@media (min-width: 640px) { .inline-reihe { grid-template-columns: minmax(0, 1fr) auto; align-items: end; } }
+.inline-demo .feld-label { color: rgba(255,255,255,0.85); }
+.inline-demo .meldungsplatz { min-height: 46px; }
+.inline-demo .feldfehler { color: #ffb4c4; }
+.inline-demo .vorschlag { color: rgba(255,255,255,0.75); }
+.inline-demo .vorschlag button { color: #bcd0ff; }
+.inline-demo .consent { color: rgba(255,255,255,0.62); }
+.inline-demo .consent a { color: #bcd0ff; }
+.inline-demo .ergebnis h3 { color: var(--c-text-on-dark); }
+.inline-demo .ergebnis p { color: rgba(255,255,255,0.75); }
+.inline-demo .ergebnis-schritte { color: rgba(255,255,255,0.75); }
+.inline-demo .bandage { background: rgba(217,35,76,0.16); color: #ffd7df; }
+.inline-demo .bandage svg { color: #ffb4c4; }
+.inline-demo .btn.sekundaer { background: transparent; color: var(--c-text-on-dark); border-color: rgba(255,255,255,0.4); }
+.inline-demo .btn.sekundaer:hover { background: rgba(255,255,255,0.1); }
+
+/* --- Erlaeuterung zwischen den Ansichten ---------------------------------- */
+.hinweis {
+  margin-bottom: 24px; padding: 14px 16px;
+  background: var(--c-bg-white); border: 1px solid var(--c-border);
+  border-left: 4px solid var(--c-blue); border-radius: var(--radius);
+  font-size: 14px; color: var(--c-text-secondary); max-width: 80ch;
+}
+.hinweis b { color: var(--c-text); }
+
+/* --- Abmeldeseite --------------------------------------------------------- */
+.option {
+  display: flex; gap: 12px; align-items: flex-start;
+  padding: 14px; border: 1px solid var(--c-border); border-radius: var(--radius-xs);
+  background: var(--c-bg-white); cursor: pointer; transition: border-color 0.15s, background 0.15s;
+}
+.option + .option { margin-top: 8px; }
+.option:hover { border-color: var(--c-border-strong); background: var(--c-bg-tint); }
+.option:has(input:checked) { border-color: var(--c-blue); background: var(--c-blue-tint); }
+.option:has(input:focus-visible) { outline: 2px solid var(--c-blue); outline-offset: 2px; }
+.option input { margin-top: 3px; accent-color: var(--c-blue); }
+.option b { display: block; font-size: 15px; }
+.option span { display: block; font-size: 14px; color: var(--c-text-secondary); }
+
+/* --- Demo-Steuerung -------------------------------------------------------
+   Gehoert nicht zum Entwurf. Sie erlaubt, jeden Ausgang vorzufuehren, ohne
+   auf einen Zufall zu warten. */
+.demo {
+  /* Links unten, nicht rechts: rechts steht das Formular, und die
+     Steuerung darf genau das nicht verdecken, was vorgefuehrt wird. */
+  position: fixed; left: 16px; bottom: 16px; z-index: 40;
+  width: 260px; max-width: calc(100vw - 32px);
+  background: var(--c-bg-white); border: 1px solid var(--c-border-strong);
+  border-radius: var(--radius); box-shadow: 0 10px 28px rgba(0,0,0,0.16);
+  font-size: 13px;
+}
+.demo-kopf {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  padding: 10px 12px; border-bottom: 1px solid var(--c-border);
+  font-weight: 700; font-size: 12px; letter-spacing: 0.05em; text-transform: uppercase;
+  color: var(--c-text-secondary);
+}
+.demo-kopf button { border: 0; background: none; font: inherit; cursor: pointer; color: var(--c-blue); text-transform: none; letter-spacing: 0; font-weight: 600; }
+.demo-body { padding: 12px; }
+.demo[data-zu] .demo-body { display: none; }
+.demo-body fieldset { border: 0; margin: 0 0 10px; padding: 0; }
+.demo-body legend { padding: 0; margin-bottom: 6px; color: var(--c-text-secondary); }
+.demo-body label { display: flex; gap: 8px; align-items: center; padding: 5px 0; cursor: pointer; }
+.demo-body input { accent-color: var(--c-blue); }
+.demo-body .btn { width: 100%; min-height: 36px; font-size: 13px; }
+</style>
+</head>
+<body>
+
+<!-- Leiste des Prototyps: nicht Teil des Entwurfs. -->
+<div class="proto">
+  <div class="proto-inner">
+    <span class="proto-label">Konzeptprototyp</span>
+    <nav class="proto-tabs" aria-label="Ansicht wählen">
+      <button type="button" data-zu="seite" aria-pressed="true">Newsletter-Seite</button>
+      <button type="button" data-zu="inline" aria-pressed="false">Inline-Variante</button>
+      <button type="button" data-zu="bestaetigt" aria-pressed="false">Bestätigung</button>
+      <button type="button" data-zu="abmelden" aria-pressed="false">Abmeldung</button>
+    </nav>
+  </div>
+</div>
+
+<main class="wrap">
+
+  <!-- ====================================================================
+       1. Eigene Newsletter-Seite
+       ==================================================================== -->
+  <section class="view" data-view="seite" aria-labelledby="t-seite">
+    <p class="hinweis"><b>Eigene Seite.</b> Die Überschrift nennt den Nutzen, nicht das
+    Produkt. Turnus, Umfang und Format stehen über dem Formular, und die Leseprobe zeigt,
+    was kommt, statt es zu behaupten.</p>
+
+    <div class="hero">
+      <h1 id="t-seite">Preisänderungen und neue Artikel sehen, bevor Sie danach suchen</h1>
+      <p class="hero-sub">Alle zwei Wochen das Wichtigste aus dem Conrad Sortiment für
+      Geschäftskunden: Nettopreise, Normenänderungen und was neu lieferbar ist.</p>
+      <div class="fakten">
+        <span class="fakt">Alle zwei Wochen, dienstags</span>
+        <span class="fakt">4 Minuten Lesezeit</span>
+        <span class="fakt">Jederzeit abbestellbar</span>
+      </div>
+    </div>
+
+    <div class="spalten">
+      <div>
+        <div class="karte">
+          <h2 class="form-titel">Das steht drin</h2>
+          <ul class="liste" style="margin-top:12px">
+            <li>
+              <span class="haken" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+              <span><b>Neue Artikel und Serien</b><span>Was neu im Sortiment ist, mit Schwerpunkt auf Ihren bisherigen Warengruppen.</span></span>
+            </li>
+            <li>
+              <span class="haken" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+              <span><b>Aktionen mit Nettopreisen</b><span>Angebote für Geschäftskunden, keine Privatkundenpreise.</span></span>
+            </li>
+            <li>
+              <span class="haken" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+              <span><b>Technik und Normen</b><span>Ratgeber, Normenänderungen, Hinweise aus dem Fachhandel.</span></span>
+            </li>
+            <li>
+              <span class="haken" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+              <span><b>Services und Beschaffung</b><span>Kalibrierung, Reparatur, Rahmenverträge, Stücklisten-Abgleich.</span></span>
+            </li>
+          </ul>
+
+          <div class="probe">
+            <div class="probe-kopf">Leseprobe · Ausgabe vom 16.09.2026 · <b>Betreff: 6&nbsp;mm² neu ab Lager, und was sich bei DIN&nbsp;VDE 0100-410 ändert</b></div>
+            <div class="probe-body">
+              <h3>Diese Woche</h3>
+              <ul>
+                <li>WAGO 221 jetzt auch in der 6&nbsp;mm²-Ausführung ab Lager, Staffelpreise ab 50&nbsp;Stück</li>
+                <li>DIN&nbsp;VDE 0100-410: was sich für Bestandsanlagen ändert, in fünf Sätzen</li>
+                <li>Kalibrierservice: Durchlaufzeit im September auf 3 Werktage verkürzt</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="karte form-karte" data-formular="seite"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================================================================
+       2. Inline-Variante
+       ==================================================================== -->
+  <section class="view" data-view="inline" hidden aria-labelledby="t-inline">
+    <p class="hinweis"><b>Inline-Variante.</b> Dieselben Zustände, kompakt für Fusszeile
+    oder Textblock. Ab 640&nbsp;px stehen Feld und Knopf nebeneinander, darunter
+    gestapelt. Der Platz für Meldungen ist auch hier reserviert, damit nichts springt.</p>
+
+    <h2 id="t-inline" class="visually-hidden">Inline-Variante</h2>
+
+    <div class="inline-demo">
+      <h2>Alle zwei Wochen: Nettopreise, Neuheiten, Normen</h2>
+      <p class="inline-sub">Der Conrad Newsletter für Geschäftskunden. Jederzeit abbestellbar.</p>
+      <div class="inline-form" data-formular="inline"></div>
+    </div>
+
+    <p class="hinweis" style="margin-top:24px">Zum Vergleich derselbe Block auf hellem
+    Grund, wie er in einem Textbereich stünde.</p>
+
+    <div class="karte">
+      <h2 style="font-size:20px">Alle zwei Wochen: Nettopreise, Neuheiten, Normen</h2>
+      <p class="form-note">Der Conrad Newsletter für Geschäftskunden. Jederzeit abbestellbar.</p>
+      <div class="inline-form" data-formular="inline-hell"></div>
+    </div>
+  </section>
+
+  <!-- ====================================================================
+       3. Double-Opt-in bestaetigt
+       ==================================================================== -->
+  <section class="view" data-view="bestaetigt" hidden aria-labelledby="t-bestaetigt">
+    <p class="hinweis"><b>Nach dem Klick im Bestätigungsmail.</b> Die Seite sagt, dass es
+    gilt, wann die erste Ausgabe kommt und was als Nächstes möglich ist. Kein Formular
+    mehr, keine zweite Aufforderung.</p>
+
+    <div class="karte" style="max-width:720px">
+      <div class="ergebnis ok">
+        <span class="ergebnis-zeichen" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+        <div>
+          <h1 id="t-bestaetigt" style="font-size:24px">Sie sind dabei</h1>
+          <p>Ihre Anmeldung für <b>nico.santangelo@elektro-brandhuber.de</b> ist bestätigt.
+          Die nächste Ausgabe erscheint am <b>Dienstag, 30.09.2026</b>.</p>
+          <ul class="ergebnis-schritte">
+            <li>Legen Sie <b>newsletter@conrad.de</b> in Ihrem Adressbuch an, damit die
+            Ausgabe nicht im Spam-Ordner landet.</li>
+            <li>Themen und Turnus können Sie jederzeit in Ihrem Konto ändern.</li>
+          </ul>
+          <div class="ergebnis-aktionen">
+            <a class="btn" href="konto-newsletter.html">Einstellungen im Konto öffnen</a>
+            <a class="btn sekundaer" href="wago221.html">Weiter im Sortiment</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================================================================
+       4. Abmeldung
+       ==================================================================== -->
+  <section class="view" data-view="abmelden" hidden aria-labelledby="t-abmelden">
+    <p class="hinweis"><b>Abmeldung aus dem Newsletter heraus.</b> Sie gilt sofort und ohne
+    weiteren Klick - wer den Link im Mail benutzt, hat sich bereits entschieden. Erst
+    danach kommen die milderen Möglichkeiten, und zwar als Angebot, nicht als Hürde.</p>
+
+    <div class="karte" style="max-width:720px">
+      <div class="ergebnis ok">
+        <span class="ergebnis-zeichen" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+        <div style="min-width:0">
+          <h1 id="t-abmelden" style="font-size:24px">Sie sind abgemeldet</h1>
+          <p><b>nico.santangelo@elektro-brandhuber.de</b> erhält ab sofort keinen Newsletter
+          mehr. Bestellbestätigungen und Rechnungen sind davon nicht betroffen.</p>
+        </div>
+      </div>
+
+      <div style="margin-top:28px;padding-top:24px;border-top:1px solid var(--c-border)">
+        <h2 style="font-size:17px">Wäre weniger vielleicht genug?</h2>
+        <p class="form-note">Freiwillig. Sie können diese Seite auch einfach schliessen.</p>
+
+        <form data-ab-form style="margin-top:16px">
+          <fieldset style="border:0;padding:0;margin:0;min-width:0">
+            <legend class="visually-hidden">Alternative zur Abmeldung wählen</legend>
+            <label class="option">
+              <input type="radio" name="ab-alt" value="monatlich">
+              <span><b>Nur noch einmal im Monat</b><span>Eine Ausgabe statt zwei, mit dem Wichtigsten aus vier Wochen.</span></span>
+            </label>
+            <label class="option">
+              <input type="radio" name="ab-alt" value="themen">
+              <span><b>Nur bestimmte Themen</b><span>Zum Beispiel nur Normen und Technik, ohne Aktionen.</span></span>
+            </label>
+            <label class="option">
+              <input type="radio" name="ab-alt" value="zurueck">
+              <span><b>Doch alles wie bisher</b><span>Anmeldung wiederherstellen, alle zwei Wochen.</span></span>
+            </label>
+          </fieldset>
+
+          <div data-ab-themen hidden style="margin-top:12px;padding-left:14px;border-left:2px solid var(--c-border)">
+            <p class="form-note" style="margin-bottom:10px">Welche Themen sollen bleiben?</p>
+            <div class="chips">
+              <label class="chip"><input type="checkbox" name="ab-thema" value="neuheiten"><span class="chip-haken" aria-hidden="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>Neuheiten</label>
+              <label class="chip"><input type="checkbox" name="ab-thema" value="aktionen"><span class="chip-haken" aria-hidden="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>Aktionen</label>
+              <label class="chip"><input type="checkbox" name="ab-thema" value="technik"><span class="chip-haken" aria-hidden="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>Technik und Normen</label>
+              <label class="chip"><input type="checkbox" name="ab-thema" value="services"><span class="chip-haken" aria-hidden="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>Services</label>
+            </div>
+          </div>
+
+          <div class="meldungsplatz" data-ab-meldung aria-live="polite"></div>
+          <button type="submit" class="btn" data-ab-senden disabled>Auswahl übernehmen</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- Demo-Steuerung: gehoert nicht zum Entwurf. -->
+<aside class="demo" aria-label="Demo-Steuerung">
+  <div class="demo-kopf">
+    <span>Demo-Steuerung</span>
+    <button type="button" data-demo-toggle aria-expanded="true">einklappen</button>
+  </div>
+  <div class="demo-body">
+    <fieldset>
+      <legend>Antwort des Servers</legend>
+      <label><input type="radio" name="ausgang" value="ok" checked> Erfolg</label>
+      <label><input type="radio" name="ausgang" value="bekannt"> Bereits angemeldet</label>
+      <label><input type="radio" name="ausgang" value="server"> Serverfehler (500)</label>
+      <label><input type="radio" name="ausgang" value="netz"> Netzwerkfehler</label>
+    </fieldset>
+    <button type="button" class="btn sekundaer" data-demo-reset>Formulare zurücksetzen</button>
+  </div>
+</aside>
+
+<script>
+(function () {
+  'use strict';
+
+  function E(s) {
+    return String(s == null ? '' : s)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+  function svg(d, w) {
+    return '<svg viewBox="0 0 24 24" width="' + (w || 18) + '" height="' + (w || 18) + '" fill="none" ' +
+      'stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + d + '</svg>';
+  }
+  var ZEICHEN_HAKEN = '<polyline points="20 6 9 17 4 12"/>';
+  var ZEICHEN_MAIL  = '<rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2 7 12 13 22 7"/>';
+  var ZEICHEN_WARN  = '<circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>';
+
+  /* ---------------------------------------------------------------------
+     Erfundene Schnittstelle. 800 ms Verzoegerung, damit der Ladezustand
+     sichtbar wird. Den Ausgang bestimmt die Demo-Steuerung, nicht der Zufall:
+     in einer Vorfuehrung muss jeder Zustand auf Zuruf zeigbar sein.
+     --------------------------------------------------------------------- */
+  function ausgang() {
+    var r = document.querySelector('input[name="ausgang"]:checked');
+    return r ? r.value : 'ok';
+  }
+  function anmelden() {
+    return new Promise(function (fertig, gescheitert) {
+      setTimeout(function () {
+        var a = ausgang();
+        if (a === 'netz' || a === 'server') return gescheitert({ art: a });
+        fertig({ art: a });
+      }, 800);
+    });
+  }
+
+  /* ---------------------------------------------------------------------
+     Pruefung mit genauer Meldung. "Ungueltige E-Mail" sagt nicht, was zu tun
+     ist; die Meldung nennt deshalb die Stelle.
+     --------------------------------------------------------------------- */
+  function pruefen(wert) {
+    var w = wert.trim();
+    if (!w) return 'Bitte geben Sie Ihre E-Mail-Adresse ein.';
+    if (w.indexOf(' ') !== -1) return 'Die Adresse enthält ein Leerzeichen. Bitte entfernen Sie es.';
+    var teile = w.split('@');
+    if (teile.length !== 2) return 'In der Adresse fehlt das @-Zeichen, zum Beispiel name@firma.de.';
+    if (!teile[0]) return 'Vor dem @ fehlt der Name, zum Beispiel einkauf@firma.de.';
+    if (!teile[1]) return 'Nach dem @ fehlt die Domain, zum Beispiel firma.de.';
+    if (teile[1].indexOf('.') === -1) return 'Nach dem @ fehlt die Endung, zum Beispiel firma.de statt firma.';
+    if (!/^[^@\s]+@[^@\s]+\.[A-Za-z]{2,}$/.test(w)) return 'Diese Adresse sieht unvollständig aus. Bitte prüfen Sie den Teil nach dem @.';
+    return null;
+  }
+
+  /* Tippfehler in der Domain: ein Vorschlag, keine Sperre. Wer wirklich
+     "gmial.com" meint, kommt trotzdem durch. */
+  var DOMAINS = ['gmail.com', 'googlemail.com', 'gmx.de', 'gmx.net', 'web.de',
+    't-online.de', 'outlook.de', 'outlook.com', 'hotmail.de', 'hotmail.com', 'conrad.de'];
+  function abstand(a, b) {
+    var m = a.length, n = b.length, d = [], i, j;
+    for (i = 0; i <= m; i++) d[i] = [i];
+    for (j = 0; j <= n; j++) d[0][j] = j;
+    for (i = 1; i <= m; i++) {
+      for (j = 1; j <= n; j++) {
+        d[i][j] = Math.min(
+          d[i - 1][j] + 1,
+          d[i][j - 1] + 1,
+          d[i - 1][j - 1] + (a.charAt(i - 1) === b.charAt(j - 1) ? 0 : 1)
+        );
+      }
+    }
+    return d[m][n];
+  }
+  function vorschlag(wert) {
+    var teile = wert.trim().toLowerCase().split('@');
+    if (teile.length !== 2 || !teile[1]) return null;
+    var domain = teile[1];
+    if (DOMAINS.indexOf(domain) !== -1) return null;
+    var beste = null, bester = 99;
+    DOMAINS.forEach(function (d) {
+      var a = abstand(domain, d);
+      if (a < bester) { bester = a; beste = d; }
+    });
+    if (beste && bester > 0 && bester <= 2 && domain.length > 3) {
+      return teile[0] + '@' + beste;
+    }
+    return null;
+  }
+
+  /* ---------------------------------------------------------------------
+     Ein Formular-Bauteil, zweimal benutzt. Dadurch koennen Seite und
+     Inline-Variante nicht auseinanderlaufen.
+     --------------------------------------------------------------------- */
+  var THEMEN = [
+    ['neuheiten', 'Neue Artikel'],
+    ['aktionen', 'Aktionen und Preise'],
+    ['technik', 'Technik und Normen'],
+    ['services', 'Services und Beschaffung']
+  ];
+  var zaehler = 0;
+
+  function Formular(wurzel, art) {
+    var id = 'nl' + (++zaehler);
+    var eng = art !== 'seite';
+    var zustand = 'ruhe';      /* ruhe | sendet | ok | bekannt | fehler */
+    var fehlerArt = null;      /* server | netz */
+    var wert = '';
+    var feldfehler = null;
+    var tipp = null;
+    var themen = {};
+
+    function formularHtml() {
+      var themenBlock = eng ? '' :
+        '<fieldset class="themen">' +
+          '<legend>Themen eingrenzen</legend>' +
+          '<p class="themen-note">Freiwillig. Ohne Auswahl erhalten Sie alle Themen.</p>' +
+          '<div class="chips">' +
+            THEMEN.map(function (t) {
+              return '<label class="chip">' +
+                '<input type="checkbox" name="thema" value="' + t[0] + '"' + (themen[t[0]] ? ' checked' : '') + '>' +
+                '<span class="chip-haken" aria-hidden="true">' + svg(ZEICHEN_HAKEN, 14) + '</span>' +
+                E(t[1]) +
+              '</label>';
+            }).join('') +
+          '</div>' +
+        '</fieldset>';
+
+      var feld =
+        '<label class="feld" for="' + id + '-mail">' +
+          '<span class="feld-label">Geschäftliche E-Mail-Adresse</span>' +
+        '</label>' +
+        '<input type="email" id="' + id + '-mail" name="mail" autocomplete="email" ' +
+          'inputmode="email" spellcheck="false" placeholder="einkauf@firma.de" ' +
+          'value="' + E(wert) + '"' +
+          (feldfehler ? ' aria-invalid="true" aria-describedby="' + id + '-fehler"' : '') +
+          (zustand === 'sendet' ? ' disabled' : '') + '>';
+
+      /* Der Platz ist dauerhaft im Dokument und als hoeflicher Lebendbereich
+         ausgezeichnet. Nur so hoert ein Vorleseprogramm den Fehler, der nach
+         dem Verlassen des Feldes erscheint, ohne dass der Fokus springt. */
+      var meldung =
+        '<div class="meldungsplatz" role="status" aria-live="polite">' +
+          (feldfehler
+            ? '<p class="feldfehler" id="' + id + '-fehler">' + svg(ZEICHEN_WARN, 16) + '<span>' + E(feldfehler) + '</span></p>'
+            : (tipp
+              ? '<p class="vorschlag">Meinten Sie <button type="button" data-tipp>' + E(tipp) + '</button>?</p>'
+              : '')) +
+        '</div>';
+
+      var knopf =
+        '<button type="submit" class="btn' + (eng ? '' : ' btn-voll') + '"' +
+          (zustand === 'sendet' ? ' disabled' : '') + '>' +
+          (zustand === 'sendet'
+            ? '<span class="spinner" aria-hidden="true"></span>Wird gesendet…'
+            : (eng ? 'Anmelden' : 'Update alle zwei Wochen erhalten')) +
+        '</button>';
+
+      var consent =
+        '<p class="consent">Mit der Anmeldung willigen Sie ein, den Conrad Newsletter per ' +
+        'E-Mail zu erhalten. Wir schicken Ihnen zuerst eine Bestätigungsmail; erst nach ' +
+        'Ihrem Klick darin geht es los. Widerruf jederzeit, etwa über den Link in jeder ' +
+        'Ausgabe. <a href="#">Datenschutzerklärung</a></p>';
+
+      /* Der Fehlerbalken steht unter dem Knopf und nimmt die Eingabe nicht weg:
+         wer es noch einmal versuchen soll, muss nicht neu tippen. */
+      var bandage = (zustand === 'fehler')
+        ? '<div class="bandage" role="alert">' + svg(ZEICHEN_WARN, 18) +
+            '<span>' + (fehlerArt === 'netz'
+              ? '<b>Keine Verbindung.</b> Ihre Eingabe ist erhalten. Prüfen Sie Ihre ' +
+                'Internetverbindung und versuchen Sie es noch einmal.'
+              : '<b>Bei uns ist etwas schiefgegangen.</b> Ihre Eingabe ist erhalten. ' +
+                'Bitte versuchen Sie es in einem Moment noch einmal.') + '</span>' +
+          '</div>'
+        : '';
+
+      if (eng) {
+        return '<form novalidate data-form>' +
+          '<div class="inline-reihe">' +
+            '<div>' + feld + '</div>' +
+            '<div>' + knopf + '</div>' +
+          '</div>' +
+          meldung + bandage + consent +
+        '</form>';
+      }
+      return '<form novalidate data-form>' +
+        '<h2 class="form-titel">Newsletter abonnieren</h2>' +
+        '<p class="form-note">Eine Adresse genügt. Kein Konto nötig.</p>' +
+        feld + meldung + themenBlock +
+        '<div style="margin-top:20px">' + knopf + '</div>' +
+        bandage + consent +
+      '</form>';
+    }
+
+    function ergebnisHtml() {
+      if (zustand === 'ok') {
+        return '<div class="ergebnis ok" tabindex="-1" data-ergebnis>' +
+          '<span class="ergebnis-zeichen">' + svg(ZEICHEN_MAIL, 22) + '</span>' +
+          '<div style="min-width:0">' +
+            '<h3>Fast geschafft: bitte im Postfach bestätigen</h3>' +
+            '<p>Wir haben eine E-Mail an <b>' + E(wert) + '</b> geschickt. ' +
+            'Erst mit dem Klick darin ist die Anmeldung gültig.</p>' +
+            '<ul class="ergebnis-schritte">' +
+              '<li>Die Mail kommt von <b>newsletter@conrad.de</b>, Betreff „Bitte bestätigen Sie Ihre Anmeldung“.</li>' +
+              '<li>Nichts angekommen? Sehen Sie im Spam-Ordner nach.</li>' +
+            '</ul>' +
+            '<div class="ergebnis-aktionen">' +
+              '<button type="button" class="btn sekundaer" data-erneut>Bestätigungsmail erneut senden</button>' +
+              '<button type="button" class="btn sekundaer" data-korrigieren>Adresse korrigieren</button>' +
+            '</div>' +
+          '</div>' +
+        '</div>';
+      }
+      /* Bereits angemeldet ist kein Fehler. Die Meldung sagt, was gilt, und
+         bietet genau die zwei Wege an, die jetzt noch sinnvoll sind. */
+      return '<div class="ergebnis info" tabindex="-1" data-ergebnis>' +
+        '<span class="ergebnis-zeichen">' + svg(ZEICHEN_HAKEN, 22) + '</span>' +
+        '<div style="min-width:0">' +
+          '<h3>Diese Adresse ist bereits angemeldet</h3>' +
+          '<p><b>' + E(wert) + '</b> erhält den Newsletter schon. Sie müssen nichts weiter tun.</p>' +
+          '<div class="ergebnis-aktionen">' +
+            '<a class="btn sekundaer" href="konto-newsletter.html">Einstellungen ändern</a>' +
+            '<button type="button" class="btn sekundaer" data-korrigieren>Andere Adresse eintragen</button>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+    }
+
+    function zeichne(fokus) {
+      wurzel.innerHTML = (zustand === 'ok' || zustand === 'bekannt') ? ergebnisHtml() : formularHtml();
+      if (fokus === 'feld') {
+        var f = wurzel.querySelector('input[type="email"]');
+        if (f) {
+          f.focus();
+          /* input[type=email] kennt setSelectionRange nicht in jedem Browser
+             und wirft dort. Der Cursor am Ende ist ein Komfort, kein Muss. */
+          try { f.setSelectionRange(f.value.length, f.value.length); } catch (e) { /* egal */ }
+        }
+      }
+      if (fokus === 'ergebnis') {
+        var e = wurzel.querySelector('[data-ergebnis]');
+        if (e) e.focus();
+      }
+    }
+
+    wurzel.addEventListener('input', function (e) {
+      if (e.target.name !== 'mail') return;
+      wert = e.target.value;
+      /* Der Fehler geht weg, sobald getippt wird - aber ohne Neuaufbau: das
+         Eingabefeld bei jedem Zeichen zu ersetzen bricht Cursor, Rueckgaengig
+         und Eingabehilfen. Es wird nur entfernt, was nicht mehr stimmt. */
+      if (feldfehler) {
+        feldfehler = null;
+        e.target.removeAttribute('aria-invalid');
+        e.target.removeAttribute('aria-describedby');
+        var platz = wurzel.querySelector('.meldungsplatz');
+        if (platz) platz.innerHTML = '';
+      }
+      if (tipp) {
+        tipp = null;
+        var platz2 = wurzel.querySelector('.meldungsplatz');
+        if (platz2) platz2.innerHTML = '';
+      }
+    });
+
+    wurzel.addEventListener('change', function (e) {
+      if (e.target.name === 'thema') themen[e.target.value] = e.target.checked;
+    });
+
+    /* Geprueft wird beim Verlassen des Feldes, nicht bei jedem Zeichen:
+       waehrend des Tippens ist jede Adresse eine Weile lang unfertig. */
+    wurzel.addEventListener('focusout', function (e) {
+      if (e.target.name !== 'mail' || zustand === 'sendet') return;
+      if (!e.target.value.trim()) { tipp = null; zeichne(); return; }
+      feldfehler = pruefen(e.target.value);
+      tipp = feldfehler ? null : vorschlag(e.target.value);
+      zeichne();
+    });
+
+    wurzel.addEventListener('click', function (e) {
+      if (e.target.closest('[data-tipp]')) {
+        wert = e.target.closest('[data-tipp]').textContent;
+        tipp = null; feldfehler = null;
+        zeichne('feld');
+        return;
+      }
+      if (e.target.closest('[data-korrigieren]')) {
+        zustand = 'ruhe'; feldfehler = null; tipp = null;
+        zeichne('feld');
+        return;
+      }
+      if (e.target.closest('[data-erneut]')) {
+        var k = e.target.closest('[data-erneut]');
+        k.disabled = true;
+        k.textContent = 'Wird gesendet…';
+        setTimeout(function () {
+          k.textContent = 'Erneut gesendet';
+        }, 800);
+        return;
+      }
+    });
+
+    wurzel.addEventListener('submit', function (e) {
+      e.preventDefault();
+      if (zustand === 'sendet') return;
+      feldfehler = pruefen(wert);
+      if (feldfehler) { tipp = null; zeichne('feld'); return; }
+      tipp = vorschlag(wert);
+      zustand = 'sendet';
+      fehlerArt = null;
+      zeichne();
+      anmelden().then(function (a) {
+        zustand = a.art === 'bekannt' ? 'bekannt' : 'ok';
+        zeichne('ergebnis');
+      }, function (a) {
+        zustand = 'fehler';
+        fehlerArt = a.art;
+        zeichne();
+      });
+    });
+
+    zeichne();
+    return { zuruecksetzen: function () {
+      zustand = 'ruhe'; wert = ''; feldfehler = null; tipp = null; fehlerArt = null; themen = {};
+      zeichne();
+    } };
+  }
+
+  var formulare = [];
+  document.querySelectorAll('[data-formular]').forEach(function (el) {
+    formulare.push(Formular(el, el.dataset.formular));
+  });
+
+  /* --- Ansichten ---------------------------------------------------------- */
+  var tabs = document.querySelectorAll('.proto-tabs button');
+  function zeige(name) {
+    document.querySelectorAll('.view').forEach(function (v) {
+      v.hidden = v.dataset.view !== name;
+    });
+    tabs.forEach(function (t) {
+      t.setAttribute('aria-pressed', String(t.dataset.zu === name));
+    });
+    if (location.hash.slice(1) !== name) history.replaceState(null, '', '#' + name);
+    window.scrollTo({ top: 0, behavior: 'auto' });
+  }
+  tabs.forEach(function (t) {
+    t.addEventListener('click', function () { zeige(t.dataset.zu); });
+  });
+  var ANSICHTEN = ['seite', 'inline', 'bestaetigt', 'abmelden'];
+  function ausHash() {
+    var n = location.hash.slice(1);
+    return ANSICHTEN.indexOf(n) !== -1 ? n : 'seite';
+  }
+  /* Auch auf Zurueck und Vorwaerts hoeren: ein Wechsel der Raute laedt das
+     Dokument nicht neu, und ohne das hier bliebe die Ansicht stehen. */
+  window.addEventListener('hashchange', function () { zeige(ausHash()); });
+  zeige(ausHash());
+
+  /* --- Abmeldeseite: Alternativen ---------------------------------------- */
+  var abForm = document.querySelector('[data-ab-form]');
+  if (abForm) {
+    var abThemen = document.querySelector('[data-ab-themen]');
+    var abMeldung = document.querySelector('[data-ab-meldung]');
+    var abSenden = document.querySelector('[data-ab-senden]');
+    abForm.addEventListener('change', function (e) {
+      if (e.target.name === 'ab-alt') {
+        abThemen.hidden = e.target.value !== 'themen';
+        abSenden.disabled = false;
+        abSenden.textContent = e.target.value === 'zurueck' ? 'Anmeldung wiederherstellen' : 'Auswahl übernehmen';
+      }
+    });
+    abForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var wahl = abForm.querySelector('input[name="ab-alt"]:checked');
+      if (!wahl) return;
+      abSenden.disabled = true;
+      abSenden.innerHTML = '<span class="spinner" aria-hidden="true"></span>Wird gespeichert…';
+      setTimeout(function () {
+        var text = wahl.value === 'monatlich'
+          ? 'Gespeichert. Sie erhalten den Newsletter ab sofort einmal im Monat.'
+          : (wahl.value === 'themen'
+            ? 'Gespeichert. Sie erhalten nur noch die gewählten Themen.'
+            : 'Willkommen zurück. Sie erhalten den Newsletter wieder alle zwei Wochen.');
+        abMeldung.innerHTML = '<p class="feldfehler" style="color:var(--c-success)">' +
+          svg(ZEICHEN_HAKEN, 16) + '<span>' + E(text) + '</span></p>';
+        abSenden.textContent = 'Gespeichert';
+      }, 800);
+    });
+  }
+
+  /* --- Demo-Steuerung ----------------------------------------------------- */
+  var demo = document.querySelector('.demo');
+  /* Auf schmalen Schirmen startet die Steuerung eingeklappt: ausgeklappt
+     verdeckt sie genau das Formular, das sie vorfuehren soll. */
+  if (window.innerWidth < 720) {
+    demo.setAttribute('data-zu', '');
+    var t = demo.querySelector('[data-demo-toggle]');
+    t.textContent = 'ausklappen';
+    t.setAttribute('aria-expanded', 'false');
+  }
+  demo.querySelector('[data-demo-toggle]').addEventListener('click', function () {
+    var zu = demo.hasAttribute('data-zu');
+    if (zu) { demo.removeAttribute('data-zu'); this.textContent = 'einklappen'; }
+    else { demo.setAttribute('data-zu', ''); this.textContent = 'ausklappen'; }
+    this.setAttribute('aria-expanded', String(zu));
+  });
+  demo.querySelector('[data-demo-reset]').addEventListener('click', function () {
+    formulare.forEach(function (f) { f.zuruecksetzen(); });
+  });
+})();
+</script>
+</body>
+</html>

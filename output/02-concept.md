@@ -2282,3 +2282,82 @@ Geprüft: beide Fehlerfälle (kein Grund gewählt, "Anderer Grund" ohne Text),
 Senden, Überspringen, Wiederanmelden, und der gespeicherte Stand nach einem
 Neuladen. 16 Seiten über fünf Breiten ohne Konsolenfehler und ohne seitlichen
 Überlauf.
+
+---
+
+## 41. Konzeptprototyp: Newsletter-Anmeldung nach Best Practice
+
+Eigenständige Datei `newsletter-konzept.html`, ohne Bauschritt, ohne echte
+Schnittstelle. Sie hängt an nichts im Kontobereich und lässt sich für sich
+zeigen. Vier Ansichten über eine Leiste oben: Newsletter-Seite,
+Inline-Variante, Bestätigung, Abmeldung. Die Sprache ist Deutsch, wie im
+ganzen Prototyp; die englischen Beispiele aus dem Auftrag sind sinngemäss
+übersetzt.
+
+### Entscheidungen, die zur Diskussion stehen
+
+1. **Ein Formular-Bauteil, zweimal benutzt.** Seite und Inline-Variante teilen
+   dieselbe Logik. Zwei Abschriften desselben Formulars laufen in einem
+   Prototyp innerhalb von zwei Runden auseinander.
+2. **Die Überschrift nennt den Nutzen**, nicht das Produkt: "Preisänderungen
+   und neue Artikel sehen, bevor Sie danach suchen". Turnus, Lesezeit und
+   Abbestellbarkeit stehen als drei Marken darunter, bevor das Formular kommt.
+3. **Leseprobe statt Versprechen.** Ein Ausschnitt einer echten Ausgabe mit
+   Betreff und drei Punkten. Das beantwortet die Frage "was kommt da?"
+   billiger als jede Aufzählung.
+4. **Geprüft wird beim Verlassen des Feldes, nicht bei jedem Zeichen.** Während
+   des Tippens ist jede Adresse eine Weile unfertig; ein Fehler dort ist Lärm.
+   Beim Tippen verschwindet ein stehender Fehler sofort wieder, und zwar ohne
+   Neuaufbau des Feldes: das Eingabefeld bei jedem Zeichen zu ersetzen bricht
+   Cursor, Rückgängig-Kette und Eingabehilfen.
+5. **Fehlermeldungen nennen die Stelle.** Nicht "ungültige E-Mail", sondern
+   "In der Adresse fehlt das @-Zeichen, zum Beispiel name@firma.de" oder "Nach
+   dem @ fehlt die Endung".
+6. **Tippfehler-Vorschlag als Angebot, nicht als Sperre.** Levenshtein-Abstand
+   bis 2 gegen eine Liste gängiger Domains: "Meinten Sie nico@gmail.com?" Ein
+   Klick übernimmt ihn. Wer wirklich eine seltene Domain hat, kommt durch.
+7. **Fester Platz für Meldungen.** 58 px reserviert, genug für zwei Zeilen.
+   Gemessen: Kartenhöhe 613 px in Ruhe, mit Fehler und mit Vorschlag. Nichts
+   springt.
+8. **Themenauswahl ausdrücklich freiwillig**, mit dem Satz "Ohne Auswahl
+   erhalten Sie alle Themen" direkt unter der Beschriftung. Nichts ist
+   vorausgewählt, hier und nirgends sonst.
+9. **Erfolg ist kein Ende, sondern ein Schritt.** Das Formular wird durch
+   "Fast geschafft: bitte im Postfach bestätigen" ersetzt, mit Absender,
+   Betreff, Spam-Hinweis und zwei Knöpfen: erneut senden, Adresse korrigieren.
+   Der Fokus springt auf diesen Block.
+10. **"Bereits angemeldet" ist kein Fehler**, sondern ein eigener, ruhiger
+    Zustand mit zwei sinnvollen Wegen.
+11. **Bei Server- und Netzfehler bleibt die Eingabe stehen.** Der Balken sagt
+    ausdrücklich "Ihre Eingabe ist erhalten", und die beiden Fälle haben
+    verschiedene Texte, weil sie verschiedene Handlungen nahelegen.
+12. **Die Abmeldung gilt sofort**, ohne weiteren Klick. Wer den Link im Mail
+    benutzt, hat sich entschieden. Erst darunter kommen die milderen
+    Möglichkeiten: monatlich, nur bestimmte Themen, oder doch wieder alles.
+    Als Angebot, nicht als Hürde.
+13. **Demo-Steuerung links unten**, nicht rechts: rechts steht das Formular,
+    und die Steuerung darf nicht verdecken, was sie vorführt. Auf schmalen
+    Schirmen startet sie eingeklappt.
+
+### Was der Auftrag verlangt und was das Konto sagt
+
+Der Auftrag verlangt Themen-Chips. Im Kontobereich haben wir eine
+Themenauswahl bewusst nicht gebaut, weil Conrad heute einen Newsletter
+versendet und die Auswahl erfunden wäre. Beides steht nebeneinander: der
+Prototyp zeigt, wie es aussähe, der Kontobereich bildet ab, was es gibt. Wenn
+die Themen kommen sollen, ist das eine Produktentscheidung, keine
+Gestaltungsfrage.
+
+### Lokal öffnen
+
+```
+cd ~/conrad-pro && python3 -m http.server 8901
+```
+
+Dann `http://localhost:8901/newsletter-konzept.html`. Direkt auf eine Ansicht:
+`#seite`, `#inline`, `#bestaetigt`, `#abmelden`.
+
+Geprüft: alle vier Serverantworten, beide Fehlerfälle des Feldes,
+Tippfehler-Vorschlag, Ladezustand, kein Sprung zwischen den Zuständen, kein
+seitlicher Überlauf bei 375 px, keine Konsolenfehler, kein Feld ohne
+Beschriftung, nichts vorausgewählt.
