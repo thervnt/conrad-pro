@@ -2204,3 +2204,81 @@ Die Spalten passen weiterhin ohne Rollleiste: sechs Spalten von 1920 bis
 Geprüft: 50 Symbolknöpfe über 16 Seiten und fünf Breiten, alle beschriftet,
 keine rollende Tabelle, keine Konsolenfehler; Teilen und Warenkorb in Liste
 und Detailseite ausgelöst.
+
+---
+
+## 40. Newsletter: Zustand, Abmeldung, Umfrage
+
+**Befund von Nico:** "redesign the NL subscription management page and add a
+survey in german to understand reasoning for unsub."
+
+### Was an der Vorlage nicht stimmt
+
+Der mitgeschickte Screenshot ist eine eigene Seite nach dem Abmelden. Fünf
+Dinge daran:
+
+1. **"Unsubscribe Successful" als Überschrift.** Eine Abmeldung ist kein
+   Erfolg, den man feiert. Die grösste Schrift der Seite steht auf einem
+   Verlust.
+2. **Eine zweite Seite.** Wer abgemeldet ist, ist weg. Auf einer
+   Bestätigungsseite ohne Kontext gibt es weder den Weg zurück noch die
+   Übersicht, aus der man kam.
+3. **Kein Weg an der Umfrage vorbei.** Es gibt nur "Submit". Wer nichts sagen
+   will, muss die Seite verlassen - und weiss nicht, ob die Abmeldung dann
+   gilt.
+4. **"The emails are spam and should be reported" steht in derselben Liste wie
+   "I no longer want to receive these emails".** Eine Beschwerde ist keine
+   Rückmeldung zum Inhalt. Sie gehört in einen Weg mit Bearbeitung, nicht in
+   einen Radioknopf, der in einer Statistik landet.
+5. **Kein Wort darüber, was die Abmeldung umfasst.** Betrifft sie auch
+   Bestellbestätigungen? Das ist die erste Frage, die ein Geschäftskunde hat.
+
+### Gebaut
+
+**Zustand zuerst, dann die Wahl** - dasselbe Muster wie auf der
+Zahlungsart-Seite. In Ruhe steht gross, was gilt: "Sie erhalten den Conrad
+Newsletter", darunter Turnus, Adresse und Anmeldedatum. Der vorherige
+Schalter ist ein Knopf geworden: eine Abmeldung ist eine bewusste Handlung,
+kein Haken, den man im Vorbeigehen umlegt. Er trägt die Warnfarbe, und der
+Satz daneben nimmt die Hemmung: "Die Abmeldung wirkt sofort. Sie können sich
+jederzeit wieder anmelden, auf dieser Seite."
+
+**Nach der Abmeldung** bleibt man auf derselben Seite. Die Karte sagt, was
+jetzt gilt, seit wann, und beantwortet die Frage aus Punkt 5: "Ihre Adresse
+bleibt für Bestellbestätigungen und Rechnungen in Gebrauch; davon ist nur der
+Newsletter betroffen." Daneben steht "Newsletter abonnieren" als Weg zurück.
+
+**Die Umfrage** erscheint darunter als eigene Karte, nur direkt nach dem
+Abbestellen. Sie sagt in ihrem ersten Satz, dass sie freiwillig ist und nichts
+an der Abmeldung ändert, und sie hat mit "Nein danke" einen echten Ausweg
+neben "Rückmeldung senden". Der Fokus springt auf die erste Antwort.
+
+Fünf Gründe, auf Geschäftskunden zugeschnitten:
+
+* Zu viele E-Mails
+* Die Inhalte passen nicht zu meiner Arbeit
+* Ich finde diese Informationen schon woanders
+* Ich habe mich nie angemeldet
+* Anderer Grund
+
+Die ersten beiden gab es in der Vorlage nicht, obwohl sie die häufigsten
+Gründe sind; "unangemessen" und "Spam melden" sind weg. Darunter ein
+Freitextfeld, dessen Beschriftung mitwandert: bei "Anderer Grund" heisst es
+"Ihr Grund" und ist Pflicht, sonst "Was sollten wir anders machen?
+(freiwillig)".
+
+Nach dem Senden verschwindet die Umfrage, und der gewählte Grund steht als
+"Ihre Rückmeldung" in der Zustandskarte - der Nutzer sieht, was von ihm
+gespeichert wurde. Alles liegt unter `conradNewsletterAbo` und übersteht einen
+Seitenwechsel.
+
+### Nicht gebaut
+
+Eine Themenauswahl. Conrad versendet einen Newsletter, nicht mehrere; eine
+Auswahl wäre erfunden. Der Vorschlag dazu steht weiterhin im Konzept, nicht im
+Prototyp.
+
+Geprüft: beide Fehlerfälle (kein Grund gewählt, "Anderer Grund" ohne Text),
+Senden, Überspringen, Wiederanmelden, und der gespeicherte Stand nach einem
+Neuladen. 16 Seiten über fünf Breiten ohne Konsolenfehler und ohne seitlichen
+Überlauf.

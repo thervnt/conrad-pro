@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="konto.css?v=55fb6f1d">
-<link rel="stylesheet" href="konto-huelle.css?v=34e35032">
+<link rel="stylesheet" href="konto-huelle.css?v=240476e0">
 <script src="cart-seed.js?v=28a5fe8f"></script>
 </head>
 <body>
@@ -179,12 +179,13 @@
           <p class="konto-head-sub">Der Conrad Newsletter für Geschäftskunden</p>
         </div>
       </div>
+      <p class="visually-hidden" data-stand aria-live="polite"></p>
       <div class="konto-stapel">
         <div class="konto-card">
           <div class="konto-card-head"><h2 class="konto-card-title">Empfang</h2></div>
           <div data-empfang></div>
-          <p class="konto-kpi-note" data-stand style="margin-top:16px" aria-live="polite"></p>
         </div>
+        <div data-umfrage></div>
         <div class="konto-card">
           <div class="konto-card-head"><h2 class="konto-card-title">Was Sie bekommen</h2></div>
           <div data-inhalt></div>
@@ -367,41 +368,207 @@
 <script src="konto-daten.js?v=232725e2"></script>
 <script>
 (function () {
-  var K = window.KONTO, E = K.esc;
-  var ich = K.benutzer[0];
+  var K = window.KONTO, E = K.esc, D = K.datum;
+  var ich = K.benutzer.filter(function (u) { return u.ichSelbst; })[0] || K.benutzer[0];
+
   /* Conrad versendet heute einen Newsletter, nicht mehrere nach Themen. Eine
-     Themenauswahl waere erfunden - derselbe Fehler wie "angelegt von". Die
-     Seite bildet ab, was es gibt: ein Abo, eine Adresse, ein Schalter.
-     Der Vorschlag fuer Themen steht im Konzept, nicht im Prototyp. */
-  var an = true;
+     Themenauswahl waere erfunden. Die Seite bildet ab, was es gibt: ein Abo,
+     eine Adresse, ein Zustand. Neu ist, was nach dem Abbestellen passiert. */
+  var SPEICHER = 'conradNewsletterAbo';
+  function lesen() {
+    try { return JSON.parse(localStorage.getItem(SPEICHER)) || {}; } catch (e) { return {}; }
+  }
+  function schreiben(x) {
+    try { localStorage.setItem(SPEICHER, JSON.stringify(x)); } catch (e) { /* voll */ }
+  }
+
+  var stand = lesen();
+  var abo = stand.abo !== false;
+  var abgemeldetAm = stand.abgemeldetAm || null;
+  var rueckmeldung = stand.rueckmeldung || null;   /* gesendeter Grund */
+  var umfrageOffen = false;                        /* nur direkt nach dem Abbestellen */
+  var gewaehlt = null;
+  var fehler = '';
+
+  /* Kein Punkt "Spam, bitte melden": eine Beschwerde ist keine Rueckmeldung
+     zum Inhalt, sie gehoert in einen Beschwerdeweg mit Bearbeitung. Und kein
+     Punkt "unangemessen" - in einem B2B-Fachnewsletter beschreibt er nichts,
+     was hier vorkommt. Dafuer zwei Gruende, die es im Original nicht gab und
+     die im Geschaeftskundenfall die haeufigsten sind: zu viele E-Mails und
+     Inhalte, die nicht zur Arbeit passen. */
+  var GRUENDE = [
+    ['zu-viel',    'Zu viele E-Mails'],
+    ['unpassend',  'Die Inhalte passen nicht zu meiner Arbeit'],
+    ['anderswo',   'Ich finde diese Informationen schon woanders'],
+    ['nie',        'Ich habe mich nie angemeldet'],
+    ['anderer',    'Anderer Grund']
+  ];
+  function grundText(id) {
+    var g = GRUENDE.filter(function (x) { return x[0] === id; })[0];
+    return g ? g[1] : id;
+  }
 
   var elEmpfang = document.querySelector('[data-empfang]');
-  var stand = document.querySelector('[data-stand]');
+  var elUmfrage = document.querySelector('[data-umfrage]');
+  var elStand = document.querySelector('[data-stand]');
+
+  function empfangHtml() {
+    if (abo) {
+      return '<p class="konto-gewaehlt">Sie erhalten den Conrad Newsletter</p>' +
+        '<p class="konto-gewaehlt-note">Etwa vierzehntägig, mit Nettopreisen für Geschäftskunden.</p>' +
+        '<dl class="konto-fakten" style="margin-top:24px">' +
+          '<div><dt>Adresse</dt><dd>' + E(ich.mail) +
+            '<br><a class="konto-mini" href="konto-profil.html">Adresse ändern</a></dd></div>' +
+          '<div><dt>Angemeldet seit</dt><dd>' + D('2023-04-11') + '</dd></div>' +
+        '</dl>' +
+        /* Die Abmeldung ist eine bewusste Handlung, kein Haken, den man im
+           Vorbeigehen umlegt. Sie steht deshalb als Knopf und in der
+           Warnfarbe - und der Satz daneben sagt, dass sie sich zuruecknehmen
+           laesst, damit niemand zoegert. */
+        '<div class="konto-zeilenleiste">' +
+          '<p class="konto-bemerkung">Die Abmeldung wirkt sofort. Sie können sich jederzeit ' +
+            'wieder anmelden, auf dieser Seite.</p>' +
+          '<div class="konto-zeilenleiste-rechts">' +
+            '<button type="button" class="konto-btn danger" data-ab>Newsletter abbestellen</button>' +
+          '</div>' +
+        '</div>';
+    }
+    return '<p class="konto-gewaehlt">Sie erhalten derzeit keinen Newsletter</p>' +
+      '<p class="konto-gewaehlt-note">' +
+        (abgemeldetAm ? 'Abgemeldet am ' + D(abgemeldetAm) + '. ' : '') +
+        'Ihre Adresse bleibt für Bestellbestätigungen und Rechnungen in Gebrauch; ' +
+        'davon ist nur der Newsletter betroffen.</p>' +
+      '<dl class="konto-fakten" style="margin-top:24px">' +
+        '<div><dt>Adresse</dt><dd>' + E(ich.mail) + '</dd></div>' +
+        (rueckmeldung
+          ? '<div><dt>Ihre Rückmeldung</dt><dd>' + E(grundText(rueckmeldung)) + '</dd></div>'
+          : '') +
+      '</dl>' +
+      '<div class="konto-zeilenleiste">' +
+        '<div class="konto-zeilenleiste-links">' +
+          '<button type="button" class="konto-btn primary" data-an>Newsletter abonnieren</button>' +
+        '</div>' +
+      '</div>';
+  }
+
+  /* Die Umfrage steht unter dem Zustand, nicht auf einer eigenen Erfolgsseite.
+     Abbestellen ist kein Erfolg, der eine Ueberschrift braucht, und wer schon
+     weg ist, kommt auf eine zweite Seite nicht mehr zurueck. Sie erscheint nur
+     direkt nach dem Abbestellen und laesst sich in einem Klick ueberspringen. */
+  function umfrageHtml() {
+    if (!umfrageOffen) return '';
+    return '<div class="konto-card konto-section">' +
+      '<div class="konto-card-head"><h2 class="konto-card-title">Warum haben Sie sich abgemeldet?</h2></div>' +
+      '<form data-form>' +
+        '<p class="konto-bemerkung" style="margin-bottom:16px">Freiwillig und in einer halben Minute ' +
+          'erledigt. Wir lesen jede Antwort, und sie ändert nichts an Ihrer Abmeldung.</p>' +
+        '<fieldset class="konto-satz">' +
+          '<legend>Was war der Hauptgrund?</legend>' +
+          GRUENDE.map(function (g) {
+            return '<label class="konto-wahl">' +
+              '<input type="radio" class="konto-check" name="grund" value="' + g[0] + '"' +
+                (gewaehlt === g[0] ? ' checked' : '') + '>' +
+              '<span class="konto-wahl-body"><span class="konto-wahl-name">' + E(g[1]) + '</span></span>' +
+            '</label>';
+          }).join('') +
+        '</fieldset>' +
+        '<div class="konto-feld" style="max-width:560px">' +
+          '<label class="konto-feld-label" for="nl-text">' +
+            (gewaehlt === 'anderer' ? 'Ihr Grund' : 'Was sollten wir anders machen? (freiwillig)') +
+          '</label>' +
+          '<textarea id="nl-text" name="text" rows="3" ' +
+            'placeholder="' + (gewaehlt === 'anderer'
+              ? 'Zum Beispiel: Ich wechsle die Firma.'
+              : 'Zum Beispiel: Weniger Aktionen, mehr Normenänderungen.') + '"></textarea>' +
+        '</div>' +
+        (fehler
+          ? '<p class="konto-feld-fehler" role="alert">' + E(fehler) + '</p>'
+          : '') +
+        '<div class="konto-zeilenleiste">' +
+          '<div class="konto-zeilenleiste-links">' +
+            '<button type="submit" class="konto-btn primary">Rückmeldung senden</button>' +
+            '<button type="button" class="konto-btn ghost" data-ueberspringen>Nein danke</button>' +
+          '</div>' +
+        '</div>' +
+      '</form>' +
+    '</div>';
+  }
 
   function zeichne() {
-    elEmpfang.innerHTML =
-      '<label class="konto-option">' +
-        '<input type="checkbox" data-an' + (an ? ' checked' : '') + '>' +
-        '<span class="konto-option-body">' +
-          '<span class="konto-option-name">Conrad Newsletter</span>' +
-          '<span class="konto-option-note">Etwa vierzehntägig, mit Nettopreisen für Geschäftskunden.</span>' +
-        '</span>' +
-      '</label>' +
-      '<dl class="konto-fakten" style="margin-top:16px">' +
-        '<div><dt>Adresse</dt><dd>' + E(ich.mail) +
-          ' <a href="konto-profil.html" style="margin-left:8px">ändern</a></dd></div>' +
-        '<div><dt>Angemeldet seit</dt><dd>' + K.datum('2023-04-11') + '</dd></div>' +
-      '</dl>';
-    stand.textContent = an
+    elEmpfang.innerHTML = empfangHtml();
+    elUmfrage.innerHTML = umfrageHtml();
+    elStand.textContent = abo
       ? 'Sie erhalten den Newsletter an ' + ich.mail
       : 'Sie erhalten derzeit keinen Newsletter';
   }
 
+  document.addEventListener('click', function (e) {
+    if (e.target.closest('[data-ab]')) {
+      abo = false;
+      abgemeldetAm = K.HEUTE_ISO;
+      rueckmeldung = null;
+      umfrageOffen = true;
+      gewaehlt = null;
+      fehler = '';
+      schreiben({ abo: false, abgemeldetAm: abgemeldetAm });
+      zeichne();
+      K.melden('Newsletter abbestellt');
+      var erste = elUmfrage.querySelector('input[name="grund"]');
+      if (erste) erste.focus();
+      return;
+    }
+    if (e.target.closest('[data-an]')) {
+      abo = true;
+      umfrageOffen = false;
+      schreiben({ abo: true });
+      zeichne();
+      K.melden('Newsletter abonniert');
+      return;
+    }
+    if (e.target.closest('[data-ueberspringen]')) {
+      umfrageOffen = false;
+      zeichne();
+      return;
+    }
+  });
+
+  /* Die Beschriftung des Textfelds haengt am gewaehlten Grund: bei "Anderer
+     Grund" ist es die Antwort, sonst ein Zusatz. */
   document.addEventListener('change', function (e) {
-    if (!e.target.closest('[data-an]')) return;
-    an = e.target.checked;
+    var r = e.target.closest('input[name="grund"]');
+    if (!r) return;
+    var text = elUmfrage.querySelector('textarea').value;
+    gewaehlt = r.value;
+    fehler = '';
     zeichne();
-    K.melden(an ? 'Newsletter abonniert' : 'Newsletter abbestellt');
+    var feld = elUmfrage.querySelector('textarea');
+    feld.value = text;
+    if (gewaehlt === 'anderer') feld.focus();
+  });
+
+  document.addEventListener('submit', function (e) {
+    if (!e.target.closest('[data-form]')) return;
+    e.preventDefault();
+    var form = e.target;
+    var wahl = form.querySelector('input[name="grund"]:checked');
+    var text = form.querySelector('textarea').value.trim();
+    if (!wahl) {
+      fehler = 'Bitte wählen Sie einen Grund, oder überspringen Sie die Frage mit "Nein danke".';
+      zeichne();
+      return;
+    }
+    if (wahl.value === 'anderer' && !text) {
+      fehler = 'Bitte schreiben Sie kurz, was der Grund war.';
+      zeichne();
+      form = elUmfrage.querySelector('[data-form]');
+      if (form) form.querySelector('textarea').focus();
+      return;
+    }
+    rueckmeldung = wahl.value;
+    umfrageOffen = false;
+    schreiben({ abo: false, abgemeldetAm: abgemeldetAm, rueckmeldung: rueckmeldung });
+    zeichne();
+    K.melden('Danke für Ihre Rückmeldung');
   });
 
   var INHALT = [
