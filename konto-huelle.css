@@ -613,9 +613,12 @@
   .konto-eingabe-reihe input[type="email"] { flex: 1 1 100%; border-right: 1px solid var(--c-border-control); border-radius: var(--radius-xs); }
   .konto-eingabe-reihe .konto-btn { flex: 1 1 100%; border-radius: var(--radius-xs); }
 }
-/* Fester Platz fuer Fehler und Tippfehler-Vorschlag. */
-.konto-eingabe-meldung { min-height: 28px; padding-top: 6px; font-size: 13px; }
-@media (max-width: 639px) { .konto-eingabe-meldung { min-height: 46px; } }
+/* Platz fuer Fehler und Tippfehler-Vorschlag. Leer nimmt er keinen Raum:
+   ein dauerhaft leerer Streifen waere die eine Luecke im Formular, die aus
+   der Reihe faellt. Erscheint eine Meldung, ruecken Kaestchen und Hinweis
+   darunter um eine Zeile nach - unter dem Feld, das gerade korrigiert wird. */
+.konto-eingabe-meldung { font-size: 13px; }
+.konto-eingabe-meldung:not(:empty) { padding-top: 6px; }
 .konto-eingabe-meldung .konto-feldfehler { display: flex; gap: 8px; color: var(--c-danger); }
 .konto-eingabe-meldung .konto-tipp { color: var(--c-text-secondary); }
 .konto-eingabe-meldung .konto-tipp button {
@@ -704,17 +707,11 @@
    Spalten entstehen, wie hineinpassen: zwei in einer Karte ueber die volle
    Inhaltsbreite, eine in einer schmalen Karte oder einer Adresszeile. */
 .konto-fakten {
-  column-width: 420px;
-  column-gap: 48px;
   margin: 0;
+  max-width: 640px;
   font-size: 14px;
 }
-/* Eine Seite, die nur einen Datensatz traegt, darf ihn auch untereinander
-   zeigen: dort ist der Datensatz der Gegenstand und nicht eine Beigabe
-   neben anderem. */
-.konto-fakten.untereinander { column-width: auto; column-count: 1; }
 .konto-fakten > div {
-  break-inside: avoid;
   display: flex;
   flex-wrap: wrap;
   gap: 4px 24px;

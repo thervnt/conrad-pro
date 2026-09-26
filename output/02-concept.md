@@ -3039,3 +3039,30 @@ belegten Plätze, ein Platz ohne Zahl blieb als leere Marke stehen.
 
 Geprüft: 17 Seiten über vier Fensterbreiten, keine leere Marke, keine
 Konsolenfehler, kein seitlicher Überlauf.
+
+---
+
+## 59. Drei Punkte zu Feldern und Abständen
+
+**1. Datensätze stehen überall untereinander.** Der Spaltensatz aus Kapitel 32
+fällt weg. Er war eine Antwort auf leere Breite; eine Liste, die man an einer
+Kante hinunterliest, ist die bessere, und zwei Leserichtungen waren der
+ursprüngliche Einwand. Die Listen sind jetzt auf 640 px begrenzt und
+einspaltig, auf allen Seiten. Der Modifikator `.untereinander`, der das
+bisher nur auf den Unternehmensdaten tat, ist damit überflüssig und entfernt.
+Gemessen: 45 Listen über fünf Fensterbreiten, keine in mehr als einer Spalte.
+
+**2. "E-Mail ändern" auf der Profilseite.** Die Adresse ist ein Zugangsdatum
+wie das Passwort und bekommt denselben Knopf daneben. Der Kartenkopf "Zugang"
+trägt jetzt beide.
+
+**3. Ein Abstand im Formular: 16 px.** Zwischen allem - Anrede, Titel,
+Vorname, Nachname, Adresse und Einwilligungs-Kästchen. Gemessen: fünf
+Abstände, fünfmal 16 px.
+
+Dafür musste eine Sache weichen: der Platz für Fehlermeldung und
+Tippfehler-Vorschlag war dauerhaft reserviert und machte die eine Lücke, die
+aus der Reihe fiel. Er nimmt jetzt nur Raum, wenn er etwas zu sagen hat.
+Erscheint eine Meldung, rücken Kästchen und Hinweis darunter um eine Zeile
+nach - unter dem Feld, das gerade korrigiert wird, und ohne dass darüber etwas
+springt. Das ist der Preis für den gleichen Takt, und er ist ihn wert.

@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="konto.css?v=55fb6f1d">
-<link rel="stylesheet" href="konto-huelle.css?v=c0a5216b">
+<link rel="stylesheet" href="konto-huelle.css?v=98d002d1">
 <script src="cart-seed.js?v=28a5fe8f"></script>
 </head>
 <body>
@@ -190,7 +190,10 @@
         </div>
         <div class="konto-card">
           <div class="konto-card-head"><h2 class="konto-card-title">Zugang</h2>
-            <button type="button" class="konto-btn ghost" data-pw>Passwort ändern</button></div>
+            <span class="konto-head-actions">
+              <button type="button" class="konto-btn ghost" data-mail-aendern>E-Mail ändern</button>
+              <button type="button" class="konto-btn ghost" data-pw>Passwort ändern</button>
+            </span></div>
           <dl class="konto-fakten" data-zugang></dl>
           <!-- Abmelden bleibt unten: es aendert nicht den Datensatz darueber,
                sondern beendet die Sitzung. -->
@@ -481,6 +484,7 @@
 
   document.addEventListener('click', function (e) {
     if (e.target.closest('[data-person-bearbeiten]')) K.melden('Persönliche Daten bearbeiten');
+    if (e.target.closest('[data-mail-aendern]')) K.melden('E-Mail-Adresse ändern');
     if (e.target.closest('[data-pw]')) K.melden('Passwort ändern');
     if (e.target.closest('[data-abmelden]')) K.melden('Abmelden');
     if (e.target.closest('[data-iban]')) K.melden('IBAN hinterlegen');
