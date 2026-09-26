@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="konto.css?v=55fb6f1d">
-<link rel="stylesheet" href="konto-huelle.css?v=a931e910">
+<link rel="stylesheet" href="konto-huelle.css?v=a115d528">
 <script src="cart-seed.js?v=28a5fe8f"></script>
 </head>
 <body>
@@ -394,7 +394,6 @@
   var mailFehler = null;
   var tippMail = null;
   var abgemeldetAm = stand.abgemeldetAm || null;
-  var HINWEIS_DOI = 'Wir schicken Ihnen zuerst eine Bestätigungsmail; erst nach Ihrem Klick darin erhalten Sie den Newsletter.';
   var rueckmeldung = stand.rueckmeldung || null;   /* gesendeter Grund */
   var umfrageOffen = false;                        /* nur direkt nach dem Abbestellen */
   var gewaehlt = null;
@@ -470,17 +469,17 @@
        Seitenfuss, mit Eingabefeld und Einwilligung. Das Feld ist mit der
        Adresse des Kontos vorbelegt, bleibt aber aenderbar: der Newsletter
        muss nicht an dieselbe Adresse gehen wie die Rechnungen. */
-    return '<p class="konto-gewaehlt">Sie erhalten derzeit keinen Newsletter</p>' +
-      '<p class="konto-gewaehlt-note">' +
-        (abgemeldetAm ? 'Abgemeldet am ' + D(abgemeldetAm) + '. ' : '') +
-        'Ihre Adresse bleibt für Bestellbestätigungen und Rechnungen in Gebrauch; ' +
-        'davon ist nur der Newsletter betroffen.</p>' +
+    return '<p class="konto-gewaehlt">Alle zwei Wochen wissen, was neu und günstiger ist</p>' +
+      '<p class="konto-gewaehlt-note">Nettopreise, Neuheiten und Normenänderungen für ' +
+        'Geschäftskunden, in vier Minuten gelesen. ' +
+        'Sie erhalten ihn derzeit nicht' + (abgemeldetAm ? ', abgemeldet am ' + D(abgemeldetAm) : '') +
+        '. Bestellbestätigungen und Rechnungen sind davon nicht betroffen.</p>' +
       (rueckmeldung
         ? '<dl class="konto-fakten" style="margin-top:24px">' +
           '<div><dt>Ihre Rückmeldung</dt><dd>' + E(grundText(rueckmeldung)) + '</dd></div></dl>'
         : '') +
       '<div class="konto-section" style="margin-top:24px">' +
-        '<div class="konto-feld">' +
+        '<div class="konto-feld" style="margin-top:0">' +
           '<label class="konto-feld-label" for="nl-mail">Geschäftliche E-Mail-Adresse</label>' +
           '<div class="konto-eingabe-reihe">' +
             '<input type="email" id="nl-mail" data-mail autocomplete="email" inputmode="email" ' +
@@ -505,9 +504,7 @@
           '<a href="#">Datenschutzerklärung</a></span>' +
         '</label>' +
         '<p class="konto-einwilligung-note" role="status" aria-live="polite">' +
-          (consentFehler
-            ? '<span class="konto-feldfehler" id="nl-consent">' + E(consentFehler) + '</span>'
-            : E(HINWEIS_DOI)) +
+          (consentFehler ? '<span id="nl-consent">' + E(consentFehler) + '</span>' : '') +
         '</p>' +
       '</div>';
   }
@@ -694,7 +691,7 @@
       kasten.removeAttribute('aria-invalid');
       kasten.removeAttribute('aria-describedby');
       var note = elEmpfang.querySelector('.konto-einwilligung-note');
-      if (note) note.textContent = HINWEIS_DOI;
+      if (note) note.textContent = '';
     }
   });
 

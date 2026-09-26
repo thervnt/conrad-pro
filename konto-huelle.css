@@ -546,7 +546,8 @@
   .konto-eingabe-reihe .konto-btn { flex: 1 1 100%; border-radius: var(--radius-xs); }
 }
 /* Fester Platz fuer Fehler und Tippfehler-Vorschlag. */
-.konto-eingabe-meldung { min-height: 46px; padding-top: 8px; font-size: 13px; }
+.konto-eingabe-meldung { min-height: 28px; padding-top: 6px; font-size: 13px; }
+@media (max-width: 639px) { .konto-eingabe-meldung { min-height: 46px; } }
 .konto-eingabe-meldung .konto-feldfehler { display: flex; gap: 8px; color: var(--c-danger); }
 .konto-eingabe-meldung .konto-tipp { color: var(--c-text-secondary); }
 .konto-eingabe-meldung .konto-tipp button {
@@ -572,17 +573,16 @@
   accent-color: var(--c-blue); cursor: pointer;
 }
 .konto-einwilligung input[aria-invalid="true"] { outline: 2px solid var(--c-danger); outline-offset: 2px; }
-/* Ein Platz fuer Hinweis und Fehlermeldung, damit beim Umschalten nichts
-   springt. */
+/* Meldung zum Kaestchen. Sie steht am Ende der Karte, also verschiebt sie
+   nichts ausser dem Kartenrand; deshalb kein reservierter Platz. */
+.konto-einwilligung-note:empty { display: none; }
 .konto-einwilligung-note {
-  min-height: 42px;
   margin: 10px 0 0;
   max-width: 72ch;
   font-size: 13px;
-  color: var(--c-text-secondary);
+  color: var(--c-danger);
   line-height: 1.5;
 }
-@media (max-width: 559px) { .konto-einwilligung-note { min-height: 60px; } }
 
 /* --- Beilaeufige Bemerkung ------------------------------------------------ */
 /* Ein Satz, der nur einen Zustand erklaert, ist kein Hinweisbanner. .konto-note

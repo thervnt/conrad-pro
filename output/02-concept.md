@@ -2618,3 +2618,33 @@ ersetzt; mit dem Band verschwindet auch die Ersetzung.
 Geprüft: 16 Seiten ohne Band und ohne Konsolenfehler, Produktseite mit ihrem
 alten Block, Warenkorb unverändert, und auf der Kontoseite laufen
 Tippfehler-Vorschlag, Einwilligung und Anmeldung weiter wie zuvor.
+
+---
+
+## 49. Drei Korrekturen am Anmeldezustand
+
+**Befund von Nico:** Hinweistext raus, Kästchen näher ans Feld, Überschrift
+handlungsorientiert.
+
+**1. Der Hinweis auf die Bestätigungsmail ist weg.** Er stand unter dem
+Kästchen und erklärte einen Schritt, den man erst nach dem Klick erlebt und
+den der Zustand "Bestätigung fehlt noch" dann ohnehin ausführlich erklärt. Der
+Platz trägt jetzt nur noch die Meldung, wenn der Haken fehlt. Dafür ist er
+nicht mehr dauerhaft reserviert: die Meldung steht als letztes in der Karte,
+verschiebt also nur den Kartenrand, und eine leere Zeile am Ende wäre
+sichtbarer Leerlauf.
+
+**2. Das Kästchen ist näher am Feld.** Der Platz für Fehler und
+Tippfehler-Vorschlag unter dem Feld war auf zwei Zeilen ausgelegt; eine
+reicht, erst unter 640 px werden zwei gebraucht. Abstand vom Feld zum
+Kästchen: 32 px statt 62 px. Der Platz bleibt reserviert, weil darunter das
+Kästchen steht, das nicht springen soll. Gemessen: die Oberkante des
+Kästchens liegt in Ruhe, mit Feldfehler und mit Vorschlag auf demselben Pixel.
+
+**3. Die Überschrift lädt ein, statt zu berichten.** "Sie erhalten derzeit
+keinen Newsletter" war eine Zustandsmeldung an der auffälligsten Stelle der
+Karte. Jetzt steht dort **"Alle zwei Wochen wissen, was neu und günstiger
+ist"**, und der Zustand rutscht in die Zeile darunter, wo er hingehört: "…
+Sie erhalten ihn derzeit nicht, abgemeldet am 24.09.2026.
+Bestellbestätigungen und Rechnungen sind davon nicht betroffen." Der Nutzen
+steht damit vor dem Knopf, der Zustand daneben.
