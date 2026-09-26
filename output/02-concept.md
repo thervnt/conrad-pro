@@ -2093,3 +2093,33 @@ Bei Listen mit offenen Positionen bleibt er gesperrt, wie bisher.
 
 Geprüft: 16 Seiten über fünf Fensterbreiten, keine rollende Tabelle von
 1920 bis 900 px, kein seitlicher Überlauf, keine Konsolenfehler.
+
+---
+
+## 36. Stücklisten-Übersicht entschlackt
+
+**Befund von Nico:** "1. zuletzt geändert und zuletzt bestellt I believe not
+necessary. 2. add to cart button not necessary on this view. 3. cta wording
+'Neue Stückliste' without the 'hochladen'"
+
+Alle drei umgesetzt.
+
+1. **Beide Datumsspalten weg.** Die Tabelle hat jetzt fünf Spalten:
+   Stückliste, Artikel, Abgleich, Betrag netto, Details. Beide Daten stehen
+   weiterhin auf der Listenseite selbst. Der Gewinn ist sichtbar: die
+   Namensspalte ist von 142 px auf 311 px gewachsen, kein Name bricht mehr um,
+   und die Zeilen sind von 105 px auf 87 px geschrumpft.
+2. **Kein Warenkorbknopf in dieser Ansicht.** Bestellt wird aus der Liste
+   heraus, nicht aus der Übersicht über Listen. Damit entfällt auch der
+   gesperrte Zustand für Listen mit offenen Positionen; was zu prüfen ist,
+   sagt die Abgleich-Spalte. Der zugehörige Klick-Handler ist mit entfernt.
+3. **"Neue Stückliste"** statt "Neue Stückliste hochladen", im Seitenkopf und
+   im Leerzustand.
+
+Die Zeilenform weicht damit von Bestellungen und Merklisten ab, die zwei
+Handlungen tragen. Das ist kein Bruch der Regel aus Kapitel 35: die Regel war
+die Reihenfolge, nicht die Anzahl. "Details" steht auch hier rechts.
+
+Geprüft: 16 Seiten über fünf Fensterbreiten, keine rollende Tabelle, kein
+seitlicher Überlauf, keine Konsolenfehler; Leerzustand trägt dieselbe neue
+Beschriftung.

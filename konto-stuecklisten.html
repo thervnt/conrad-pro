@@ -179,7 +179,7 @@
           <p class="konto-head-sub" data-zahl></p>
         </div>
         <div class="konto-head-actions">
-          <a class="konto-btn primary" href="stueckliste.html">Neue Stückliste hochladen</a>
+          <a class="konto-btn primary" href="stueckliste.html">Neue Stückliste</a>
         </div>
       </div>
       <div data-liste></div>
@@ -384,17 +384,15 @@
       'Text. Wir gleichen Hersteller-Nummern, EAN und Bestell-Nummern gegen den Katalog ab. ' +
       'Die abgeglichene Liste bleibt hier stehen und lässt sich jederzeit erneut bestellen.</p>' +
       '<div class="konto-empty-actions">' +
-      '<a class="konto-btn primary" href="stueckliste.html">Stückliste hochladen</a>' +
+      '<a class="konto-btn primary" href="stueckliste.html">Neue Stückliste</a>' +
       '<a class="konto-btn" href="konto-bestellungen.html">Bestellungen ansehen</a></div></div>';
     return;
   }
 
   el.innerHTML = '<div class="konto-table-wrap"><table class="konto-table">' +
     '<thead><tr><th scope="col">Stückliste</th><th scope="col">Artikel</th>' +
-    '<th scope="col">Zuletzt geändert</th>' +
     '<th scope="col">Abgleich</th>' +
     '<th scope="col" class="konto-amount">Betrag netto</th>' +
-    '<th scope="col" class="konto-spalte-opt">Zuletzt bestellt</th>' +
     '<th scope="col"><span class="visually-hidden">Aktionen</span></th></tr></thead><tbody>' +
     listen.map(function (l) {
       /* "ohneTreffer" kommt aus dem Abgleich und ist der Grund, warum jemand
@@ -410,28 +408,15 @@
         /* Zeilen ohne Treffer zeigen den Platzhalter; benannt wird der erste
            Eintrag, dem ein Artikel zugeordnet werden konnte. */
         '<td>' + K.vorschau(l.zeilen, 'Noch kein Artikel zugeordnet') + '</td>' +
-        '<td class="konto-num">' + D(l.geaendert) + '</td>' +
         '<td>' + abgleich + '</td>' +
         '<td class="konto-amount">' + EU(l.summe) + '</td>' +
-        '<td class="konto-num konto-spalte-opt">' + (l.zuletztBestellt ? D(l.zuletztBestellt) : 'noch nicht') + '</td>' +
-        /* Dieselbe Reihenfolge wie in den Merklisten: links das Leichtere,
-           ganz rechts die erste Handlung. */
+        /* Nur eine Handlung: bestellt wird aus der Liste heraus, nicht aus
+           der Uebersicht ueber Listen. "Details" steht wie ueberall rechts. */
         '<td><span class="konto-row-actions">' +
-          '<button type="button" class="konto-btn ghost" data-wagen="' + E(l.id) + '"' +
-            (l.ohneTreffer ? ' disabled title="Erst die offenen Positionen prüfen"' : '') +
-            '>Alle in den Warenkorb</button>' +
           '<a class="konto-btn primary" href="' + E(ziel) + '">Details</a>' +
         '</span></td></tr>';
     }).join('') + '</tbody></table></div>';
 
-  el.addEventListener('click', function (e) {
-    var w = e.target.closest('[data-wagen]');
-    if (!w || w.disabled) return;
-    var l = listen.filter(function (x) { return x.id === w.dataset.wagen; })[0];
-    var treffer = l.zeilen.filter(function (z) { return z.sku; });
-    K.nachbestellen(treffer);
-    K.melden(treffer.length + ' Positionen aus "' + l.name + '" in den Einkaufswagen gelegt');
-  });
 })();
 </script>
 </body>
