@@ -150,7 +150,7 @@
   <div class="konto-nav-group">
     <p class="konto-nav-title">Bestellen</p>
     <a href="konto-bestellungen.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg><span>Bestellungen</span><span class="konto-nav-count" data-nav-count="bestellungen"></span></a>
-    <a href="konto-stuecklisten.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg><span>Stücklisten</span></a>
+    <a href="konto-stuecklisten.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg><span>Stücklisten</span><span class="konto-nav-count" data-nav-count="stuecklisten"></span></a>
     <a href="konto-merklisten.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg><span>Merklisten</span></a>
   </div>
   <div class="konto-nav-group">
@@ -353,21 +353,38 @@
   pruefe();
 })();
 </script>
-<script src="konto-daten.js?v=02365e24"></script>
+<script src="konto-daten.js?v=b30d4bca"></script>
 <script>
 (function () {
   var K = window.KONTO;
   var E = K.esc, EU = K.euro, D = K.datum;
   var param = new URLSearchParams(location.search);
   var leer = param.get('zustand') === 'leer';
-  var liste = leer ? [] : K.ruecksendungen;
+  var nurStatus = param.get('status');
+  var liste = leer ? [] : K.ruecksendungen.filter(function (r) {
+    return !nurStatus || r.status === nurStatus;
+  });
 
   document.querySelector('[data-zahl]').textContent = liste.length
-    ? liste.length + ' Rücksendungen \u00b7 ' + K.offeneVorgaenge().ruecksendungen.zahl +
-      ' in Prüfung \u00b7 Gutschrift immer durch Conrad Electronic'
+    ? (nurStatus
+        ? liste.length + ' von ' + K.ruecksendungen.length + ' Rücksendungen \u00b7 ' +
+          'gefiltert nach ' + K.STATUS[nurStatus].text
+        : liste.length + ' Rücksendungen \u00b7 ' +
+          K.ruecksendungen.filter(function (r) { return r.status === 'pruefung'; }).length +
+          ' in Prüfung \u00b7 Gutschrift immer durch Conrad Electronic')
     : 'Gutschrift immer durch Conrad Electronic, unabhängig vom Versender';
 
   var elListe = document.querySelector('[data-liste]');
+
+  /* Wer aus der Uebersicht kommt, sieht nur den gefilterten Ausschnitt. Der
+     Weg zurueck zur ganzen Liste steht daneben, sonst wirkt sie unvollstaendig. */
+  if (nurStatus && !leer) {
+    var zurueck = document.createElement('p');
+    zurueck.className = 'konto-bemerkung';
+    zurueck.style.margin = '0 0 16px';
+    zurueck.innerHTML = '<a href="konto-ruecksendungen.html">Alle Rücksendungen anzeigen</a>';
+    elListe.parentNode.insertBefore(zurueck, elListe);
+  }
 
   if (!liste.length) {
     /* Leerzustand mit Weg und mit den Regeln, die der Nutzer braucht. Die

@@ -2963,3 +2963,79 @@ den Platz und bleiben untereinander.
 620 px, weil die Adresszeile dieses Mass braucht: die Adresse selbst rund
 410 px und der Knopf knapp 200 px. Alles andere daran auszurichten kostet
 nichts und erspart eine zweite Kante.
+
+---
+
+## 58. Kacheln, die zählen, was sie zeigen, und Zahlen, die etwas bedeuten
+
+### 1. Die Kachel zählte anders als sie filterte
+
+**Befund von Nico:** "on klick wird nur eine bestellung in bearbeitung
+angezeigt"
+
+Gefunden, und es war schlimmer als eine Stelle. Die Kachel "2 Sendungen
+unterwegs" zählte Bestellungen mit Status *versendet* **oder** *teilweise
+versendet*, verlinkte aber auf `?status=versendet`, und der Listenfilter
+vergleicht genau. Zwei gezählt, eine gezeigt.
+
+Derselbe Fehler steckte in der Rechnungskachel: "3 offene Rechnungen" zählt
+*offen* **und** *überfällig*, der Link filterte nur *offen*. Und die
+Rücksendungskachel zeigte 1, führte aber in die ungefilterte Liste mit 2.
+
+Drei Korrekturen, eine Regel: **eine Kachel führt genau auf die Menge, die
+sie zählt.**
+
+* Die Bestellliste hat einen Filter **"Unterwegs (versendet)"**, der beide
+  Versandzustände zusammenfasst. "In Bearbeitung" bleibt getrennt, weil die
+  Übersicht dafür eine eigene Kachel hat.
+* Die Belegliste hat einen Filter **"Noch nicht bezahlt"** für offen und
+  überfällig, und sie nimmt jeden Status aus der URL an, nicht nur einen
+  einzigen fest verdrahteten.
+* Die Rücksendungsliste nimmt `?status=` ebenfalls an und sagt dann, dass
+  gefiltert ist, mit einem Weg zur ganzen Liste.
+
+Nebenbei: die Kachel hiess "Sendungen unterwegs", zählte aber Bestellungen.
+Eine teilweise versendete Bestellung hat zwei Sendungen, von denen eine
+unterwegs ist. Sie heisst jetzt "Bestellungen unterwegs".
+
+Gemessen, alle vier Kacheln: 3 offene Rechnungen → 3 Zeilen, 2 unterwegs → 2,
+1 in Bearbeitung → 1, 1 in Prüfung → 1.
+
+### 2. Was eine Zahl in der Navigation bedeutet
+
+**Befund von Nico:** "notification logic is not understandable for users"
+
+Zu Recht. Sie zählte "offene Vorgänge": Bestellungen unterwegs, offene
+Rechnungen, Rücksendungen in Prüfung. Diese Zahlen gingen nie weg, weil immer
+etwas läuft, und sie forderten nichts: unterwegs ist unterwegs, und eine
+Rücksendung in Prüfung prüft Conrad, nicht der Kunde. Eine Marke, die nie
+verschwindet und nichts verlangt, wird zur Verzierung.
+
+**Neue Regel, in einem Satz: eine Zahl steht dort, wo etwas von Ihnen erwartet
+wird.**
+
+| Eintrag | Zahl | warum |
+|---|---|---|
+| Rechnungen & Gutschriften | 1 | überfällig, muss bezahlt werden |
+| Stücklisten | 2 | offene Positionen, müssen zugeordnet werden |
+| Bestellungen | keine | unterwegs, Conrad ist dran |
+| Rücksendungen | keine | in Prüfung, Conrad ist dran |
+| Merklisten | keine | dort passiert nichts von selbst |
+
+Stücklisten tragen damit zum ersten Mal eine Zahl, und zwar die einzige im
+Kontobereich, die eine echte Aufgabe benennt: eine Liste mit offenen Zeilen
+lässt sich nicht vollständig bestellen, solange niemand sie zuordnet.
+
+Was verloren geht, ist der Blick auf die laufenden Vorgänge in der
+Navigation. Den gibt es weiterhin an zwei Stellen, und zwar genauer: als
+Kachel auf der Übersicht und im Untertitel der jeweiligen Liste. Die
+Bestellliste sagt jetzt "7 von 7 Bestellungen · 2 unterwegs, 1 in Bearbeitung",
+die Stücklisten "3 gespeicherte Listen · 2 mit offenen Positionen".
+
+Jede Marke trägt weiterhin `title` und `aria-label` mit dem Wortlaut: "1
+Rechnung ist überfällig", "2 Stücklisten haben offene Positionen". Und leere
+Marken werden jetzt wirklich entfernt: vorher lief der Füller nur über die
+belegten Plätze, ein Platz ohne Zahl blieb als leere Marke stehen.
+
+Geprüft: 17 Seiten über vier Fensterbreiten, keine leere Marke, keine
+Konsolenfehler, kein seitlicher Überlauf.

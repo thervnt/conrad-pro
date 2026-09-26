@@ -541,23 +541,31 @@
       (benannt ? esc(benannt.kurz) : esc(ersatz || '\u2013')) + '</span>';
   }
 
-  /* Eine Regel fuer alle drei Zahlen: offene Vorgaenge in diesem Bereich.
-     Vorher hiessen sie dreierlei und standen ohne Beschriftung da - eine "3"
-     neben "Bestellungen" konnte alles heissen, auch die Zahl aller
-     Bestellungen. Jetzt sagt jede Zahl per Beschriftung, was sie zaehlt, und
-     dieselbe Zahl steht als Untertitel auf der Seite, zu der sie fuehrt. */
-  function offeneVorgaenge() {
-    var rechnungenOffen = rechnungen.filter(function (r) {
-      return r.status === 'offen' || r.status === 'ueberfaellig';
-    }).length;
-    var bestellungenOffen = bestellungen.filter(function (b) {
-      return b.status === 'bearbeitung' || b.status === 'versendet' || b.status === 'teilversand';
-    }).length;
-    var rmaOffen = ruecksendungen.filter(function (r) { return r.status === 'pruefung'; }).length;
+  /* Eine Zahl in der Navigation steht dort, wo etwas von Ihnen erwartet wird.
+     Nicht dort, wo etwas laeuft.
+
+     Vorher zaehlte sie "offene Vorgaenge": Bestellungen unterwegs, offene
+     Rechnungen, Ruecksendungen in Pruefung. Diese Zahlen gingen nie weg, weil
+     immer etwas laeuft, und sie forderten nichts - unterwegs ist unterwegs,
+     und eine Ruecksendung in Pruefung prueft Conrad, nicht der Kunde. Eine
+     Marke, die nie verschwindet und nichts verlangt, wird zur Verzierung.
+
+     Jetzt tragen nur zwei Eintraege eine Zahl, und beide bedeuten dasselbe:
+     hier wartet etwas auf Sie.
+       - Rechnungen: ueberfaellige Belege. Die muessen bezahlt werden.
+       - Stuecklisten: Listen mit offenen Positionen. Die muessen zugeordnet
+         werden, sonst laesst sich die Liste nicht vollstaendig bestellen.
+     Bestellungen, Ruecksendungen und Merklisten tragen keine: dort wartet
+     Conrad, nicht der Kunde. Was dort laeuft, steht als Kachel auf der
+     Uebersicht und im Untertitel der jeweiligen Seite. */
+  function wartetAufSie() {
+    var ueberfaellig = rechnungen.filter(function (r) { return r.status === 'ueberfaellig'; }).length;
+    var zuPruefen = stuecklisten.filter(function (l) { return l.ohneTreffer > 0; }).length;
     return {
-      bestellungen: { zahl: bestellungenOffen, wort: bestellungenOffen === 1 ? 'Bestellung unterwegs' : 'Bestellungen unterwegs' },
-      rechnungen:   { zahl: rechnungenOffen,   wort: rechnungenOffen === 1 ? 'offene Rechnung' : 'offene Rechnungen' },
-      ruecksendungen: { zahl: rmaOffen,        wort: rmaOffen === 1 ? 'Rücksendung in Prüfung' : 'Rücksendungen in Prüfung' }
+      rechnungen: { zahl: ueberfaellig,
+        wort: ueberfaellig === 1 ? 'Rechnung ist überfällig' : 'Rechnungen sind überfällig' },
+      stuecklisten: { zahl: zuPruefen,
+        wort: zuPruefen === 1 ? 'Stückliste hat offene Positionen' : 'Stücklisten haben offene Positionen' }
     };
   }
 
@@ -590,7 +598,7 @@
     stornierbar: stornierbar, stornieren: stornieren, HEUTE_ISO: HEUTE_ISO,
     STORNO_FRIST_MIN: STORNO_FRIST_MIN, stornoFrist: stornoFrist,
     stornoRestMin: stornoRestMin, uhrzeit: uhrzeit,
-    nettoOffen: nettoOffen, vorschau: vorschau, offeneVorgaenge: offeneVorgaenge,
+    nettoOffen: nettoOffen, vorschau: vorschau, wartetAufSie: wartetAufSie,
     rmaAlle: rmaAlle, rmaAnlegen: rmaAnlegen, RMA_GRUENDE: RMA_GRUENDE,
     ibanPruefen: ibanPruefen, ibanGruppiert: ibanGruppiert, ibanVerdeckt: ibanVerdeckt
   };
@@ -608,12 +616,13 @@
   function fuellen() {
     var K = window.KONTO;
     if (!K) return;
-    var werte = K.offeneVorgaenge();
-    Object.keys(werte).forEach(function (name) {
-      var el = document.querySelector('[data-nav-count="' + name + '"]');
-      if (!el) return;
+    var werte = K.wartetAufSie();
+    /* Ueber alle Plaetze laufen, nicht nur ueber die belegten: ein Platz ohne
+       Zahl bliebe sonst als leere Marke stehen. */
+    document.querySelectorAll('[data-nav-count]').forEach(function (el) {
+      var name = el.getAttribute('data-nav-count');
       var w = werte[name];
-      if (!w.zahl) { el.remove(); return; }
+      if (!w || !w.zahl) { el.remove(); return; }
       el.textContent = w.zahl;
       /* Die Zahl allein sagt nichts. Der Titel sagt es der Maus, das
          aria-label dem Vorleseprogramm. */

@@ -150,7 +150,7 @@
   <div class="konto-nav-group">
     <p class="konto-nav-title">Bestellen</p>
     <a href="konto-bestellungen.html" aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg><span>Bestellungen</span><span class="konto-nav-count" data-nav-count="bestellungen"></span></a>
-    <a href="konto-stuecklisten.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg><span>Stücklisten</span></a>
+    <a href="konto-stuecklisten.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg><span>Stücklisten</span><span class="konto-nav-count" data-nav-count="stuecklisten"></span></a>
     <a href="konto-merklisten.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg><span>Merklisten</span></a>
   </div>
   <div class="konto-nav-group">
@@ -191,6 +191,7 @@
         <label class="visually-hidden" for="f-status">Status</label>
         <select class="konto-select" id="f-status" data-f-status>
           <option value="">Status</option>
+          <option value="unterwegs">Unterwegs (versendet)</option>
           <option value="bearbeitung">In Bearbeitung</option>
           <option value="versendet">Versendet</option>
           <option value="teilversand">Teilweise versendet</option>
@@ -373,7 +374,7 @@
   pruefe();
 })();
 </script>
-<script src="konto-daten.js?v=02365e24"></script>
+<script src="konto-daten.js?v=b30d4bca"></script>
 <script>
 (function () {
   var K = window.KONTO;
@@ -390,7 +391,9 @@
   function gefiltert() {
     var q = elSuche.value.trim().toLowerCase();
     return K.bestellungen.filter(function (b) {
-      if (elStatus.value && b.status !== elStatus.value) return false;
+      if (elStatus.value === 'unterwegs') {
+        if (b.status !== 'versendet' && b.status !== 'teilversand') return false;
+      } else if (elStatus.value && b.status !== elStatus.value) return false;
       if (!q) return true;
       var heu = b.nr + ' ' + b.referenz + ' ' + b.positionen.map(function (p) { return p.titel; }).join(' ');
       return heu.toLowerCase().indexOf(q) !== -1;
@@ -431,7 +434,11 @@
     var liste = zustand === 'leer' ? [] : gefiltert();
     document.querySelector('[data-zahl]').textContent =
       liste.length + ' von ' + K.bestellungen.length + ' Bestellungen \u00b7 ' +
-      K.offeneVorgaenge().bestellungen.zahl + ' unterwegs \u00b7 alle Beträge netto';
+      K.bestellungen.filter(function (b) {
+        return b.status === 'versendet' || b.status === 'teilversand';
+      }).length + ' unterwegs, ' +
+      K.bestellungen.filter(function (b) { return b.status === 'bearbeitung'; }).length +
+      ' in Bearbeitung \u00b7 alle Beträge netto';
 
     if (!liste.length) {
       var gefilterte = elSuche.value || elStatus.value;
