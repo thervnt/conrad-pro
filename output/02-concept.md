@@ -2319,9 +2319,13 @@ ganzen Prototyp; die englischen Beispiele aus dem Auftrag sind sinngemäss
 7. **Fester Platz für Meldungen.** 58 px reserviert, genug für zwei Zeilen.
    Gemessen: Kartenhöhe 613 px in Ruhe, mit Fehler und mit Vorschlag. Nichts
    springt.
-8. **Themenauswahl ausdrücklich freiwillig**, mit dem Satz "Ohne Auswahl
-   erhalten Sie alle Themen" direkt unter der Beschriftung. Nichts ist
-   vorausgewählt, hier und nirgends sonst.
+8. **Keine Themenauswahl.** Der Auftrag sah Themen-Chips vor, Nico hat sie
+   gestrichen. Damit bleibt die E-Mail-Adresse das einzige Eingabefeld, und
+   der Prototyp sagt dasselbe wie der Kontobereich: es gibt einen Newsletter.
+   Die Chips sind auch aus dem Abmeldeweg verschwunden, wo "Nur bestimmte
+   Themen" als Alternative stand - ohne Themen gibt es dort nichts zu wählen.
+   Übrig bleiben zwei Alternativen: monatlich statt vierzehntägig, oder doch
+   wieder alles. Nichts ist vorausgewählt, hier und nirgends sonst.
 9. **Erfolg ist kein Ende, sondern ein Schritt.** Das Formular wird durch
    "Fast geschafft: bitte im Postfach bestätigen" ersetzt, mit Absender,
    Betreff, Spam-Hinweis und zwei Knöpfen: erneut senden, Adresse korrigieren.
@@ -2338,15 +2342,6 @@ ganzen Prototyp; die englischen Beispiele aus dem Auftrag sind sinngemäss
 13. **Demo-Steuerung links unten**, nicht rechts: rechts steht das Formular,
     und die Steuerung darf nicht verdecken, was sie vorführt. Auf schmalen
     Schirmen startet sie eingeklappt.
-
-### Was der Auftrag verlangt und was das Konto sagt
-
-Der Auftrag verlangt Themen-Chips. Im Kontobereich haben wir eine
-Themenauswahl bewusst nicht gebaut, weil Conrad heute einen Newsletter
-versendet und die Auswahl erfunden wäre. Beides steht nebeneinander: der
-Prototyp zeigt, wie es aussähe, der Kontobereich bildet ab, was es gibt. Wenn
-die Themen kommen sollen, ist das eine Produktentscheidung, keine
-Gestaltungsfrage.
 
 ### Lokal öffnen
 

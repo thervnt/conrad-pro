@@ -159,24 +159,6 @@ a { color: var(--c-blue); }
   color: var(--c-blue); text-decoration: underline; cursor: pointer;
 }
 
-/* --- Themen, ausdruecklich freiwillig ------------------------------------- */
-.themen { border: 0; padding: 0; margin: 20px 0 0; min-width: 0; }
-.themen legend { padding: 0; font-size: 14px; font-weight: 600; }
-.themen-note { margin: 2px 0 10px; font-size: 13px; color: var(--c-text-secondary); }
-.chips { display: flex; flex-wrap: wrap; gap: 8px; }
-.chip {
-  display: inline-flex; align-items: center; gap: 8px;
-  padding: 8px 14px; border: 1px solid var(--c-border-control);
-  border-radius: var(--radius-pill); background: var(--c-bg-white);
-  font-size: 14px; cursor: pointer; transition: border-color 0.15s, background 0.15s;
-}
-.chip:hover { border-color: var(--c-border-strong); background: var(--c-bg-tint); }
-.chip input { position: absolute; opacity: 0; width: 0; height: 0; }
-.chip:has(input:checked) { border-color: var(--c-blue); background: var(--c-blue-tint); color: var(--c-navy); font-weight: 600; }
-.chip:has(input:focus-visible) { outline: 2px solid var(--c-blue); outline-offset: 2px; }
-.chip-haken { width: 14px; color: var(--c-blue); visibility: hidden; }
-.chip:has(input:checked) .chip-haken { visibility: visible; }
-
 /* --- Knopf ---------------------------------------------------------------- */
 .btn {
   display: inline-flex; align-items: center; justify-content: center; gap: 10px;
@@ -418,7 +400,7 @@ a { color: var(--c-blue); }
           <ul class="ergebnis-schritte">
             <li>Legen Sie <b>newsletter@conrad.de</b> in Ihrem Adressbuch an, damit die
             Ausgabe nicht im Spam-Ordner landet.</li>
-            <li>Themen und Turnus können Sie jederzeit in Ihrem Konto ändern.</li>
+            <li>Den Turnus können Sie jederzeit in Ihrem Konto ändern.</li>
           </ul>
           <div class="ergebnis-aktionen">
             <a class="btn" href="konto-newsletter.html">Einstellungen im Konto öffnen</a>
@@ -459,24 +441,10 @@ a { color: var(--c-blue); }
               <span><b>Nur noch einmal im Monat</b><span>Eine Ausgabe statt zwei, mit dem Wichtigsten aus vier Wochen.</span></span>
             </label>
             <label class="option">
-              <input type="radio" name="ab-alt" value="themen">
-              <span><b>Nur bestimmte Themen</b><span>Zum Beispiel nur Normen und Technik, ohne Aktionen.</span></span>
-            </label>
-            <label class="option">
               <input type="radio" name="ab-alt" value="zurueck">
               <span><b>Doch alles wie bisher</b><span>Anmeldung wiederherstellen, alle zwei Wochen.</span></span>
             </label>
           </fieldset>
-
-          <div data-ab-themen hidden style="margin-top:12px;padding-left:14px;border-left:2px solid var(--c-border)">
-            <p class="form-note" style="margin-bottom:10px">Welche Themen sollen bleiben?</p>
-            <div class="chips">
-              <label class="chip"><input type="checkbox" name="ab-thema" value="neuheiten"><span class="chip-haken" aria-hidden="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>Neuheiten</label>
-              <label class="chip"><input type="checkbox" name="ab-thema" value="aktionen"><span class="chip-haken" aria-hidden="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>Aktionen</label>
-              <label class="chip"><input type="checkbox" name="ab-thema" value="technik"><span class="chip-haken" aria-hidden="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>Technik und Normen</label>
-              <label class="chip"><input type="checkbox" name="ab-thema" value="services"><span class="chip-haken" aria-hidden="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>Services</label>
-            </div>
-          </div>
 
           <div class="meldungsplatz" data-ab-meldung aria-live="polite"></div>
           <button type="submit" class="btn" data-ab-senden disabled>Auswahl übernehmen</button>
@@ -597,12 +565,6 @@ a { color: var(--c-blue); }
      Ein Formular-Bauteil, zweimal benutzt. Dadurch koennen Seite und
      Inline-Variante nicht auseinanderlaufen.
      --------------------------------------------------------------------- */
-  var THEMEN = [
-    ['neuheiten', 'Neue Artikel'],
-    ['aktionen', 'Aktionen und Preise'],
-    ['technik', 'Technik und Normen'],
-    ['services', 'Services und Beschaffung']
-  ];
   var zaehler = 0;
 
   function Formular(wurzel, art) {
@@ -616,21 +578,6 @@ a { color: var(--c-blue); }
     var themen = {};
 
     function formularHtml() {
-      var themenBlock = eng ? '' :
-        '<fieldset class="themen">' +
-          '<legend>Themen eingrenzen</legend>' +
-          '<p class="themen-note">Freiwillig. Ohne Auswahl erhalten Sie alle Themen.</p>' +
-          '<div class="chips">' +
-            THEMEN.map(function (t) {
-              return '<label class="chip">' +
-                '<input type="checkbox" name="thema" value="' + t[0] + '"' + (themen[t[0]] ? ' checked' : '') + '>' +
-                '<span class="chip-haken" aria-hidden="true">' + svg(ZEICHEN_HAKEN, 14) + '</span>' +
-                E(t[1]) +
-              '</label>';
-            }).join('') +
-          '</div>' +
-        '</fieldset>';
-
       var feld =
         '<label class="feld" for="' + id + '-mail">' +
           '<span class="feld-label">Geschäftliche E-Mail-Adresse</span>' +
@@ -691,7 +638,7 @@ a { color: var(--c-blue); }
       return '<form novalidate data-form>' +
         '<h2 class="form-titel">Newsletter abonnieren</h2>' +
         '<p class="form-note">Eine Adresse genügt. Kein Konto nötig.</p>' +
-        feld + meldung + themenBlock +
+        feld + meldung +
         '<div style="margin-top:20px">' + knopf + '</div>' +
         bandage + consent +
       '</form>';
@@ -864,12 +811,10 @@ a { color: var(--c-blue); }
   /* --- Abmeldeseite: Alternativen ---------------------------------------- */
   var abForm = document.querySelector('[data-ab-form]');
   if (abForm) {
-    var abThemen = document.querySelector('[data-ab-themen]');
     var abMeldung = document.querySelector('[data-ab-meldung]');
     var abSenden = document.querySelector('[data-ab-senden]');
     abForm.addEventListener('change', function (e) {
       if (e.target.name === 'ab-alt') {
-        abThemen.hidden = e.target.value !== 'themen';
         abSenden.disabled = false;
         abSenden.textContent = e.target.value === 'zurueck' ? 'Anmeldung wiederherstellen' : 'Auswahl übernehmen';
       }
@@ -883,9 +828,7 @@ a { color: var(--c-blue); }
       setTimeout(function () {
         var text = wahl.value === 'monatlich'
           ? 'Gespeichert. Sie erhalten den Newsletter ab sofort einmal im Monat.'
-          : (wahl.value === 'themen'
-            ? 'Gespeichert. Sie erhalten nur noch die gewählten Themen.'
-            : 'Willkommen zurück. Sie erhalten den Newsletter wieder alle zwei Wochen.');
+          : 'Willkommen zurück. Sie erhalten den Newsletter wieder alle zwei Wochen.';
         abMeldung.innerHTML = '<p class="feldfehler" style="color:var(--c-success)">' +
           svg(ZEICHEN_HAKEN, 16) + '<span>' + E(text) + '</span></p>';
         abSenden.textContent = 'Gespeichert';
