@@ -2809,3 +2809,67 @@ Geprüft: 16 Seiten über vier Fensterbreiten, kein gesperrter Warenkorbknopf
 mehr, keine rollende Tabelle, keine Konsolenfehler; Bestellen aus einer Liste
 mit offenen Zeilen einmal von der Übersicht und einmal von der Listenseite
 ausgelöst.
+
+---
+
+## 54. Newsletter-Anmeldung mit Anrede, und zwei Adressarten
+
+**1. Die Statuszeile im abgemeldeten Zustand ist raus.** Wer das Formular vor
+sich hat, weiss, dass er nicht angemeldet ist; der Satz darüber sagt es
+ohnehin.
+
+**2., 3., 4. Der Anmeldeblock hat jetzt Profilfelder.** Anrede, Titel, Vorname
+und Nachname stehen über der Adresse: sie gehören zur Person, die Adresse ist
+der Weg dorthin. Darunter die Adresse mit dem Abonnieren-Knopf, direkt darunter
+das Einwilligungs-Kästchen. Abstand von der Adresse zum Kästchen: 32 px.
+
+Die Felder folgen dem Bau der Conrad-Formulare, als neues Bauteil
+`.konto-feldbox`:
+
+* Die Beschriftung steht klein im Rahmen, nicht darüber.
+* Pflichtfelder tragen einen Stern, freiwillige den Zusatz "(optional)".
+* Ein gültiger Wert bekommt rechts einen blauen Haken.
+* Unter Textfeldern zählt eine Angabe die Zeichen, "4 / 35".
+* Auswahlfelder tragen denselben Rahmen mit einem Pfeil.
+
+Farben, Rundung und Fokusring kommen aus dem Prototyp, nicht aus dem
+Screenshot: ein zweiter Feldstil neben den vorhandenen Eingaben des
+Kontobereichs wäre auffälliger als der Gewinn. Wenn der Produktionsstil
+gewünscht ist, ist das ein Zweizeiler in der CSS.
+
+Ohne Vor- oder Nachnamen wird nicht abonniert: das Feld bekommt einen roten
+Rahmen, der Fokus springt darauf, und der Grund steht darunter. Gespeichert
+wird alles unter `conradNewsletterAbo`, und der angemeldete Zustand zeigt die
+Ansprache als eigene Zeile: "Herr Dr. Nico Santangelo".
+
+**Kein Telefonfeld.** Der Screenshot zeigt eines, aber ein Newsletter braucht
+keine Telefonnummer. Ein Feld ohne Zweck ist eine Hürde.
+
+**5. Lieferadresse und Packstation.** Die Empfehlung vorweg: **die Art ist kein
+Etikett, sondern bestimmt die Felder.** Eine Packstation hat keine Strasse,
+sondern eine achtstellige Postnummer und eine Stationsnummer, und sie hat
+keinen Ansprechpartner. Deshalb steht die Wahl der Art **vor** den Feldern und
+lässt sich nachträglich nicht umschalten: das würde Eingetragenes wegwerfen.
+
+Gebaut:
+
+* "Lieferadresse hinzufügen" öffnet zuerst die Wahl zwischen **An eine
+  Adresse** und **An eine Packstation**, jede mit einem Satz, der sagt, wann
+  sie passt.
+* Danach die passenden Felder: Strasse und Ansprechpartner für die eine,
+  Postnummer und Packstationsnummer für die andere.
+* Beim Anlegen einer Packstation steht ein Hinweis mit den Grenzen: bis
+  31,5 kg und 60 × 35 × 35 cm, keine Speditionsware, keine Gefahrgüter, und
+  **keine Sendungen anderer Versender**. Der letzte Punkt ist für dieses Konto
+  der wichtigste: der Prototyp hat Marktplatzversender, und deren Sendungen
+  kommen dort nicht an.
+* In der Liste trägt eine Packstation eine eigene Marke, und ihre Anschrift
+  wird richtig geschrieben: "Postnummer 14827361, Packstation 128".
+
+Eine Packstation kann in diesem Entwurf nicht Standardadresse werden - das
+wäre der Fall, in dem ein Teil der Bestellungen stillschweigend nicht
+zustellbar wäre. Sag Bescheid, wenn das anders sein soll.
+
+Geprüft: 16 Seiten über fünf Fensterbreiten ohne Konsolenfehler und ohne
+seitlichen Überlauf; Anmeldeweg mit fehlendem Vornamen, Zeichenzähler, Haken
+und vollständiger Anmeldung bis zur Bestätigung; Adressanlage für beide Arten.

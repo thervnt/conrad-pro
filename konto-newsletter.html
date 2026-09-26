@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="konto.css?v=55fb6f1d">
-<link rel="stylesheet" href="konto-huelle.css?v=e95a9fb5">
+<link rel="stylesheet" href="konto-huelle.css?v=e1ccad8d">
 <script src="cart-seed.js?v=28a5fe8f"></script>
 </head>
 <body>
@@ -366,7 +366,7 @@
   pruefe();
 })();
 </script>
-<script src="konto-daten.js?v=f8d34677"></script>
+<script src="konto-daten.js?v=02365e24"></script>
 <script>
 (function () {
   var K = window.KONTO, E = K.esc, D = K.datum;
@@ -391,6 +391,53 @@
   var zugestimmt = false;
   var consentFehler = null;
   var mail = stand.mail || ich.mail;   /* vorbelegt, aber aenderbar */
+  /* Anrede und Name fuer die persoenliche Ansprache im Newsletter.
+     Vorbelegt aus dem Konto, aenderbar wie die Adresse. */
+  var teile = (stand.name || ich.name).split(' ');
+  var profil = {
+    anrede: stand.anrede || 'Herr',
+    titel: stand.titel || '',
+    vorname: stand.vorname || teile[0] || '',
+    nachname: stand.nachname || teile.slice(1).join(' ') || ''
+  };
+  var profilFehler = {};
+
+  var HAKEN = '<svg class="konto-feldbox-haken" viewBox="0 0 24 24" fill="none" stroke="currentColor" ' +
+    'stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+    '<polyline points="20 6 9 17 4 12"/></svg>';
+  var PFEIL = '<svg class="konto-feldbox-pfeil" viewBox="0 0 24 24" fill="none" stroke="currentColor" ' +
+    'stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+    '<polyline points="6 9 12 15 18 9"/></svg>';
+
+  function feldkasten(name, bez, pflicht, wert, max) {
+    var fehler = profilFehler[name];
+    var gueltig = !fehler && (pflicht ? String(wert).trim().length > 0 : String(wert).length > 0);
+    return '<div>' +
+      '<label class="konto-feldbox' + (fehler ? ' ist-fehler' : '') + '">' +
+        '<span class="konto-feldbox-label">' + E(bez) +
+          (pflicht ? '<span class="pflicht">*</span>' : ' (optional)') + '</span>' +
+        '<input type="text" data-profil="' + name + '" maxlength="' + max + '" ' +
+          'value="' + E(wert) + '"' + (fehler ? ' aria-invalid="true"' : '') + '>' +
+        (gueltig ? HAKEN : '') +
+      '</label>' +
+      '<span class="konto-feldbox-zaehler">' + String(wert).length + ' / ' + max + '</span>' +
+    '</div>';
+  }
+
+  function wahlkasten(name, bez, pflicht, wert, werte) {
+    return '<div>' +
+      '<label class="konto-feldbox">' +
+        '<span class="konto-feldbox-label">' + E(bez) +
+          (pflicht ? '<span class="pflicht">*</span>' : ' (optional)') + '</span>' +
+        '<select data-profil="' + name + '">' +
+          werte.map(function (w) {
+            return '<option value="' + E(w) + '"' + (w === wert ? ' selected' : '') + '>' +
+              (w ? E(w) : 'Bitte wählen') + '</option>';
+          }).join('') +
+        '</select>' + PFEIL +
+      '</label>' +
+    '</div>';
+  }
   var mailFehler = null;
   var tippMail = null;
   var abgemeldetAm = stand.abgemeldetAm || null;
@@ -429,6 +476,8 @@
         '<dl class="konto-fakten" style="margin-top:24px">' +
           '<div><dt>Status</dt><dd>' + K.pille('angemeldet') +
             '<br><span class="konto-mini">seit ' + D('2023-04-11') + '</span></dd></div>' +
+          '<div><dt>Anrede</dt><dd>' + E([profil.anrede, profil.titel, profil.vorname, profil.nachname]
+            .filter(Boolean).join(' ')) + '</dd></div>' +
           '<div><dt>Adresse</dt><dd>' + E(mail) + '</dd></div>' +
         '</dl>' +
         /* Die Abmeldung ist eine bewusste Handlung, kein Haken, den man im
@@ -476,16 +525,23 @@
       '<p class="konto-gewaehlt-note">Nettopreise, Neuheiten und Normenänderungen für ' +
         'Geschäftskunden, in vier Minuten gelesen. Bestellbestätigungen und Rechnungen ' +
         'sind von der Abmeldung nicht betroffen.</p>' +
-      '<dl class="konto-fakten" style="margin-top:24px">' +
-        '<div><dt>Status</dt><dd>' + K.pille('abgemeldet') +
-          (abgemeldetAm ? '<br><span class="konto-mini">am ' + D(abgemeldetAm) + '</span>' : '') +
-        '</dd></div>' +
-        (rueckmeldung
-          ? '<div><dt>Ihre Rückmeldung</dt><dd>' + E(grundText(rueckmeldung)) + '</dd></div>'
-          : '') +
-      '</dl>' +
+      (rueckmeldung
+        ? '<dl class="konto-fakten" style="margin-top:24px">' +
+          '<div><dt>Ihre Rückmeldung</dt><dd>' + E(grundText(rueckmeldung)) + '</dd></div></dl>'
+        : '') +
       '<div class="konto-section" style="margin-top:24px">' +
-        '<div class="konto-feld" style="margin-top:0">' +
+        /* Anrede und Name stehen vor der Adresse: sie gehoeren zur Person,
+           die Adresse ist der Weg dorthin. Fuer die Anrede im Newsletter
+           reichen sie; eine Telefonnummer braucht ein Newsletter nicht. */
+        '<div class="konto-feldreihe zwei">' +
+          wahlkasten('anrede', 'Anrede', true, profil.anrede, ['Herr', 'Frau', 'Divers']) +
+          wahlkasten('titel', 'Titel', false, profil.titel, ['', 'Dr.', 'Prof.', 'Prof. Dr.', 'Dipl.-Ing.']) +
+        '</div>' +
+        '<div class="konto-feldreihe zwei" style="margin-top:16px">' +
+          feldkasten('vorname', 'Vorname', true, profil.vorname, 35) +
+          feldkasten('nachname', 'Nachname', true, profil.nachname, 35) +
+        '</div>' +
+        '<div class="konto-feld" style="margin-top:16px">' +
           '<label class="konto-feld-label" for="nl-mail">Geschäftliche E-Mail-Adresse</label>' +
           '<div class="konto-eingabe-reihe">' +
             '<input type="email" id="nl-mail" data-mail autocomplete="email" inputmode="email" ' +
@@ -600,6 +656,21 @@
     }
 
     if (e.target.closest('[data-an]')) {
+      profilFehler = {};
+      if (!profil.vorname.trim()) profilFehler.vorname = 1;
+      if (!profil.nachname.trim()) profilFehler.nachname = 1;
+      if (profilFehler.vorname || profilFehler.nachname) {
+        consentFehler = 'Bitte ergänzen Sie ' +
+          (profilFehler.vorname && profilFehler.nachname ? 'Vor- und Nachnamen'
+            : (profilFehler.vorname ? 'den Vornamen' : 'den Nachnamen')) +
+          ', damit wir Sie im Newsletter ansprechen können.';
+        mailFehler = null;
+        tippMail = null;
+        zeichne();
+        var erstes = elEmpfang.querySelector('[data-profil][aria-invalid]');
+        if (erstes) erstes.focus();
+        return;
+      }
       mailFehler = window.NEWSLETTER ? window.NEWSLETTER.pruefen(mail) : null;
       if (mailFehler) {
         tippMail = null;
@@ -621,7 +692,8 @@
       tippMail = null;
       lage = 'wartet';
       umfrageOffen = false;
-      schreiben({ lage: 'wartet', mail: mail });
+      schreiben({ lage: 'wartet', mail: mail, anrede: profil.anrede, titel: profil.titel,
+        vorname: profil.vorname, nachname: profil.nachname });
       zeichne();
       K.melden('Bestätigungsmail an ' + mail + ' geschickt');
       return;
@@ -630,7 +702,8 @@
     if (e.target.closest('[data-bestaetigen]')) {
       lage = 'an';
       zugestimmt = false;
-      schreiben({ lage: 'an', mail: mail });
+      schreiben({ lage: 'an', mail: mail, anrede: profil.anrede, titel: profil.titel,
+        vorname: profil.vorname, nachname: profil.nachname });
       zeichne();
       K.melden('Anmeldung bestätigt');
       return;
@@ -665,6 +738,26 @@
      beim Verlassen des Feldes, und ein stehender Fehler geht beim Tippen weg,
      ohne dass das Feld neu gebaut wird. */
   document.addEventListener('input', function (e) {
+    var pf = e.target.closest('[data-profil]');
+    if (pf) {
+      profil[pf.dataset.profil] = pf.value;
+      var kasten = pf.closest('.konto-feldbox');
+      var zaehler = kasten.parentElement.querySelector('.konto-feldbox-zaehler');
+      if (zaehler) zaehler.textContent = pf.value.length + ' / ' + pf.getAttribute('maxlength');
+      /* Haken und Fehlerrahmen in Ort setzen: ein Neuaufbau bei jedem Zeichen
+         braeche Cursor und Rueckgaengig-Kette. */
+      if (profilFehler[pf.dataset.profil] && pf.value.trim()) {
+        delete profilFehler[pf.dataset.profil];
+        kasten.classList.remove('ist-fehler');
+        pf.removeAttribute('aria-invalid');
+        var note = elEmpfang.querySelector('.konto-einwilligung-note');
+        if (note && !consentFehler) note.textContent = '';
+      }
+      var hat = kasten.querySelector('.konto-feldbox-haken');
+      if (pf.value.trim() && !hat) kasten.insertAdjacentHTML('beforeend', HAKEN);
+      if (!pf.value.trim() && hat) hat.remove();
+      return;
+    }
     var feld = e.target.closest('[data-mail]');
     if (!feld) return;
     mail = feld.value;
@@ -689,6 +782,8 @@
 
   /* Der Haken nimmt seine Meldung sofort wieder weg, ohne Neuaufbau. */
   document.addEventListener('change', function (e) {
+    var pf = e.target.closest('select[data-profil]');
+    if (pf) { profil[pf.dataset.profil] = pf.value; return; }
     var kasten = e.target.closest('[data-consent]');
     if (!kasten) return;
     zugestimmt = kasten.checked;

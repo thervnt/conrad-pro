@@ -43,11 +43,23 @@
       funktion: 'Buchhaltung', seit: '2022-09-01' }
   ];
 
+  // "art" unterscheidet die Hausadresse von der Packstation. Sie ist kein
+  // Etikett, sondern bestimmt, welche Felder es gibt: eine Packstation hat
+  // keine Strasse, sondern eine Postnummer und eine Stationsnummer.
   var lieferadressen = [
-    { id: 'a1', label: 'Firmensitz', name: 'Elektro Brandhuber GmbH',
+    { id: 'a1', art: 'liefer', label: 'Firmensitz', name: 'Elektro Brandhuber GmbH',
       zeile: 'Wendelsteinstr. 9', ort: '85579 Neubiberg', standard: true },
-    { id: 'a2', label: 'Baustelle Halle 3', name: 'Elektro Brandhuber GmbH / Halle 3',
-      zeile: 'Gewerbering 24', ort: '85586 Poing', ansprech: 'S. Weller' }
+    { id: 'a2', art: 'liefer', label: 'Baustelle Halle 3', name: 'Elektro Brandhuber GmbH / Halle 3',
+      zeile: 'Gewerbering 24', ort: '85586 Poing', ansprech: 'S. Weller' },
+    { id: 'a3', art: 'packstation', label: 'Packstation Neubiberg', name: 'Nico Santangelo',
+      postnummer: '14827361', station: '128', ort: '85579 Neubiberg' }
+  ];
+  // Was eine Packstation nicht kann. Steht in den Daten, weil die Seite es
+  // sagen muss, bevor jemand sie als Standard waehlt.
+  var PACKSTATION_GRENZEN = [
+    'Bis 31,5 kg und 60 × 35 × 35 cm je Paket.',
+    'Keine Speditionsware und keine Gefahrgüter.',
+    'Sendungen anderer Versender gehen nicht an eine Packstation.'
   ];
 
   // --- Positionen ----------------------------------------------------------
@@ -282,6 +294,12 @@
   }
   function adresse(id) {
     return lieferadressen.filter(function (x) { return x.id === id; })[0] || lieferadressen[0];
+  }
+  // Eine Zeile, die beide Arten richtig schreibt.
+  function anschrift(a) {
+    return a.art === 'packstation'
+      ? 'Postnummer ' + a.postnummer + ', Packstation ' + a.station
+      : a.zeile;
   }
 
   // Ein Wort und eine Farbe je Zustand. Basis ist .bom-status aus der
@@ -562,10 +580,11 @@
   window.KONTO = {
     MWST: MWST, HEUTE: HEUTE,
     firma: firma, benutzer: benutzer, lieferadressen: lieferadressen,
+    PACKSTATION_GRENZEN: PACKSTATION_GRENZEN,
     bestellungen: bestellungen, rechnungen: rechnungen, ruecksendungen: ruecksendungen,
     merklisten: merklisten, stuecklisten: stuecklisten,
     euro: euro, datum: datum, tageBis: tageBis, esc: esc, netto: netto,
-    person: person, adresse: adresse, pille: pille, STATUS: STATUS,
+    person: person, adresse: adresse, anschrift: anschrift, pille: pille, STATUS: STATUS,
     nachbestellen: nachbestellen, melden: melden,
     bankLesen: bankLesen, bankSchreiben: bankSchreiben,
     stornierbar: stornierbar, stornieren: stornieren, HEUTE_ISO: HEUTE_ISO,

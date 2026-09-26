@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="konto.css?v=55fb6f1d">
-<link rel="stylesheet" href="konto-huelle.css?v=e95a9fb5">
+<link rel="stylesheet" href="konto-huelle.css?v=e1ccad8d">
 <script src="cart-seed.js?v=28a5fe8f"></script>
 </head>
 <body>
@@ -347,7 +347,7 @@
   pruefe();
 })();
 </script>
-<script src="konto-daten.js?v=f8d34677"></script>
+<script src="konto-daten.js?v=02365e24"></script>
 <script>
 (function () {
   var K = window.KONTO;
@@ -478,7 +478,7 @@
             '<span class="id-chip-num">' + E(s.sendung) + '</span></button></span> ' +
             '<a href="#" style="margin-left:8px">Bei ' + E(s.frachtfuehrer) + ' verfolgen</a></dd></div>'
           : '') +
-        '<div><dt>Lieferadresse</dt><dd>' + E(adr.label) + ', ' + E(adr.zeile) + ', ' + E(adr.ort) + '</dd></div>' +
+        '<div><dt>Lieferadresse</dt><dd>' + E(adr.label) + ', ' + E(K.anschrift(adr)) + ', ' + E(adr.ort) + '</dd></div>' +
       '</dl>' +
       (weg
         ? '<p class="konto-bemerkung" style="margin:16px 0 0">Diese Sendung wird nicht versendet und nicht berechnet.</p>'

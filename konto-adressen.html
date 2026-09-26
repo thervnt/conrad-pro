@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="konto.css?v=55fb6f1d">
-<link rel="stylesheet" href="konto-huelle.css?v=e95a9fb5">
+<link rel="stylesheet" href="konto-huelle.css?v=e1ccad8d">
 <script src="cart-seed.js?v=28a5fe8f"></script>
 </head>
 <body>
@@ -182,6 +182,7 @@
           <button type="button" class="konto-btn" data-neu>Lieferadresse hinzufügen</button>
         </div>
       </div>
+      <div data-neu-form></div>
       <!-- Beide Abschnitte gleich gebaut: eine Karte, der Titel darin. Vorher
            stand "Rechnungsadresse" in einer Karte und "Lieferadressen"
            darueber auf der Seite - zwei Geschwister, zwei Bauarten. -->
@@ -363,7 +364,7 @@
   pruefe();
 })();
 </script>
-<script src="konto-daten.js?v=f8d34677"></script>
+<script src="konto-daten.js?v=02365e24"></script>
 <script>
 (function () {
   var K = window.KONTO, E = K.esc;
@@ -384,11 +385,14 @@
   function ansicht(a) {
     return '<div class="konto-pos-body">' +
         '<p class="konto-pos-name">' + E(a.label) +
-          (a.standard ? ' <span class="bom-status ok" style="margin-left:8px">Standard</span>' : '') + '</p>' +
+          (a.standard ? ' <span class="bom-status ok" style="margin-left:8px">Standard</span>' : '') +
+          (a.art === 'packstation' ? ' <span class="bom-status warn" style="margin-left:8px">Packstation</span>' : '') + '</p>' +
         '<dl class="konto-fakten" style="margin-top:8px">' +
           '<div><dt>Empfänger</dt><dd>' + E(a.name) + '</dd></div>' +
-          '<div><dt>Anschrift</dt><dd>' + E(a.zeile) + ', ' + E(a.ort) + '</dd></div>' +
-          '<div><dt>Ansprechpartner</dt><dd>' + (a.ansprech ? E(a.ansprech) : 'nicht hinterlegt') + '</dd></div>' +
+          '<div><dt>Anschrift</dt><dd>' + E(K.anschrift(a)) + ', ' + E(a.ort) + '</dd></div>' +
+          (a.art === 'packstation'
+            ? ''
+            : '<div><dt>Ansprechpartner</dt><dd>' + (a.ansprech ? E(a.ansprech) : 'nicht hinterlegt') + '</dd></div>') +
         '</dl>' +
       '</div>' +
       '<div class="konto-pos-right">' +
@@ -410,21 +414,30 @@
      zeigt diese Handlungen deshalb gar nicht. */
   function bearbeiten(a) {
     return '<div class="konto-pos-body">' +
-        '<p class="konto-pos-name">' + E(a.label) +
-          (a.standard ? ' <span class="bom-status ok" style="margin-left:8px">Standard</span>' : '') + '</p>' +
+        (a.id === 'neu' ? '' :
+          '<p class="konto-pos-name">' + E(a.label) +
+            (a.standard ? ' <span class="bom-status ok" style="margin-left:8px">Standard</span>' : '') + '</p>') +
         '<div class="konto-felder">' +
           feld('Bezeichnung', a.label) +
           feld('Empfänger', a.name) +
-          feld('Straße und Nummer', a.zeile) +
+          (a.art === 'packstation'
+            ? feld('Postnummer', a.postnummer, '8-stellig') +
+              feld('Packstationsnummer', a.station, 'z. B. 128')
+            : feld('Straße und Nummer', a.zeile) +
+              feld('Ansprechpartner', a.ansprech, 'nicht hinterlegt')) +
           feld('PLZ und Ort', a.ort) +
-          feld('Ansprechpartner', a.ansprech, 'nicht hinterlegt') +
         '</div>' +
+        (a.art === 'packstation'
+          ? '<div class="konto-note" style="margin-top:16px">' +
+            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>' +
+            '<span>' + K.PACKSTATION_GRENZEN.join(' ') + '</span></div>'
+          : '') +
         '<div class="konto-zeilenleiste">' +
           '<span class="konto-zeilenleiste-links">' +
             '<button type="button" class="konto-btn primary" data-speichern="' + E(a.id) + '">Speichern</button>' +
             '<button type="button" class="konto-btn ghost" data-abbrechen>Abbrechen</button>' +
           '</span>' +
-          (a.standard ? '' :
+          (a.standard || a.id === 'neu' ? '' :
             '<span class="konto-zeilenleiste-rechts">' +
               '<button type="button" class="konto-btn ghost" data-standard="' + E(a.id) + '">Als Standard festlegen</button>' +
               '<button type="button" class="konto-btn danger" data-loeschen="' + E(a.id) + '">Adresse löschen</button>' +
@@ -433,7 +446,56 @@
       '</div>';
   }
 
+  /* Neu ist die Wahl der Art. Sie steht vor den Feldern, weil sie bestimmt,
+     welche es gibt: eine Packstation hat keine Strasse, sondern eine
+     Postnummer und eine Stationsnummer. Eine Art nachtraeglich umzuschalten
+     hiesse, eingegebene Felder wegzuwerfen. */
+  var neueArt = null;
+  var neuOffen = false;
+
+  function neuHtml() {
+    if (!neueArt) {
+      return '<div class="konto-card konto-section">' +
+        '<div class="konto-card-head"><h2 class="konto-card-title">Lieferadresse hinzufügen</h2></div>' +
+        '<fieldset class="konto-satz">' +
+          '<legend>Wohin soll geliefert werden?</legend>' +
+          '<label class="konto-wahl">' +
+            '<input type="radio" class="konto-check" name="neu-art" value="liefer">' +
+            '<span class="konto-wahl-body">' +
+              '<span class="konto-wahl-name">An eine Adresse</span>' +
+              '<span class="konto-wahl-note">Firmensitz, Filiale oder Baustelle. Mit Ansprechpartner, ' +
+              'damit die Sendung dort jemanden findet.</span>' +
+            '</span>' +
+          '</label>' +
+          '<label class="konto-wahl">' +
+            '<input type="radio" class="konto-check" name="neu-art" value="packstation">' +
+            '<span class="konto-wahl-body">' +
+              '<span class="konto-wahl-name">An eine Packstation</span>' +
+              '<span class="konto-wahl-note">Für kleine Sendungen, wenn tagsüber niemand da ist. ' +
+              'Braucht Ihre Postnummer und die Nummer der Station.</span>' +
+            '</span>' +
+          '</label>' +
+        '</fieldset>' +
+        '<div class="konto-zeilenleiste">' +
+          '<div class="konto-zeilenleiste-links">' +
+            '<button type="button" class="konto-btn ghost" data-neu-ab>Abbrechen</button>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+    }
+    var leer = { id: 'neu', art: neueArt, label: '', name: K.firma.name, zeile: '', ort: '',
+      postnummer: '', station: '', ansprech: '' };
+    return '<div class="konto-card konto-section">' +
+      '<div class="konto-card-head"><h2 class="konto-card-title">' +
+        (neueArt === 'packstation' ? 'Packstation hinzufügen' : 'Lieferadresse hinzufügen') +
+      '</h2></div>' +
+      '<div class="konto-pos ist-offen" style="padding:0;border:0">' + bearbeiten(leer) + '</div>' +
+    '</div>';
+  }
+
   function zeichne() {
+    var elNeu = document.querySelector('[data-neu-form]');
+    if (elNeu) elNeu.innerHTML = neuOffen ? neuHtml() : '';
     document.querySelector('[data-liefer]').innerHTML = K.lieferadressen.map(function (a) {
       var auf = a.id === offeneId;
       return '<div class="konto-pos' + (auf ? ' ist-offen' : '') + '">' +
@@ -451,12 +513,38 @@
       if (ersteEingabe) ersteEingabe.focus();
       return;
     }
-    if (e.target.closest('[data-abbrechen]')) { offeneId = null; zeichne(); return; }
-    if (e.target.closest('[data-speichern]')) { offeneId = null; zeichne(); K.melden('Adresse gespeichert'); return; }
+    if (e.target.closest('[data-abbrechen]')) { offeneId = null; neuOffen = false; neueArt = null; zeichne(); return; }
+    var sp = e.target.closest('[data-speichern]');
+    if (sp) {
+      var warNeu = sp.dataset.speichern === 'neu';
+      offeneId = null; neuOffen = false;
+      var art = neueArt; neueArt = null;
+      zeichne();
+      K.melden(warNeu
+        ? (art === 'packstation' ? 'Packstation gespeichert' : 'Lieferadresse gespeichert')
+        : 'Adresse gespeichert');
+      return;
+    }
     if (e.target.closest('[data-standard]')) { offeneId = null; zeichne(); K.melden('Als Standard-Lieferadresse gesetzt'); return; }
     if (e.target.closest('[data-loeschen]')) { offeneId = null; zeichne(); K.melden('Adresse gelöscht'); return; }
-    if (e.target.closest('[data-neu]')) K.melden('Neue Lieferadresse anlegen');
+    if (e.target.closest('[data-neu]')) {
+      neuOffen = true; neueArt = null; offeneId = null;
+      zeichne();
+      var erste = document.querySelector('[data-neu-form] input[name="neu-art"]');
+      if (erste) erste.focus();
+      return;
+    }
+    if (e.target.closest('[data-neu-ab]')) { neuOffen = false; neueArt = null; zeichne(); return; }
   });
+  document.addEventListener('change', function (e) {
+    var r = e.target.closest('input[name="neu-art"]');
+    if (!r) return;
+    neueArt = r.value;
+    zeichne();
+    var erste = document.querySelector('[data-neu-form] input[type="text"]');
+    if (erste) erste.focus();
+  });
+
   document.addEventListener('keydown', function (e) {
     if (e.key === 'Escape' && offeneId) { offeneId = null; zeichne(); }
   });
