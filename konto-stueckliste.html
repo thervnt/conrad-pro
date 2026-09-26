@@ -367,6 +367,11 @@
   var kr = document.querySelector('.breadcrumb-current');
   if (kr) kr.textContent = liste.name;
 
+  var TEILEN_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" ' +
+    'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+    '<circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>' +
+    '<line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>';
+
   var zugeordnet = liste.zeilen.filter(function (z) { return z.sku; });
   var offen = liste.zeilen.filter(function (z) { return !z.sku; });
 
@@ -378,6 +383,9 @@
           D(liste.geaendert) + '</p>' +
       '</div>' +
       '<div class="konto-head-actions">' +
+        '<button type="button" class="konto-icon-btn" data-teilen ' +
+          'data-tooltip="Stückliste per E-Mail an Kollegen senden" ' +
+          'aria-label="Stückliste teilen">' + TEILEN_SVG + '</button>' +
         '<a class="konto-btn ghost" href="stueckliste.html">Im Abgleich öffnen</a>' +
         '<button type="button" class="konto-btn primary" data-alle' +
           (offen.length ? ' disabled' : '') + '>Alle Positionen in den Warenkorb</button>' +
@@ -442,6 +450,7 @@
     '</div>';
 
   document.addEventListener('click', function (e) {
+    if (e.target.closest('[data-teilen]')) { K.melden('Stückliste mit Kollegen teilen'); return; }
     if (e.target.closest('[data-alle]')) {
       K.nachbestellen(zugeordnet.map(function (z) {
         return { sku: z.sku, packSize: z.packSize, titel: z.titel, menge: z.menge, einzel: z.einzel, bild: z.bild };

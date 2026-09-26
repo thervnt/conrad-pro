@@ -367,6 +367,11 @@
   }
   var listen = leer ? [] : K.stuecklisten;
 
+  var TEILEN_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" ' +
+    'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+    '<circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>' +
+    '<line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>';
+
   /* Der Navigationseintrag ist jetzt ein Ort, kein Werkzeug: hier liegen die
      gespeicherten Stuecklisten, das Hochladen ist eine Handlung auf dieser
      Seite. Vorher zeigte der Eintrag direkt auf das Werkzeug, das keine
@@ -391,6 +396,7 @@
 
   el.innerHTML = '<div class="konto-table-wrap"><table class="konto-table">' +
     '<thead><tr><th scope="col">Stückliste</th><th scope="col">Artikel</th>' +
+    '<th scope="col" class="konto-spalte-opt">Zuletzt geändert</th>' +
     '<th scope="col">Abgleich</th>' +
     '<th scope="col" class="konto-amount">Betrag netto</th>' +
     '<th scope="col"><span class="visually-hidden">Aktionen</span></th></tr></thead><tbody>' +
@@ -408,14 +414,32 @@
         /* Zeilen ohne Treffer zeigen den Platzhalter; benannt wird der erste
            Eintrag, dem ein Artikel zugeordnet werden konnte. */
         '<td>' + K.vorschau(l.zeilen, 'Noch kein Artikel zugeordnet') + '</td>' +
+        '<td class="konto-num konto-spalte-opt">' + D(l.geaendert) + '</td>' +
         '<td>' + abgleich + '</td>' +
         '<td class="konto-amount">' + EU(l.summe) + '</td>' +
-        /* Nur eine Handlung: bestellt wird aus der Liste heraus, nicht aus
-           der Uebersicht ueber Listen. "Details" steht wie ueberall rechts. */
+        /* Dieselben Handlungen wie in den Merklisten, in derselben
+           Reihenfolge: Symbol, zweite Handlung, ganz rechts "Details". */
         '<td><span class="konto-row-actions">' +
+          '<button type="button" class="konto-icon-btn" data-teilen="' + E(l.id) + '" ' +
+            'data-tooltip="Stückliste per E-Mail an Kollegen senden" ' +
+            'aria-label="Stückliste &quot;' + E(l.name) + '&quot; teilen">' + TEILEN_SVG + '</button>' +
+          '<button type="button" class="konto-btn ghost" data-wagen="' + E(l.id) + '"' +
+            (l.ohneTreffer ? ' disabled title="Erst die offenen Positionen prüfen"' : '') +
+            '>Alle in den Warenkorb</button>' +
           '<a class="konto-btn primary" href="' + E(ziel) + '">Details</a>' +
         '</span></td></tr>';
     }).join('') + '</tbody></table></div>';
+
+  el.addEventListener('click', function (e) {
+    var t = e.target.closest('[data-teilen]');
+    if (t) { K.melden('Stückliste mit Kollegen teilen'); return; }
+    var w = e.target.closest('[data-wagen]');
+    if (!w || w.disabled) return;
+    var l = listen.filter(function (x) { return x.id === w.dataset.wagen; })[0];
+    var treffer = l.zeilen.filter(function (z) { return z.sku; });
+    K.nachbestellen(treffer);
+    K.melden(treffer.length + ' Positionen aus "' + l.name + '" in den Einkaufswagen gelegt');
+  });
 
 })();
 </script>

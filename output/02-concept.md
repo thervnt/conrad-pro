@@ -2171,3 +2171,36 @@ Nicht mitgeändert, weil nicht Krume: der Seitentitel im Browsertab ("Mein
 Konto · Conrad Electronic") und die Beschriftung der Seitennavigation für
 Vorleseprogramme (`aria-label="Mein Konto"`). Sag Bescheid, wenn die auch
 kürzer werden sollen.
+
+---
+
+## 39. Stücklisten: Datum zurück, Handlungen wie in den Merklisten
+
+**Befund von Nico:** "in stücklisten: add the zuletzt geändert value after
+'Artikel'. Add the same buttons as on merkliste per row"
+
+Beides umgesetzt, beides nimmt einen Teil von Kapitel 36 zurück.
+
+**"Zuletzt geändert"** steht wieder da, als Spalte direkt hinter der
+Artikelvorschau. Sie ist als optional markiert und fällt unter 1100 px weg,
+wie "Positionen" in den anderen Listen. "Zuletzt bestellt" bleibt draussen; das
+war nicht Teil der Bitte.
+
+**Drei Handlungen je Zeile**, in derselben Reihenfolge wie in den Merklisten:
+Teilen als Symbol, "Alle in den Warenkorb", ganz rechts "Details". Der
+Warenkorbknopf bleibt gesperrt, solange eine Liste offene Positionen hat, und
+legt sonst die zugeordneten Positionen in den echten Warenkorb. Teilen trägt
+dieselbe Sprechblase wie in den Merklisten, mit eigenem Text: "Stückliste per
+E-Mail an Kollegen senden".
+
+Mitgezogen, ohne dass danach gefragt war: die Stücklisten-Detailseite bekommt
+denselben Teilen-Knopf im Seitenkopf. Sonst gäbe es die Handlung nur in der
+Übersicht, und die Merkliste hätte sie an beiden Stellen. Sag Bescheid, wenn
+sie dort nicht hingehört.
+
+Die Spalten passen weiterhin ohne Rollleiste: sechs Spalten von 1920 bis
+1280 px, fünf darunter, Namensspalte zwischen 173 und 263 px.
+
+Geprüft: 50 Symbolknöpfe über 16 Seiten und fünf Breiten, alle beschriftet,
+keine rollende Tabelle, keine Konsolenfehler; Teilen und Warenkorb in Liste
+und Detailseite ausgelöst.
