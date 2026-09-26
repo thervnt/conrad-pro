@@ -2449,3 +2449,36 @@ Minuten drin.
 Geprüft: kein Sprung zwischen den Zuständen (339 px durchgehend), Feld und
 Knopf bündig auf dem Rechner und gestapelt bei 375 px, kein seitlicher
 Überlauf, Fehler, Vorschlag und Absenden unverändert.
+
+---
+
+## 44. Einwilligungs-Kästchen
+
+**Befund von Nico:** "checkbox einbauen und input field"
+
+Das Kästchen ist drin, unter der Eingabereihe, wie in der Vorlage. Zwei
+Entscheidungen dabei:
+
+**Es ist Pflicht, nicht "(optional)".** Die Vorlage beschriftet ihres als
+optional. Ein Kästchen, das nichts erzwingt, ist eine Hürde ohne Gegenwert:
+es kostet einen Klick und ändert nichts. Wenn es dasteht, soll es etwas
+bedeuten. Ohne Haken wird nicht abgeschickt, das Kästchen bekommt einen roten
+Rahmen, der Fokus springt darauf, und unter ihm steht der Grund: "Bitte
+bestätigen Sie die Einwilligung, damit wir Ihnen den Newsletter schicken
+dürfen." Das Anhaken nimmt die Meldung sofort wieder weg.
+
+**Ein Platz für zwei Sätze.** In Ruhe steht unter dem Kästchen der Hinweis auf
+die Bestätigungsmail, im Fehlerfall die Meldung. Beide teilen sich denselben
+reservierten Platz, sonst wächst die Karte beim Umschalten. Gemessen: 397 px
+Kartenhöhe bei 1024 px und 517 px bei 375 px, jeweils in allen vier Zuständen
+gleich. Am Telefon braucht derselbe Satz drei Zeilen statt zwei, deshalb gibt
+es dort einen eigenen Schritt für die Höhe.
+
+Nichts ist vorausgewählt. Nach einem Server- oder Netzfehler bleiben **beide**
+Eingaben stehen, Adresse und Haken: wer es noch einmal versuchen soll, muss
+nicht noch einmal einwilligen.
+
+Nebenbei aufgeräumt: `var themen`, ein Zuhörer auf `name === 'thema'` und ein
+`themen = {}` im Zurücksetzen waren nach dem Streichen der Themen
+übriggeblieben. Das Zurücksetzen hat dadurch den Haken nicht mit
+zurückgesetzt.

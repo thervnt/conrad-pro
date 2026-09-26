@@ -205,7 +205,26 @@ a { color: var(--c-blue); }
 @media (prefers-reduced-motion: reduce) { .spinner { animation-duration: 2.4s; } }
 
 /* --- Einwilligung --------------------------------------------------------- */
-.consent { margin-top: 12px; font-size: 13px; color: var(--c-text-secondary); line-height: 1.5; }
+/* Ein Kaestchen, das nichts erzwingt, ist eine Huerde ohne Gegenwert. Dieses
+   hier ist Pflicht und hat eine eigene Meldung. Nie vorausgewaehlt. */
+.einwilligung {
+  display: flex; gap: 12px; align-items: flex-start;
+  margin-top: 16px; cursor: pointer;
+  font-size: 13px; color: var(--c-text-secondary); line-height: 1.5;
+}
+.einwilligung input {
+  width: 18px; height: 18px; margin: 1px 0 0; flex-shrink: 0;
+  accent-color: var(--c-blue); cursor: pointer;
+}
+.einwilligung input[aria-invalid="true"] { outline: 2px solid var(--c-danger); outline-offset: 2px; }
+/* Ein Platz fuer beides: in Ruhe steht der Hinweis auf die Bestaetigungsmail
+   darin, im Fehlerfall die Meldung. Dadurch springt nichts. */
+.consent { min-height: 44px; margin-top: 10px; font-size: 13px; color: var(--c-text-secondary); line-height: 1.5; }
+/* Am Telefon braucht derselbe Satz drei Zeilen statt zwei. Ohne diesen
+   Schritt waechst die Karte um 14px, sobald der Fehler gegen den Hinweis
+   getauscht wird. */
+@media (max-width: 559px) { .consent { min-height: 62px; } }
+.consent .feldfehler { font-size: 13px; }
 
 /* --- Ergebniszustaende ---------------------------------------------------- */
 .ergebnis { display: flex; gap: 14px; }
@@ -600,9 +619,10 @@ a { color: var(--c-blue); }
     var zustand = 'ruhe';      /* ruhe | sendet | ok | bekannt | fehler */
     var fehlerArt = null;      /* server | netz */
     var wert = '';
+    var zugestimmt = false;
+    var consentFehler = null;
     var feldfehler = null;
     var tipp = null;
-    var themen = {};
 
     function formularHtml() {
       var knopf =
@@ -639,10 +659,21 @@ a { color: var(--c-blue); }
         '</div>';
 
       var consent =
-        '<p class="consent">Mit der Anmeldung willigen Sie ein, den Conrad Newsletter per ' +
-        'E-Mail zu erhalten. Wir schicken Ihnen zuerst eine Bestätigungsmail; erst nach ' +
-        'Ihrem Klick darin geht es los. Widerruf jederzeit, etwa über den Link in jeder ' +
-        'Ausgabe. <a href="#">Datenschutzerklärung</a></p>';
+        '<label class="einwilligung">' +
+          '<input type="checkbox" name="consent"' + (zugestimmt ? ' checked' : '') +
+            (consentFehler ? ' aria-invalid="true" aria-describedby="' + id + '-consent"' : '') +
+            (zustand === 'sendet' ? ' disabled' : '') + '>' +
+          '<span>Ich bin damit einverstanden, den Conrad Newsletter per E-Mail zu ' +
+          'erhalten. Ich kann die Einwilligung jederzeit widerrufen, etwa über den Link ' +
+          'in jeder Ausgabe. <a href="#">Datenschutzerklärung</a></span>' +
+        '</label>' +
+        '<div class="consent" role="status" aria-live="polite">' +
+          (consentFehler
+            ? '<p class="feldfehler" id="' + id + '-consent">' + svg(ZEICHEN_WARN, 14) +
+              '<span>' + E(consentFehler) + '</span></p>'
+            : 'Wir schicken Ihnen zuerst eine Bestätigungsmail; erst nach Ihrem Klick ' +
+              'darin geht es los.') +
+        '</div>';
 
       /* Der Fehlerbalken steht unter dem Knopf und nimmt die Eingabe nicht weg:
          wer es noch einmal versuchen soll, muss nicht neu tippen. */
@@ -711,6 +742,10 @@ a { color: var(--c-blue); }
           try { f.setSelectionRange(f.value.length, f.value.length); } catch (e) { /* egal */ }
         }
       }
+      if (fokus === 'consent') {
+        var c = wurzel.querySelector('input[name="consent"]');
+        if (c) c.focus();
+      }
       if (fokus === 'ergebnis') {
         var e = wurzel.querySelector('[data-ergebnis]');
         if (e) e.focus();
@@ -738,7 +773,18 @@ a { color: var(--c-blue); }
     });
 
     wurzel.addEventListener('change', function (e) {
-      if (e.target.name === 'thema') themen[e.target.value] = e.target.checked;
+      if (e.target.name === 'consent') {
+        zugestimmt = e.target.checked;
+        if (zugestimmt && consentFehler) {
+          consentFehler = null;
+          e.target.removeAttribute('aria-invalid');
+          e.target.removeAttribute('aria-describedby');
+          var cp = wurzel.querySelector('.consent');
+          if (cp) cp.textContent = 'Wir schicken Ihnen zuerst eine Bestätigungsmail; ' +
+            'erst nach Ihrem Klick darin geht es los.';
+        }
+        return;
+      }
     });
 
     /* Geprueft wird beim Verlassen des Feldes, nicht bei jedem Zeichen:
@@ -778,7 +824,15 @@ a { color: var(--c-blue); }
       e.preventDefault();
       if (zustand === 'sendet') return;
       feldfehler = pruefen(wert);
-      if (feldfehler) { tipp = null; zeichne('feld'); return; }
+      if (feldfehler) { tipp = null; consentFehler = null; zeichne('feld'); return; }
+      if (!zugestimmt) {
+        consentFehler = 'Bitte bestätigen Sie die Einwilligung, damit wir Ihnen den ' +
+          'Newsletter schicken dürfen.';
+        tipp = null;
+        zeichne('consent');
+        return;
+      }
+      consentFehler = null;
       tipp = vorschlag(wert);
       zustand = 'sendet';
       fehlerArt = null;
@@ -795,7 +849,8 @@ a { color: var(--c-blue); }
 
     zeichne();
     return { zuruecksetzen: function () {
-      zustand = 'ruhe'; wert = ''; feldfehler = null; tipp = null; fehlerArt = null; themen = {};
+      zustand = 'ruhe'; wert = ''; feldfehler = null; tipp = null; fehlerArt = null;
+      zugestimmt = false; consentFehler = null;
       zeichne();
     } };
   }
