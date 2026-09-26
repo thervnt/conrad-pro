@@ -2156,3 +2156,18 @@ Kollegen senden".
 
 Geprüft: 30 Symbolknöpfe über 16 Seiten und fünf Breiten, keiner ohne
 `aria-label`, keiner ohne Sprechblase, keiner mehr mit `title`.
+
+---
+
+## 38. Brotkrume: "Konto" statt "Mein Konto"
+
+**Befund von Nico:** "in the breadcrumb use wordingwise only 'Konto'"
+
+Geändert auf allen 16 Seiten mit Kontobereich, einschliesslich des
+Stücklisten-Abgleichs. Die Krume lautet damit durchgehend
+`Homepage › Konto › …`, auf der Übersichtsseite endet sie bei `Konto`.
+
+Nicht mitgeändert, weil nicht Krume: der Seitentitel im Browsertab ("Mein
+Konto · Conrad Electronic") und die Beschriftung der Seitennavigation für
+Vorleseprogramme (`aria-label="Mein Konto"`). Sag Bescheid, wenn die auch
+kürzer werden sollen.
