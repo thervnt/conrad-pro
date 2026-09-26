@@ -3066,3 +3066,46 @@ aus der Reihe fiel. Er nimmt jetzt nur Raum, wenn er etwas zu sagen hat.
 Erscheint eine Meldung, rücken Kästchen und Hinweis darunter um eine Zeile
 nach - unter dem Feld, das gerade korrigiert wird, und ohne dass darüber etwas
 springt. Das ist der Preis für den gleichen Takt, und er ist ihn wert.
+
+## 60. Die Zahlen in der Navigation: immer da, und jede zählt ihren Inhalt
+
+Die vorige Fassung zeigte eine Zahl nur, wenn etwas zu tun war. Zwei Einträge
+trugen eine Marke, die übrigen nicht, und keiner konnte am Muster ablesen,
+warum. Eine Marke, die mal erscheint und mal verschwindet, stellt bei jedem
+Besuch dieselbe Frage: ist hier gerade nichts, oder zählt dieser Eintrag
+grundsätzlich nicht mit? Das Erscheinen war selbst zur Information geworden,
+und zwar zur unlesbaren.
+
+Jetzt steht an jedem Eintrag, der etwas zu zählen hat, dauerhaft eine Zahl.
+Auch die Null. Damit ist die Marke keine Meldung mehr, sondern ein Messwert:
+sie sagt nicht "hier ist etwas passiert", sondern "so viel liegt hier".
+
+Was gezählt wird, richtet sich danach, was die Seite dahinter zeigt:
+
+| Eintrag | Zahl | Was sie zählt |
+| --- | --- | --- |
+| Bestellungen | 3 | was noch nicht zugestellt ist (in Bearbeitung, versendet, Teilversand) |
+| Stücklisten | 3 | wie viele Listen gespeichert sind |
+| Merklisten | 3 | wie viele Listen es gibt |
+| Rechnungen & Gutschriften | 3 | was noch offen ist (offen und überfällig) |
+| Rücksendungen | 1 | was noch geprüft wird |
+
+Die Zahl lässt sich auf jeder Zielseite nachzählen: die Stücklistenseite nennt
+"3 gespeicherte Listen", die Rechnungsliste "3 offene Rechnungen", die
+Rücksendungen "1 in Prüfung". Wer klickt, findet genau die Menge vor, die er
+gesehen hat - das ist der Prüfstein, an dem die vorige Fassung gescheitert war.
+
+Bei Listen ist der Inhalt die ganze Menge, bei Vorgängen der offene Teil. Das
+ist kein Bruch, sondern folgt der Sache: eine Merkliste ist ein Behälter, eine
+Rechnung ein Vorgang mit Ende. Der Titel jeder Marke sagt es aus, wenn man mit
+der Maus darauf geht, und Screenreader lesen dasselbe über `aria-label`:
+"3 gespeicherte Stücklisten", "1 Rücksendung wird geprüft".
+
+Übersicht, Unternehmensdaten, Adressen, Zahlungsart, Conrad PRO, Profil und
+Newsletter tragen keine Marke. Dort gibt es nichts zu zählen, und eine Null
+ohne Gegenstand wäre wieder eine Frage statt einer Antwort.
+
+Die Marke bleibt optisch ruhig: grauer Grund, graue Schrift, kein Rot. Rot
+wäre ein Alarm, und drei gespeicherte Merklisten sind kein Alarm. Auf der
+aktiven Seite wechselt sie auf weißen Grund und blaue Schrift, damit sie sich
+vom farbigen Balken abhebt.
