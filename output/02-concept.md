@@ -2944,3 +2944,22 @@ Beim Umbau sind mir die Zustandsvariablen der Seite aus dem Skript gefallen
 (`rueckmeldung`, `umfrageOffen`, die Gründe der Umfrage) - eine Ersetzung, die
 mehr erwischt hat als gemeint. Die Karte blieb leer. Aus der letzten Fassung
 zurückgeholt und geprüft.
+
+---
+
+## 57. Felder untereinander, eine Breite
+
+**Befund von Nico:** "untereinander alignen und breite anpassen"
+
+Anrede, Titel, Vorname und Nachname standen paarweise nebeneinander. Das sah
+aus wie zwei Formulare; ein Formular hat eine Kante, an der das Auge
+hinunterläuft.
+
+Jetzt alle fünf Felder untereinander und gleich breit: **620 px**, dasselbe
+Mass wie die Adresszeile mit ihrem Knopf. Gemessen bei 1280 px Fenster:
+fünf Felder, eine linke Kante, eine Breite. In schmalen Fenstern füllen sie
+den Platz und bleiben untereinander.
+
+620 px, weil die Adresszeile dieses Mass braucht: die Adresse selbst rund
+410 px und der Knopf knapp 200 px. Alles andere daran auszurichten kostet
+nichts und erspart eine zweite Kante.

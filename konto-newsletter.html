@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="konto.css?v=55fb6f1d">
-<link rel="stylesheet" href="konto-huelle.css?v=851dafea">
+<link rel="stylesheet" href="konto-huelle.css?v=c0a5216b">
 <script src="cart-seed.js?v=28a5fe8f"></script>
 </head>
 <body>
@@ -529,15 +529,13 @@
         /* Anrede und Name stehen vor der Adresse: sie gehoeren zur Person,
            die Adresse ist der Weg dorthin. Fuer die Anrede im Newsletter
            reichen sie; eine Telefonnummer braucht ein Newsletter nicht. */
-        '<div class="konto-feldreihe zwei">' +
+        '<div class="konto-feldreihe">' +
           wahlkasten('anrede', 'Anrede', true, profil.anrede, ['Herr', 'Frau', 'Divers']) +
           wahlkasten('titel', 'Titel', false, profil.titel, ['', 'Dr.', 'Prof.', 'Prof. Dr.', 'Dipl.-Ing.']) +
-        '</div>' +
-        '<div class="konto-feldreihe zwei" style="margin-top:16px">' +
           feldkasten('vorname', 'Vorname', true, profil.vorname, 35) +
           feldkasten('nachname', 'Nachname', true, profil.nachname, 35) +
         '</div>' +
-        '<div class="konto-feldbox" style="margin-top:16px">' +
+        '<div class="konto-feldbox" style="margin-top:16px;max-width:620px">' +
           '<label class="konto-feldbox-label" for="nl-mail">Geschäftliche E-Mail-Adresse' +
             '<span class="pflicht">*</span></label>' +
           '<div class="konto-eingabe-reihe">' +

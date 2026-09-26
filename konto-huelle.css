@@ -576,9 +576,11 @@
   color: var(--c-text-tertiary);
   font-variant-numeric: tabular-nums;
 }
-/* Zeile aus Feldern: zwei nebeneinander, darunter gestapelt. */
-.konto-feldreihe { display: grid; gap: 16px; }
-@media (min-width: 640px) { .konto-feldreihe.zwei { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+/* Alle Felder untereinander und gleich breit. Nebeneinander sahen sie aus
+   wie zwei Formulare; ein Formular hat eine Kante, an der das Auge
+   hinunterlaeuft. Das Mass ist dasselbe wie das der Adresszeile mit ihrem
+   Knopf, damit keine Zeile aus der Flucht faellt. */
+.konto-feldreihe { display: grid; gap: 16px; max-width: 620px; }
 
 /* --- Eingabereihe: Feld und Knopf als eine Einheit ------------------------ */
 /* Gleiche Bauart wie im Anmeldeband ueber dem Seitenfuss. Unter 560px stapeln
