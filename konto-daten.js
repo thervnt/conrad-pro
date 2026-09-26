@@ -305,9 +305,11 @@
     wartet:       { text: 'Bestätigung fehlt', klasse: 'warn' },
     abgemeldet:   { text: 'Abgemeldet',    klasse: 'err' }
   };
-  function pille(schluessel) {
+  function pille(schluessel, titel) {
     var s = STATUS[schluessel] || { text: schluessel, klasse: 'warn' };
-    return '<span class="bom-status ' + s.klasse + '">' + esc(s.text) + '</span>';
+    return '<span class="bom-status ' + s.klasse + '"' +
+      (titel ? ' title="' + esc(titel) + '" aria-label="' + esc(s.text + ', ' + titel) + '"' : '') +
+      '>' + esc(s.text) + '</span>';
   }
 
   // --- Nachbestellen -------------------------------------------------------

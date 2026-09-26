@@ -641,6 +641,10 @@
   margin: 0;
   font-size: 14px;
 }
+/* Eine Seite, die nur einen Datensatz traegt, darf ihn auch untereinander
+   zeigen: dort ist der Datensatz der Gegenstand und nicht eine Beigabe
+   neben anderem. */
+.konto-fakten.untereinander { column-width: auto; column-count: 1; }
 .konto-fakten > div {
   break-inside: avoid;
   display: flex;

@@ -2760,3 +2760,52 @@ Der Kartentitel heisst jetzt **"Conrad PRO Mitgliedschaft"** statt nur
 "Mitgliedschaft". Geschrieben in der Schreibweise, die der Prototyp überall
 sonst benutzt: Navigation, Brotkrume, Seitenüberschrift und Kopfleiste sagen
 "Conrad PRO" mit grossem PRO.
+
+---
+
+## 53. Sieben Punkte
+
+**1. "Mitglied seit" hängt am Status.** Die Pille kann jetzt einen Tooltip
+tragen (`K.pille(schluessel, titel)`), und das Eintrittsdatum steht darin
+statt als eigene Zeile darunter. Für Vorleseprogramme trägt sie zusätzlich ein
+`aria-label` mit beidem: "Aktiv, Mitglied seit 11.04.2023".
+
+**2. "um ein weiteres Jahr" entfällt.** Das Datum genügt; wie lange
+verlängert wird, sagt der Satz in der Handlungsleiste.
+
+**3. "Die Kündigung wirkt zum … Bis dahin gelten alle Vorteile weiter."
+entfällt.** Die Leiste trägt nur noch die Handlung und den einen Satz, der
+wirklich gebraucht wird.
+
+**4. Der Umbruch, nach dem Nico gefragt hat.** Der rechtliche Satz stand als
+eigener Absatz **unter** der Karte, mit einer eigenen Maximalbreite von
+760 px. Er brach dadurch früher um als alles andere auf der Seite und sah aus
+wie ein abgerissenes Stück. Er gehört zur Mitgliedschaft, also steht er jetzt
+in ihrer Karte, links neben der Kündigung, auf die er sich bezieht.
+
+**5. Unternehmensdaten stehen untereinander.** `.konto-fakten.untereinander`
+schaltet den Spaltensatz ab. Auf einer Seite, die nur einen Datensatz trägt,
+ist er der Gegenstand und keine Beigabe neben anderem; dort liest sich eine
+Spalte besser als zwei.
+
+**6. Die Warenkorbknöpfe der Stücklisten sind nicht mehr gesperrt.** Ein
+gesperrter Knopf ohne Ausweg ist eine Sackgasse. Wer eine Liste mit offenen
+Zeilen bestellt, bekommt jetzt, was zugeordnet ist, und erfährt genau, was
+bleibt:
+
+* Der Knopf trägt einen Tooltip: "2 offene Positionen bleiben in der Liste".
+* Die Kurzmeldung nennt beides: "2 von 4 Positionen in den Einkaufswagen
+  gelegt. 2 offene Positionen bleiben in der Liste."
+* Der Hinweis auf der Listenseite sagt nicht mehr "lässt sich nicht
+  vollständig bestellen", sondern "Die übrigen lassen sich trotzdem bestellen;
+  die offenen bleiben so lange in der Liste stehen."
+
+Gilt auf der Übersicht und auf der Listenseite gleichermassen.
+
+**7. "Stückliste hochladen" ist auch aus der Übersicht raus.** Der Knopf steht
+jetzt nur noch dort, wo Stücklisten zu Hause sind.
+
+Geprüft: 16 Seiten über vier Fensterbreiten, kein gesperrter Warenkorbknopf
+mehr, keine rollende Tabelle, keine Konsolenfehler; Bestellen aus einer Liste
+mit offenen Zeilen einmal von der Übersicht und einmal von der Listenseite
+ausgelöst.

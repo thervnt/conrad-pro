@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="konto.css?v=55fb6f1d">
-<link rel="stylesheet" href="konto-huelle.css?v=a115d528">
+<link rel="stylesheet" href="konto-huelle.css?v=e95a9fb5">
 <script src="cart-seed.js?v=28a5fe8f"></script>
 </head>
 <body>
@@ -194,11 +194,6 @@
         </div>
       </div>
 
-      <p class="konto-kpi-note" style="margin-top:16px;max-width:760px">
-        Die Mitgliedschaft verlängert sich jeweils um ein Jahr, wenn sie nicht bis zum
-        Verlängerungstag gekündigt wird. Näheres in den
-        <a href="#">Teilnahmebedingungen</a>.
-      </p>
     </div>
   </div>
 </main>
@@ -368,7 +363,7 @@
   pruefe();
 })();
 </script>
-<script src="konto-daten.js?v=5ed488d6"></script>
+<script src="konto-daten.js?v=f8d34677"></script>
 <script>
 (function () {
   var K = window.KONTO, E = K.esc, EU = K.euro, D = K.datum;
@@ -410,20 +405,23 @@
     '<p class="konto-gewaehlt-note">Ohne Mindestbestellwert, mit PRO-Vorteilspreisen und ' +
       '36 Monaten Garantie.</p>' +
     '<dl class="konto-fakten" style="margin-top:24px">' +
-      '<div><dt>Status</dt><dd>' + K.pille('aktiv') +
-        '<br><span class="konto-mini">Mitglied seit ' + D(pro.seit) + '</span></dd></div>' +
+      '<div><dt>Status</dt><dd>' + K.pille('aktiv', 'Mitglied seit ' + D(pro.seit)) + '</dd></div>' +
       '<div><dt>Jahresbeitrag</dt><dd>' + EU(pro.beitrag) + ' netto<br>' +
         '<span class="konto-mini">per Rechnung</span></dd></div>' +
-      '<div><dt>Verlängert sich am</dt><dd>' + D(pro.verlaengert) +
-        '<br><span class="konto-mini">um ein weiteres Jahr</span></dd></div>' +
+      '<div><dt>Verlängert sich am</dt><dd>' + D(pro.verlaengert) + '</dd></div>' +
       '<div><dt>Belege</dt><dd><a class="konto-mini" href="konto-rechnungen.html?suche=PRO">Beitragsrechnungen anzeigen</a></dd></div>' +
     '</dl>' +
     /* Kuendigen steht am Ende der Karte, zu der es gehoert, nicht oben rechts
        als erste Handlung der Seite. Und es traegt die Warnfarbe, weil es
        etwas beendet. Genau wie das Abbestellen auf der Newsletter-Seite. */
+    /* 4. Der rechtliche Satz stand als eigener Absatz unter der Karte und sah
+          dadurch aus wie ein abgerissenes Stueck Seite. Er gehoert zur
+          Mitgliedschaft, also steht er in ihrer Karte, links neben der
+          Handlung, auf die er sich bezieht. */
     '<div class="konto-zeilenleiste">' +
-      '<p class="konto-bemerkung">Die Kündigung wirkt zum ' + D(pro.verlaengert) +
-        '. Bis dahin gelten alle Vorteile weiter.</p>' +
+      '<p class="konto-bemerkung">Die Mitgliedschaft verlängert sich jeweils um ein Jahr, ' +
+        'wenn sie nicht bis zum Verlängerungstag gekündigt wird. ' +
+        '<a href="#">Teilnahmebedingungen</a></p>' +
       '<div class="konto-zeilenleiste-rechts">' +
         '<button type="button" class="konto-btn danger" data-kuendigen>Mitgliedschaft kündigen</button>' +
       '</div>' +

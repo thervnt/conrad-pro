@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="konto.css?v=55fb6f1d">
-<link rel="stylesheet" href="konto-huelle.css?v=a115d528">
+<link rel="stylesheet" href="konto-huelle.css?v=e95a9fb5">
 <script src="cart-seed.js?v=28a5fe8f"></script>
 </head>
 <body>
@@ -352,7 +352,7 @@
   pruefe();
 })();
 </script>
-<script src="konto-daten.js?v=5ed488d6"></script>
+<script src="konto-daten.js?v=f8d34677"></script>
 <script>
 (function () {
   var K = window.KONTO, E = K.esc, EU = K.euro, D = K.datum;
@@ -424,7 +424,9 @@
             'data-tooltip="Stückliste per E-Mail an Kollegen senden" ' +
             'aria-label="Stückliste &quot;' + E(l.name) + '&quot; teilen">' + TEILEN_SVG + '</button>' +
           '<button type="button" class="konto-btn" data-wagen="' + E(l.id) + '"' +
-            (l.ohneTreffer ? ' disabled title="Erst die offenen Positionen prüfen"' : '') +
+            (l.ohneTreffer
+              ? ' title="' + l.ohneTreffer + ' offene Positionen bleiben in der Liste"'
+              : '') +
             '>Alle in den Warenkorb</button>' +
           '<a class="konto-btn primary" href="' + E(ziel) + '">Details</a>' +
         '</span></td></tr>';
@@ -434,11 +436,14 @@
     var t = e.target.closest('[data-teilen]');
     if (t) { K.melden('Stückliste mit Kollegen teilen'); return; }
     var w = e.target.closest('[data-wagen]');
-    if (!w || w.disabled) return;
+    if (!w) return;
     var l = listen.filter(function (x) { return x.id === w.dataset.wagen; })[0];
     var treffer = l.zeilen.filter(function (z) { return z.sku; });
     K.nachbestellen(treffer);
-    K.melden(treffer.length + ' Positionen aus "' + l.name + '" in den Einkaufswagen gelegt');
+    K.melden(treffer.length + ' von ' + l.positionen + ' Positionen in den Einkaufswagen gelegt' +
+      (l.ohneTreffer
+        ? '. ' + l.ohneTreffer + ' offene Positionen bleiben in der Liste.'
+        : ''));
   });
 
 })();
