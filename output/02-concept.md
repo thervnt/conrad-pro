@@ -2708,3 +2708,44 @@ jemand diese Seite aufmacht.
 
 Geprüft: 16 Seiten über vier Fensterbreiten, keine Konsolenfehler, kein
 seitlicher Überlauf, keine Marke ohne Beschriftung.
+
+---
+
+## 51. Nutzen in die Überschrift, Zustand in die Pille
+
+**Befund von Nico:** "headline is status based. Replace it with something more
+value creating. place the status badge with info in the content"
+
+Dieselbe Regel wie auf der Newsletter-Seite, jetzt auch bei Conrad PRO - und
+konsequent in allen Zuständen beider Seiten.
+
+**Conrad PRO.** "Ihre Mitgliedschaft ist aktiv" war eine Zustandsmeldung an
+der auffälligsten Stelle. Jetzt steht dort, was die Mitgliedschaft bringt:
+**"Versandkostenfrei bestellen und dauerhaft günstiger einkaufen"**, darunter
+"Ohne Mindestbestellwert, mit PRO-Vorteilspreisen und 36 Monaten Garantie."
+Dass sie aktiv ist, ist eine Angabe unter anderen und steht als erste Zeile
+der Liste: **Status · [Aktiv] · Mitglied seit 11.04.2023**.
+
+**Newsletter.** Zwei der drei Zustände trugen ihn ebenfalls als Überschrift
+("Sie erhalten den Conrad Newsletter", "Ihre Bestätigung fehlt noch"). Alle
+drei sagen jetzt dasselbe Versprechen - "Alle zwei Wochen wissen, was neu und
+günstiger ist" - und unterscheiden sich in der Pille:
+
+| Lage | Pille | Farbe |
+|---|---|---|
+| angemeldet | Angemeldet | grün |
+| Bestätigung ausstehend | Bestätigung fehlt | gelb |
+| abgemeldet | Abgemeldet | rot |
+
+Eine Seite, ein Versprechen; der Zustand ist eine Angabe darin, keine
+Schlagzeile.
+
+**Nebenbei sauber gemacht:** die PRO-Seite baute ihre Pille bisher mit
+`pille('ausgeglichen').replace('Ausgeglichen', 'Aktiv')` - ein Zustand, der
+den Namen eines fremden trug und beim nächsten Wortwechsel gebrochen wäre. Die
+Zustandstabelle kennt jetzt `aktiv`, `angemeldet`, `wartet` und `abgemeldet`
+als eigene Einträge.
+
+Geprüft: alle drei Newsletter-Zustände durchgeklickt, PRO mit Pille und
+Kündigungsleiste, 16 Seiten über vier Fensterbreiten ohne Konsolenfehler und
+ohne seitlichen Überlauf.

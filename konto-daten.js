@@ -296,7 +296,14 @@
     ueberfaellig: { text: 'Überfällig',    klasse: 'err' },
     ausgeglichen: { text: 'Ausgeglichen',  klasse: 'ok' },
     erstattet:    { text: 'Erstattet',     klasse: 'ok' },
-    pruefung:     { text: 'In Prüfung',    klasse: 'warn' }
+    pruefung:     { text: 'In Prüfung',    klasse: 'warn' },
+    // Zustaende von Abos. Vorher half sich die PRO-Seite mit
+    // pille('ausgeglichen').replace('Ausgeglichen', 'Aktiv') - ein Zustand,
+    // der einen fremden Namen trug.
+    aktiv:        { text: 'Aktiv',         klasse: 'ok' },
+    angemeldet:   { text: 'Angemeldet',    klasse: 'ok' },
+    wartet:       { text: 'Bestätigung fehlt', klasse: 'warn' },
+    abgemeldet:   { text: 'Abgemeldet',    klasse: 'err' }
   };
   function pille(schluessel) {
     var s = STATUS[schluessel] || { text: schluessel, klasse: 'warn' };

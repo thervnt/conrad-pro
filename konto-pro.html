@@ -368,7 +368,7 @@
   pruefe();
 })();
 </script>
-<script src="konto-daten.js?v=d4bf3a36"></script>
+<script src="konto-daten.js?v=5ed488d6"></script>
 <script>
 (function () {
   var K = window.KONTO, E = K.esc, EU = K.euro, D = K.datum;
@@ -404,12 +404,18 @@
       '<div class="konto-kpi-note">gegenüber dem Listenpreis</div></div>';
 
   document.querySelector('[data-mitgliedschaft]').innerHTML =
-    '<p class="konto-gewaehlt">Ihre Mitgliedschaft ist aktiv</p>' +
-    '<p class="konto-gewaehlt-note">Seit ' + D(pro.seit) + '. Sie verlängert sich am ' +
-      D(pro.verlaengert) + ' um ein weiteres Jahr.</p>' +
+    /* Die Ueberschrift nennt, was die Mitgliedschaft bringt. Dass sie aktiv
+       ist, ist eine Angabe unter anderen und steht als Pille in der Liste. */
+    '<p class="konto-gewaehlt">Versandkostenfrei bestellen und dauerhaft günstiger einkaufen</p>' +
+    '<p class="konto-gewaehlt-note">Ohne Mindestbestellwert, mit PRO-Vorteilspreisen und ' +
+      '36 Monaten Garantie.</p>' +
     '<dl class="konto-fakten" style="margin-top:24px">' +
-      '<div><dt>Jahresbeitrag</dt><dd>' + EU(pro.beitrag) + ' netto<br>per Rechnung</dd></div>' +
-      '<div><dt>Verlängert sich am</dt><dd>' + D(pro.verlaengert) + '</dd></div>' +
+      '<div><dt>Status</dt><dd>' + K.pille('aktiv') +
+        '<br><span class="konto-mini">Mitglied seit ' + D(pro.seit) + '</span></dd></div>' +
+      '<div><dt>Jahresbeitrag</dt><dd>' + EU(pro.beitrag) + ' netto<br>' +
+        '<span class="konto-mini">per Rechnung</span></dd></div>' +
+      '<div><dt>Verlängert sich am</dt><dd>' + D(pro.verlaengert) +
+        '<br><span class="konto-mini">um ein weiteres Jahr</span></dd></div>' +
       '<div><dt>Belege</dt><dd><a class="konto-mini" href="konto-rechnungen.html?suche=PRO">Beitragsrechnungen anzeigen</a></dd></div>' +
     '</dl>' +
     /* Kuendigen steht am Ende der Karte, zu der es gehoert, nicht oben rechts

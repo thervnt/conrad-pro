@@ -366,7 +366,7 @@
   pruefe();
 })();
 </script>
-<script src="konto-daten.js?v=d4bf3a36"></script>
+<script src="konto-daten.js?v=5ed488d6"></script>
 <script>
 (function () {
   var K = window.KONTO, E = K.esc, D = K.datum;
@@ -423,11 +423,13 @@
 
   function empfangHtml() {
     if (lage === 'an') {
-      return '<p class="konto-gewaehlt">Sie erhalten den Conrad Newsletter</p>' +
-        '<p class="konto-gewaehlt-note">Etwa vierzehntägig, mit Nettopreisen für Geschäftskunden.</p>' +
+      return '<p class="konto-gewaehlt">Alle zwei Wochen wissen, was neu und günstiger ist</p>' +
+        '<p class="konto-gewaehlt-note">Nettopreise, Neuheiten und Normenänderungen für ' +
+          'Geschäftskunden, in vier Minuten gelesen.</p>' +
         '<dl class="konto-fakten" style="margin-top:24px">' +
+          '<div><dt>Status</dt><dd>' + K.pille('angemeldet') +
+            '<br><span class="konto-mini">seit ' + D('2023-04-11') + '</span></dd></div>' +
           '<div><dt>Adresse</dt><dd>' + E(mail) + '</dd></div>' +
-          '<div><dt>Angemeldet seit</dt><dd>' + D('2023-04-11') + '</dd></div>' +
         '</dl>' +
         /* Die Abmeldung ist eine bewusste Handlung, kein Haken, den man im
            Vorbeigehen umlegt. Sie steht deshalb als Knopf und in der
@@ -443,10 +445,11 @@
     }
 
     if (lage === 'wartet') {
-      return '<p class="konto-gewaehlt">Ihre Bestätigung fehlt noch</p>' +
+      return '<p class="konto-gewaehlt">Alle zwei Wochen wissen, was neu und günstiger ist</p>' +
         '<p class="konto-gewaehlt-note">Wir haben eine E-Mail an ' + E(mail) + ' geschickt. ' +
         'Erst mit dem Klick darin erhalten Sie den Newsletter.</p>' +
         '<dl class="konto-fakten" style="margin-top:24px">' +
+          '<div><dt>Status</dt><dd>' + K.pille('wartet') + '</dd></div>' +
           '<div><dt>Absender</dt><dd>newsletter@conrad.de</dd></div>' +
           '<div><dt>Betreff</dt><dd>Bitte bestätigen Sie Ihre Anmeldung</dd></div>' +
         '</dl>' +
@@ -471,13 +474,16 @@
        muss nicht an dieselbe Adresse gehen wie die Rechnungen. */
     return '<p class="konto-gewaehlt">Alle zwei Wochen wissen, was neu und günstiger ist</p>' +
       '<p class="konto-gewaehlt-note">Nettopreise, Neuheiten und Normenänderungen für ' +
-        'Geschäftskunden, in vier Minuten gelesen. ' +
-        'Sie erhalten ihn derzeit nicht' + (abgemeldetAm ? ', abgemeldet am ' + D(abgemeldetAm) : '') +
-        '. Bestellbestätigungen und Rechnungen sind davon nicht betroffen.</p>' +
-      (rueckmeldung
-        ? '<dl class="konto-fakten" style="margin-top:24px">' +
-          '<div><dt>Ihre Rückmeldung</dt><dd>' + E(grundText(rueckmeldung)) + '</dd></div></dl>'
-        : '') +
+        'Geschäftskunden, in vier Minuten gelesen. Bestellbestätigungen und Rechnungen ' +
+        'sind von der Abmeldung nicht betroffen.</p>' +
+      '<dl class="konto-fakten" style="margin-top:24px">' +
+        '<div><dt>Status</dt><dd>' + K.pille('abgemeldet') +
+          (abgemeldetAm ? '<br><span class="konto-mini">am ' + D(abgemeldetAm) + '</span>' : '') +
+        '</dd></div>' +
+        (rueckmeldung
+          ? '<div><dt>Ihre Rückmeldung</dt><dd>' + E(grundText(rueckmeldung)) + '</dd></div>'
+          : '') +
+      '</dl>' +
       '<div class="konto-section" style="margin-top:24px">' +
         '<div class="konto-feld" style="margin-top:0">' +
           '<label class="konto-feld-label" for="nl-mail">Geschäftliche E-Mail-Adresse</label>' +
