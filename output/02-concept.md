@@ -2482,3 +2482,44 @@ Nebenbei aufgeräumt: `var themen`, ein Zuhörer auf `name === 'thema'` und ein
 `themen = {}` im Zurücksetzen waren nach dem Streichen der Themen
 übriggeblieben. Das Zurücksetzen hat dadurch den Haken nicht mit
 zurückgesetzt.
+
+---
+
+## 45. Die Anmeldung im Prototyp
+
+**Befund von Nico:** "bau es in den prototypen ein"
+
+Aus dem Konzept ist ein Bauteil geworden: `newsletter-anmeldung.js`, eine
+Datei, die auf jeder Seite des Prototyps ein Anmeldeband über dem Seitenfuss
+einsetzt. Eine Datei statt achtzehn Abschriften; die Stile bringt sie selbst
+mit, weil Produktseite und Warenkorb kein gemeinsames Stylesheet mit dem
+Kontobereich haben.
+
+**Was das Band trägt:** links Überschrift, ein Satz und die drei Marken
+(Turnus, Lesezeit, Abbestellbarkeit), rechts das Formular. Feld und Knopf als
+eine Einheit, darunter das Einwilligungs-Kästchen und der Hinweis auf die
+Bestätigungsmail. Wortlaut und Verhalten sind identisch mit dem
+Konzeptprototyp: Prüfung beim Verlassen des Feldes, genaue Fehlermeldungen,
+Tippfehler-Vorschlag, Pflichthaken mit eigener Meldung, reservierter Platz für
+beides.
+
+**Drei Entscheidungen beim Einbau:**
+
+1. **Die Produktseite hatte schon einen Newsletter-Block** ("10 € Gutschein
+   sichern", hellblau). Er wird ersetzt, nicht ergänzt. Zwei Anmeldungen auf
+   einer Seite sind eine zu viel, und der Sinn eines gemeinsamen Bauteils ist,
+   dass überall dasselbe steht.
+2. **Die Newsletter-Seite im Konto bekommt kein Band.** Dort wird das Abo
+   verwaltet; ein Anmeldeband unter der Abmeldung wäre ein Widerspruch. Die
+   Seite trägt dafür `data-ohne-nl-band` am `body`.
+3. **Der Speicher ist der vorhandene.** Die Produktseite legte angemeldete
+   Adressen schon unter `conradNewsletterMails` ab. Das Bauteil benutzt
+   denselben Schlüssel, damit der Prototyp eine Liste hat und nicht zwei: wer
+   sich zweimal mit derselben Adresse anmeldet, bekommt "Diese Adresse ist
+   bereits angemeldet" statt einer zweiten Bestätigung.
+
+Geprüft: 75 Bänder über 15 Seiten und fünf Fensterbreiten plus Warenkorb und
+Produktseite, keines mit vorausgewähltem Haken, keine Konsolenfehler, kein
+seitlicher Überlauf; die Verwaltungsseite bleibt ohne Band; Fehlermeldung,
+Tippfehler-Vorschlag, fehlender Haken, Erfolg und "bereits angemeldet"
+durchgespielt, Kartenhöhe in allen Zuständen gleich.
