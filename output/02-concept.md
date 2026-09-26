@@ -3278,3 +3278,31 @@ mit `repeat(auto-fit, minmax(240px, 1fr))`; bei 1440 Pixeln stehen damit
 Bezeichnung, Empfänger, Straße und Ansprechpartner in einer Reihe. Die
 Bankverbindung steht zweispaltig. Der Newsletter steht einspaltig - so, wie es
 für die Inhaltsfelder verabredet war.
+
+## 66. Eine Feldbauart für alle Formulare
+
+Die Durchsicht im vorigen Kapitel hatte zwei Bauarten für dieselbe Sache
+gefunden. Jetzt gibt es nur noch eine, und zwar die des Newsletters:
+
+| | vorher (`konto-feld`) | jetzt |
+| --- | --- | --- |
+| Label | 13 px, normal, sekundärgrau | 13 px, halbfett, dunkel |
+| Label → Feld | 4 px | 6 px |
+| Feldhöhe | 40 px | 48 px |
+| Anordnung | bis zu vier nebeneinander | eine Spalte, 620 px |
+
+Betroffen sind die drei Formulare, die vorher anders aussahen: Adresse
+bearbeiten, Lieferadresse und Packstation hinzufügen, Bankverbindung und der
+Grund einer Rücksendung. Die Auswahl im Formular wächst mit auf 48 Pixel; in
+den Filterleisten der Listen bleibt sie bei 40, denn dort ist sie ein
+Werkzeug neben dem Inhalt, kein Feld im Formular.
+
+Das Adressformular stand vorher vierspaltig, weil `repeat(auto-fit,
+minmax(240px, 1fr))` bei 1440 Pixeln vier Spalten ergibt. Bezeichnung,
+Empfänger, Straße und Ansprechpartner lagen damit auf einer Zeile - vier
+kurze Kästchen, die das Auge einzeln absuchen muss. Jetzt läuft eine Kante
+von oben nach unten, wie bei allen anderen Inhaltsfeldern auch.
+
+Nachgemessen, jedes Formular einzeln geöffnet: Label zu Feld überall 6 Pixel,
+Feld zu nächstem Label überall 16, Feldhöhe überall 48, Spaltenbreite überall
+620. Bei 1440, 1024, 768 und 375 Pixeln eine Spalte, kein Überlauf.

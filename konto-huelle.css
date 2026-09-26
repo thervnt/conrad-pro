@@ -986,16 +986,22 @@
    hier stand, war ein zweites Bedienelement fuer dieselbe Zeile und enthielt
    bei der Standardadresse nur einen Eintrag. */
 .konto-pos.ist-offen { background: var(--c-bg-tint); border-radius: var(--radius); padding: 16px; }
+/* Dieselbe Bauart wie die Felder im Newsletter: eine Spalte auf 620 px,
+   halbfettes dunkles Label, 6 px darunter, 48 px hohes Feld. Vorher waren es
+   zwei Formularstile im selben Kontobereich - vierspaltig, hellgraues Label,
+   40 px - und nebeneinander sahen sie aus wie zwei Programme. */
 .konto-felder {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 16px;
+  max-width: 620px;
   margin-top: 16px;
 }
-.konto-feld { display: flex; flex-direction: column; gap: 4px; }
-.konto-feld-label { font-size: 13px; color: var(--c-text-secondary); }
+.konto-feld { display: flex; flex-direction: column; gap: 6px; }
+.konto-feld-label { font-size: 13px; font-weight: 600; color: var(--c-text); }
+/* Nur im Formular. In den Filterleisten bleibt die Auswahl bei 40 px. */
+.konto-feld .konto-select { height: 48px; }
 .konto-feld input {
-  height: 40px;
+  height: 48px;
   padding: 0 12px;
   border: 1px solid var(--c-border-control);
   border-radius: var(--radius-xs);
