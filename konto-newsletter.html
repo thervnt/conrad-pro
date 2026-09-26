@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="konto.css?v=55fb6f1d">
-<link rel="stylesheet" href="konto-huelle.css?v=240476e0">
+<link rel="stylesheet" href="konto-huelle.css?v=3d4e80dc">
 <script src="cart-seed.js?v=28a5fe8f"></script>
 </head>
 <body data-ohne-nl-band>
@@ -384,8 +384,14 @@
   }
 
   var stand = lesen();
-  var abo = stand.abo !== false;
+  /* 'an' | 'wartet' | 'aus'. "wartet" ist neu: bei Double-Opt-in ist man nach
+     dem Klick auf "abonnieren" noch nicht angemeldet, und eine Seite, die das
+     verschweigt, behauptet etwas Falsches. */
+  var lage = stand.lage || (stand.abo === false ? 'aus' : 'an');
+  var zugestimmt = false;
+  var consentFehler = null;
   var abgemeldetAm = stand.abgemeldetAm || null;
+  var HINWEIS_DOI = 'Wir schicken Ihnen zuerst eine Bestätigungsmail; erst nach Ihrem Klick darin erhalten Sie den Newsletter.';
   var rueckmeldung = stand.rueckmeldung || null;   /* gesendeter Grund */
   var umfrageOffen = false;                        /* nur direkt nach dem Abbestellen */
   var gewaehlt = null;
@@ -414,7 +420,7 @@
   var elStand = document.querySelector('[data-stand]');
 
   function empfangHtml() {
-    if (abo) {
+    if (lage === 'an') {
       return '<p class="konto-gewaehlt">Sie erhalten den Conrad Newsletter</p>' +
         '<p class="konto-gewaehlt-note">Etwa vierzehntägig, mit Nettopreisen für Geschäftskunden.</p>' +
         '<dl class="konto-fakten" style="margin-top:24px">' +
@@ -434,6 +440,33 @@
           '</div>' +
         '</div>';
     }
+
+    if (lage === 'wartet') {
+      return '<p class="konto-gewaehlt">Ihre Bestätigung fehlt noch</p>' +
+        '<p class="konto-gewaehlt-note">Wir haben eine E-Mail an ' + E(ich.mail) + ' geschickt. ' +
+        'Erst mit dem Klick darin erhalten Sie den Newsletter.</p>' +
+        '<dl class="konto-fakten" style="margin-top:24px">' +
+          '<div><dt>Absender</dt><dd>newsletter@conrad.de</dd></div>' +
+          '<div><dt>Betreff</dt><dd>Bitte bestätigen Sie Ihre Anmeldung</dd></div>' +
+        '</dl>' +
+        '<p class="konto-bemerkung" style="margin-top:16px">Nichts angekommen? Sehen Sie im ' +
+        'Spam-Ordner nach, oder lassen Sie sich die Mail erneut schicken.</p>' +
+        '<div class="konto-zeilenleiste">' +
+          '<div class="konto-zeilenleiste-links">' +
+            /* Steht fuer den Klick im Bestaetigungsmail, den es im Prototyp
+               nicht gibt. Deshalb heisst er auch so. */
+            '<button type="button" class="konto-btn primary" data-bestaetigen>Anmeldung bestätigen (wie im Mail)</button>' +
+            '<button type="button" class="konto-btn ghost" data-erneut>Mail erneut senden</button>' +
+          '</div>' +
+          '<div class="konto-zeilenleiste-rechts">' +
+            '<button type="button" class="konto-btn danger" data-abbrechen>Anmeldung abbrechen</button>' +
+          '</div>' +
+        '</div>';
+    }
+
+    /* Abgemeldet: die Anmeldung braucht dieselbe Einwilligung wie im
+       Anmeldeband. Die Adresse ist bekannt, also gibt es kein Eingabefeld -
+       alles andere ist gleich. */
     return '<p class="konto-gewaehlt">Sie erhalten derzeit keinen Newsletter</p>' +
       '<p class="konto-gewaehlt-note">' +
         (abgemeldetAm ? 'Abgemeldet am ' + D(abgemeldetAm) + '. ' : '') +
@@ -445,10 +478,20 @@
           ? '<div><dt>Ihre Rückmeldung</dt><dd>' + E(grundText(rueckmeldung)) + '</dd></div>'
           : '') +
       '</dl>' +
-      '<div class="konto-zeilenleiste">' +
-        '<div class="konto-zeilenleiste-links">' +
-          '<button type="button" class="konto-btn primary" data-an>Newsletter abonnieren</button>' +
-        '</div>' +
+      '<div class="konto-section" style="margin-top:24px">' +
+        '<label class="konto-einwilligung">' +
+          '<input type="checkbox" data-consent' + (zugestimmt ? ' checked' : '') +
+            (consentFehler ? ' aria-invalid="true" aria-describedby="nl-consent"' : '') + '>' +
+          '<span>Ich bin damit einverstanden, den Conrad Newsletter per E-Mail zu erhalten. ' +
+          'Ich kann die Einwilligung jederzeit widerrufen, etwa über den Link in jeder Ausgabe. ' +
+          '<a href="#">Datenschutzerklärung</a></span>' +
+        '</label>' +
+        '<p class="konto-einwilligung-note" role="status" aria-live="polite">' +
+          (consentFehler
+            ? '<span class="konto-feldfehler" id="nl-consent">' + E(consentFehler) + '</span>'
+            : E(HINWEIS_DOI)) +
+        '</p>' +
+        '<button type="button" class="konto-btn primary" data-an>Newsletter abonnieren</button>' +
       '</div>';
   }
 
@@ -457,7 +500,7 @@
      weg ist, kommt auf eine zweite Seite nicht mehr zurueck. Sie erscheint nur
      direkt nach dem Abbestellen und laesst sich in einem Klick ueberspringen. */
   function umfrageHtml() {
-    if (!umfrageOffen) return '';
+    if (!umfrageOffen || lage !== 'aus') return '';
     return '<div class="konto-card konto-section">' +
       '<div class="konto-card-head"><h2 class="konto-card-title">Warum haben Sie sich abgemeldet?</h2></div>' +
       '<form data-form>' +
@@ -498,38 +541,96 @@
   function zeichne() {
     elEmpfang.innerHTML = empfangHtml();
     elUmfrage.innerHTML = umfrageHtml();
-    elStand.textContent = abo
+    elStand.textContent = lage === 'an'
       ? 'Sie erhalten den Newsletter an ' + ich.mail
-      : 'Sie erhalten derzeit keinen Newsletter';
+      : (lage === 'wartet'
+        ? 'Ihre Bestätigung fehlt noch'
+        : 'Sie erhalten derzeit keinen Newsletter');
   }
 
   document.addEventListener('click', function (e) {
     if (e.target.closest('[data-ab]')) {
-      abo = false;
+      lage = 'aus';
       abgemeldetAm = K.HEUTE_ISO;
       rueckmeldung = null;
       umfrageOffen = true;
       gewaehlt = null;
       fehler = '';
-      schreiben({ abo: false, abgemeldetAm: abgemeldetAm });
+      zugestimmt = false;
+      consentFehler = null;
+      schreiben({ lage: 'aus', abgemeldetAm: abgemeldetAm });
       zeichne();
       K.melden('Newsletter abbestellt');
       var erste = elUmfrage.querySelector('input[name="grund"]');
       if (erste) erste.focus();
       return;
     }
+
+    /* Anmelden geht nur mit Einwilligung, und danach ist man noch nicht
+       angemeldet, sondern wartet auf die Bestaetigung. */
     if (e.target.closest('[data-an]')) {
-      abo = true;
+      if (!zugestimmt) {
+        consentFehler = 'Bitte bestätigen Sie die Einwilligung, damit wir Ihnen den ' +
+          'Newsletter schicken dürfen.';
+        zeichne();
+        var kasten = elEmpfang.querySelector('[data-consent]');
+        if (kasten) kasten.focus();
+        return;
+      }
+      consentFehler = null;
+      lage = 'wartet';
       umfrageOffen = false;
-      schreiben({ abo: true });
+      schreiben({ lage: 'wartet' });
       zeichne();
-      K.melden('Newsletter abonniert');
+      K.melden('Bestätigungsmail an ' + ich.mail + ' geschickt');
       return;
     }
+
+    if (e.target.closest('[data-bestaetigen]')) {
+      lage = 'an';
+      zugestimmt = false;
+      schreiben({ lage: 'an' });
+      zeichne();
+      K.melden('Anmeldung bestätigt');
+      return;
+    }
+
+    if (e.target.closest('[data-erneut]')) {
+      var k = e.target.closest('[data-erneut]');
+      k.disabled = true;
+      k.textContent = 'Wird gesendet…';
+      setTimeout(function () { k.textContent = 'Erneut gesendet'; }, 800);
+      return;
+    }
+
+    if (e.target.closest('[data-abbrechen]')) {
+      lage = 'aus';
+      zugestimmt = false;
+      consentFehler = null;
+      schreiben({ lage: 'aus', abgemeldetAm: abgemeldetAm });
+      zeichne();
+      K.melden('Anmeldung abgebrochen');
+      return;
+    }
+
     if (e.target.closest('[data-ueberspringen]')) {
       umfrageOffen = false;
       zeichne();
       return;
+    }
+  });
+
+  /* Der Haken nimmt seine Meldung sofort wieder weg, ohne Neuaufbau. */
+  document.addEventListener('change', function (e) {
+    var kasten = e.target.closest('[data-consent]');
+    if (!kasten) return;
+    zugestimmt = kasten.checked;
+    if (zugestimmt && consentFehler) {
+      consentFehler = null;
+      kasten.removeAttribute('aria-invalid');
+      kasten.removeAttribute('aria-describedby');
+      var note = elEmpfang.querySelector('.konto-einwilligung-note');
+      if (note) note.textContent = HINWEIS_DOI;
     }
   });
 
@@ -567,7 +668,7 @@
     }
     rueckmeldung = wahl.value;
     umfrageOffen = false;
-    schreiben({ abo: false, abgemeldetAm: abgemeldetAm, rueckmeldung: rueckmeldung });
+    schreiben({ lage: 'aus', abgemeldetAm: abgemeldetAm, rueckmeldung: rueckmeldung });
     zeichne();
     K.melden('Danke für Ihre Rückmeldung');
   });

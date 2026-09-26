@@ -2523,3 +2523,40 @@ Produktseite, keines mit vorausgewähltem Haken, keine Konsolenfehler, kein
 seitlicher Überlauf; die Verwaltungsseite bleibt ohne Band; Fehlermeldung,
 Tippfehler-Vorschlag, fehlender Haken, Erfolg und "bereits angemeldet"
 durchgespielt, Kartenhöhe in allen Zuständen gleich.
+
+---
+
+## 46. Die Newsletter-Seite im Konto folgt dem Konzept
+
+**Befund von Nico:** "ich sehe hier keine änderung" (Newsletter-Seite im Konto)
+
+Richtig, und zwar aus zwei Gründen. Erstens hatte ich genau diese Seite vom
+Anmeldeband ausgenommen. Zweitens, und das war der eigentliche Mangel: die
+Seite hat abonniert, wie sie es vorher tat, mit einem Klick, ohne Einwilligung
+und ohne Bestätigungsmail. Das Konzept verlangt beides, und zwei Stellen
+desselben Prototyps dürfen dazu nicht Verschiedenes sagen.
+
+Die Seite kennt jetzt **drei** Zustände statt zweier:
+
+1. **Angemeldet.** Wie bisher: was gilt, Adresse, seit wann, und der
+   Abbestellen-Knopf in der Warnfarbe.
+2. **Bestätigung fehlt noch.** Neu. Bei Double-Opt-in ist man nach dem Klick
+   auf "abonnieren" noch nicht angemeldet; eine Seite, die das verschweigt,
+   behauptet etwas Falsches. Der Zustand nennt Absender und Betreff der
+   Bestätigungsmail, bietet "Mail erneut senden" und "Anmeldung abbrechen" an,
+   und für den Prototyp einen Knopf "Anmeldung bestätigen (wie im Mail)", der
+   den Klick im Postfach vertritt. Er heisst auch so, damit niemand ihn für
+   ein Produktmerkmal hält.
+3. **Abgemeldet.** Jetzt mit demselben Einwilligungs-Kästchen wie im
+   Anmeldeband, demselben Wortlaut und demselben Hinweis auf die
+   Bestätigungsmail. Ein Eingabefeld gibt es nicht, die Adresse ist ja
+   bekannt. Ohne Haken wird nicht abonniert: rote Umrandung, Fokus auf dem
+   Kästchen, Begründung darunter. Hinweis und Fehlermeldung teilen sich einen
+   reservierten Platz, Kartenhöhe 398 px in allen drei Fällen.
+
+Das Anmeldeband bleibt auf dieser Seite aus. Es wäre jetzt die dritte Stelle
+mit derselben Aussage.
+
+Geprüft: der ganze Kreis abgemeldet → Einwilligung → wartet → bestätigt →
+angemeldet → abbestellen → Umfrage, jeweils mit gespeichertem Stand; 16 Seiten
+über vier Fensterbreiten ohne Konsolenfehler und ohne seitlichen Überlauf.

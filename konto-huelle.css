@@ -518,6 +518,36 @@
   color: var(--c-text);
 }
 
+/* --- Einwilligung --------------------------------------------------------- */
+/* Gleiche Bauart wie im Anmeldeband und im Konzept: ein Kaestchen, das etwas
+   bedeutet, nie vorausgewaehlt, mit eigener Meldung. */
+.konto-einwilligung {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  max-width: 72ch;
+  cursor: pointer;
+  font-size: 13px;
+  color: var(--c-text-secondary);
+  line-height: 1.5;
+}
+.konto-einwilligung input {
+  width: 18px; height: 18px; margin: 1px 0 0; flex-shrink: 0;
+  accent-color: var(--c-blue); cursor: pointer;
+}
+.konto-einwilligung input[aria-invalid="true"] { outline: 2px solid var(--c-danger); outline-offset: 2px; }
+/* Ein Platz fuer Hinweis und Fehlermeldung, damit beim Umschalten nichts
+   springt. */
+.konto-einwilligung-note {
+  min-height: 42px;
+  margin: 10px 0 0;
+  max-width: 72ch;
+  font-size: 13px;
+  color: var(--c-text-secondary);
+  line-height: 1.5;
+}
+@media (max-width: 559px) { .konto-einwilligung-note { min-height: 60px; } }
+
 /* --- Beilaeufige Bemerkung ------------------------------------------------ */
 /* Ein Satz, der nur einen Zustand erklaert, ist kein Hinweisbanner. .konto-note
    traegt Rahmen, Flaeche und eine Handlung und liest sich deshalb als Warnung.
