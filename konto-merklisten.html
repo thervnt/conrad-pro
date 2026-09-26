@@ -386,12 +386,15 @@
         '<td class="konto-num">' + D(m.geaendert) + '</td>' +
         '<td class="konto-amount konto-spalte-opt">' + m.artikel + '</td>' +
         '<td class="konto-amount">' + EU(m.wert) + '</td>' +
+        /* Von links nach rechts aufsteigend nach Gewicht: das Nebensaechliche
+           als Symbol, dann die zweite Handlung, ganz rechts die erste. Die
+           Zeile endet damit dort, wo geklickt wird. */
         '<td><span class="konto-row-actions">' +
-          '<a class="konto-btn primary" href="' + E(ziel) + '">Liste öffnen</a>' +
-          '<button type="button" class="konto-btn ghost" data-wagen="' + E(m.id) + '">Alle in den Warenkorb</button>' +
           '<button type="button" class="konto-icon-btn" data-teilen="' + E(m.id) + '" ' +
             'title="Merkliste teilen" aria-label="Merkliste &quot;' + E(m.name) + '&quot; teilen">' +
             TEILEN_SVG + '</button>' +
+          '<button type="button" class="konto-btn ghost" data-wagen="' + E(m.id) + '">Alle in den Warenkorb</button>' +
+          '<a class="konto-btn primary" href="' + E(ziel) + '">Details</a>' +
         '</span></td></tr>';
     }).join('') + '</tbody></table></div>';
 

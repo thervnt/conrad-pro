@@ -2019,3 +2019,23 @@ nicht gibt.
 
 Geprüft: 17 Seiten über fünf Fensterbreiten, kein seitliches Rollen, keine
 rollende Tabelle, kein Symbolknopf ohne Beschriftung, keine Konsolenfehler.
+
+---
+
+## 34. Reihenfolge der Zeilenhandlungen
+
+**Befund von Nico:** "primary CTA position far right and rename to 'Details',
+secondary left of primary, share left of secondary"
+
+Umgesetzt in der Merklisten-Zeile. Von links nach rechts aufsteigend nach
+Gewicht: das Nebensächliche als Symbol, daneben die zweite Handlung, ganz
+rechts die erste. Die Zeile endet damit dort, wo geklickt wird. Gemessen bei
+1440 px: Symbol bei 1080, "Alle in den Warenkorb" bei 1128, "Details" bei 1317
+und damit als letztes vor dem rechten Zellenrand.
+
+"Liste öffnen" heisst jetzt "Details". Nebeneffekt: das kürzere Wort gibt der
+Namensspalte Platz zurück, die vorher die schmalste der Tabelle war.
+
+Unter 1100 px stapeln sich die drei wie bisher untereinander, in derselben
+Reihenfolge - Symbol oben rechts, darunter die beiden Knöpfe, "Details"
+zuletzt. Kein seitliches Rollen bei keiner Breite von 1920 bis 768 px.
