@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="konto.css?v=3d138a8d">
-<link rel="stylesheet" href="konto-huelle.css?v=98d002d1">
+<link rel="stylesheet" href="konto-huelle.css?v=38bfcd71">
 <script src="cart-seed.js?v=28a5fe8f"></script>
 </head>
 <body>
@@ -531,8 +531,10 @@
            die Adresse ist der Weg dorthin. Fuer die Anrede im Newsletter
            reichen sie; eine Telefonnummer braucht ein Newsletter nicht. */
         '<div class="konto-feldreihe">' +
-          wahlkasten('anrede', 'Anrede', true, profil.anrede, ['Herr', 'Frau', 'Divers']) +
-          wahlkasten('titel', 'Titel', false, profil.titel, ['', 'Dr.', 'Prof.', 'Prof. Dr.', 'Dipl.-Ing.']) +
+          '<div class="konto-feldpaar">' +
+            wahlkasten('anrede', 'Anrede', true, profil.anrede, ['Herr', 'Frau', 'Divers']) +
+            wahlkasten('titel', 'Titel', false, profil.titel, ['', 'Dr.', 'Prof.', 'Prof. Dr.', 'Dipl.-Ing.']) +
+          '</div>' +
           feldkasten('vorname', 'Vorname', true, profil.vorname, 35) +
           feldkasten('nachname', 'Nachname', true, profil.nachname, 35) +
         '</div>' +

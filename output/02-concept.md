@@ -3182,3 +3182,24 @@ verglichen, bei 1440, 1280, 1024, 768 und 375 Pixeln.
 Der erste Durchlauf meldete 774 Abweichungen auf der Produktseite. Alle gingen
 auf das eine Mengenfeld zurück. Nach der einen Korrektur: 1788 Elemente,
 885 Elemente, 532 Elemente - kein einziger Unterschied, auf keiner Breite.
+
+## 63. Anrede und Titel in einer Zeile
+
+Vier Felder untereinander waren für die Newsletter-Anmeldung eine Zeile zu
+viel. Anrede und Titel sind kurze Auswahlen mit drei beziehungsweise fünf
+Einträgen; sie füllen die 620 Pixel der Spalte nicht einmal zur Hälfte und
+stehen jetzt nebeneinander.
+
+Jedes der beiden misst 302 Pixel, dazwischen die üblichen 16. Zusammen ergibt
+das exakt die 620 Pixel, die Vorname und Nachname darunter haben. Die linke
+Kante, an der das Auge hinunterläuft, bleibt damit erhalten, und auch die
+rechte fällt nicht aus der Flucht - das war der Grund, aus dem die Felder
+überhaupt untereinander gerückt waren.
+
+Unter 560 Pixeln stapeln die beiden wieder. Ein Auswahlfeld mit "Prof. Dr."
+und dem Pfeil daneben braucht Platz, und zwei davon nebeneinander wären auf
+dem Telefon zwei zu schmale Kästchen statt einer gesparten Zeile.
+
+Gemessen bei 1440, 1024, 600 und 375 Pixeln: nebeneinander 302 + 16 + 302 =
+620, bei 600 Pixeln 257 + 16 + 257 = 530, bei 375 gestapelt und beide über die
+volle Breite. Vorname und Nachname stehen auf jeder Breite auf demselben Maß.

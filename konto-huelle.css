@@ -582,6 +582,12 @@
    Knopf, damit keine Zeile aus der Flucht faellt. */
 .konto-feldreihe { display: grid; gap: 16px; max-width: 620px; }
 
+/* Anrede und Titel sind kurze Auswahlen - nebeneinander sparen sie eine
+   Zeile, ohne die Kante zu brechen: zusammen mit dem Abstand sind sie
+   genauso breit wie die Felder darunter. Wird es zu eng, stapeln sie. */
+.konto-feldpaar { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+@media (max-width: 560px) { .konto-feldpaar { grid-template-columns: 1fr; } }
+
 /* --- Eingabereihe: Feld und Knopf als eine Einheit ------------------------ */
 /* Gleiche Bauart wie im Anmeldeband ueber dem Seitenfuss. Unter 560px stapeln
    beide und werden wieder rundum gerundet. */
