@@ -2593,3 +2593,28 @@ Geprüft: ungültige Adresse, Tippfehler-Vorschlag mit Übernahme, fehlender
 Haken, Anmeldung, Bestätigung; Kartenhöhe 401 px in allen vier Zuständen; 60
 Anmeldebänder über 15 Seiten und vier Breiten weiterhin da, die Kontoseite
 weiterhin ohne Band, keine Konsolenfehler.
+
+---
+
+## 48. Das Anmeldeband ist wieder raus
+
+**Befund von Nico:** "this was not intended. take it out" (Anmeldeband über
+dem Seitenfuss)
+
+Ich hatte "bau es in den prototypen ein" als "auf jede Seite" gelesen. Gemeint
+war die Newsletter-Seite im Konto, und die hat es inzwischen. Das Band ist
+deshalb entfernt, von allen achtzehn Seiten.
+
+Was davon bleibt: **`newsletter-pruefung.js`**, 57 Zeilen, nur noch die
+Prüfung einer Adresse und der Tippfehler-Vorschlag. Die braucht die
+Kontoseite, und sie soll dort dieselben Meldungen geben wie der
+Konzeptprototyp. Die Datei heisst jetzt nach dem, was sie tut, und wird nur
+noch von der einen Seite geladen, die sie benutzt, statt von allen achtzehn.
+
+Die Produktseite hat ihren eigenen Newsletter-Block zurück ("10 € Gutschein
+sichern"). Er war nie aus dem Dokument entfernt worden, nur zur Laufzeit
+ersetzt; mit dem Band verschwindet auch die Ersetzung.
+
+Geprüft: 16 Seiten ohne Band und ohne Konsolenfehler, Produktseite mit ihrem
+alten Block, Warenkorb unverändert, und auf der Kontoseite laufen
+Tippfehler-Vorschlag, Einwilligung und Anmeldung weiter wie zuvor.

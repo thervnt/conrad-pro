@@ -14,7 +14,7 @@ Aufruf vor jedem Commit, der eine der gemeinsamen Dateien anfasst:
 import glob, hashlib, io, os, re, sys
 
 GEMEINSAM = ['konto.css', 'konto-huelle.css', 'konto-daten.js',
-             'cart-seed.js', 'header-flyouts.js', 'newsletter-anmeldung.js']
+             'cart-seed.js', 'header-flyouts.js', 'newsletter-pruefung.js']
 
 def kuerzel(pfad):
     with open(pfad, 'rb') as f:
