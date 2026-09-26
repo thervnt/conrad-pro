@@ -259,6 +259,52 @@ button { font: inherit; cursor: pointer; }
   flex-shrink: 0;
 }
 
+/* Knopf zum Hochladen einer Stueckliste, links vom Suchknopf. Er ist
+   absichtlich ruhig: gleiche Hoehe und gleiche Ecken wie der blaue Knopf
+   daneben, aber nur Umriss statt Flaeche, damit die Suche der erste
+   Handgriff bleibt. Die Beschriftung steht im Titel, weil im Feld kein
+   Platz fuer Text ist. */
+.search-upload {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  box-sizing: border-box;
+  border: 1px solid var(--c-border-control);
+  border-radius: var(--radius-sm);
+  background: var(--c-bg-white);
+  color: var(--c-text-secondary);
+  cursor: pointer;
+  padding: 0;
+}
+.search-upload:hover {
+  background: var(--c-bg-tint);
+  border-color: var(--c-border-strong);
+  color: var(--c-text);
+}
+.search-upload svg { width: 20px; height: 20px; display: block; }
+.search-upload[data-tooltip]:hover::after,
+.search-upload[data-tooltip]:focus-visible::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  background: var(--c-navy);
+  color: var(--c-text-on-dark);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.4;
+  padding: 6px 10px;
+  border-radius: var(--radius-sm);
+  white-space: nowrap;
+  z-index: 50;
+  pointer-events: none;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.18);
+}
+
 .search-btn {
   background: var(--c-blue);
   color: var(--c-text-on-dark);
@@ -397,6 +443,8 @@ button { font: inherit; cursor: pointer; }
   .search-btn { padding: 0 10px; }
   .search-btn-text { display: none; }
   .search-btn-icon-box { width: 26px; height: 26px; padding: 4px; margin-right: -4px; }
+  .search-upload { width: 44px; }
+  .search-upload svg { width: 18px; height: 18px; }
 
   /* --- Breadcrumb ------------------------------------------- */
   .breadcrumb {
@@ -2459,6 +2507,7 @@ button { font: inherit; cursor: pointer; }
     <div class="search-card">
       <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
       <input type="text" class="search-input" placeholder="Stellen Sie eine Frage, zum Beispiel: Welche Spannung benötige ich für ein Labornetzgerät?">
+      <a class="search-upload" href="stueckliste.html" data-tooltip="Stückliste hochladen (CSV)" aria-label="Stückliste hochladen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></a>
       <button class="search-btn" aria-label="Suchen">
         <span class="search-btn-icon-box" aria-hidden="true"><svg class="search-btn-icon" viewBox="0 0 640 640" fill="currentColor"><path d="M480 272C480 317.9 465.1 360.3 440 394.7L566.6 521.4C579.1 533.9 579.1 554.2 566.6 566.7C554.1 579.2 533.8 579.2 521.3 566.7L394.7 440C360.3 465.1 317.9 480 272 480C157.1 480 64 386.9 64 272C64 157.1 157.1 64 272 64C386.9 64 480 157.1 480 272zM272 416C351.5 416 416 351.5 416 272C416 192.5 351.5 128 272 128C192.5 128 128 192.5 128 272C128 351.5 192.5 416 272 416z"/></svg></span>
         <span class="search-btn-text">Suchen</span>

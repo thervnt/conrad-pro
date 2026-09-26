@@ -3109,3 +3109,36 @@ Die Marke bleibt optisch ruhig: grauer Grund, graue Schrift, kein Rot. Rot
 wäre ein Alarm, und drei gespeicherte Merklisten sind kein Alarm. Auf der
 aktiven Seite wechselt sie auf weißen Grund und blaue Schrift, damit sie sich
 vom farbigen Balken abhebt.
+
+## 61. Ein Knopf zum Hochladen in der Kopfzeile
+
+Das Hochladen einer Stückliste war bisher nur über Umwege erreichbar: über die
+Stücklistenseite im Konto oder über einen direkten Link. Für ein Konto, in dem
+Beschaffung aus vorhandenen Listen der Normalfall ist, war das zu tief
+vergraben. Der Weg dorthin gehört an die Stelle, an der ohnehin jeder Einstieg
+beginnt - in die Kopfzeile, neben die Suche.
+
+Der Knopf steht links vom Suchknopf, innerhalb der Suchkarte. Das ist kein
+Zufall: Suchen und Hochladen sind zwei Arten, an Artikel zu kommen. Wer weiß,
+was er braucht, tippt. Wer eine Liste hat, lädt sie hoch. Beides sind Eingänge
+zum selben Katalog, also stehen sie nebeneinander.
+
+Damit die Reihenfolge stimmt, ist der Knopf bewusst leiser gehalten als sein
+Nachbar: gleiche Höhe, gleiche Ecken, aber nur Umriss statt blauer Fläche. Die
+Suche bleibt der erste Handgriff, das Hochladen der zweite. Ein zweiter
+Vollton-Knopf hätte beide entwertet.
+
+Beschriftung gibt es keine, im Feld ist kein Platz dafür. Stattdessen nennt
+ein Titel beim Überfahren und beim Tabben "Stückliste hochladen (CSV)"; das
+Format steht dabei, weil sonst erst die Zielseite verrät, was erwartet wird.
+Screenreader lesen "Stückliste hochladen" über `aria-label`.
+
+In der schmalen Ansicht schrumpft der Knopf von 48 auf 44 Pixel Breite und das
+Zeichen von 20 auf 18. Die Höhe bleibt, damit er mit dem Suchknopf auf einer
+Linie steht. Bei 375 Pixeln behält das Eingabefeld noch 219 Pixel - eng, aber
+lesbar.
+
+Der Knopf steht auf allen 18 Seiten mit Kopfzeile, also auch im Warenkorb, auf
+der Produktseite und auf der Stücklistenseite selbst. Dort führt er auf die
+eigene Seite zurück, was kein Fehler ist: ein global verfügbarer Einstieg, der
+auf einer einzelnen Seite fehlt, wäre die größere Irritation.
