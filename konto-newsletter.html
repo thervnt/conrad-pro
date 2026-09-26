@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="konto.css?v=55fb6f1d">
-<link rel="stylesheet" href="konto-huelle.css?v=e1ccad8d">
+<link rel="stylesheet" href="konto-huelle.css?v=9d63ec85">
 <script src="cart-seed.js?v=28a5fe8f"></script>
 </head>
 <body>
@@ -541,12 +541,15 @@
           feldkasten('vorname', 'Vorname', true, profil.vorname, 35) +
           feldkasten('nachname', 'Nachname', true, profil.nachname, 35) +
         '</div>' +
-        '<div class="konto-feld" style="margin-top:16px">' +
-          '<label class="konto-feld-label" for="nl-mail">Geschäftliche E-Mail-Adresse</label>' +
+        '<div style="margin-top:16px">' +
           '<div class="konto-eingabe-reihe">' +
-            '<input type="email" id="nl-mail" data-mail autocomplete="email" inputmode="email" ' +
-              'spellcheck="false" placeholder="einkauf@firma.de" value="' + E(mail) + '"' +
-              (mailFehler ? ' aria-invalid="true" aria-describedby="nl-mailfehler"' : '') + '>' +
+            '<label class="konto-feldbox' + (mailFehler ? ' ist-fehler' : '') + '" for="nl-mail">' +
+              '<span class="konto-feldbox-label">Geschäftliche E-Mail-Adresse<span class="pflicht">*</span></span>' +
+              '<input type="email" id="nl-mail" data-mail autocomplete="email" inputmode="email" ' +
+                'spellcheck="false" placeholder="einkauf@firma.de" value="' + E(mail) + '"' +
+                (mailFehler ? ' aria-invalid="true" aria-describedby="nl-mailfehler"' : '') + '>' +
+              (!mailFehler && mail.trim() ? HAKEN : '') +
+            '</label>' +
             '<button type="button" class="konto-btn primary" data-an>Newsletter abonnieren</button>' +
           '</div>' +
           '<div class="konto-eingabe-meldung" role="status" aria-live="polite">' +

@@ -2873,3 +2873,39 @@ zustellbar wäre. Sag Bescheid, wenn das anders sein soll.
 Geprüft: 16 Seiten über fünf Fensterbreiten ohne Konsolenfehler und ohne
 seitlichen Überlauf; Anmeldeweg mit fehlendem Vornamen, Zeichenzähler, Haken
 und vollständiger Anmeldung bis zur Bestätigung; Adressanlage für beide Arten.
+
+---
+
+## 55. Produktionsstil für die Felder
+
+**Befund von Nico:** "produktionsstil für die felder übernehmen"
+
+Übernommen, also die Anatomie **und** das Aussehen:
+
+| | vorher (Prototyp) | jetzt (Produktion) |
+|---|---|---|
+| Rahmen | 1 px `--c-border-control` | 2 px `--c-text` |
+| Rundung | 8 px | 8 px |
+| Höhe | 64 px | 68 px |
+| Beschriftung | 12 px sekundär | 13 px in Textfarbe |
+| Wert | 16 px | 17 px |
+
+**Die Adresse zieht mit.** Sie stand im alten Stil und mit der Beschriftung
+über dem Rahmen, direkt unter vier Feldern im neuen. Zwei Bauarten in einem
+Formular fallen mehr auf als der Wechsel selbst; sie ist jetzt derselbe Kasten
+mit der Beschriftung darin, links offen, damit der Knopf bündig anschliesst.
+Beide 68 px hoch, gemessen bündig. Unter 560 px stapeln sie und werden wieder
+rundum gerundet.
+
+Nebenbei: die Zeile war auf 560 px begrenzt und schnitt die Adresse ab, weil
+der Knopf knapp 200 px braucht und eine Geschäftsadresse länger ist als eine
+private. Jetzt 660 px, gemessen kein Abschneiden mehr.
+
+**Noch nicht umgestellt** sind die Eingaben ausserhalb dieses Formulars: das
+Bearbeiten einer Adresse, das IBAN-Formular, die Rücksendeauswahl. Die tragen
+weiterhin den schlankeren Stil. Ob der Produktionsstil dort auch hin soll, ist
+eine Entscheidung über den ganzen Kontobereich, nicht über dieses Formular -
+sag Bescheid, dann ziehe ich alle gleichzeitig nach.
+
+Geprüft: alle fünf Kästen auf der Seite mit 2 px Rahmen, 16 Seiten über fünf
+Fensterbreiten ohne Konsolenfehler und ohne seitlichen Überlauf.
