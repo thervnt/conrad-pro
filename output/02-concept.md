@@ -2404,3 +2404,48 @@ auf.
 Geprüft: Feldhöhe und Rahmen in allen Zuständen, kein Sprung zwischen Ruhe,
 Fehler und Vorschlag (450 px durchgehend), Tippfehler-Vorschlag und Absenden,
 kein seitlicher Überlauf bei 375 px.
+
+---
+
+## 43. Newsletter-Seite: kompakter Anmeldeblock, USPs darunter
+
+**Befund von Nico:** ein Ausschnitt von DigiKey ("Folgen Sie uns", ein Satz,
+Feld und Knopf als eine Einheit, darunter die Einwilligung) mit dem Zusatz
+"e.g. / darunter USPs".
+
+Damit war klar, was ich vorher falsch gelesen hatte: die Argumente gehören
+unter die Handlung, nicht daneben und nicht davor.
+
+**Feld und Knopf sind eine Einheit.** Vorher: Feld über die volle Breite, ein
+Knopf darunter, ebenfalls über die volle Breite. Jetzt eine Reihe, die Ränder
+aneinander, gemeinsame Höhe 48 px. Eine Anmeldung ist eine Handlung und soll
+auch wie eine aussehen. Unter 560 px stapeln beide und werden wieder rundum
+gerundet, beide über die volle Breite. Die Inline-Variante benutzt dieselbe
+Reihe; zwei Formen für dieselbe Sache wären eine Form zu viel.
+
+**Der Aufbau ist jetzt linear**, ohne Spalten:
+
+1. Überschrift und ein Satz
+2. Anmeldeblock: Titel, eine Zeile, Feld mit Knopf, Einwilligung
+3. **Was Sie bekommen**: die drei Marken und die vier Inhalte, zweispaltig ab
+   720 px
+4. Leseprobe
+
+Gemessen bei 1024 px: Formular beginnt bei 390 px, der Knopf bei 519 px, die
+Gründe bei 769 px. Vorher war der Kopfbereich allein 579 px hoch.
+
+**Ein Fehler nebenbei gefunden:** `.hero { max-width: 40ch }` rechnet gegen die
+Schriftgrösse des Behälters, also 16 px, und ergab 320 px statt einer
+vernünftigen Zeilenlänge. Die Überschrift brach deshalb auf vier Zeilen. Ohne
+diese Begrenzung nutzt sie die 640 px des Blocks und braucht zwei.
+
+**Keine Einwilligungs-Checkbox.** Die Vorlage hat eine, ausdrücklich als
+"(optional)" beschriftet. Bei Double-Opt-in ist sie überflüssig: die
+Einwilligung entsteht durch die Bestätigung im Postfach, und ein zusätzliches
+Kästchen, das nichts erzwingt, ist eine Hürde ohne Gegenwert. Der Satz unter
+dem Knopf sagt dasselbe. Wenn die Rechtsabteilung sie will, ist sie in fünf
+Minuten drin.
+
+Geprüft: kein Sprung zwischen den Zuständen (339 px durchgehend), Feld und
+Knopf bündig auf dem Rechner und gestapelt bei 375 px, kein seitlicher
+Überlauf, Fehler, Vorschlag und Absenden unverändert.
