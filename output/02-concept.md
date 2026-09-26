@@ -3232,3 +3232,49 @@ war: eine Zahl, die stimmt, ist kein Beweis, wenn sie das Falsche misst.
 Gemessen gehört, was der Betrachter sieht - hier die Lücke zwischen zwei
 sichtbaren Kanten, nicht der Abstand zweier Kästen, deren Inhalt
 unterschiedlich hoch ist.
+
+## 65. Durchsicht aller übrigen Formulare
+
+Geprüft wurde jedes Formular im Prototyp, jeweils geöffnet und im Browser
+vermessen: der Abstand vom Label zur Feldoberkante und der Abstand von der
+Feldunterkante zum nächsten Label - also das, was man sieht, nicht der Abstand
+der Container.
+
+| Formular | Felder | Label → Feld | Feld → nächstes Label |
+| --- | --- | --- | --- |
+| Newsletter anmelden | 5 | 6 px | 16 px |
+| Adresse bearbeiten | 5 | 4 px | 16 px |
+| Lieferadresse hinzufügen | 5 | 4 px | 16 px |
+| Packstation hinzufügen | 5 | 4 px | 16 px |
+| Bankverbindung | 2 | 4 px | - |
+| Rücksendung starten | 1 | 4 px | - |
+| Zahlungsart ändern | Auswahlzeilen | - | 8 px zwischen den Zeilen |
+| Stückliste einlesen | 1 | 6 px | - |
+| Spalten zuordnen | 2 Auswahlen | Tabellenkopf | - |
+
+**Der Fehler selbst kommt nirgends sonst vor.** Der Newsletter war das einzige
+Formular, das etwas unter das Feld gestellt hat. In allen anderen folgt auf
+die Feldunterkante direkt der Abstand zum nächsten Label, ohne Zwischenzeile.
+Auch die Fehlermeldungen wurden geprüft: sie erscheinen am Ende des Formulars
+oder unter der Positionsliste, nie zwischen zwei Feldern.
+
+### Zwei Dinge sind dabei aufgefallen
+
+**Es gibt zwei Feldbauarten.** Der Newsletter benutzt `konto-feldbox`, alle
+übrigen Formulare `konto-feld`:
+
+| | Newsletter | übrige Formulare |
+| --- | --- | --- |
+| Label | 13 px, halbfett, dunkel | 13 px, normal, sekundär |
+| Label → Feld | 6 px | 4 px |
+| Feldhöhe | 48 px | 40 px |
+| Rahmen, Radius, Schriftgröße | gleich | gleich |
+
+Nebeneinander gestellt sehen die beiden aus wie zwei verschiedene Programme.
+Zwei Bauarten für dieselbe Sache sind auf Dauer teurer als eine.
+
+**Die Adressformulare stehen vierspaltig.** `konto-felder` verteilt die Felder
+mit `repeat(auto-fit, minmax(240px, 1fr))`; bei 1440 Pixeln stehen damit
+Bezeichnung, Empfänger, Straße und Ansprechpartner in einer Reihe. Die
+Bankverbindung steht zweispaltig. Der Newsletter steht einspaltig - so, wie es
+für die Inhaltsfelder verabredet war.
