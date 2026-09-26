@@ -2749,3 +2749,14 @@ als eigene Einträge.
 Geprüft: alle drei Newsletter-Zustände durchgeklickt, PRO mit Pille und
 Kündigungsleiste, 16 Seiten über vier Fensterbreiten ohne Konsolenfehler und
 ohne seitlichen Überlauf.
+
+---
+
+## 52. Kartentitel auf der PRO-Seite
+
+**Befund von Nico:** Das Label darüber "Conrad Pro Mitgliedschaft" nennen.
+
+Der Kartentitel heisst jetzt **"Conrad PRO Mitgliedschaft"** statt nur
+"Mitgliedschaft". Geschrieben in der Schreibweise, die der Prototyp überall
+sonst benutzt: Navigation, Brotkrume, Seitenüberschrift und Kopfleiste sagen
+"Conrad PRO" mit grossem PRO.
