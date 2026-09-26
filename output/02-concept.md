@@ -3203,3 +3203,32 @@ dem Telefon zwei zu schmale Kästchen statt einer gesparten Zeile.
 Gemessen bei 1440, 1024, 600 und 375 Pixeln: nebeneinander 302 + 16 + 302 =
 620, bei 600 Pixeln 257 + 16 + 257 = 530, bei 375 gestapelt und beide über die
 volle Breite. Vorname und Nachname stehen auf jeder Breite auf demselben Maß.
+
+## 64. Der Zeichenzähler gehört neben das Label, nicht unter das Feld
+
+Der Zähler stand unter dem Eingabefeld. Zwischen den Feldkästen lagen überall
+16 Pixel, und genau so war es auch gemessen worden - Kasten zu Kasten. Was das
+Auge aber sieht, ist der Weg von der Unterkante eines Feldes zum nächsten
+Label, und dort schob sich der Zähler dazwischen: nach einem Auswahlfeld
+16 Pixel, nach einem Feld mit Zähler 16 plus dessen Zeile. Das Maß stimmte,
+der Eindruck nicht.
+
+Der Zähler steht jetzt rechts neben dem Label, auf derselben Zeile. Damit hat
+jeder Feldkasten denselben Aufbau - eine Kopfzeile, ein Feld - und alle
+Abstände sind gleich, egal ob ein Kasten zählt oder nicht:
+
+| von | nach | Abstand |
+| --- | --- | --- |
+| Label | Feld | 6 px |
+| Feld | nächstes Label | 16 px |
+| letztes Feld | Einwilligung | 16 px |
+
+Das gilt für alle fünf Felder der Anmeldung und bei jeder Breite. Der Zähler
+ist für Screenreader ausgeblendet: `maxlength` steht am Feld, und ein Wert,
+der sich bei jedem Zeichen ändert, wäre vorgelesen nur Lärm.
+
+Die Lehre daraus ist dieselbe wie beim E-Mail-Feld, das nie ein Eingabefeld
+war: eine Zahl, die stimmt, ist kein Beweis, wenn sie das Falsche misst.
+Gemessen gehört, was der Betrachter sieht - hier die Lücke zwischen zwei
+sichtbaren Kanten, nicht der Abstand zweier Kästen, deren Inhalt
+unterschiedlich hoch ist.

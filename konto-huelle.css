@@ -523,6 +523,18 @@
    darueber, 1px Rand, 48px hoch. Der Stern sagt, was Pflicht ist, der Zaehler
    sagt, wie viel noch geht - beides ist Information, keine Gestaltung. */
 .konto-feldbox { display: block; }
+/* Label und Zeichenzaehler teilen sich eine Zeile ueber dem Feld. Stand der
+   Zaehler unter dem Feld, war der Abstand zum naechsten Label dort um seine
+   Zeile groesser als bei einem Feld ohne Zaehler - gemessen stimmten die
+   16 px zwischen den Kaesten, gesehen stimmte nichts. Jetzt hat jeder Kasten
+   denselben Aufbau: eine Kopfzeile, ein Feld. */
+.konto-feldbox-kopf {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 6px;
+}
 .konto-feldbox-label {
   display: block;
   font-size: 13px;
@@ -530,6 +542,7 @@
   color: var(--c-text);
   margin-bottom: 6px;
 }
+.konto-feldbox-kopf .konto-feldbox-label { margin-bottom: 0; }
 .konto-feldbox-label .pflicht { color: var(--c-text-secondary); font-weight: 400; }
 .konto-feldbox input,
 .konto-feldbox select {
@@ -569,10 +582,9 @@
   pointer-events: none;
 }
 .konto-feldbox-zaehler {
-  display: block;
-  margin-top: 4px;
-  text-align: right;
+  flex: 0 0 auto;
   font-size: 12px;
+  font-weight: 400;
   color: var(--c-text-tertiary);
   font-variant-numeric: tabular-nums;
 }
