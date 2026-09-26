@@ -2039,3 +2039,57 @@ Namensspalte Platz zurück, die vorher die schmalste der Tabelle war.
 Unter 1100 px stapeln sich die drei wie bisher untereinander, in derselben
 Reihenfolge - Symbol oben rechts, darunter die beiden Knöpfe, "Details"
 zuletzt. Kein seitliches Rollen bei keiner Breite von 1920 bis 768 px.
+
+---
+
+## 35. Eine Zeilenform für alle drei Listen
+
+**Befund von Nico:** "1. gleiche button-reihenfolge auf stücklisten und
+bestellungen anwenden. 2. bei stücklisten ebenso artikel preview images
+anzeigen."
+
+### Zeilenhandlungen
+
+Bestellungen, Stücklisten und Merklisten enden jetzt gleich: links das
+Leichtere, ganz rechts **Details**.
+
+| Liste | Zeilenhandlungen, links nach rechts |
+|---|---|
+| Bestellungen | Nochmal bestellen · **Details** |
+| Stücklisten | Alle in den Warenkorb · **Details** |
+| Merklisten | Teilen (Symbol) · Alle in den Warenkorb · **Details** |
+
+Zwei Umbenennungen dabei: "Öffnen" heisst in den Stücklisten jetzt "Details",
+und "In den Warenkorb" heisst "Alle in den Warenkorb" wie in den Merklisten.
+
+**Eine frühere Entscheidung ist damit zurückgenommen.** Der Details-Knopf war
+aus der Bestellliste geflogen, weil die Bestellnummer in der ersten Spalte
+schon dorthin führt. Das Argument stimmt noch, wiegt aber weniger als drei
+Listen mit derselben Aufgabe und drei verschiedenen Zeilenenden. Dazu kommt:
+ein Knopf ist ein grösseres Ziel als ein Link in der Zelle daneben.
+
+### Vorschau in den Stücklisten
+
+Dieselbe Darstellung wie in Bestellungen und Merklisten. Eine Stückliste hat
+aber Zeilen, denen kein Artikel zugeordnet werden konnte; die zeigen den
+Platzhalter, und benannt wird der erste Eintrag, der einen Namen hat.
+`K.vorschau()` nimmt dafür einen zweiten Wert für den Fall, dass gar nichts
+zugeordnet ist.
+
+### Platz dafür
+
+Acht Spalten passten nicht: die Tabelle wollte 13 px rollen, und die
+Namensspalte war mit 105 px die schmalste der Seite. Statt eine Spalte am
+Rand wegzuschieben ist **Positionen** in den **Abgleich** gewandert, als
+zweite Zeile unter dem Status. Dort gehört die Zahl auch hin: "2 zu prüfen"
+sagt erst etwas, wenn daneben steht, von wie vielen. Sieben Spalten, kein
+Rollen mehr, und die Namensspalte hat 142 px.
+
+### Nebenbei repariert
+
+"In den Warenkorb" in den Stücklisten setzte nur eine Kurzmeldung ab. Der
+Knopf legt jetzt die zugeordneten Positionen in den echten Warenkorb; geprüft.
+Bei Listen mit offenen Positionen bleibt er gesperrt, wie bisher.
+
+Geprüft: 16 Seiten über fünf Fensterbreiten, keine rollende Tabelle von
+1920 bis 900 px, kein seitlicher Überlauf, keine Konsolenfehler.

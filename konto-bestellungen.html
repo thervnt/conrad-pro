@@ -376,7 +376,7 @@
   pruefe();
 })();
 </script>
-<script src="konto-daten.js?v=1dcfdbd9"></script>
+<script src="konto-daten.js?v=232725e2"></script>
 <script>
 (function () {
   var K = window.KONTO;
@@ -465,11 +465,16 @@
           '<td>' + K.vorschau(b.positionen) + '</td>' +
           '<td class="konto-num konto-spalte-opt">' + b.positionen.length + '<span class="konto-cell-sub">' + stk + ' Stück</span></td>' +
           '<td class="konto-amount">' + (b.status === 'storniert' ? '\u2013' : EU(K.nettoOffen(b))) + '</td>' +
-          /* Kein zweiter Knopf fuer die Details: die Bestell-Nr. in der ersten
-             Spalte fuehrt schon dorthin. Der Knopf war eine Dopplung und die
-             breiteste Spalte der Liste. */
+          /* Dieselbe Reihenfolge wie in Merklisten und Stuecklisten: links
+             das Leichtere, ganz rechts die erste Handlung. Der "Details"-Knopf
+             war frueher aus dieser Liste geflogen, weil die Bestell-Nr. schon
+             dorthin fuehrt. Er steht wieder da, weil drei Listen mit
+             derselben Aufgabe nicht drei verschiedene Zeilenenden haben
+             sollten - und weil ein Knopf ein groesseres Ziel ist als ein Link
+             in der Zelle daneben. */
           '<td><span class="konto-row-actions">' +
-            '<button type="button" class="konto-btn" data-nach="' + E(b.nr) + '">Nochmal bestellen</button>' +
+            '<button type="button" class="konto-btn ghost" data-nach="' + E(b.nr) + '">Nochmal bestellen</button>' +
+            '<a class="konto-btn primary" href="konto-bestellung.html?nr=' + E(b.nr) + '">Details</a>' +
           '</span></td></tr>';
       }).join('') + '</tbody></table></div>';
   }

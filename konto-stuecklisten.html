@@ -352,7 +352,7 @@
   pruefe();
 })();
 </script>
-<script src="konto-daten.js?v=1dcfdbd9"></script>
+<script src="konto-daten.js?v=232725e2"></script>
 <script>
 (function () {
   var K = window.KONTO, E = K.esc, EU = K.euro, D = K.datum;
@@ -390,29 +390,37 @@
   }
 
   el.innerHTML = '<div class="konto-table-wrap"><table class="konto-table">' +
-    '<thead><tr><th scope="col">Stückliste</th><th scope="col">Zuletzt geändert</th>' +
-    '<th scope="col">Abgleich</th><th scope="col" class="konto-amount">Positionen</th>' +
-    '<th scope="col" class="konto-amount">Betrag netto</th><th scope="col">Zuletzt bestellt</th>' +
+    '<thead><tr><th scope="col">Stückliste</th><th scope="col">Artikel</th>' +
+    '<th scope="col">Zuletzt geändert</th>' +
+    '<th scope="col">Abgleich</th>' +
+    '<th scope="col" class="konto-amount">Betrag netto</th>' +
+    '<th scope="col" class="konto-spalte-opt">Zuletzt bestellt</th>' +
     '<th scope="col"><span class="visually-hidden">Aktionen</span></th></tr></thead><tbody>' +
     listen.map(function (l) {
       /* "ohneTreffer" kommt aus dem Abgleich und ist der Grund, warum jemand
          die Liste wieder oeffnet. Deshalb steht er als Status, nicht als
          Randnotiz. */
-      var abgleich = l.ohneTreffer
+      var ziel = 'konto-stueckliste.html?id=' + encodeURIComponent(l.id);
+      var abgleich = (l.ohneTreffer
         ? '<span class="bom-status warn">' + l.ohneTreffer + ' zu prüfen</span>'
-        : '<span class="bom-status ok">Vollständig</span>';
+        : '<span class="bom-status ok">Vollständig</span>') +
+        '<span class="konto-cell-sub">' + l.positionen + ' Positionen</span>';
       return '<tr>' +
-        '<td><a href="konto-stueckliste.html?id=' + E(l.id) + '">' + E(l.name) + '</a></td>' +
+        '<td><a href="' + E(ziel) + '">' + E(l.name) + '</a></td>' +
+        /* Zeilen ohne Treffer zeigen den Platzhalter; benannt wird der erste
+           Eintrag, dem ein Artikel zugeordnet werden konnte. */
+        '<td>' + K.vorschau(l.zeilen, 'Noch kein Artikel zugeordnet') + '</td>' +
         '<td class="konto-num">' + D(l.geaendert) + '</td>' +
         '<td>' + abgleich + '</td>' +
-        '<td class="konto-amount">' + l.positionen + '</td>' +
         '<td class="konto-amount">' + EU(l.summe) + '</td>' +
-        '<td class="konto-num">' + (l.zuletztBestellt ? D(l.zuletztBestellt) : 'noch nicht') + '</td>' +
+        '<td class="konto-num konto-spalte-opt">' + (l.zuletztBestellt ? D(l.zuletztBestellt) : 'noch nicht') + '</td>' +
+        /* Dieselbe Reihenfolge wie in den Merklisten: links das Leichtere,
+           ganz rechts die erste Handlung. */
         '<td><span class="konto-row-actions">' +
-          '<button type="button" class="konto-btn" data-wagen="' + E(l.id) + '"' +
+          '<button type="button" class="konto-btn ghost" data-wagen="' + E(l.id) + '"' +
             (l.ohneTreffer ? ' disabled title="Erst die offenen Positionen prüfen"' : '') +
-            '>In den Warenkorb</button>' +
-          '<a class="konto-btn ghost" href="konto-stueckliste.html?id=' + E(l.id) + '">Öffnen</a>' +
+            '>Alle in den Warenkorb</button>' +
+          '<a class="konto-btn primary" href="' + E(ziel) + '">Details</a>' +
         '</span></td></tr>';
     }).join('') + '</tbody></table></div>';
 
@@ -420,7 +428,9 @@
     var w = e.target.closest('[data-wagen]');
     if (!w || w.disabled) return;
     var l = listen.filter(function (x) { return x.id === w.dataset.wagen; })[0];
-    K.melden('Alle ' + l.positionen + ' Positionen aus "' + l.name + '" in den Warenkorb');
+    var treffer = l.zeilen.filter(function (z) { return z.sku; });
+    K.nachbestellen(treffer);
+    K.melden(treffer.length + ' Positionen aus "' + l.name + '" in den Einkaufswagen gelegt');
   });
 })();
 </script>

@@ -210,35 +210,35 @@
   // Werkzeugs und ist damit echte Angabe, kein erfundenes Feld.
   // Die Zeilen einer gespeicherten Liste. "roh" ist, was in der
   // hochgeladenen Datei stand; ohne Treffer bleibt nur das stehen.
-  function zeile(roh, sku, packSize, titel, menge, einzel, bild) {
-    return { roh: roh, sku: sku, packSize: packSize, titel: titel,
+  function zeile(roh, sku, packSize, titel, kurz, menge, einzel, bild) {
+    return { roh: roh, sku: sku, packSize: packSize, titel: titel, kurz: kurz || null,
              menge: menge, einzel: einzel, bild: bild || null };
   }
   var stuecklisten = [
     { id: 's1', name: 'Halle 3 / Schaltschrank A', angelegt: '2026-09-08', geaendert: '2026-09-19',
       zuletztBestellt: '2026-09-11',
       zeilen: [
-        zeile('221-413-50;Verbindungsklemme 3-Leiter;20', '221-413', 50, 'WAGO 221-413-50 221 Verbindungsklemme flexibel: 0.14-4 mm² starr: 0.2-4 mm² Polzahl: 3 Transparent, Orange Box', 20, 14.99, 'bilder/klein/wago-221-413-01.webp'),
-        zeile('221-415-25;Verbindungsklemme 5-Leiter;40', '221-415', 25, 'WAGO 221-415-25 221 Verbindungsklemme flexibel: 0.14-4 mm² starr: 0.2-4 mm² Polzahl: 5 Transparent, Orange Box', 40, 13.79, 'bilder/klein/wago-221-415-01.webp'),
-        zeile('221-420-15;Verbindungsklemme 10-Leiter;30', '221-420', 15, 'WAGO 221-420-15 221 Verbindungsklemme flexibel: 0.14-4 mm² starr: 0.2-4 mm² Polzahl: 10 Transparent, Orange Box', 30, 40.60, 'bilder/klein/wago-221-420-01.webp'),
-        zeile('221-500;Befestigungsadapter;250', '221-500', 1, 'WAGO 221-500 Serie 221 Befestigungsadapter', 250, 0.87, null)
+        zeile('221-413-50;Verbindungsklemme 3-Leiter;20', '221-413', 50, 'WAGO 221-413-50 221 Verbindungsklemme flexibel: 0.14-4 mm² starr: 0.2-4 mm² Polzahl: 3 Transparent, Orange Box', 'WAGO 221-413 Verbindungsklemme, 3-polig', 20, 14.99, 'bilder/klein/wago-221-413-01.webp'),
+        zeile('221-415-25;Verbindungsklemme 5-Leiter;40', '221-415', 25, 'WAGO 221-415-25 221 Verbindungsklemme flexibel: 0.14-4 mm² starr: 0.2-4 mm² Polzahl: 5 Transparent, Orange Box', 'WAGO 221-415 Verbindungsklemme, 5-polig', 40, 13.79, 'bilder/klein/wago-221-415-01.webp'),
+        zeile('221-420-15;Verbindungsklemme 10-Leiter;30', '221-420', 15, 'WAGO 221-420-15 221 Verbindungsklemme flexibel: 0.14-4 mm² starr: 0.2-4 mm² Polzahl: 10 Transparent, Orange Box', 'WAGO 221-420 Verbindungsklemme, 10-polig', 30, 40.60, 'bilder/klein/wago-221-420-01.webp'),
+        zeile('221-500;Befestigungsadapter;250', '221-500', 1, 'WAGO 221-500 Serie 221 Befestigungsadapter', 'WAGO 221-500 Befestigungsadapter', 250, 0.87, null)
       ] },
     { id: 's2', name: 'Wartungspaket Umspannstation', angelegt: '2026-08-12', geaendert: '2026-08-14',
       zuletztBestellt: '2026-08-14',
       zeilen: [
-        zeile('221-613;Verbindungsklemme 6 mm²;120', '221-613', 1, 'WAGO 221-613 221 Verbindungsklemme flexibel: 0.5-6 mm² starr: 0.5-6 mm² Polzahl: 3 Transparent, Orange', 120, 0.95, null),
-        zeile('221-615;Verbindungsklemme 6 mm² 5-Leiter;80', '221-615', 1, 'WAGO 221-615 221 Verbindungsklemme flexibel: 0.5-6 mm² starr: 0.5-6 mm² Polzahl: 5 Transparent, Orange', 80, 1.60, null),
-        zeile('SIE-3RV2011-1JA10;Leistungsschalter;4', null, null, null, 4, 0, null),
-        zeile('PHOENIX-3044076;Reihenklemme UT 2,5;60', null, null, null, 60, 0, null)
+        zeile('221-613;Verbindungsklemme 6 mm²;120', '221-613', 1, 'WAGO 221-613 221 Verbindungsklemme flexibel: 0.5-6 mm² starr: 0.5-6 mm² Polzahl: 3 Transparent, Orange', 'WAGO 221-613 Verbindungsklemme, 3-polig', 120, 0.95, null),
+        zeile('221-615;Verbindungsklemme 6 mm² 5-Leiter;80', '221-615', 1, 'WAGO 221-615 221 Verbindungsklemme flexibel: 0.5-6 mm² starr: 0.5-6 mm² Polzahl: 5 Transparent, Orange', 'WAGO 221-615 Verbindungsklemme, 5-polig', 80, 1.60, null),
+        zeile('SIE-3RV2011-1JA10;Leistungsschalter;4', null, null, null, null, 4, 0, null),
+        zeile('PHOENIX-3044076;Reihenklemme UT 2,5;60', null, null, null, null, 60, 0, null)
       ] },
     { id: 's3', name: 'Ausschreibung Stadtwerke 2026', angelegt: '2026-09-21', geaendert: '2026-09-21',
       zuletztBestellt: null,
       zeilen: [
-        zeile('221-412-100;Verbindungsklemme 2-Leiter;25', '221-412', 100, 'WAGO 221-412-100 221 Verbindungsklemme flexibel: 0.14-4 mm² starr: 0.2-4 mm² Polzahl: 2 Transparent, Orange Box', 25, 26.99, 'bilder/klein/wago-221-412-01.webp'),
-        zeile('221-423-50;Verbindungsklemme 3-Leiter Green;30', '221-423', 50, 'WAGO 221-423-50 221 Verbindungsklemme flexibel: 0.14-4 mm² starr: 0.2-4 mm² Polzahl: 3 Transparent, Grün Box', 30, 17.50, 'bilder/klein/wago-221-423-01.webp'),
-        zeile('WAGO-XYZ-4711;Sonderklemme;12', null, null, null, 12, 0, null),
-        zeile('ABB-2CDS251001R0164;Leitungsschutzschalter;18', null, null, null, 18, 0, null),
-        zeile('HAGER-VZ321N;Sammelschiene;6', null, null, null, 6, 0, null)
+        zeile('221-412-100;Verbindungsklemme 2-Leiter;25', '221-412', 100, 'WAGO 221-412-100 221 Verbindungsklemme flexibel: 0.14-4 mm² starr: 0.2-4 mm² Polzahl: 2 Transparent, Orange Box', 'WAGO 221-412 Verbindungsklemme, 2-polig', 25, 26.99, 'bilder/klein/wago-221-412-01.webp'),
+        zeile('221-423-50;Verbindungsklemme 3-Leiter Green;30', '221-423', 50, 'WAGO 221-423-50 221 Verbindungsklemme flexibel: 0.14-4 mm² starr: 0.2-4 mm² Polzahl: 3 Transparent, Grün Box', 'WAGO 221-423 Verbindungsklemme, 3-polig', 30, 17.50, 'bilder/klein/wago-221-423-01.webp'),
+        zeile('WAGO-XYZ-4711;Sonderklemme;12', null, null, null, null, 12, 0, null),
+        zeile('ABB-2CDS251001R0164;Leitungsschutzschalter;18', null, null, null, null, 18, 0, null),
+        zeile('HAGER-VZ321N;Sammelschiene;6', null, null, null, null, 6, 0, null)
       ] }
   ];
   // Abgeleitet statt doppelt gepflegt: Anzahl, offene Zeilen und Summe
@@ -495,9 +495,13 @@
     'stroke-linecap="round" stroke-linejoin="round" width="18" height="18" aria-hidden="true">' +
     '<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/>' +
     '<path d="M21 15l-5-5L5 21"/></svg>';
-  function vorschau(positionen) {
+  function vorschau(positionen, ersatz) {
     var zeigen = positionen.slice(0, 3);
     var rest = positionen.length - zeigen.length;
+    // In einer Stueckliste gibt es Zeilen, denen kein Artikel zugeordnet
+    // werden konnte. Sie zeigen den Platzhalter, und benannt wird der erste
+    // Eintrag, der einen Namen hat.
+    var benannt = positionen.filter(function (p) { return p.kurz; })[0];
     return '<div class="konto-vorschau" aria-hidden="true">' +
       zeigen.map(function (p) {
         return '<span class="konto-vorschau-bild">' + (p.bild
@@ -506,7 +510,8 @@
       }).join('') +
       (rest > 0 ? '<span class="konto-vorschau-mehr">+' + rest + '</span>' : '') +
     '</div>' +
-    '<span class="konto-vorschau-titel">' + esc(positionen[0].kurz) + '</span>';
+    '<span class="konto-vorschau-titel">' +
+      (benannt ? esc(benannt.kurz) : esc(ersatz || '\u2013')) + '</span>';
   }
 
   // --- Kurzmeldung ---------------------------------------------------------
