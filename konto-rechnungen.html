@@ -388,7 +388,7 @@
   pruefe();
 })();
 </script>
-<script src="konto-daten.js?v=232725e2"></script>
+<script src="konto-daten.js?v=d4bf3a36"></script>
 <script>
 (function () {
   var K = window.KONTO;
@@ -436,6 +436,20 @@
     elBulk.hidden = n === 0;
     if (n) document.querySelector('[data-bulk-count]').textContent =
       n === 1 ? '1 Beleg ausgewählt' : n + ' Belege ausgewählt';
+    kopfhakenAktualisieren();
+  }
+
+  /* Der Kopfhaken muss zeigen, was gilt. Vorher wurde er bei jedem Neuaufbau
+     leer gezeichnet: nach "alle auswaehlen" sah er unangehakt aus, und der
+     naechste Klick hat wieder ausgewaehlt statt abgewaehlt. Abwaehlen war
+     damit nicht moeglich. */
+  function kopfhakenAktualisieren() {
+    var kopf = elListe.querySelector('[data-alle]');
+    if (!kopf) return;
+    var sichtbar = gefiltert();
+    var gewaehlteSichtbar = sichtbar.filter(function (r) { return gewaehlt[r.nr]; }).length;
+    kopf.checked = sichtbar.length > 0 && gewaehlteSichtbar === sichtbar.length;
+    kopf.indeterminate = gewaehlteSichtbar > 0 && gewaehlteSichtbar < sichtbar.length;
   }
 
   function zeichne() {
@@ -444,7 +458,7 @@
     var summe = offen.reduce(function (s, r) { return s + r.netto; }, 0);
     document.querySelector('[data-zahl]').textContent =
       liste.length + ' von ' + K.rechnungen.length + ' Belegen \u00b7 ' +
-      EU(summe) + ' netto offen \u00b7 alle Beträge netto';
+      offen.length + ' offene Rechnungen \u00b7 ' + EU(summe) + ' netto offen \u00b7 alle Beträge netto';
 
     if (!liste.length) {
       elListe.innerHTML = '<div class="konto-empty">' +
@@ -456,7 +470,7 @@
 
     elListe.innerHTML = '<div class="konto-table-wrap"><table class="konto-table">' +
       '<thead><tr>' +
-        '<th scope="col"><input type="checkbox" class="konto-check" data-alle aria-label="Alle Belege auswählen"></th>' +
+        '<th scope="col"><input type="checkbox" class="konto-check" data-alle aria-label="Alle sichtbaren Belege auswählen"></th>' +
         '<th scope="col">Beleg</th><th scope="col">Datum</th><th scope="col">Fällig</th><th scope="col">Bestellung</th><th scope="col">Status</th>' +
         '<th scope="col" class="konto-amount">Betrag netto</th><th scope="col"><span class="visually-hidden">Aktionen</span></th>' +
       '</tr></thead><tbody>' +
@@ -502,8 +516,10 @@
   elListe.addEventListener('change', function (e) {
     var alle = e.target.closest('[data-alle]');
     if (alle) {
-      gefiltert().forEach(function (r) { gewaehlt[r.nr] = alle.checked; });
-      zeichne();
+      var an = alle.checked;
+      gefiltert().forEach(function (r) { gewaehlt[r.nr] = an; });
+      elListe.querySelectorAll('[data-pick]').forEach(function (k) { k.checked = an; });
+      bulkAktualisieren();
       return;
     }
     var p = e.target.closest('[data-pick]');

@@ -178,9 +178,6 @@
           <h1 class="konto-h1">Bestellungen</h1>
           <p class="konto-head-sub" data-zahl aria-live="polite"></p>
         </div>
-        <div class="konto-head-actions">
-          <a class="konto-btn ghost" href="stueckliste.html">Stückliste hochladen</a>
-        </div>
       </div>
 
       <!-- Suchen, filtern, mitnehmen. Die Produktionsliste kennt nur einen
@@ -376,7 +373,7 @@
   pruefe();
 })();
 </script>
-<script src="konto-daten.js?v=232725e2"></script>
+<script src="konto-daten.js?v=d4bf3a36"></script>
 <script>
 (function () {
   var K = window.KONTO;
@@ -433,7 +430,8 @@
 
     var liste = zustand === 'leer' ? [] : gefiltert();
     document.querySelector('[data-zahl]').textContent =
-      liste.length + ' von ' + K.bestellungen.length + ' Bestellungen \u00b7 alle Beträge netto';
+      liste.length + ' von ' + K.bestellungen.length + ' Bestellungen \u00b7 ' +
+      K.offeneVorgaenge().bestellungen.zahl + ' unterwegs \u00b7 alle Beträge netto';
 
     if (!liste.length) {
       var gefilterte = elSuche.value || elStatus.value;
@@ -473,7 +471,7 @@
              sollten - und weil ein Knopf ein groesseres Ziel ist als ein Link
              in der Zelle daneben. */
           '<td><span class="konto-row-actions">' +
-            '<button type="button" class="konto-btn ghost" data-nach="' + E(b.nr) + '">Nochmal bestellen</button>' +
+            '<button type="button" class="konto-btn" data-nach="' + E(b.nr) + '">Nochmal bestellen</button>' +
             '<a class="konto-btn primary" href="konto-bestellung.html?nr=' + E(b.nr) + '">Details</a>' +
           '</span></td></tr>';
       }).join('') + '</tbody></table></div>';

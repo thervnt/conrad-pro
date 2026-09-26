@@ -514,6 +514,26 @@
       (benannt ? esc(benannt.kurz) : esc(ersatz || '\u2013')) + '</span>';
   }
 
+  /* Eine Regel fuer alle drei Zahlen: offene Vorgaenge in diesem Bereich.
+     Vorher hiessen sie dreierlei und standen ohne Beschriftung da - eine "3"
+     neben "Bestellungen" konnte alles heissen, auch die Zahl aller
+     Bestellungen. Jetzt sagt jede Zahl per Beschriftung, was sie zaehlt, und
+     dieselbe Zahl steht als Untertitel auf der Seite, zu der sie fuehrt. */
+  function offeneVorgaenge() {
+    var rechnungenOffen = rechnungen.filter(function (r) {
+      return r.status === 'offen' || r.status === 'ueberfaellig';
+    }).length;
+    var bestellungenOffen = bestellungen.filter(function (b) {
+      return b.status === 'bearbeitung' || b.status === 'versendet' || b.status === 'teilversand';
+    }).length;
+    var rmaOffen = ruecksendungen.filter(function (r) { return r.status === 'pruefung'; }).length;
+    return {
+      bestellungen: { zahl: bestellungenOffen, wort: bestellungenOffen === 1 ? 'Bestellung unterwegs' : 'Bestellungen unterwegs' },
+      rechnungen:   { zahl: rechnungenOffen,   wort: rechnungenOffen === 1 ? 'offene Rechnung' : 'offene Rechnungen' },
+      ruecksendungen: { zahl: rmaOffen,        wort: rmaOffen === 1 ? 'Rücksendung in Prüfung' : 'Rücksendungen in Prüfung' }
+    };
+  }
+
   // --- Kurzmeldung ---------------------------------------------------------
   // Gleicher Baustein wie die Snackbar der Produktseite.
   function melden(text) {
@@ -542,7 +562,7 @@
     stornierbar: stornierbar, stornieren: stornieren, HEUTE_ISO: HEUTE_ISO,
     STORNO_FRIST_MIN: STORNO_FRIST_MIN, stornoFrist: stornoFrist,
     stornoRestMin: stornoRestMin, uhrzeit: uhrzeit,
-    nettoOffen: nettoOffen, vorschau: vorschau,
+    nettoOffen: nettoOffen, vorschau: vorschau, offeneVorgaenge: offeneVorgaenge,
     rmaAlle: rmaAlle, rmaAnlegen: rmaAnlegen, RMA_GRUENDE: RMA_GRUENDE,
     ibanPruefen: ibanPruefen, ibanGruppiert: ibanGruppiert, ibanVerdeckt: ibanVerdeckt
   };
@@ -560,23 +580,17 @@
   function fuellen() {
     var K = window.KONTO;
     if (!K) return;
-    var offen = K.rechnungen.filter(function (r) {
-      return r.status === 'offen' || r.status === 'ueberfaellig';
-    });
-    var unterwegs = K.bestellungen.filter(function (b) {
-      return b.status === 'versendet' || b.status === 'teilversand' || b.status === 'bearbeitung';
-    }).length;
-    var laufend = K.ruecksendungen.filter(function (r) { return r.status === 'pruefung'; }).length;
-    var werte = {
-      bestellungen: unterwegs,
-      rechnungen: offen.length,
-      ruecksendungen: laufend
-    };
+    var werte = K.offeneVorgaenge();
     Object.keys(werte).forEach(function (name) {
       var el = document.querySelector('[data-nav-count="' + name + '"]');
       if (!el) return;
-      if (!werte[name]) { el.remove(); return; }
-      el.textContent = werte[name];
+      var w = werte[name];
+      if (!w.zahl) { el.remove(); return; }
+      el.textContent = w.zahl;
+      /* Die Zahl allein sagt nichts. Der Titel sagt es der Maus, das
+         aria-label dem Vorleseprogramm. */
+      el.setAttribute('title', w.zahl + ' ' + w.wort);
+      el.setAttribute('aria-label', w.zahl + ' ' + w.wort);
     });
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', fuellen);

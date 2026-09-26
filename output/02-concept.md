@@ -2648,3 +2648,63 @@ ist"**, und der Zustand rutscht in die Zeile darunter, wo er hingehört: "…
 Sie erhalten ihn derzeit nicht, abgemeldet am 24.09.2026.
 Bestellbestätigungen und Rechnungen sind davon nicht betroffen." Der Nutzen
 steht damit vor dem Knopf, der Zustand daneben.
+
+---
+
+## 50. Fünf Punkte aus der Durchsicht
+
+**1. "Stückliste hochladen" ist aus dem Kopf der Bestellliste raus.** Der Knopf
+führte von der Seite weg, die man gerade angesehen hat, und die Stücklisten
+haben ihre eigene Seite mit ihrem eigenen Knopf.
+
+**2. Abwählen war nicht möglich.** Ein echter Fehler: der Kopfhaken der
+Belegliste wurde bei jedem Neuaufbau leer gezeichnet. Nach "alle auswählen"
+sah er unangehakt aus, der nächste Klick hat deshalb wieder ausgewählt statt
+abgewählt. Er zeigt jetzt den Stand: angehakt, wenn alle sichtbaren Belege
+gewählt sind, unbestimmt bei einer Teilmenge, leer bei keiner. Das Umschalten
+setzt ausserdem nur noch die Haken, statt die Tabelle neu zu bauen - ein
+Neuaufbau kostet den Fokus. Geprüft: alle wählen, alle abwählen, einzelner
+Haken.
+
+**3. Eine Spielart für "in den Warenkorb".** "Nochmal bestellen" stand in der
+Bestellliste als weisser Knopf, auf der Bestellseite und der Übersicht als
+Standardknopf. Jetzt überall der Standardknopf, auch "Alle in den Warenkorb"
+in Merklisten und Stücklisten. Weiss bleibt dem Neutralen vorbehalten: PDF,
+Öffnen, Abbrechen. Der Hauptknopf bleibt dem vorbehalten, was auf einer
+Detailseite die Hauptsache ist ("Alle Positionen in den Warenkorb").
+
+**4. Die Zahlen in der Navigation.** Sie zählten dreierlei und sagten nicht,
+was. Eine "3" neben "Bestellungen" konnte alles heissen, auch die Zahl aller
+Bestellungen; tatsächlich waren es die noch nicht zugestellten.
+
+Neue Regel, eine für alle drei: **offene Vorgänge in diesem Bereich.**
+
+| Eintrag | Zahl | zählt |
+|---|---|---|
+| Bestellungen | 3 | in Bearbeitung, versendet oder teilweise versendet |
+| Rechnungen & Gutschriften | 3 | offen oder überfällig |
+| Rücksendungen | 1 | in Prüfung |
+
+Dazu zwei Dinge, damit die Zahl lesbar wird: jede trägt jetzt `title` und
+`aria-label` mit dem Wortlaut ("3 Bestellungen unterwegs"), und **dieselbe
+Zahl steht im Untertitel der Seite**, zu der sie führt. Wer der 3 folgt,
+findet oben "7 von 7 Bestellungen · 3 unterwegs" und sieht, worauf sich die
+Marke bezog. Gerechnet wird an einer Stelle, `K.offeneVorgaenge()`, damit
+Marke und Untertitel nicht auseinanderlaufen können.
+
+**5. Conrad PRO folgt dem Aufbau der Newsletter-Seite.** Beide Seiten zeigen
+dasselbe: ein Abo mit einem Zustand, einer Handlung und einer Liste dessen,
+was man dafür bekommt. PRO hatte zwei Karten nebeneinander und eine
+Definitionsliste, die Newsletter-Seite gestapelte Karten mit einem grossen
+Zustandssatz.
+
+Jetzt beide gleich: gestapelte Karten über die volle Breite, erste Karte "Ihre
+Mitgliedschaft ist aktiv" gross, darunter die Angaben, darunter die
+Handlungsleiste mit dem einordnenden Satz und "Mitgliedschaft kündigen" in der
+Warnfarbe - genau wie "Newsletter abbestellen". Zweite Karte heisst hier wie
+dort "Was Sie bekommen". Am Ende der rechtliche Satz, wie auf der
+Newsletter-Seite. Das Kennzahlenband bleibt oben: es ist der Grund, warum
+jemand diese Seite aufmacht.
+
+Geprüft: 16 Seiten über vier Fensterbreiten, keine Konsolenfehler, kein
+seitlicher Überlauf, keine Marke ohne Beschriftung.

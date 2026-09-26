@@ -183,22 +183,22 @@
 
       <div class="konto-attention" data-nutzen></div>
 
-      <div class="konto-grid">
+      <div class="konto-stapel">
         <div class="konto-card">
           <div class="konto-card-head"><h2 class="konto-card-title">Mitgliedschaft</h2></div>
-          <dl class="konto-fakten" data-mitglied></dl>
-          <!-- Kuendigen steht am Ende der Karte, zu der es gehoert, nicht oben
-               rechts als erste Handlung der Seite. Und es traegt die
-               Warnfarbe, weil es etwas beendet. -->
-          <div class="konto-head-actions" style="margin-top:16px">
-            <button type="button" class="konto-btn danger" data-kuendigen>Mitgliedschaft kündigen</button>
-          </div>
+          <div data-mitgliedschaft></div>
         </div>
         <div class="konto-card">
-          <div class="konto-card-head"><h2 class="konto-card-title">Ihre Vorteile</h2></div>
+          <div class="konto-card-head"><h2 class="konto-card-title">Was Sie bekommen</h2></div>
           <div data-vorteile></div>
         </div>
       </div>
+
+      <p class="konto-kpi-note" style="margin-top:16px;max-width:760px">
+        Die Mitgliedschaft verlängert sich jeweils um ein Jahr, wenn sie nicht bis zum
+        Verlängerungstag gekündigt wird. Näheres in den
+        <a href="#">Teilnahmebedingungen</a>.
+      </p>
     </div>
   </div>
 </main>
@@ -368,7 +368,7 @@
   pruefe();
 })();
 </script>
-<script src="konto-daten.js?v=232725e2"></script>
+<script src="konto-daten.js?v=d4bf3a36"></script>
 <script>
 (function () {
   var K = window.KONTO, E = K.esc, EU = K.euro, D = K.datum;
@@ -403,12 +403,25 @@
       '<div class="konto-kpi-label">PRO-Vorteilspreise</div>' +
       '<div class="konto-kpi-note">gegenüber dem Listenpreis</div></div>';
 
-  document.querySelector('[data-mitglied]').innerHTML =
-    '<div><dt>Status</dt><dd>' + K.pille('ausgeglichen').replace('Ausgeglichen', 'Aktiv') + '</dd></div>' +
-    '<div><dt>Mitglied seit</dt><dd>' + D(pro.seit) + '</dd></div>' +
-    '<div><dt>Verlängert sich am</dt><dd>' + D(pro.verlaengert) + '</dd></div>' +
-    '<div><dt>Jahresbeitrag</dt><dd>' + EU(pro.beitrag) + ' netto, per Rechnung</dd></div>' +
-    '<div><dt>Belege</dt><dd><a href="konto-rechnungen.html?suche=PRO">Beitragsrechnungen anzeigen</a></dd></div>';
+  document.querySelector('[data-mitgliedschaft]').innerHTML =
+    '<p class="konto-gewaehlt">Ihre Mitgliedschaft ist aktiv</p>' +
+    '<p class="konto-gewaehlt-note">Seit ' + D(pro.seit) + '. Sie verlängert sich am ' +
+      D(pro.verlaengert) + ' um ein weiteres Jahr.</p>' +
+    '<dl class="konto-fakten" style="margin-top:24px">' +
+      '<div><dt>Jahresbeitrag</dt><dd>' + EU(pro.beitrag) + ' netto<br>per Rechnung</dd></div>' +
+      '<div><dt>Verlängert sich am</dt><dd>' + D(pro.verlaengert) + '</dd></div>' +
+      '<div><dt>Belege</dt><dd><a class="konto-mini" href="konto-rechnungen.html?suche=PRO">Beitragsrechnungen anzeigen</a></dd></div>' +
+    '</dl>' +
+    /* Kuendigen steht am Ende der Karte, zu der es gehoert, nicht oben rechts
+       als erste Handlung der Seite. Und es traegt die Warnfarbe, weil es
+       etwas beendet. Genau wie das Abbestellen auf der Newsletter-Seite. */
+    '<div class="konto-zeilenleiste">' +
+      '<p class="konto-bemerkung">Die Kündigung wirkt zum ' + D(pro.verlaengert) +
+        '. Bis dahin gelten alle Vorteile weiter.</p>' +
+      '<div class="konto-zeilenleiste-rechts">' +
+        '<button type="button" class="konto-btn danger" data-kuendigen>Mitgliedschaft kündigen</button>' +
+      '</div>' +
+    '</div>';
 
   var VORTEILE = [
     ['Versandkostenfreie Lieferung', 'Ohne Mindestbestellwert, auch bei Sendungen anderer Versender.'],
