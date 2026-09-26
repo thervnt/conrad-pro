@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="konto.css?v=55fb6f1d">
-<link rel="stylesheet" href="konto-huelle.css?v=bc61d0e7">
+<link rel="stylesheet" href="konto-huelle.css?v=34e35032">
 <script src="cart-seed.js?v=28a5fe8f"></script>
 </head>
 <body>
@@ -391,7 +391,7 @@
            Zeile endet damit dort, wo geklickt wird. */
         '<td><span class="konto-row-actions">' +
           '<button type="button" class="konto-icon-btn" data-teilen="' + E(m.id) + '" ' +
-            'title="Merkliste teilen" aria-label="Merkliste &quot;' + E(m.name) + '&quot; teilen">' +
+            'data-tooltip="Merkliste per E-Mail an Kollegen senden" aria-label="Merkliste &quot;' + E(m.name) + '&quot; teilen">' +
             TEILEN_SVG + '</button>' +
           '<button type="button" class="konto-btn ghost" data-wagen="' + E(m.id) + '">Alle in den Warenkorb</button>' +
           '<a class="konto-btn primary" href="' + E(ziel) + '">Details</a>' +

@@ -2123,3 +2123,36 @@ die Reihenfolge, nicht die Anzahl. "Details" steht auch hier rechts.
 Geprüft: 16 Seiten über fünf Fensterbreiten, keine rollende Tabelle, kein
 seitlicher Überlauf, keine Konsolenfehler; Leerzustand trägt dieselbe neue
 Beschriftung.
+
+---
+
+## 37. Export als Symbolknopf
+
+**Befund von Nico:** "icon button only. plus tooltip with description (csv
+etc)"
+
+"Export (CSV)" in Bestellungen und Rechnungen ist ein Symbolknopf mit dem
+Download-Pfeil, 40 × 40 px, wie der Teilen-Knopf in den Merklisten. Beschriftet
+ist er zweifach: `aria-label` für Vorleseprogramme und `data-tooltip` für die
+Sprechblase bei Mauszeiger und Tastaturfokus. Beide tragen denselben Satz, und
+der sagt auch, was genau exportiert wird:
+
+* Bestellungen: "Gefilterte Bestellungen als CSV-Datei herunterladen"
+* Rechnungen: "Gefilterte Belege als CSV-Datei herunterladen"
+
+"Gefiltert", weil beide Knöpfe genau das tun: sie exportieren, was nach Suche
+und Statusauswahl übrig ist, nicht die ganze Liste. Das stand vorher nirgends.
+
+Die Sprechblase ist nicht neu gebaut. Der Warenkorb hat mit
+`.icon-btn[data-tooltip]` schon eine; `.konto-icon-btn` bekommt dieselbe
+Bauart, damit es im Prototyp eine Sprechblase gibt und nicht zwei. Sie steht
+rechtsbündig unter dem Knopf und bleibt damit auch am rechten Seitenrand im
+Bild.
+
+Der Teilen-Knopf in den Merklisten ist mitgezogen: er trug einen nativen
+`title`, der langsam erscheint und sich nicht gestalten lässt. Jetzt dieselbe
+Sprechblase, und der Text sagt, was passiert: "Merkliste per E-Mail an
+Kollegen senden".
+
+Geprüft: 30 Symbolknöpfe über 16 Seiten und fünf Breiten, keiner ohne
+`aria-label`, keiner ohne Sprechblase, keiner mehr mit `title`.

@@ -344,7 +344,30 @@
   cursor: pointer;
   transition: background 0.15s, border-color 0.15s;
 }
+.konto-icon-btn { position: relative; }
 .konto-icon-btn svg { width: 18px; height: 18px; }
+/* Ein Symbol allein muss sagen koennen, was es tut. Der Hinweis steht deshalb
+   nicht nur in aria-label, sondern auch sichtbar bei Mauszeiger und Tastatur.
+   Dieselbe Bauart wie .icon-btn[data-tooltip] im Warenkorb, damit es im
+   Prototyp eine Sprechblase gibt und nicht zwei. */
+.konto-icon-btn[data-tooltip]:hover::after,
+.konto-icon-btn[data-tooltip]:focus-visible::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  background: var(--c-navy);
+  color: var(--c-text-on-dark);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.4;
+  padding: 6px 10px;
+  border-radius: var(--radius-sm);
+  white-space: nowrap;
+  z-index: 50;
+  pointer-events: none;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.18);
+}
 .konto-icon-btn:hover { background: var(--c-bg-tint); border-color: var(--c-border-strong); }
 .konto-icon-btn:focus-visible { outline: 2px solid var(--c-blue); outline-offset: 2px; }
 
